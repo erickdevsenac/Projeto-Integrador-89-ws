@@ -1,0 +1,67 @@
+:root {
+    --cor-primaria: #2E7D32;
+    --cor-secundaria: #A5D6A7;
+    --cor-texto: #FFFFFF;
+    --cor-botao: #4CAF50;
+    --cor-botao-hover: #388E3C;
+    --cor-input-bg: #ffffffdc;
+}
+
+body {
+    font-family: sans-serif;
+    background-color: var(--cor-primaria);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: var(--cor-secundaria);
+    padding: 32px; 
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+}
+
+.form-senha h2 {
+    color: var(--cor-primaria);
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.form-senha label {
+    display: block;
+    margin-bottom: 8px; 
+    color: var(--cor-primaria);
+    font-weight: bold;
+}
+
+.form-senha input[type="password"] {
+    width: 100%;
+    padding: 13px; 
+    margin-bottom: 16px; 
+    border: 1px solid var(--cor-primaria);
+    border-radius: 4px;
+    background-color: var(--cor-input-bg);
+    box-sizing: border-box;
+}
+
+.form-senha button {
+    width: 100%;
+    padding: 16px;
+    background-color: var(--cor-botao);
+    color: var(--cor-texto);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px; 
+    transition: background-color 0.3s ease;
+}
+
+.form-senha button:hover {
+    background-color: var(--cor-botao-hover);
+}
