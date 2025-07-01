@@ -1,0 +1,133 @@
+:root {
+    --cor-primaria: #2E7D32;
+    --cor-secundaria: #A5D6A7;
+    --cor-texto: #FFFFFF;
+    --cor-botao: #4CAF50;
+    --cor-botao-hover: #388E3C;
+    --cor-input-bg: #ffffffdc;
+}
+
+* {
+    margin: 0; padding: 0; box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #00000099;
+    background-image: url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1470&q=80');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
+    background-blend-mode: darken;
+
+
+    overflow: hidden;
+}
+
+.login-container {
+    background-color: var(--cor-secundaria);
+    padding: 40px 30px;
+    border-radius: 15px;
+
+    box-shadow: 0 12px 30px #d34a4a40, 0 4px 10px #0000001a;
+
+    width: 350px;
+    color: var(--cor-primaria);
+    text-align: center;
+    backdrop-filter: blur(10px);
+    position: relative;
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: var(--cor-primaria);
+    font-size: 52px; /* Aumentado de 40px para 52px */
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    text-align: left;
+    font-size: 20px;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 18px; 
+    border-radius: 8px;
+    border: none;
+    background-color: var(--cor-input-bg);
+    box-shadow: 10px 10px 10px #a1a1a11a;
+    transition: box-shadow 0.3s ease;
+}
+
+button {
+    margin-top: 25px;
+    width: 100%;
+    padding: 16px 0;
+    font-size: 24px; /* Aumentei para 1.5rem (24px) */
+    font-weight: 700;
+    color: var(--cor-texto);
+    background-color: var(--cor-botao);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 10px 5px 15px #4caf5066;
+    transition: background-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    box-shadow: 0 0 8px var(--cor-primaria);
+}
+button {
+    margin-top: 25px;
+    width: 100%;
+    padding: 14px 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--cor-texto);
+    background-color: var(--cor-botao);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 5px 15px #4caf5066;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--cor-botao-hover);
+}
+.change-password-btn {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--cor-primaria);
+    background-color: transparent;
+    text-decoration: none;
+    border: 2px solid var(--cor-primaria);
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.change-password-btn:hover {
+    background-color: var(--cor-primaria);
+    color: var(--cor-texto);
+}
