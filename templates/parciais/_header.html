@@ -1,3 +1,31 @@
-<header>
-    <h1>HEADER</h1>
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Cabeçalho </title>
+     {% comment %} <link rel="stylesheet" href="{% static "core/headerstyle.css" %}"> {% endcomment %}
+</head>
+<body>
+<header> 
+    <div class="logo">
+    <img  src="{% static 'assets/img/logoapp.png' %}" alt="logoapp">
+
+    <h1>Aproveite +</h1>
+    </div>
+    <nav>
+        <a href="https://www.tudogostoso.com.br/">Receitas</a>
+        <a href="https://www.ifood.com.br/">Lojas</a>
+        <a href="https://www.ifood.com.br/">Mercado</a>
+        <a href="https://www.ifood.com.br/">Dicas Sustentáveis</a>
+        <a href="https://www.ifood.com.br/">Meu Perfil</a>  
+        <a href="{% url "contato" %}">Contato</a>
+        <a href="{% url "produtos" %}">Produtos</a>
+        <a href="{% url "troca-senha" %}">Troca Senha</a>
+        <a href="{% url "cadastro" %}">Cadastro </a>
+    </nav>
 </header>
+</body>
+</html>

@@ -1,0 +1,20 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 10%;
+    font-size: 70px;
+    font-family: "Comic Relief", system-ui;
+}
+
+.logo {
+    width: 200px;
+}
+
+body {
+    background-color: #f5f5dc;
+}
