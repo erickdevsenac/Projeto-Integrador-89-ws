@@ -1,0 +1,125 @@
+{% extends 'global/base.html' %}
+{% load static %}
+
+{% block videos %}
+<style>
+    .recipe-videos {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+        padding: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .video-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        height: 0;
+        overflow: hidden;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .video-container:hover {
+        transform: translateY(-5px);
+    }
+
+    .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    .video-title {
+        margin-top: 15px;
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        text-align: center;
+        padding: 10px;
+        background: #f8f8f8;
+        border-radius: 5px;
+    }
+
+    @media (max-width: 768px) {
+        .recipe-videos {
+            grid-template-columns: 1fr;
+            padding: 20px;
+        }
+        
+        .video-title {
+            font-size: 16px;
+        }
+    }
+</style>
+
+<div class="recipe-videos">
+    <!-- Row 1 -->
+    <div class="video-wrapper">
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/rMi9yEodxvs?si=-fTYhq_J2ONSNR7F" 
+                    title="Massa Caseira Tradicional"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen></iframe>
+        </div>
+        <div class="video-title">Pão Integral de Tomate Seco</div>
+    </div>
+
+    <div class="video-wrapper">
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/2BSH0RaB8QY?si=PzBxH7dSRHZ2SdKP" 
+                    title="Molho Branco Cremoso"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen></iframe>
+        </div>
+        <div class="video-title">P</div>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="video-wrapper">
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/2hvN0bzjBxw?si=NJtkRbPUzfqY6tbg" 
+                    title="Bolo de Chocolate"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen></iframe>
+        </div>
+        <div class="video-title">Bolo de Chocolate Fofinho</div>
+    </div>
+
+    <div class="video-wrapper">
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/PUR0QuDZY80?si=N3JRBa_sYjCIfvEy" 
+                    title="Risoto de Cogumelos"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen></iframe>
+        </div>
+        <div class="video-title">Risoto de Cogumelos Cremoso</div>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="video-wrapper">
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/KYQ6MJM0WwM?si=EaFwT51Nyzs1NgnA" 
+                    title="Peixe Grelhado"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen></iframe>
+        </div>
+        <div class="video-title">Peixe Grelhado com Ervas</div>
+    </div>
+
+    <div class="video-wrapper">
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/-6oKEiI6_N0?si=kMfpFfIBp3dV6CHn" 
+                    title="Salada Caesar"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen></iframe>
+        </div>
+        <div class="video-title">Salada Caesar Autêntica</div>
+    </div>
+</div>
+{% endblock videos %}

@@ -14,3 +14,6 @@ def cadastro(request):
 
 def trocasenha(request):
     return render(request, 'core/senha_erica.html')
+
+def videos(request):
+    return render (request, 'core/videos.html')
