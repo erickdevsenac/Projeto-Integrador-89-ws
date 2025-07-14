@@ -1,0 +1,42 @@
+{% load static %}
+
+<!-- cabeçalho -->{% block navB %}
+<div class='.h-anthony'>
+    <div class="container">
+            <ul class="nav nav-pills">
+                <li class="nav-item"><a href="https://www.ifood.com.br/" class="nav-link">Receitas</a></li>
+                <li class="nav-item"><a href="https://www.ifood.com.br/" class="nav-link">Lojas</a></li>
+                <li class="nav-item"><a href="https://www.ifood.com.br/" class="nav-link">Mercado</a></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li class="nav-item"><a href="https://www.ifood.com.br/" class="nav-link">Dicas Sustentáveis</a></li>
+                 </ul>
+
+
+
+
+
+                </div>
+         
+     <nav container2>
+      <a href="https://www.tudogostoso.com.br/">Receitas</a>
+      <a href="https://www.ifood.com.br/">Lojas</a>
+      <a href="https://www.ifood.com.br/">Mercado</a>
+      <a href="https://www.ifood.com.br/">Dicas Sustentáveis</a>
+      <a href="https://www.ifood.com.br/">Meu Perfil</a>  
+      <a href="{% url "contato" %}">Contato</a>
+      <a href="{% url "produtos" %}">Produtos</a>
+      <a href="{% url "troca-senha" %}">Troca Senha</a>
+      <a href="{% url "cadastro" %}">Cadastro </a>
+  </nav>
+    <nav class="container1">
+        <ul>
+
+            <li><a href="">Contato</a></li>
+            <li><a href="">Baixar</a></li>
+            <li><a href="">Login </a></li>
+        </ul>
+       </nav>
+</div> <!-- cabeçalho -->
+{% endblock navB %}

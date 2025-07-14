@@ -36,6 +36,17 @@ h1 {
 h1:hover {
     background: linear-gradient(to right, hsl(122, 68%, 41%), #2E7D32)
 }
+.nav-link {
+    display: block;
+    padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
+    font-size: var(--bs-nav-link-font-size);
+    font-weight: var(--bs-nav-link-font-weight);
+    color: var(--bs-nav-link-color);
+    text-decoration: none;
+    background: 0 0;
+    border: 0;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
+}
  
 header nav {
     width: 100%;
@@ -54,12 +65,18 @@ header nav ul {
     border-radius: 8px;
     padding: 10px 20px;
 }
+
  
+ul{
+background: #383232;
+}
+
 header nav ul li {
     text-align: center;
 }
  
 header nav ul li a {
+    background: #020202;
     text-decoration: none;
     font-weight: bold;
     color: #FFFFFF;
@@ -127,3 +144,4 @@ footer {
     font-size: 0.6%;
  
 }
+

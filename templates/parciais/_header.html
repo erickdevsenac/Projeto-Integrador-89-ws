@@ -15,17 +15,8 @@
 
     <h1>Aproveite +</h1>
     </div>
-    <nav>
-        <a href="https://www.tudogostoso.com.br/">Receitas</a>
-        <a href="https://www.ifood.com.br/">Lojas</a>
-        <a href="https://www.ifood.com.br/">Mercado</a>
-        <a href="https://www.ifood.com.br/">Dicas Sustentáveis</a>
-        <a href="https://www.ifood.com.br/">Meu Perfil</a>  
-        <a href="{% url "contato" %}">Contato</a>
-        <a href="{% url "produtos" %}">Produtos</a>
-        <a href="{% url "troca-senha" %}">Troca Senha</a>
-        <a href="{% url "cadastro" %}">Cadastro </a>
-    </nav>
+    {% block navB %}{% endblock navB %}
+ 
 </header>
 </body>
 </html>
