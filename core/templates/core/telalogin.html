@@ -1,0 +1,23 @@
+{% extends 'global/base.html' %}
+{% load static %}
+
+{% block conteudologin %}
+<div class="login-box">
+    <h2 class="login-title">Entrar</h2>
+
+    
+
+    <form id="login-form" method="post" novalidate>
+        {% csrf_token %}
+        <label for="id_username" class="form-label">Usuário</label>
+        <input type="text" name="username" id="id_username" class="text-input" required>
+
+        <label for="id_password" class="form-label">Senha</label>
+        <input type="password" name="password" id="id_password" class="password-input" required>
+
+        <button type="submit" class="submit-btn">Entrar</button>
+    </form>
+    <div id="error-message" class="error-msg" style="display:none;"></div>
+    <a href="{% url 'troca-senha' %}" class="change-password-link">Alterar senha</a>
+</div>
+{% endblock conteudologin %}

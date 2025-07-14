@@ -14,3 +14,5 @@ def cadastro(request):
 
 def trocasenha(request):
     return render(request, 'core/senha_erica.html')
+def telalogin(request):
+    return render(request,"core/telalogin.html")
