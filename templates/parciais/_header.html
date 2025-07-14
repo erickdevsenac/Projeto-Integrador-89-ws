@@ -1,14 +1,9 @@
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Cabeçalho </title>
-     {% comment %} <link rel="stylesheet" href="{% static "core/headerstyle.css" %}"> {% endcomment %}
-</head>
-<body>
+{% block styleheader %}
+     <link rel="stylesheet" href="{% static "assets/css/headerstyle.css" %}">
+{% endblock styleheader %}
+
 <header> 
     <div class="logo">
     <img  src="{% static 'assets/img/logoapp.png' %}" alt="logoapp">
@@ -27,5 +22,3 @@
         <a href="{% url "cadastro" %}">Cadastro </a>
     </nav>
 </header>
-</body>
-</html>
