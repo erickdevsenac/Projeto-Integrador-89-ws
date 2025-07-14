@@ -6,37 +6,38 @@
 
 body {
   background-color: #f5f0e1;
-
 }
 
-footer {
+.container {
+  display: flex;
   position: fixed;
   bottom: 0;
-  width: 100%;
-  background: linear-gradient(to top, #4CAF50, #d4d49f);
-
+  background-color: linear-gradient(to top, #4CAF50, #d4d49f);
 }
 
-footer ul {
-  list-style: none;
+
+.footer {
   display: flex;
-  justify-content: center;
-  padding: 10px 0;
-  font-size: 17px;
+  background-color: linear-gradient(to top, #4CAF50, #d4d49f);
 }
 
-footer li {
-  margin: 0 15px;
+.box {
+  width: 250px;
+  right: 50px;
+  background-color: #f5f0e1;
 }
 
-footer a {
-  color: black;
-  text-decoration: none;
-  font-family: "Quicksand", sans-serif;
-  transition: color 0.4s ease;
-
+li {
+  /* margin-left: 80px; */
+  padding-right: 80px;
+  font-size: 20px;
 }
 
-a:hover {
-    color: #00f83e;
+h5 {
+  /* margin-left: 80px; */
+  padding-bottom: 10px;
+}
+
+p {
+  padding-left: 90px;
 }
