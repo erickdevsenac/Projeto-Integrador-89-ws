@@ -1,17 +1,16 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro Usuario</title>
-    <link rel="stylesheet" href= "{% static "core/stylecadastro.css" %}">
-     </head>
-<body>
+
+{% block head %}
+  <title>Cadastro Usuario</title>
+  <link rel="stylesheet" href= "{% static "core/stylecadastro.css" %}">
+{% endblock head %}
+
+<body></body>
   <div class="container">
     <div class="caixa">
       <h1>Cadastro de Usuário</h1>
       <form action="#" method="post">
+       {% csrf_token %}
         <label for="nome">Nome:</label>
         <input type="text" id="nome" name="nome" required>
 
