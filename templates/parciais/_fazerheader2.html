@@ -1,42 +1,74 @@
 {% load static %}
-
-<!-- cabeçalho -->{% block navB %}
-<div class='.h-anthony'>
-    <div class="container">
-            <ul class="nav nav-pills">
-                <li class="nav-item"><a href="https://www.ifood.com.br/" class="nav-link">Receitas</a></li>
-                <li class="nav-item"><a href="https://www.ifood.com.br/" class="nav-link">Lojas</a></li>
-                <li class="nav-item"><a href="https://www.ifood.com.br/" class="nav-link">Mercado</a></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li class="nav-item"><a href="https://www.ifood.com.br/" class="nav-link">Dicas Sustentáveis</a></li>
-                 </ul>
-
-
-
-
-
-                </div>
-         
-     <nav container2>
-      <a href="https://www.tudogostoso.com.br/">Receitas</a>
-      <a href="https://www.ifood.com.br/">Lojas</a>
-      <a href="https://www.ifood.com.br/">Mercado</a>
-      <a href="https://www.ifood.com.br/">Dicas Sustentáveis</a>
-      <a href="https://www.ifood.com.br/">Meu Perfil</a>  
-      <a href="{% url "contato" %}">Contato</a>
-      <a href="{% url "produtos" %}">Produtos</a>
-      <a href="{% url "troca-senha" %}">Troca Senha</a>
-      <a href="{% url "cadastro" %}">Cadastro </a>
+{% block navB %}
+<!-- cabeçalho -->
+{% block head %}
+<link rel="stylesheet" href="{% static 'assets/css/menunavstyle.css' %}">
+<style>
+  nav.container2 {
+    background-color: #4caf50;
+    padding: 15px 0;
+    text-align: center;
+  }
+  
+  nav.container2 ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  nav.container2 li {
+    margin: 5px 10px;
+  }
+  
+  nav.container2 a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    display: block;
+    border-radius: 5px;
+    background-color: #66bb6a;
+    transition: all 0.3s;
+  }
+  
+  nav.container2 a:hover {
+    background-color: #388e3c;
+  }
+  
+    /* MENU RESPONSIVO */
+  @media (max-width: 768px) {
+    nav.container2 ul {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    nav.container2 li {
+      margin: 5px 0;
+      width: 80%;
+    }
+    
+    nav.container2 a {
+      text-align: center;
+      padding: 12px;
+    }
+  }
+</style>
+{% endblock head %}
+ 
+<div class="h-anthony">
+  <nav class="container2">
+    <ul>
+    <li><button><a href="https://www.tudogostoso.com.br/">Receitas</a></button></li>
+            <li><button><a href="https://www.ifood.com.br/">Lojas</a></button></li>
+            <li><button><a href="https://www.ifood.com.br/">Mercado</a></button></li>
+            <li><button><a href="https://www.ifood.com.br/">Dicas Sustentáveis</a></button></li>
+            <li><button><a href="">Contato</a></li></button>
+            <li><button><a href="">Baixar</a></li></button>
+            <li><button><a href="">Login </a></li></button>
   </nav>
-    <nav class="container1">
-        <ul>
-
-            <li><a href="">Contato</a></li>
-            <li><a href="">Baixar</a></li>
-            <li><a href="">Login </a></li>
-        </ul>
-       </nav>
-</div> <!-- cabeçalho -->
+</div>
+<!-- cabeçalho -->
 {% endblock navB %}
+ 
