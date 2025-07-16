@@ -8,4 +8,6 @@ urlpatterns = [
     path('telalogin/', views.telalogin, name='telalogin'),
     path('trocasenha/', views.trocasenha, name='troca-senha'),
     path('cadastro/', views.cadastro, name='cadastro'),
+    path('videos/',views.videos,name='videos'),
+    path('receitas/', views.receitas, name= 'receitas')
 ]

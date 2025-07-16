@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 {% include 'parciais/_head.html' %}
-{% comment %} {% include "parciais/_fazerheader2.html" %} {% endcomment %}
+{% include "parciais/_fazerheader2.html" %}
  {% include 'parciais/_header.html' %} 
 
 <main class="container mt-4">
     {% block content %}{% endblock content %}
+    {% block videos %}{% endblock videos %}
     {% block conteudologin%}{% endblock conteudologin %}
     {% block cadastro %}{% endblock cadastro %}
     {% block alterarsenha %}{% endblock alterarsenha %}
+    {% block produtos %}{% endblock produtos %}
 </main>
+
 
 {% include 'parciais/_footer.html' %}
 

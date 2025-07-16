@@ -16,3 +16,9 @@ def trocasenha(request):
     return render(request, 'core/senha_erica.html')
 def telalogin(request):
     return render(request,"core/telalogin.html")
+
+def receitas(request):
+    return render (request, 'core/receitas.html')
+
+def videos(request):
+    return render (request, 'core/videos.html')
