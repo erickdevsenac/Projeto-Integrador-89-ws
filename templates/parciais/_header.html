@@ -1,30 +1,52 @@
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Cabeçalho </title>
-     {% comment %} <link rel="stylesheet" href="{% static "core/headerstyle.css" %}"> {% endcomment %}
-</head>
-<body>
-<header> 
-    <div class="logo">
-    <img  src="{% static 'assets/img/logoapp.png' %}" alt="logoapp">
+{% block head %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Quicksand:wght@700&display=swap" rel="stylesheet">
 
-    <h1>Aproveite +</h1>
-    </div>
-    <nav>
-        <a href="https://www.tudogostoso.com.br/">Receitas</a>
-        <a href="https://www.ifood.com.br/">Lojas</a>
-        <a href="https://www.ifood.com.br/">Mercado</a>
-        <a href="https://www.ifood.com.br/">Dicas Sustentáveis</a>
-        <a href="https://www.ifood.com.br/">Meu Perfil</a>  
-        <a href="{% url "contato" %}">Contato</a>
-        <a href="{% url "produtos" %}">Produtos</a>
-        <a href="{% url "troca-senha" %}">Troca Senha</a>
-        <a href="{% url "cadastro" %}">Cadastro </a>
+    <link rel="stylesheet" href={% static "assets/css/headerstyle.css" %}>
+{% endblock head %}
+
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container-fluid">
+
+        <div class="d-flex align-items-center">
+          <img src={% static "assets/img/logo.png" %} alt="logo" class="logo me-2">
+          <h1> Aproveite +</h1>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuHamburguer" aria-controls="menuHamburguer" aria-expanded="false" aria-label="Toggle navigation">
+          <p class="navbar-toggler-icon"> </p>
+        </button>
+
+        <div class="collapse navbar-collapse" id="menuHamburguer">
+
+
+          <ul class="navbar-nav d-flex align-items-center mb-2 mb-lg-0">
+            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-egg-fried"></i>Receitas</a></li>
+            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-shop"></i>Lojas</a></li>
+            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-basket"></i>Mercado</a></li>
+            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-leaf"></i>Dicas Sustentáveis</a></li>
+            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person-circle"></i>Meu Perfil</a></li>
+          </ul>
+
+          <div class="search-login-group ms-lg-3">
+            <form class="d-flex" role="search">
+              <input class="form-control me-2" type="search" placeholder="Pesquisar..." aria-label="Pesquisar">
+              <button class="btn btn-light" type="submit"><i class="bi bi-search"></i></button>
+            </form>
+
+            <div class="d-flex text-center">
+              <a href="#" class="btn btn-success me-2"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+              <a href= {% url "cadastro" %} class="btn btn-outline-light"><i class="bi bi-person-plus"></i> Cadastre-se</a>
+            </div>
+
+          </div>
+        </div>
+      </div>
     </nav>
 </header>
 </body>

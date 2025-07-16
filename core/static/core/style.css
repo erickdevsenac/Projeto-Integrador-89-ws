@@ -13,7 +13,7 @@
     padding: 0;
     box-sizing: border-box;
 }
-body {
+.body {
     font-family: 'Roboto', sans-serif;
     background-color: var(--bg-light);
     color: var(--text-color-dark);
@@ -25,7 +25,7 @@ body {
     width: 200px;
     margin-bottom: 40px;
 }
-main {
+.main {
     max-width: 960px;
     margin: 40px auto;
     padding: 30px 20px;
