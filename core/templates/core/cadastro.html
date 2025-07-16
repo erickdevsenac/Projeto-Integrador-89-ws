@@ -1,16 +1,17 @@
+ {% extends 'global/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro Usuario</title>
-    <link rel="stylesheet" href= "{% static "core/stylecadastro.css" %}">
-     </head>
-<body>
-  <div class="container">
+
+{% block head %}
+
+{% endblock head %}
+
+{% block cadastro %}
+
+  <div class="container-fluid">
+    <img src={% static 'assets/img/logo.png' %} alt="" width="300px";>
+    <h1>APROVEITE+</h1>
     <div class="caixa">
-      <h1>Cadastro de Usuário</h1>
+      <h2>Cadastro de Usuário</h2>
       <form action="#" method="post">
         <label for="nome">Nome:</label>
         <input type="text" id="nome" name="nome" required>
@@ -29,5 +30,4 @@
       <p class="voltar"><a href="{% url "index" %}">← Voltar para a página inicial</a></p>
     </div>
   </div>
-</body>
-</html>
+{% endblock cadastro %}

@@ -9,21 +9,28 @@ body {
   height: 100vh;
 }
 
-.container {
+.container-fluid {
   text-align: center;
 }
 
-.caixa {
+.caixa{
   background-color: white;
   padding: 40px;
   border-radius: 20px;
   box-shadow: 0 8px 16px rgba(0, 100, 0, 0.2);
-  max-width: 400px;
+  max-width: 500px;
   width: 100%;
+  max-height: 700px ;
   margin: auto;
 }
-
 h1 {
+    font-family: "Manrope", sans-serif;
+    font-family: "Manrope", sans-serif;   
+    font-optical-sizing: auto;   
+    font-weight: weight;   
+    font-style: normal;
+}
+h2 {
   color: #2f855a;
   margin-bottom: 20px;
 }
