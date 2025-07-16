@@ -1,52 +1,44 @@
-body {
-    background-color: rgb(17, 240, 240);
-}
+    
+    header {
+      background: linear-gradient(to right, #70e0ff, #0072ff);
+      color: white;
+      padding: 5px;
+      border-radius: 15px;
+      margin: 20px;
+    }
 
-header {
-  display: flex;
-  justify-content: space-between; 
-  align-items: center;
-  padding: 10px 20px;
-  background: linear-gradient(90deg, #8bf1e9, #73cf73);
-  box-shadow: 2px 5px rgba(0, 0, 0, 0.1);
-}
+    .logo {
+      height: 65px;
+      padding-left: 10px;
+    }
 
-header a {
-    margin: 15px;
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 25px;
-    color: #ffffff;
-    align-items: center;
-    text-decoration: none;
-}
+    h1 {
+      font-size: 30px;
+      font-family: 'Playfair Display', serif;
+      color: #ffffff;
+      font-weight: 700;
+      text-shadow: 5px 2px 4px rgba(0, 0, 0, 0.3);
+    }
 
-h1 { 
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 30px;
-    color: #2c3e50;
-    margin: 10px 10px;
-}
+    .nav-link {
+      color: white;
+      font-weight: 400;
+      transition: 0.3s ease;
+    }
 
-.logo {
-  display: flex;
-  align-items: center;
-}
+    .nav-link i {
+      margin-right: 10px;
+      
+    }
 
-.logo img {
-  max-height: 60px;
-  margin-right: 10px; 
-}
+    .search-login-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-left: 400px;
+    } 
 
-.logo h1 {
-
-  font-size: 20px;
-  color: #2c3e50;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-
-
-
-
-
+    .form {
+        display: flex;
+    } 
 

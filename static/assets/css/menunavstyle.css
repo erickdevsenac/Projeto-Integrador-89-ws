@@ -7,7 +7,7 @@
 body {
     font-family: 'Arial', sans-serif;
     background-color: #A5D6A7;
-    color: #333333;
+    color: #b9f39e;
     line-height: 1.6;
     min-height: 100vh;
     display: flex;
@@ -36,7 +36,7 @@ h1 {
 h1:hover {
     background: linear-gradient(to right, hsl(122, 68%, 41%), #2E7D32)
 }
- 
+
 header nav {
     width: 100%;
     display: flex;
@@ -54,12 +54,15 @@ header nav ul {
     border-radius: 8px;
     padding: 10px 20px;
 }
- 
+
+
+
 header nav ul li {
     text-align: center;
 }
  
 header nav ul li a {
+    background: #0c7019;
     text-decoration: none;
     font-weight: bold;
     color: #FFFFFF;
@@ -127,3 +130,4 @@ footer {
     font-size: 0.6%;
  
 }
+
