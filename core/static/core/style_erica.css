@@ -1,5 +1,5 @@
 :root {
-    --cor-primaria: #2E7D32;
+    --cor-primaria: #125515;
     --cor-secundaria: #A5D6A7;
     --cor-texto: #FFFFFF;
     --cor-botao: #4CAF50;
@@ -8,23 +8,29 @@
 }
 
 body {
+    font-size: 0 auto;
     font-family: sans-serif;
-    background-color: var(--cor-primaria);
+    background: linear-gradient(#65bde0, #11aeec, #07587a);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
+
 }
 
 .container {
-    background-color: var(--cor-secundaria);
-    padding: 32px; 
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 60px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
     box-sizing: border-box;
+
 }
 
 .form-senha h2 {
@@ -34,34 +40,74 @@ body {
 }
 
 .form-senha label {
+    font-size: auto;
     display: block;
-    margin-bottom: 8px; 
+    margin-bottom: 8px;
     color: var(--cor-primaria);
     font-weight: bold;
 }
 
 .form-senha input[type="password"] {
     width: 100%;
-    padding: 13px; 
-    margin-bottom: 16px; 
-    border: 1px solid var(--cor-primaria);
+    padding: 12px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
     border-radius: 4px;
     background-color: var(--cor-input-bg);
     box-sizing: border-box;
+    color: #333;
+    transition: box-shadow 0.3s ease-in-out;
 }
+
+.form-senha input[type="password"]:focus {
+    border-color: rgba(255, 255, 255, 1);
+    box-shadow: 0 0 8px 4px #86d52c;
+    outline: none;
+}
+
 
 .form-senha button {
     width: 100%;
-    padding: 16px;
+    padding: 15px;
+    display: block;
     background-color: var(--cor-botao);
     color: var(--cor-texto);
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 16px; 
+    font-size: 16px;
     transition: background-color 0.3s ease;
 }
 
+
 .form-senha button:hover {
     background-color: var(--cor-botao-hover);
+}
+
+
+@media (max-width: 768px) {
+    .container {
+        padding: 30px;
+        max-width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 20px;
+        max-width: 95%;
+    }
+
+    .form-senha h2 {
+        font-size: 1.5rem;
+    }
+
+    .form-senha input[type="password"] {
+        padding: 10px;
+    }
+
+    .form-senha button {
+        padding: 12px;
+        font-size: 14px;
+    }
 }
