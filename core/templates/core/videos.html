@@ -3,123 +3,218 @@
 
 {% block videos %}
 <style>
-    .recipe-videos {
+    /* Estilos básicos */
+    .categories {
+        text-align: center;
+        margin: 20px 0;
+    }
+    .category-btn {
+        padding: 8px 15px;
+        margin: 0 5px;
+        background: #f0f0f0;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+    }
+    .category-btn.active {
+        background: #ff6b6b;
+        color: white;
+    }
+    .videos {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 30px;
-        padding: 30px;
-        max-width: 1200px;
-        margin: 0 auto;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        padding: 10px;
     }
-
-    .video-container {
-        position: relative;
-        padding-bottom: 56.25%; /* 16:9 aspect ratio */
-        height: 0;
+    .video {
+        border-radius: 8px;
         overflow: hidden;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        transition: transform 0.3s ease;
     }
-
-    .video-container:hover {
-        transform: translateY(-5px);
-    }
-
-    .video-container iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
+    .video iframe {
         width: 100%;
-        height: 100%;
+        height: 200px;
         border: none;
     }
-
     .video-title {
-        margin-top: 15px;
-        font-size: 18px;
-        font-weight: 600;
-        color: #333;
         text-align: center;
         padding: 10px;
-        background: #f8f8f8;
-        border-radius: 5px;
-    }
-
-    @media (max-width: 768px) {
-        .recipe-videos {
-            grid-template-columns: 1fr;
-            padding: 20px;
-        }
-        
-        .video-title {
-            font-size: 16px;
-        }
+        font-size: 16px;
     }
 </style>
 
-<div class="recipe-videos">
-    <!-- Row 1 -->
-    <div class="video-wrapper">
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/rMi9yEodxvs?si=-fTYhq_J2ONSNR7F" 
-                    title="Massa Caseira Tradicional"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    allowfullscreen></iframe>
-        </div>
-        <div class="video-title">Pão Integral de Tomate Seco</div>
-    </div>
+<div class="categories">
+    <button class="category-btn active" onclick="showVideos('bread')">Pães</button>
+    <button class="category-btn" onclick="showVideos('cake')">Bolos</button>
+    <button class="category-btn" onclick="showVideos('dessert')">Sobremesas</button>
+    <button class="category-btn" onclick="showVideos('savory')">Salgados</button>
+</div>
 
-    <div class="video-wrapper">
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/2BSH0RaB8QY?si=PzBxH7dSRHZ2SdKP" 
-                    title="Molho Branco Cremoso"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    allowfullscreen></iframe>
+<!-- Pães (8 receitas) -->
+<div id="bread" class="video-group">
+    <div class="videos">
+        <div class="video">
+            <iframe src="https://www.youtube.com/embed/RaVSaQpGmmA" allowfullscreen></iframe>
+            <div class="video-title">Pão Integral com Tomate Seco</div>
         </div>
-        <div class="video-title">P</div>
-    </div>
-
-    <!-- Row 2 -->
-    <div class="video-wrapper">
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/2hvN0bzjBxw?si=NJtkRbPUzfqY6tbg" 
-                    title="Bolo de Chocolate"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    allowfullscreen></iframe>
+        <div class="video">
+            <iframe src="https://www.youtube.com/embed/2BSH0RaB8QY" allowfullscreen></iframe>
+            <div class="video-title">Pão Caseiro Fofinho</div>
         </div>
-        <div class="video-title">Bolo de Chocolate Fofinho</div>
-    </div>
-
-    <div class="video-wrapper">
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/PUR0QuDZY80?si=N3JRBa_sYjCIfvEy" 
-                    title="Risoto de Cogumelos"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    allowfullscreen></iframe>
+        <div class="video">
+            <iframe src="https://www.youtube.com/embed/PUR0QuDZY80" allowfullscreen></iframe>
+            <div class="video-title">Pão Francês Crocante</div>
         </div>
-        <div class="video-title">Risoto de Cogumelos Cremoso</div>
-    </div>
-
-    <!-- Row 3 -->
-    <div class="video-wrapper">
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/KYQ6MJM0WwM?si=EaFwT51Nyzs1NgnA" 
-                    title="Peixe Grelhado"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    allowfullscreen></iframe>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/noDZZXzImv8?si=Uzpy1wY0V5dL5M6q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
-        <div class="video-title">Peixe Grelhado com Ervas</div>
-    </div>
-
-    <div class="video-wrapper">
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/-6oKEiI6_N0?si=kMfpFfIBp3dV6CHn" 
-                    title="Salada Caesar"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    allowfullscreen></iframe>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/sPe90DSD_h4?si=5-UlQtrs3usbTpGD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Pão de Alho Caseiro</div>
         </div>
-        <div class="video-title">Salada Caesar Autêntica</div>
+        <div class="video">
+           <iframe width="560" height="315" src="https://www.youtube.com/embed/nsWFax70O94?si=AMJOkylCjL8KucgP" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Pão de Mel Delicioso</div>
+        </div>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/BKbujHOXOxE?si=-8v0gAEPdp6vLJlR" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Pão Sírio Árabe</div>
+        </div>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/4CCAWSkzeY0?si=2dYo_CAf1z0fj7CR" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Pão de Batata Doce</div>
+        </div>
     </div>
 </div>
+
+<!-- Bolos (8 receitas) -->
+<div id="cake" class="video-group" style="display:none">
+    <div class="videos">
+        <div class="video">
+            <iframe src="https://www.youtube.com/embed/2hvN0bzjBxw" allowfullscreen></iframe>
+            <div class="video-title">Sonho de padaria</div>
+        </div>
+        <div class="video">
+            <iframe src="https://www.youtube.com/embed/KYQ6MJM0WwM" allowfullscreen></iframe>
+            <div class="video-title">Bolinho de Chuva da Vovó</div>
+        </div>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/ff82PsbSz2g?si=EgEax6CqTSsdCDxd" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Bolo de Cenoura com Cobertura</div>
+        </div>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/LkNJdIaqAdk?si=ZWpZ6dPloYDgq1fx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Bolo Red Velvet Elegante</div>
+        </div>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/fhX_qFC-59A?si=Y03IrUMFkmuDm3Q9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Bolo de Fubá Cremoso</div>
+        </div>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/rX3Scrr2Ots?si=DSGSiCCUH1yImGJ3" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Bolo de Laranja Úmido</div>
+        </div>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/sveKDiTpQOc?si=WfqqFgfKSkD8X_0e" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Bolo Vulcão de Chocolate</div>
+        </div>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/2FBS3_eUGRU?si=A5_T42xaVbTcyhFv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Bolo de Coco Cremoso</div>
+        </div>
+    </div>
+</div>
+
+<!-- Sobremesas (8 receitas) -->
+<div id="dessert" class="video-group" style="display:none">
+    <div class="videos">
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/OPoPVUrFhkY?si=5y-N9e33Pp7qfNSI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Rocambole de Doce de Leite</div>
+        </div>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/olw3gMc4YlU?si=TWNencOMZmeifhPb" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Pudim de Leite Condensado</div>
+        </div>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/B1neuYtLVKE?si=DYSjAX19O6SZllmo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Brigadeiro Caseiro</div>
+        </div>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/tKCvDIXp6FI?si=UepSQ-iPM_JycSYz" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Mousse de Maracujá</div>
+        </div>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/X3dtT2bGrys?si=1zb83d5iv7zFFBlN" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Torta de Limão Cremosa</div>
+        </div>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/z-s0dNKnanM?si=JvWsMKQ35KiLJz7J" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Petit Gateau</div>
+        </div>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/RPh7Y8Y6uCo?si=BmPv51BPuy8oUooQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Pavê de Chocolate</div>
+        </div>
+        <div class="video">
+           <iframe width="560" height="315" src="https://www.youtube.com/embed/LpfWkaBluLE?si=dLniMKIcCtnPrIeg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Mousse de Chocolate</div>
+        </div>
+    </div>
+</div>
+
+<!-- Salgados (8 receitas) -->
+<div id="savory" class="video-group" style="display:none">
+    <div class="videos">
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/NzAbrkg8dkU?si=Cti367wyQN8XFV_M" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Coxinha de Frango Crocante</div>
+        </div>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/_T6OGFRcB_Q?si=5t7gu16TAy7z4Pcr" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Empada de Palmito</div>
+        </div>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/F68YL1WPEnU?si=boqTweTYU21vEWcZ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Esfiha de Carne</div>
+        </div>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/SklEEwUHRFw?si=RHV4uQLSpB0jInve" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Pastel de Feira</div>
+        </div>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/FS1wEDSih8I?si=8gZ03LRNR5Niofna" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Enroladinho de Salsicha</div>
+        </div>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/z0LGE5SGWSc?si=l84TKdouLav80m9v" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Bolinho de Bacalhau</div>
+        </div>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/fMsVrGxR75M?si=PDesJvrsjNi-Fm14" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Torta de Frango</div>
+        </div>
+        <div class="video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/900rnP4xyf0?si=x_PGPUbc1ZxV9FTF" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="video-title">Pão de Queijo Recheado</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showVideos(category) {
+        // Esconde todos os grupos de vídeos
+        document.querySelectorAll('.video-group').forEach(group => {
+            group.style.display = 'none';
+        });
+        
+        // Mostra o grupo selecionado
+        document.getElementById(category).style.display = 'block';
+        
+        // Atualiza os botões ativos
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        event.target.classList.add('active');
+    }
+</script>
 {% endblock videos %}
