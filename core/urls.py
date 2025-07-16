@@ -8,5 +8,4 @@ urlpatterns = [
     path('telalogin/', views.telalogin, name='telalogin'),
     path('trocasenha/', views.trocasenha, name='troca-senha'),
     path('cadastro/', views.cadastro, name='cadastro'),
-    
 ]

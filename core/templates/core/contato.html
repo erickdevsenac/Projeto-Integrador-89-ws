@@ -1,49 +1,48 @@
 {% load static %}
-<!DOCTYPE html>
 <html lang="pt-BR">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    {% block head %}
+    <title>Contato</title>
     <link rel="stylesheet" href="{% static 'core/style_contato.css' %}">
-</head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    {% endblock head %}
+
+
 
 <body>
-
     <div class="container">
+        <img src="{% static 'core/img/contato.png' %}" alt="imagem referente a contatos" class="imagem-contato">
         <div class="formulario">
+            
             <form action="#" method="post">
+                {% csrf_token %}
                 <fieldset>
                     <legend>FORMULÁRIO DE CONTATO</legend>
                     <div>
                         <label for="name">Nome Completo:</label>
-                        <input type="text" id="name" name="name">
+                        <input type="text" id="name" name="name" required>
                     </div>
                     <div>
                         <label for="email">Email:</label>
-                        <input type="email" id="email" name="email">
+                        <input type="email" id="email" name="email" required>
                     </div>
                     <div>
-                        <label for="mensagem">mensagem:</label>
-                        <textarea id="mensagem" name="mensagem" rows="4" aria-label="mensagem"></textarea>
+                        <label for="mensagem">Mensagem:</label>
+                        <textarea id="mensagem" name="mensagem" rows="4" required></textarea>
                     </div>
-
                     <button type="submit">Enviar</button>
                 </fieldset>
             </form>
         </div>
-    
-
-    <div class="redes">
-        <h2>SIGA-NOS</h2>
-        <ul class="redes-sociais">
-            <li class="instagram"><a href="https://www.instagram.com/">Instagram</a></li>
-            <li class="facebook"><a href="https://www.facebook.com/?locale=pt_BR">Facebook</a></li>
-            <li class="whats"><a href="https://www.whatsapp.com/?lang=pt_BR">WhatsApp</a></li>
-        </ul>
-   </div>
-</div>
+        <div class="redes">
+            <h2>SIGA-NOS</h2>
+                <ul class="redes-sociais">
+                    <li><a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"> </i>   Instagram</a></li>
+                    <li><a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook"> </i>  Facebook</a></li>
+                    <li><a href="https://www.whatsapp.com/" target="_blank"><i class="fab fa-whatsapp"> </i>  WhatsApp</a></li>
+                </ul>
+        </div>
+    </div>
 </body>
 
 </html>

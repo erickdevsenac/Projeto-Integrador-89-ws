@@ -1,11 +1,17 @@
-{% extends 'global/base.html' %}
+
 {% load static %}
 
+
 {% block conteudologin %}
+    
+    {% block head %}
+        <title>Login</title>
+        <script src="{% static 'core/js/login.js' %}"></script>  
+        <link rel="stylesheet" href="{% static 'core/stylelogin.css' %}">
+
+    {% endblock head %}
 <div class="login-box">
     <h2 class="login-title">Entrar</h2>
-
-    
 
     <form id="login-form" method="post" novalidate>
         {% csrf_token %}
@@ -17,7 +23,14 @@
 
         <button type="submit" class="submit-btn">Entrar</button>
     </form>
+
     <div id="error-message" class="error-msg" style="display:none;"></div>
-    <a href="{% url 'troca-senha' %}" class="change-password-link">Alterar senha</a>
+
+    <div class="extra-links">
+        <ul>
+            <li><a href="{% url 'cadastro' %}">Criar conta</a></li>
+            <li><a href="{% url 'troca-senha' %}">Esqueci minha senha</a></li>
+        </ul>
+    </div>
 </div>
 {% endblock conteudologin %}

@@ -1,48 +1,52 @@
 {% extends 'global/base.html' %}
 {% load static %}
 
-{% block content %}
-    {% block head %}
-    <title> Aproveite mais </title>
+<html> 
+<body>
+    {% block head %}  
+    <link rel="stylesheet" href="{% static "core/style.css" %}">
+    <title>Bem-Vindo ao Aproveite +</title>
     {% endblock head %}
-    <main>
-        <article>
-            <section>
- 
-                <h2>Objetivo do APP</h2>
-                <div class="sobre">
- 
-                    <p>
-                        Nosso aplicativo tem como principal objetivo reduzir o desperdício de alimentos, conectando
-                        consumidores a estabelecimentos que oferecem produtos próximos da data de validade com descontos
-                        atrativos.
-                       
-                        Dessa forma, o cliente tem a oportunidade de adquirir alimentos de qualidade por um preço mais
-                        acessível, enquanto os comerciantes evitam prejuízos com a perda de produtos que, de outra forma,
-                        seriam descartados. É uma solução vantajosa para todos  boa para o bolso, para o negócio e para o
-                        planeta.
-                    </p>
-                   
+   <main>
+        <div class="main-header">
+            <h1 class="main-title">Bem-Vindo ao Aproveite +</h1>
+             <img class="inline-logo" src="{% static 'assets/img/logo.png' %}" alt="Logo Aproveite +">
+        </div>
+
+        <section id="sobre" class="about">
+            <h2 class="section-title">O que é o Desperdício Zero?</h2>
+            <p>O Desperdício Zero é um aplicativo que conecta pessoas que têm alimentos sobrando com aqueles que precisam, contribuindo para um mundo mais sustentável.</p>
+
+            <h2 class="section-title">Benefícios de Participar</h2>
+        </section>
+
+        <section id="beneficios-grid">
+            <div class="benefits">
+                <div class="benefit">
+                    <h3>Reduza o Desperdício</h3>
+                    <p>Ajude a evitar o desperdício de alimentos ao doar o que não está sendo consumido.</p>
                 </div>
-            </section>
- 
-            <section>
- 
-               
-                <h2>Sobre o Aplicativo</h2>
-                <div class="sobre">
- 
-                    <p>
-                        O Aproveite+ surgiu como resposta a um problema urgente e impactante: o desperdício de alimentos.
-                        Motivados por essa realidade, nós, alunos do curso de Desenvolvimento de Sistemas, abraçamos o
-                        desafio de criar uma solução tecnológica capaz de reduzir e quem sabe até eliminar  esse
-                        desperdício.
-                        Após uma análise detalhada do tema, desenvolvemos um aplicativo que oferece alternativas
-                        sustentáveis e financeiramente vantajosas para empresas e consumidores, unindo tecnologia,
-                        consciência social e impacto positivo.
-                    </p>
+                <div class="benefit">
+                    <h3>Apoie a Comunidade</h3>
+                    <p>Contribua com quem precisa e fortaleça a solidariedade em sua comunidade.</p>
                 </div>
-            </section>
-        </article>
-    </main> <!--  conteudo principal -->
-{% endblock content %}
+                <div class="benefit">
+                    <h3>Impacto Ambiental</h3>
+                    <p>Menos desperdício de alimentos significa menos impacto ambiental e uma vida mais sustentável.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="acoes" class="actions">
+            <h2 class="section-title">Como você pode ajudar</h2>
+            <div class="action-button">
+                <a href="#doar" class="cta-button">Doar Alimentos</a>
+            </div>
+            <div class="action-button">
+                <a href="{% url 'produtos' %}" class="cta-button" >Pedir Alimentos</a>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>
