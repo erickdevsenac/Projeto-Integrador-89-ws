@@ -4,6 +4,8 @@ body {
     padding: 0;
     background-color: var(--cor-6);
 
+
+
 header {
     background-color: var(--cor-9); 
     color: rgb(255, 0, 0);
@@ -82,4 +84,4 @@ footer {
     color: white;
     text-align: center;
     padding: 15px;
-}
+}}
