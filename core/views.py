@@ -14,3 +14,6 @@ def cadastro(request):
 
 def trocasenha(request):
     return render(request, 'core/senha_erica.html')
+
+def receitas(request):
+    return render (request, 'core/receitas.html')
