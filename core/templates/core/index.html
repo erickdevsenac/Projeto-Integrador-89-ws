@@ -1,13 +1,16 @@
 {% extends 'global/base.html' %}
 {% load static %}
 
-<html> 
-<body>
-    {% block head %}  
-    <link rel="stylesheet" href="{% static "core/style.css" %}">
-    <title>Bem-Vindo ao Aproveite +</title>
-    {% endblock head %}
-   <main>
+
+
+
+    {% block content %}
+
+        {% block head %}  
+            <link rel="stylesheet" href="{% static "core/style.css" %}">
+            <title>Bem-Vindo ao Aproveite+</title>
+        {% endblock head %}
+
         <div class="main-header">
             <h1 class="main-title">Bem-Vindo ao Aproveite +</h1>
              <img class="inline-logo" src="{% static 'assets/img/logo.png' %}" alt="Logo Aproveite +">
@@ -46,7 +49,4 @@
                 <a href="{% url 'produtos' %}" class="cta-button" >Pedir Alimentos</a>
             </div>
         </section>
-    </main>
-
-</body>
-</html>
+   {% endblock content %}

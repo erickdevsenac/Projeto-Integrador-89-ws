@@ -1,18 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
+.body_contato {
     font-family: 'Roboto', sans-serif;
     background: linear-gradient(to right, #aacdb4 100%);
     min-height: 100vh;
 }
 
-.container {
+.body_contato  .container {
     display: flex;
     justify-content: flex-start; /* Alinhando a imagem à esquerda */
     align-items: flex-start;
@@ -22,23 +16,23 @@ body {
     gap: 30px;
 }
 
-.imagem-container {
+.body_contato .imagem-container {
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: flex-start;
 }
 
-.imagem-contato {
+.body_contato  .imagem-contato {
     width: 100%;
-    max-width: 350px; /* Tamanho menor para a imagem */
-    height: 500px; /* Esticando a imagem para ser mais alta */
+    max-width: 250px; /* Tamanho menor para a imagem */
+    height: 200px; /* Esticando a imagem para ser mais alta */
     object-fit: cover; /* Para a imagem cobrir o espaço sem distorcer */
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.formulario {
+.body_contato  .formulario {
     background: #fff;
     padding: 40px;
     flex: 2; /* Aumentando o tamanho do formulário */
@@ -48,27 +42,27 @@ body {
     margin-left: 30px;
 }
 
-fieldset {
+.body_contato  fieldset {
     border: 2px solid #5c8b6c;
     padding: 24px;
     border-radius: 10px;
 }
 
-legend {
+.body_contato  legend {
     font-weight: bold;
     font-size: 22px;
     color: #5c8b6c;
     margin-bottom: 16px;
 }
 
-label {
+.body_contato label {
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
     color: #333;
 }
 
-input,
+.body_contato input,
 textarea {
     width: 100%;
     padding: 12px;
@@ -87,7 +81,7 @@ textarea:focus {
     box-shadow: 0 0 5px #5c8b6c;
 }
 
-button {
+.body_contato button {
     padding: 12px 20px;
     background-color: #5c8b6c;
     color: #fff;
@@ -100,11 +94,11 @@ button {
     width: 100%;
 }
 
-button:hover {
+.body_contato button:hover {
     background-color: #407254;
 }
 
-.redes {
+.body_contato .redes {
     background: #5c8b6c;
     color: white;
     padding: 32px;
@@ -119,22 +113,22 @@ button:hover {
     margin-left: 30px;
 }
 
-.redes h2 {
+.body_contato .redes h2 {
     margin-bottom: 24px;
     font-size: 24px;
     font-weight: 700;
 }
 
-.redes-sociais {
+.body_contato .redes-sociais {
     list-style-type: none;
     padding: 0;
 }
 
-.redes-sociais li {
+.body_contato .redes-sociais li {
     margin-bottom: 12px;
 }
 
-.redes-sociais a {
+.body_contato .redes-sociais a {
     display: inline-block;
     width: 100%;
     padding: 12px;
@@ -146,7 +140,7 @@ button:hover {
     transition: background-color 0.3s ease;
 }
 
-.redes-sociais .fab {
+.body_contato .redes-sociais .fab {
     width: 30px;
     font-size: 20px;
     margin-right: 8px;
@@ -158,26 +152,26 @@ button:hover {
 }
 
 @media (max-width: 900px) {
-    .container {
+    .body_contato .container {
         flex-direction: column;
         align-items: center;
     }
 
-    .imagem-container {
+    .body_contato .imagem-container {
         margin-bottom: 30px;
     }
 
-    .formulario,
+    .body_contato .formulario,
     .redes {
         width: 100%;
         margin-left: 0;
     }
 
-    .formulario {
+    .body_contato .formulario {
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     }
 
-    .redes {
+    .body_contato .redes {
         margin-top: 30px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     }

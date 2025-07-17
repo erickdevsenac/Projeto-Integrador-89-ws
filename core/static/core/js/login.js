@@ -17,8 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             errorMessage.style.display = "none";
             alert("Login realizado com sucesso!");
-
-    
         }
     });
 });
