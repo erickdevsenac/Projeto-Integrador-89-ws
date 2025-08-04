@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 {% include 'parciais/_head.html' %}
-{% include "parciais/_fazerheader2.html" %}
+{% comment %} {% include "parciais/_fazerheader2.html" %} {% endcomment %}
  {% include 'parciais/_header.html' %} 
 
 <main class="container mt-4">
@@ -11,6 +11,9 @@
     {% block cadastro %}{% endblock cadastro %}
     {% block alterarsenha %}{% endblock alterarsenha %}
     {% block produtos %}{% endblock produtos %}
+    {% block cadastro %}{% endblock cadastro %}
+    {% block contato %}{% endblock contato %}
+
 </main>
 
 

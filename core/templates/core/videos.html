@@ -2,45 +2,11 @@
 {% load static %}
 
 {% block videos %}
-<style>
-    /* Estilos básicos */
-    .categories {
-        text-align: center;
-        margin: 20px 0;
-    }
-    .category-btn {
-        padding: 8px 15px;
-        margin: 0 5px;
-        background: #f0f0f0;
-        border: none;
-        border-radius: 15px;
-        cursor: pointer;
-    }
-    .category-btn.active {
-        background: #ff6b6b;
-        color: white;
-    }
-    .videos {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 20px;
-        padding: 10px;
-    }
-    .video {
-        border-radius: 8px;
-        overflow: hidden;
-    }
-    .video iframe {
-        width: 100%;
-        height: 200px;
-        border: none;
-    }
-    .video-title {
-        text-align: center;
-        padding: 10px;
-        font-size: 16px;
-    }
-</style>
+
+{% block head %}
+<script src={% static "core/js/videos.js" %} defer></script>
+<link rel="stylesheet" href={% static "core/css/video.css" %}>
+{% endblock head %}
 
 <div class="categories">
     <button class="category-btn active" onclick="showVideos('bread')">Pães</button>
@@ -200,21 +166,4 @@
     </div>
 </div>
 
-<script>
-    function showVideos(category) {
-        // Esconde todos os grupos de vídeos
-        document.querySelectorAll('.video-group').forEach(group => {
-            group.style.display = 'none';
-        });
-        
-        // Mostra o grupo selecionado
-        document.getElementById(category).style.display = 'block';
-        
-        // Atualiza os botões ativos
-        document.querySelectorAll('.category-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        event.target.classList.add('active');
-    }
-</script>
 {% endblock videos %}

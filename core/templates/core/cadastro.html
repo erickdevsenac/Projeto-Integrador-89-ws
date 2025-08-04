@@ -1,17 +1,33 @@
+<<<<<<< HEAD
  {% extends 'global/base.html' %}
+=======
+{% extends 'global/base.html' %}
+>>>>>>> f5aff4eaf0bcf879e909d0746c2b487cbdf77632
 {% load static %}
 
+
+{% block cadastro %}
 {% block head %}
   <title>Cadastro Usuario</title>
   <link rel="stylesheet" href= "{% static "core/stylecadastro.css" %}">
 {% endblock head %}
 
+<<<<<<< HEAD
 
   <div class="container">
+=======
+<div class="body">
+  <div class="container-fluid">
+    <div class="logo">
+      <img src={% static 'assets/img/logo.png' %} alt="" >
+      <h1>APROVEITE+</h1>
+    </div>
+>>>>>>> f5aff4eaf0bcf879e909d0746c2b487cbdf77632
     <div class="caixa">
       <h2>Cadastro de Usuário</h2>
       <form action="#" method="post">
        {% csrf_token %}
+
         <label for="nome">Nome:</label>
         <input type="text" id="nome" name="nome" required>
 
@@ -29,3 +45,8 @@
       <p class="voltar"><a href="{% url "index" %}">← Voltar para a página inicial</a></p>
     </div>
   </div>
+<<<<<<< HEAD
+=======
+</div>
+{% endblock cadastro %}
+>>>>>>> f5aff4eaf0bcf879e909d0746c2b487cbdf77632

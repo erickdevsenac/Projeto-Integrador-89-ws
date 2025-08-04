@@ -6,39 +6,46 @@
       border-radius: 15px;
       margin: 20px;
     }
+    header a {
+      text-decoration: none;
+    }
 
-    .logo {
+    header .logo {
       height: 65px;
       padding-left: 10px;
     }
 
-    h1 {
+    header .divlogo{
+      margin-right: 20px;
+    }
+
+    header a h1 {
       font-size: 30px;
       font-family: 'Playfair Display', serif;
       color: #ffffff;
-      font-weight: 700;
+      font-weight: 700px;
       text-shadow: 5px 2px 4px rgba(0, 0, 0, 0.3);
     }
 
-    .nav-link {
+    header .nav-link {
       color: white;
-      font-weight: 400;
+      font-weight: 400px;
       transition: 0.3s ease;
     }
 
-    .nav-link i {
+    header .nav-link i {
       margin-right: 10px;
       
     }
 
-    .search-login-group {
+    header .search-login-group {
         display: flex;
         align-items: center;
         gap: 10px;
-        padding-left: 400px;
+        padding-left: 100px;
     } 
 
-    .form {
+    header .form {
         display: flex;
     } 
 

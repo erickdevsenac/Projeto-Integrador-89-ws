@@ -1,19 +1,28 @@
-body {
+.body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
   background-color: #f0fdf4; /* Verde bem claro */
-  display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+}
+.body .logo img{
+  width: 200px;
 }
 
+<<<<<<< HEAD
 .container-fluid {
   text-align: center;
 }
 
 .caixa{
+=======
+.body .container-fluid {
+  text-align: center;
+}
+
+.body .caixa {
+>>>>>>> f5aff4eaf0bcf879e909d0746c2b487cbdf77632
   background-color: white;
   padding: 40px;
   border-radius: 20px;
@@ -23,6 +32,7 @@ body {
   max-height: 700px ;
   margin: auto;
 }
+<<<<<<< HEAD
 h1 {
     font-family: "Manrope", sans-serif;
     font-family: "Manrope", sans-serif;   
@@ -31,17 +41,21 @@ h1 {
     font-style: normal;
 }
 h2 {
+=======
+
+.body h1 {
+>>>>>>> f5aff4eaf0bcf879e909d0746c2b487cbdf77632
   color: #2f855a;
   margin-bottom: 20px;
 }
 
-form {
+.body form {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-label {
+.body label {
   text-align: left;
   font-weight: bold;
   color: #2f855a;
@@ -54,13 +68,13 @@ input {
   font-size: 15px;
 }
 
-input:focus {
+.body input:focus {
   border-color: #38a169;
   outline: none;
   box-shadow: 0 0 4px #c6f6d5;
 }
 
-button {
+.body button {
   padding: 12px;
   border: none;
   border-radius: 10px;
@@ -72,20 +86,20 @@ button {
   transition: background-color 0.3s;
 }
 
-button:hover {
+.body button:hover {
   background-color: #2f855a;
 }
 
-.voltar {
+.body .voltar {
   margin-top: 20px;
 }
 
-.voltar a {
+.body .voltar a {
   text-decoration: none;
   color: #2f855a;
   font-weight: bold;
 }
 
-.voltar a:hover {
+.body .voltar a:hover {
   text-decoration: underline;
 }
