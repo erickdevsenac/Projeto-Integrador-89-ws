@@ -10,19 +10,11 @@
   width: 200px;
 }
 
-<<<<<<< HEAD
-.container-fluid {
-  text-align: center;
-}
-
-.caixa{
-=======
 .body .container-fluid {
   text-align: center;
 }
 
 .body .caixa {
->>>>>>> f5aff4eaf0bcf879e909d0746c2b487cbdf77632
   background-color: white;
   padding: 40px;
   border-radius: 20px;
@@ -32,7 +24,7 @@
   max-height: 700px ;
   margin: auto;
 }
-<<<<<<< HEAD
+
 h1 {
     font-family: "Manrope", sans-serif;
     font-family: "Manrope", sans-serif;   
@@ -40,11 +32,8 @@ h1 {
     font-weight: weight;   
     font-style: normal;
 }
-h2 {
-=======
 
 .body h1 {
->>>>>>> f5aff4eaf0bcf879e909d0746c2b487cbdf77632
   color: #2f855a;
   margin-bottom: 20px;
 }
