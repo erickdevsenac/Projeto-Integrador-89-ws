@@ -1,40 +1,82 @@
 {% extends 'global/base.html' %}
 {% load static %}
 
-
 {% block cadastro %}
 {% block head %}
-  <title>Cadastro Usuario</title>
-  <link rel="stylesheet" href= "{% static "core/stylecadastro.css" %}">
+  <title>Cadastro Usuário</title>
+  <link rel="stylesheet" href="{% static 'core/stylecadastro.css' %}">
 {% endblock head %}
 
 <div class="body">
   <div class="container-fluid">
     <div class="logo">
-      <img src={% static 'assets/img/logo.png' %} alt="" >
+      <img src="{% static 'assets/img/logo.png' %}" alt="">
       <h1>APROVEITE+</h1>
     </div>
     <div class="caixa">
       <h2>Cadastro de Usuário</h2>
-      <form action="#" method="post">
-       {% csrf_token %}
+      {% if mensagem %}
+        <p style="color: red;">{{ mensagem }}</p>
+      {% endif %}
+      <form method="post" action="">
+        {% csrf_token %}
 
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" name="nome" required>
+        <label for="tipo">Tipo de Usuário:</label>
+        <select id="tipo" name="tipo" required onchange="mostrarCampos()">
+          <option value="" disabled selected>Selecione o tipo</option>
+          <option value="CLIENTE">Cliente</option>
+          <option value="FORNECEDOR">vendedor/comerciante</option>
+          <option value="ONG">ONG</option>
+        </select>
 
-        <label for="email">E-mail:</label>
-        <input type="email" id="email" name="email" required>
 
-        <label for="senha">Senha:</label>
-        <input type="password" id="senha" name="senha" required>
+        <div id="campos-comuns">
+          <label for="nome">Nome:</label>
+          <input type="text" id="nome" name="nome" required>
+          <br>
 
-        <label for="confirmar">Confirmar Senha:</label>
-        <input type="password" id="confirmar" name="confirmar" required>
+          <label for="email">E-mail:</label>
+          <input type="email" id="email" name="email" required>
+           <br>
+          <label for="senha">Senha:</label>
+          <input type="password" id="senha" name="senha" required>
+           <br>
+          <label for="confirmar">Confirmar Senha:</label>
+          <input type="password" id="confirmar" name="confirmar" required>
+          <br>
+          <label for="telefone">Telefone:</label>
+          <input type="text" id="telefone" name="telefone" required>
+           <br>
+          <label for="endereco">Endereço:</label>
+          <input type="text" id="endereco" name="endereco" required>
+        </div>
+
+
+        <div id="campos-fornecedor" style="display:none;">
+          <label for="cnpj">CNPJ:</label>
+          <input type="text" id="cnpj" name="cnpj">
+           <br>
+          <label for="descricao_parceiro">Descrição da Empresa:</label>
+          <textarea id="descricao_parceiro" name="descricao_parceiro"></textarea>
+        </div>
+
+        <div id="campos-ong" style="display:none;">
+          <label for="cnpj_ong">CNPJ:</label>
+          <input type="text" id="cnpj_ong" name="cnpj">
+           <br>
+           <br>
+          <label for="descricao_ong">Descrição da ONG:</label> 
+          <textarea id="descricao_ong" name="descricao_parceiro"></textarea>
+        </div>
 
         <button type="submit" class="botao botao-verde">Cadastrar</button>
       </form>
-      <p class="voltar"><a href="{% url "index" %}">← Voltar para a página inicial</a></p>
-    </div>
-  </div>
-</div>
+
+      <script>
+      function mostrarCampos() {
+        const tipo = document.getElementById('tipo').value;
+        document.getElementById('campos-fornecedor').style.display = (tipo === 'FORNECEDOR') ? 'block' : 'none';
+        document.getElementById('campos-ong').style.display = (tipo === 'ONG') ? 'block' : 'none';
+      }
+      </script>
 {% endblock cadastro %}

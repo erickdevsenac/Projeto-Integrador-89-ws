@@ -1,3 +1,8 @@
 from django.contrib import admin
+from core.models import Perfil
 
-# Register your models here.
+admin.site.register(Perfil)
+# admin.site.register(Cliente)
+# admin.site.register(Fornecedor)
+# admin.site.register(AdminSistema)
+

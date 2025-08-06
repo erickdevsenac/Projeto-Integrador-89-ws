@@ -1,94 +1,132 @@
-.body {
+/* Reset e base */
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f0fdf4; /* Verde bem claro */
-  align-items: center;
-  justify-content: center;
-}
-.body .logo img{
-  width: 200px;
 }
 
-.body .container-fluid {
-  text-align: center;
-}
-
-.body .caixa {
-  background-color: white;
-  padding: 40px;
-  border-radius: 20px;
-  box-shadow: 0 8px 16px rgba(0, 100, 0, 0.2);
-  max-width: 500px;
-  width: 100%;
-  max-height: 700px ;
-  margin: auto;
-}
-
-h1 {
-    font-family: "Manrope", sans-serif;
-    font-family: "Manrope", sans-serif;   
-    font-optical-sizing: auto;   
-    font-weight: weight;   
-    font-style: normal;
-}
-
-.body h1 {
-  color: #2f855a;
-  margin-bottom: 20px;
-}
-
-.body form {
+body, .body {
+  background-color: #d6f0e3;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  gap: 15px;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 30px 20px;
 }
 
-.body label {
-  text-align: left;
-  font-weight: bold;
-  color: #2f855a;
+/* Container principal */
+.container-fluid {
+  width: 100%;
+  max-width: 500px;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
-input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 15px;
+
+.logo {
+  text-align: center;
+  margin-bottom: 30px;
 }
 
-.body input:focus {
-  border-color: #38a169;
-  outline: none;
-  box-shadow: 0 0 4px #c6f6d5;
+.logo img {
+  width: 70px;
+  height: auto;
 }
 
-.body button {
-  padding: 12px;
-  border: none;
+.logo h1 {
+  color: #2d7a5f;
+  font-size: 24px;
+  margin-top: 10px;
+}
+.caixa h2 {
+  text-align: center;
+  color: #2d7a5f;
+  font-size: 22px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+p[style*="color: red"] {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+
+form label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #2d7a5f;
+  font-size: 14px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select,
+textarea {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 18px;
+  border: 1.5px solid #ccc;
   border-radius: 10px;
-  background-color: #38a169;
+  font-size: 15px;
+  transition: border-color 0.3s;
+  font-family: inherit;
+  resize: vertical;
+  color: #333;
+}
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #2d7a5f;
+  outline: none;
+  box-shadow: 0 0 4px rgba(45, 122, 95, 0.3);
+}
+textarea {
+  min-height: 90px;
+}
+
+.botao {
+  width: 100%;
+  padding: 14px 0;
+  background-color: #2d7a5f;
   color: white;
-  font-weight: bold;
+  border: none;
+  border-radius: 12px;
   font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.body button:hover {
-  background-color: #2f855a;
-}
-
-.body .voltar {
-  margin-top: 20px;
-}
-
-.body .voltar a {
-  text-decoration: none;
-  color: #2f855a;
   font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.body .voltar a:hover {
-  text-decoration: underline;
+.botao:hover {
+  background-color: #24664c;
+}
+
+@media (max-width: 480px) {
+  .container-fluid {
+    padding: 25px 20px;
+  }
+
+  .logo img {
+    width: 60px;
+  }
+
+  .logo h1 {
+    font-size: 20px;
+  }
+
+  .caixa h2 {
+    font-size: 20px;
+  }
+
+  .botao {
+    font-size: 15px;
+  }
 }

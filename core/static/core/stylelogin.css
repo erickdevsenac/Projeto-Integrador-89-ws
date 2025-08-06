@@ -1,26 +1,32 @@
 :root {
-    --cor-primaria: #2E7D32;
-    --cor-secundaria: #A5D6A7;
-    --cor-texto: #FFFFFF;
-    --cor-botao: #4CAF50;
-    --cor-botao-hover: #388E3C;
-    --cor-input-bg: #ffffffdc;
-    --cor-erro: #f44336;
+    --cor-primaria: #2E7D32;        /* Verde escuro */
+    --cor-secundaria: #A5D6A7;      /* Verde claro */
+    --cor-texto: #FFFFFF;            /* Branco */
+    --cor-botao: #4CAF50;            /* Verde botão */
+    --cor-botao-hover: #388E3C;      /* Verde escuro botão hover */
+    --cor-input-bg: #ffffffdc;       /* Fundo inputs semi-transparente */
+    --cor-erro: #f44336;             /* Vermelho erro */
 }
+
+/* Reset básico */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
+/* Corpo da página - centralizar conteúdo */
 html, body {
     height: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
 body {
     display: flex;
     justify-content: center;
     align-items: center;
 
+    /* Fundo com imagem e camada escura */
     background-color: #00000099;
     background-image: url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1470&q=80');
     background-repeat: no-repeat;
@@ -31,6 +37,8 @@ body {
 
     overflow: hidden;
 }
+
+/* Caixa do login */
 .login-box {
     background-color: var(--cor-secundaria);
     padding: 20px 30px;
@@ -38,16 +46,20 @@ body {
     width: 350px;
     color: var(--cor-primaria);
     text-align: center;
-    box-shadow: 0 12px 30px #00000040, 0 4px 10px #0000001a;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
     backdrop-filter: blur(10px);
     position: relative;
 }
+
+/* Título do login */
 .login-title {
     margin-bottom: 20px;
-    font-size: 52px;
+    font-size: 48px;
     font-weight: bold;
     color: var(--cor-primaria);
 }
+
+/* Labels */
 .form-label {
     display: block;
     text-align: left;
@@ -56,6 +68,8 @@ body {
     font-weight: 600;
     font-size: 18px;
 }
+
+/* Inputs de texto e senha */
 .text-input,
 .password-input {
     width: 100%;
@@ -67,11 +81,15 @@ body {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     transition: box-shadow 0.3s ease;
 }
+
+/* Foco nos inputs */
 .text-input:focus,
 .password-input:focus {
     outline: none;
     box-shadow: 0 0 8px var(--cor-primaria);
 }
+
+/* Botão de submit */
 .submit-btn {
     margin-top: 25px;
     width: 100%;
@@ -83,25 +101,16 @@ body {
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    box-shadow: 0 5px 15px #4caf5066;
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
     transition: background-color 0.3s ease;
 }
+
+/* Hover do botão */
 .submit-btn:hover {
     background-color: var(--cor-botao-hover);
 }
-.change-password-link {
-    display: inline-block;
-    margin-top: 20px;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--cor-primaria);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-.change-password-link:hover {
-    color: var(--cor-texto);
-    text-decoration: underline;
-}
+
+/* Mensagem de erro */
 .error-msg {
     color: var(--cor-erro);
     font-weight: 600;
@@ -110,33 +119,34 @@ body {
     padding-left: 5px;
     text-align: center;
 }
+
+/* Links extras */
 .extra-links {
     margin-top: 25px;
     text-align: center;
 }
-.extra-links h4 {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--cor-primaria);
-    margin-bottom: 15px;
-}
+
 .extra-links ul {
     list-style: none;
     padding-left: 0;
 }
+
 .extra-links li {
     margin-bottom: 8px;
 }
+
 .extra-links a {
     color: var(--cor-primaria);
     text-decoration: none;
     font-weight: 500;
     transition: color 0.3s ease;
 }
+
 .extra-links a:hover {
     color: var(--cor-texto);
     text-decoration: underline;
 }
+
 
 @media (max-width: 400px) {
     .login-box {
