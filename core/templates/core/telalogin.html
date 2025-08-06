@@ -1,32 +1,34 @@
 {% load static %}
 
-{% block conteudologin %}
-    {% block head %}
-        <title>Login</title>
-        <link rel="stylesheet" href="{% static 'core/stylelogin.css' %}">
-    {% endblock head %}
+{% block head %}
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'core/stylelogin.css' %}">
+{% endblock head %}
 
-    <div class="login-box">
-        <h2 class="login-title">Entrar</h2>
+{% block conteudologin %} 
+<div class="login-box">
+    <h2 class="login-title">Entrar</h2>
 
-        <form id="login-form" method="post" action="{% url 'index' %}">
-            {% csrf_token %}
-            <label for="id_email" class="form-label">E-mail</label>
-            <input type="email" name="email" id="id_email" class="text-input" required>
+    <form id="login-form" method="post" action="{% url 'telalogin' %}">
+        {% csrf_token %}
+        <label for="id_email" class="form-label">E-mail</label>
+        <input type="email" name="email" id="id_email" class="text-input" required>
 
-            <label for="id_password" class="form-label">Senha</label>
-            <input type="password" name="password" id="id_password" class="password-input" required>
+        <label for="id_password" class="form-label">Senha</label>
+        <input type="password" name="password" id="id_password" class="password-input" required>
 
-            <button type="submit" class="submit-btn">Entrar</button>
-        </form>
-        {% if mensagem and mensagem != ""%}
+        <button type="submit" class="submit-btn">Entrar</button>
+    </form>
+    
+    {% if mensagem %}
         <p style="color: red;">{{ mensagem }}</p>
-        {% endif %}
-        <div class="extra-links">
-            <ul>
-                <li><a href="{% url 'cadastro' %}">Criar conta</a></li>
-                <li><a href="{% url 'troca-senha' %}">Esqueci minha senha</a></li>
-            </ul>
-        </div>
+    {% endif %}
+
+    <div class="extra-links">
+        <ul>
+            <li><a href="{% url 'cadastro' %}">Criar conta</a></li>
+            <li><a href="{% url 'troca-senha' %}">Esqueci minha senha</a></li>
+        </ul>
     </div>
+</div>
 {% endblock conteudologin %}

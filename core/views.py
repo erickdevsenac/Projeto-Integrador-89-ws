@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from .models import Perfil
 from django.contrib.auth.hashers import check_password
@@ -32,48 +33,52 @@ def cadastro(request):
         elif User.objects.filter(username=email).exists():
             mensagem = "Este e-mail já está cadastrado!"
         else:
-            if tipo in ['FORNECEDOR', 'ONG']:
-                if not cnpj:
-                    mensagem = "CNPJ é obrigatório para Fornecedores e ONGs."
-                    return render(request, "core/cadastro.html", {"mensagem": mensagem})
+            if tipo in ['VENDEDOR', 'ONG'] and not cnpj:
+                mensagem = "CNPJ é obrigatório para Vendedores e ONGs."
+                return render(request, "core/cadastro.html", {"mensagem": mensagem})
 
             user = User.objects.create_user(username=email, email=email, password=senha)
-            perfil = Perfil.objects.create(
+            user.first_name = nome
+            user.save()
+
+            Perfil.objects.create(
                 usuario=user,
                 tipo=tipo,
-                nome=nome,
-                email=email,
                 telefone=telefone,
                 endereco=endereco,
-                cnpj=cnpj if tipo in ['FORNECEDOR', 'ONG'] else None,
-                descricao_parceiro=descricao_parceiro if tipo in ['FORNECEDOR', 'ONG'] else ''
+                cnpj=cnpj if tipo in ['VENDEDOR', 'ONG'] else None,
+                descricao_parceiro=descricao_parceiro if tipo in ['VENDEDOR', 'ONG'] else ''
             )
-
-            mensagem = "Usuário cadastrado com sucesso!"
-            return redirect('telalogin')
+            
+            login(request, user)
+            return redirect('index')
 
     return render(request, "core/cadastro.html", {"mensagem": mensagem})
 
 def trocasenha(request):
     return render(request, 'core/senha_erica.html')
+
 def telalogin(request):
     mensagem = ""
-
     if request.method == "POST":
         email = request.POST.get("email")
-        password = request.POST.get("password")
+        senha = request.POST.get("password")
 
-        try:
-            user = User.objects.get(username=email)  
-            if check_password(password, user.password):
-                request.session['usuario_id'] = user.id
-                return redirect('index')
-            else:
-                mensagem = "Senha ou email incorretos."
-        except User.DoesNotExist:
-            mensagem = "Usuário não encontrado."
+        # `authenticate` verifica se o usuário existe E se a senha está correta.
+        # Note que estamos usando o 'username=email', pois no cadastro você atribuiu o email ao username.
+        user = authenticate(request, username=email, password=senha)
+
+        if user is not None:
+            # `login` cria a sessão segura para o usuário.
+            login(request, user)
+            # Redireciona para a página principal após o login bem-sucedido.
+            return redirect('index') 
+        else:
+            # Se `authenticate` retornar None, o usuário não existe ou a senha está errada.
+            mensagem = "Email ou senha incorretos."
 
     return render(request, "core/telalogin.html", {"mensagem": mensagem})
+
 def receitas(request):
     return render (request, 'core/receitas.html')
 

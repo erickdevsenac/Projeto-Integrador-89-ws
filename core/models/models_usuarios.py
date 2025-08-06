@@ -4,20 +4,19 @@ from django.contrib.auth.models import User
 class Perfil(models.Model):
     class TipoUsuario(models.TextChoices):
         CLIENTE = 'CLIENTE', 'Cliente'
-        FORNECEDOR = 'FORNECEDOR', 'Fornecedor'
+        VENDEDOR = 'VENDEDOR', 'Vendedor'
         ONG = 'ONG', 'ONG'
 
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     tipo = models.CharField(max_length=20, choices=TipoUsuario.choices)
-    nome = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
+    
     telefone = models.CharField(max_length=15)
     endereco = models.TextField()
     cnpj = models.CharField("CNPJ", max_length=18, unique=True, null=True, blank=True, help_text="Obrigatório para Fornecedores e ONGs")
     descricao_parceiro = models.TextField("Descrição da Empresa/ONG", blank=True, help_text="Uma breve descrição sobre o parceiro")
 
     def __str__(self):
-        return self.nome
+        return self.usuario.get_full_name() or self.usuario.username
     
 
 # class Usuario(models.Model):

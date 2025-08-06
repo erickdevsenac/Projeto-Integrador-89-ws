@@ -1,132 +1,123 @@
-/* Reset e base */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* Removemos qualquer estilo direto na tag 'body' para não afetar o base.html */
+/* Apenas a classe .body que está no seu template de cadastro será estilizada. */
+
+.body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px 10px;
+    background-color: #f0fdf4;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
 }
 
-body, .body {
-  background-color: #d6f0e3;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 30px 20px;
+/* --- Logo e Títulos (agora específicos) --- */
+.body .logo {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-/* Container principal */
-.container-fluid {
-  width: 100%;
-  max-width: 500px;
-  background: #ffffff;
-  padding: 30px;
-  border-radius: 20px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+.body .logo img {
+    width: 150px;
 }
 
-
-.logo {
-  text-align: center;
-  margin-bottom: 30px;
+.body .logo h1 {
+    font-family: "Manrope", sans-serif;
+    font-weight: 800;
+    color: #2f855a;
+    margin-top: 5px;
 }
 
-.logo img {
-  width: 70px;
-  height: auto;
+/* --- Caixa do Formulário --- */
+.body .caixa {
+    background-color: white;
+    padding: 30px 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 16px rgba(0, 100, 0, 0.2);
+    max-width: 500px;
+    width: 100%;
+    margin: auto;
 }
 
-.logo h1 {
-  color: #2d7a5f;
-  font-size: 24px;
-  margin-top: 10px;
-}
-.caixa h2 {
-  text-align: center;
-  color: #2d7a5f;
-  font-size: 22px;
-  margin-bottom: 20px;
-  font-weight: 600;
+.body .caixa h2 {
+    font-family: "Manrope", sans-serif;
+    color: #333;
+    margin-bottom: 25px;
+    text-align: center;
 }
 
-p[style*="color: red"] {
-  text-align: center;
-  font-weight: 600;
-  margin-bottom: 15px;
-  font-size: 14px;
+/* --- Mensagem de erro/sucesso --- */
+.body .caixa p {
+    background-color: #fed7d7;
+    border: 1px solid #f56565;
+    color: #c53030;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    text-align: center;
 }
 
-
-form label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 600;
-  color: #2d7a5f;
-  font-size: 14px;
+/* --- Elementos do Formulário (agora específicos) --- */
+.body .caixa form {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"],
-select,
-textarea {
-  width: 100%;
-  padding: 10px 12px;
-  margin-bottom: 18px;
-  border: 1.5px solid #ccc;
-  border-radius: 10px;
-  font-size: 15px;
-  transition: border-color 0.3s;
-  font-family: inherit;
-  resize: vertical;
-  color: #333;
-}
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: #2d7a5f;
-  outline: none;
-  box-shadow: 0 0 4px rgba(45, 122, 95, 0.3);
-}
-textarea {
-  min-height: 90px;
+.body .caixa label {
+    font-weight: bold;
+    color: #2f855a;
+    margin-top: 15px;
+    margin-bottom: 5px;
 }
 
-.botao {
-  width: 100%;
-  padding: 14px 0;
-  background-color: #2d7a5f;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.body .caixa input[type="text"],
+.body .caixa input[type="email"],
+.body .caixa input[type="password"],
+.body .caixa select,
+.body .caixa textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
 }
 
-.botao:hover {
-  background-color: #24664c;
+/* Remove o espaçamento dos <br> que estão no seu HTML */
+.body .caixa form br {
+    display: none;
 }
 
-@media (max-width: 480px) {
-  .container-fluid {
-    padding: 25px 20px;
-  }
+.body .caixa textarea {
+    resize: vertical;
+    min-height: 80px;
+}
 
-  .logo img {
-    width: 60px;
-  }
+.body .caixa input:focus,
+.body .caixa select:focus,
+.body .caixa textarea:focus {
+    border-color: #38a169;
+    outline: none;
+    box-shadow: 0 0 5px #c6f6d5;
+}
 
-  .logo h1 {
-    font-size: 20px;
-  }
+/* --- Botão de Cadastro (usando a classe que já está no HTML) --- */
+.body .botao.botao-verde {
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background-color: #38a169;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 25px;
+}
 
-  .caixa h2 {
-    font-size: 20px;
-  }
-
-  .botao {
-    font-size: 15px;
-  }
+.body .botao.botao-verde:hover {
+    background-color: #2f855a;
 }
