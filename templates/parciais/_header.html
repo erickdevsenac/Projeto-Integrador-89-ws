@@ -32,8 +32,9 @@
           </ul>
 
           <div class="search-login-group ms-lg-3">
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Pesquisar..." aria-label="Pesquisar">
+            <form class="d-flex" role="search" method='get' action={% url "buscar_produtos" %}>
+              {% csrf_token %}
+              <input class="form-control me-2" type="search" placeholder="Pesquisar..." aria-label="Pesquisar" name="termo">
               <button class="btn btn-light" type="submit"><i class="bi bi-search"></i></button>
             </form>
 

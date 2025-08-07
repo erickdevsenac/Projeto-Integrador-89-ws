@@ -4,6 +4,7 @@ from core.models.produto_model import Produto, Categoria
 from core.models.item_pedido_model import ItemPedido
 from core.models.pedido_model import Pedido, PedidoVendedor
 from core.models.doacoes_model import Doacao
+from core.models.receita_model import Receita
 
 
 # core/admin.py
@@ -34,3 +35,4 @@ admin.site.register(Perfil)
 admin.site.register(Categoria)
 admin.site.register(Pedido)
 admin.site.register(Doacao)
+admin.site.register(Receita)
