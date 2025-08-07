@@ -1,4 +1,5 @@
-from .models_usuarios import *
-from .produto_models import *
-# from .item_pedido_models import *
-# from .pedido_models import *
+from .perfil_model import *
+from .produto_model import *
+from .item_pedido_model import *
+from .pedido_model import *
+from .produto_model import *
