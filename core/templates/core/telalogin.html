@@ -1,30 +1,28 @@
-
 {% load static %}
 
+{% block head %}
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'core/stylelogin.css' %}">
+{% endblock head %}
 
-{% block conteudologin %}
-    
-    {% block head %}
-        <title>Login</title>
-        <script src="{% static 'core/js/login.js' %}"></script>  
-        <link rel="stylesheet" href="{% static 'core/stylelogin.css' %}">
-
-    {% endblock head %}
+{% block conteudologin %} 
 <div class="login-box">
     <h2 class="login-title">Entrar</h2>
 
-    <form id="login-form" method="post" novalidate>
+    <form id="login-form" method="post" action="{% url 'telalogin' %}">
         {% csrf_token %}
-        <label for="id_username" class="form-label">Usuário</label>
-        <input type="text" name="username" id="id_username" class="text-input" required>
+        <label for="id_email" class="form-label">E-mail</label>
+        <input type="email" name="email" id="id_email" class="text-input" required>
 
         <label for="id_password" class="form-label">Senha</label>
         <input type="password" name="password" id="id_password" class="password-input" required>
 
         <button type="submit" class="submit-btn">Entrar</button>
     </form>
-
-    <div id="error-message" class="error-msg" style="display:none;"></div>
+    
+    {% if mensagem %}
+        <p style="color: red;">{{ mensagem }}</p>
+    {% endif %}
 
     <div class="extra-links">
         <ul>

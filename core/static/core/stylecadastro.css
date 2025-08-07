@@ -1,94 +1,123 @@
+/* Removemos qualquer estilo direto na tag 'body' para não afetar o base.html */
+/* Apenas a classe .body que está no seu template de cadastro será estilizada. */
+
 .body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f0fdf4; /* Verde bem claro */
-  align-items: center;
-  justify-content: center;
-}
-.body .logo img{
-  width: 200px;
-}
-
-.body .container-fluid {
-  text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px 10px;
+    background-color: #f0fdf4;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
 }
 
-.body .caixa {
-  background-color: white;
-  padding: 40px;
-  border-radius: 20px;
-  box-shadow: 0 8px 16px rgba(0, 100, 0, 0.2);
-  max-width: 500px;
-  width: 100%;
-  max-height: 700px ;
-  margin: auto;
+/* --- Logo e Títulos (agora específicos) --- */
+.body .logo {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-h1 {
+.body .logo img {
+    width: 150px;
+}
+
+.body .logo h1 {
     font-family: "Manrope", sans-serif;
-    font-family: "Manrope", sans-serif;   
-    font-optical-sizing: auto;   
-    font-weight: weight;   
-    font-style: normal;
+    font-weight: 800;
+    color: #2f855a;
+    margin-top: 5px;
 }
 
-.body h1 {
-  color: #2f855a;
-  margin-bottom: 20px;
+/* --- Caixa do Formulário --- */
+.body .caixa {
+    background-color: white;
+    padding: 30px 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 16px rgba(0, 100, 0, 0.2);
+    max-width: 500px;
+    width: 100%;
+    margin: auto;
 }
 
-.body form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+.body .caixa h2 {
+    font-family: "Manrope", sans-serif;
+    color: #333;
+    margin-bottom: 25px;
+    text-align: center;
 }
 
-.body label {
-  text-align: left;
-  font-weight: bold;
-  color: #2f855a;
+/* --- Mensagem de erro/sucesso --- */
+.body .caixa p {
+    background-color: #fed7d7;
+    border: 1px solid #f56565;
+    color: #c53030;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    text-align: center;
 }
 
-input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 15px;
+/* --- Elementos do Formulário (agora específicos) --- */
+.body .caixa form {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
 }
 
-.body input:focus {
-  border-color: #38a169;
-  outline: none;
-  box-shadow: 0 0 4px #c6f6d5;
+.body .caixa label {
+    font-weight: bold;
+    color: #2f855a;
+    margin-top: 15px;
+    margin-bottom: 5px;
 }
 
-.body button {
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  background-color: #38a169;
-  color: white;
-  font-weight: bold;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+.body .caixa input[type="text"],
+.body .caixa input[type="email"],
+.body .caixa input[type="password"],
+.body .caixa select,
+.body .caixa textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
 }
 
-.body button:hover {
-  background-color: #2f855a;
+/* Remove o espaçamento dos <br> que estão no seu HTML */
+.body .caixa form br {
+    display: none;
 }
 
-.body .voltar {
-  margin-top: 20px;
+.body .caixa textarea {
+    resize: vertical;
+    min-height: 80px;
 }
 
-.body .voltar a {
-  text-decoration: none;
-  color: #2f855a;
-  font-weight: bold;
+.body .caixa input:focus,
+.body .caixa select:focus,
+.body .caixa textarea:focus {
+    border-color: #38a169;
+    outline: none;
+    box-shadow: 0 0 5px #c6f6d5;
 }
 
-.body .voltar a:hover {
-  text-decoration: underline;
+/* --- Botão de Cadastro (usando a classe que já está no HTML) --- */
+.body .botao.botao-verde {
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background-color: #38a169;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 25px;
+}
+
+.body .botao.botao-verde:hover {
+    background-color: #2f855a;
 }
