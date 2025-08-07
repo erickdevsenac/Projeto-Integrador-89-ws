@@ -85,3 +85,6 @@ def buscar_produtos(request):
         'resultados': resultados,
         'termo': termo,
      })
+    
+def cadastroproduto(request):
+    return render (request, 'core/cadastroproduto.html')
