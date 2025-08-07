@@ -1,3 +1,4 @@
+from .forms import CadastroForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
@@ -14,46 +15,72 @@ def produtos(request):
 def contato(request):
     return render(request, 'core/contato.html')
 
-def cadastro(request):
-    mensagem = ""
+# def cadastro(request):
+#     mensagem = ""
 
-    if request.method == "POST":
-        tipo = request.POST.get("tipo")
-        nome = request.POST.get("nome")
-        email = request.POST.get("email")
-        senha = request.POST.get("senha")
-        confirmar = request.POST.get("confirmar")
-        telefone = request.POST.get("telefone")
-        endereco = request.POST.get("endereco")
-        cnpj = request.POST.get("cnpj")
-        descricao_parceiro = request.POST.get("descricao_parceiro")
+#     if request.method == "POST":
+#         tipo = request.POST.get("tipo")
+#         nome = request.POST.get("nome")
+#         email = request.POST.get("email")
+#         senha = request.POST.get("senha")
+#         confirmar = request.POST.get("confirmar")
+#         telefone = request.POST.get("telefone")
+#         endereco = request.POST.get("endereco")
+#         cnpj = request.POST.get("cnpj")
+#         descricao_parceiro = request.POST.get("descricao_parceiro")
 
-        if senha != confirmar:
-            mensagem = "As senhas não conferem!"
-        elif User.objects.filter(username=email).exists():
-            mensagem = "Este e-mail já está cadastrado!"
-        else:
-            if tipo in ['VENDEDOR', 'ONG'] and not cnpj:
-                mensagem = "CNPJ é obrigatório para Vendedores e ONGs."
-                return render(request, "core/cadastro.html", {"mensagem": mensagem})
+#         if senha != confirmar:
+#             mensagem = "As senhas não conferem!"
+#         elif User.objects.filter(username=email).exists():
+#             mensagem = "Este e-mail já está cadastrado!"
+#         else:
+#             if tipo in ['VENDEDOR', 'ONG'] and not cnpj:
+#                 mensagem = "CNPJ é obrigatório para Vendedores e ONGs."
+#                 return render(request, "core/cadastro.html", {"mensagem": mensagem})
 
-            user = User.objects.create_user(username=email, email=email, password=senha)
-            user.first_name = nome
-            user.save()
+#             user = User.objects.create_user(username=email, email=email, password=senha)
+#             user.first_name = nome
+#             user.save()
 
-            Perfil.objects.create(
-                usuario=user,
-                tipo=tipo,
-                telefone=telefone,
-                endereco=endereco,
-                cnpj=cnpj if tipo in ['VENDEDOR', 'ONG'] else None,
-                descricao_parceiro=descricao_parceiro if tipo in ['VENDEDOR', 'ONG'] else ''
-            )
+#             Perfil.objects.create(
+#                 usuario=user,
+#                 tipo=tipo,
+#                 telefone=telefone,
+#                 endereco=endereco,
+#                 cnpj=cnpj if tipo in ['VENDEDOR', 'ONG'] else None,
+#                 descricao_parceiro=descricao_parceiro if tipo in ['VENDEDOR', 'ONG'] else ''
+#             )
             
+#             login(request, user)
+#             return redirect('index')
+
+#     return render(request, "core/cadastro.html", {"mensagem": mensagem})
+
+def cadastro(request):
+    if request.method == "POST":
+        form = CadastroForm(request.POST)
+        if form.is_valid():
+            # Dados já estão limpos e validados pelo form
+            data = form.cleaned_data
+
+            # Cria o User
+            user = User.objects.create_user(
+                username=data['email'],
+                email=data['email'],
+                password=data['senha']
+            )
+
+            # Salva o Perfil (note que o form é do tipo ModelForm)
+            perfil = form.save(commit=False)
+            perfil.usuario = user
+            perfil.save()
+
             login(request, user)
             return redirect('index')
+    else:
+        form = CadastroForm()
 
-    return render(request, "core/cadastro.html", {"mensagem": mensagem})
+    return render(request, "core/cadastro.html", {"form": form})
 
 def trocasenha(request):
     return render(request, 'core/senha_erica.html')

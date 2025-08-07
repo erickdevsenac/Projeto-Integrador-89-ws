@@ -13,70 +13,76 @@
       <img src="{% static 'assets/img/logo.png' %}" alt="">
       <h1>APROVEITE+</h1>
     </div>
+
     <div class="caixa">
       <h2>Cadastro de Usuário</h2>
-      {% if mensagem %}
-        <p style="color: red;">{{ mensagem }}</p>
-      {% endif %}
+
       <form method="post" action="">
         {% csrf_token %}
 
-        <label for="tipo">Tipo de Usuário:</label>
-        <select id="tipo" name="tipo" required onchange="mostrarCampos()">
-          <option value="" disabled selected>Selecione o tipo</option>
-          <option value="CLIENTE">Cliente</option>
-          <option value="FORNECEDOR">vendedor/comerciante</option>
-          <option value="ONG">ONG</option>
-        </select>
+        {% if form.non_field_errors %}
+          <div class="form-errors">
+            {% for error in form.non_field_errors %}
+              <p style="color: red;">{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
 
-
+        <div class="form-group">
+            {{ form.tipo.label_tag }}
+            {{ form.tipo }}
+            {% if form.tipo.errors %}
+                <div class="field-errors">
+                    {% for error in form.tipo.errors %}
+                        <p style="color: red;">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
         <div id="campos-comuns">
-          <label for="nome">Nome:</label>
-          <input type="text" id="nome" name="nome" required>
-          <br>
-
-          <label for="email">E-mail:</label>
-          <input type="email" id="email" name="email" required>
-           <br>
-          <label for="senha">Senha:</label>
-          <input type="password" id="senha" name="senha" required>
-           <br>
-          <label for="confirmar">Confirmar Senha:</label>
-          <input type="password" id="confirmar" name="confirmar" required>
-          <br>
-          <label for="telefone">Telefone:</label>
-          <input type="text" id="telefone" name="telefone" required>
-           <br>
-          <label for="endereco">Endereço:</label>
-          <input type="text" id="endereco" name="endereco" required>
+            <div class="form-group">{{ form.nome_negocio.label_tag }} {{ form.nome_negocio }}</div>
+            <div class.form-group>{{ form.email.label_tag }} {{ form.email }}</div>
+            <div class="form-group">{{ form.senha.label_tag }} {{ form.senha }}</div>
+            <div class="form-group">{{ form.confirmar_senha.label_tag }} {{ form.confirmar_senha }}</div>
+            <div class="form-group">{{ form.telefone.label_tag }} {{ form.telefone }}</div>
+            <div class="form-group">{{ form.endereco.label_tag }} {{ form.endereco }}</div>
         </div>
-
-
-        <div id="campos-fornecedor" style="display:none;">
-          <label for="cnpj">CNPJ:</label>
-          <input type="text" id="cnpj" name="cnpj">
-           <br>
-          <label for="descricao_parceiro">Descrição da Empresa:</label>
-          <textarea id="descricao_parceiro" name="descricao_parceiro"></textarea>
-        </div>
-
-        <div id="campos-ong" style="display:none;">
-          <label for="cnpj_ong">CNPJ:</label>
-          <input type="text" id="cnpj_ong" name="cnpj">
-           <br>
-           <br>
-          <label for="descricao_ong">Descrição da ONG:</label> 
-          <textarea id="descricao_ong" name="descricao_parceiro"></textarea>
+        
+        <div id="campos-parceiro" style="display:none;">
+            <div class="form-group">{{ form.cnpj.label_tag }} {{ form.cnpj }}</div>
+            <div class="form-group">{{ form.descricao_parceiro.label_tag }} {{ form.descricao_parceiro }}</div>
         </div>
 
         <button type="submit" class="botao botao-verde">Cadastrar</button>
       </form>
+    </div>
+  </div>
+</div>
 
-      <script>
-      function mostrarCampos() {
-        const tipo = document.getElementById('tipo').value;
-        document.getElementById('campos-fornecedor').style.display = (tipo === 'FORNECEDOR') ? 'block' : 'none';
-        document.getElementById('campos-ong').style.display = (tipo === 'ONG') ? 'block' : 'none';
-      }
-      </script>
+<script>
+  // Função para mostrar/ocultar campos com base no tipo de usuário
+  function mostrarCamposParceiro() {
+    // Django gera o ID como "id_nome_do_campo"
+    const tipo = document.getElementById('id_tipo').value;
+    const camposParceiro = document.getElementById('campos-parceiro');
+
+    // Mostra os campos se for VENDEDOR ou ONG
+    if (tipo === 'VENDEDOR' || tipo === 'ONG') {
+      camposParceiro.style.display = 'block';
+    } else {
+      camposParceiro.style.display = 'none';
+    }
+  }
+
+  // Adiciona o 'listener' para chamar a função quando o valor do select mudar
+  document.getElementById('id_tipo').addEventListener('change', mostrarCamposParceiro);
+
+  // Chama a função uma vez no carregamento da página para garantir que o estado inicial esteja correto
+  // (útil se o formulário for recarregado com um tipo já selecionado após um erro)
+  document.addEventListener('DOMContentLoaded', mostrarCamposParceiro);
+</script>
+
+
+
 {% endblock cadastro %}

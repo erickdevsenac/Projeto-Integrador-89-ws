@@ -18,7 +18,7 @@ class Perfil(models.Model):
     )
     
     telefone = models.CharField(max_length=15)
-    endereco = models.TextField()
+    endereco = models.CharField(max_length=255)
     cnpj = models.CharField("CNPJ", max_length=18, unique=True, null=True, blank=True, help_text="Obrigatório para Vendedores e ONGs")
     descricao_parceiro = models.TextField("Descrição da Empresa/ONG", blank=True, help_text="Uma breve descrição sobre o parceiro")
 
