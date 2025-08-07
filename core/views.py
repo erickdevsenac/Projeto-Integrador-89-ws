@@ -4,12 +4,14 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 
-
 def index(request):
     return render(request, 'core/index.html')
 
 def produtos(request):
     return render(request, 'core/produtos.html')
+
+def doacao(request):
+    return render(request, 'core/doacao.html')
 
 def contato(request):
     return render(request, 'core/contato.html')
