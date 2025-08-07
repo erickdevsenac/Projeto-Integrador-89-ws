@@ -13,14 +13,14 @@ class Doacao(models.Model):
         'core.Perfil', 
         on_delete=models.PROTECT, 
         limit_choices_to={'tipo': 'ONG'},
-        related_name='doacoes_recebidas' # Ajuda a diferenciar as relações no modelo Perfil
+        related_name='doacoes_recebidas' 
     )
 
     doador = models.ForeignKey(
         'core.Perfil', 
         on_delete=models.PROTECT, 
-        limit_choices_to={'tipo': 'FORNECEDOR'}, 
-        help_text="Fornecedor que está doando",
+        limit_choices_to={'tipo': 'VENDEDOR'}, 
+        help_text="Vendedor que está doando",
         related_name='doacoes_feitas'
     )
     

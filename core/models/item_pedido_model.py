@@ -20,7 +20,6 @@ class ItemPedido(models.Model):
         related_name='itens_pedidos'
     )
     
-    # Campo para a quantidade do item.
     quantidade = models.PositiveIntegerField(
         default=1,
         help_text="Quantidade de unidades do produto neste item."
@@ -30,7 +29,9 @@ class ItemPedido(models.Model):
     preco_unitario = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        help_text="Preço do produto no momento em que o pedido foi feito."
+        help_text="Preço do produto no momento da compra. Preenchido automaticamente se deixado em branco.",
+        null=True, # Permite que o campo fique temporariamente nulo antes de salvar
+        blank=True
     )
 
     class Meta:
@@ -39,8 +40,16 @@ class ItemPedido(models.Model):
         verbose_name = "Item do Pedido"
         verbose_name_plural = "Itens dos Pedidos"
 
-    def subtotal(self):
-        return self.quantidade * self.preco_unitario
+    def save(self, *args, **kwargs):
+        # Se o preço unitário não foi definido, busca o preço do produto relacionado
+        if self.preco_unitario is None and self.produto:
+            self.preco_unitario = self.produto.preco
+        super().save(*args, **kwargs) # Chama o método save original
 
+    def subtotal(self):
+        if self.quantidade and self.preco_unitario is not None:
+            return self.quantidade * self.preco_unitario
+        return 0
+    
     def __str__(self):
         return f'{self.quantidade}x {self.produto.nome} (Sub-Pedido: #{self.sub_pedido.id})'
