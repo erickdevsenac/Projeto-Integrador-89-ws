@@ -17,6 +17,7 @@ class Perfil(models.Model):
         help_text="O nome comercial do vendedor ou da ONG."
     )
     
+    logo_ong = models.ImageField(null=True)
     telefone = models.CharField(max_length=15)
     endereco = models.CharField(max_length=255)
     cnpj = models.CharField("CNPJ", max_length=18, unique=True, null=True, blank=True, help_text="Obrigatório para Vendedores e ONGs")

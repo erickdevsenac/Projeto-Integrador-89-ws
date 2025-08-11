@@ -1,5 +1,43 @@
 {% extends 'global/base.html' %}
 {% load static %}
+ 
+{% block head %}
+  <title>Aproveite+ - Cadastrar Receitas</title>
+  <link rel="stylesheet" href="{% static 'core/style_receitas.css' %}">
+{% endblock %}
+ 
+{% endblock %}
+ 
+<hr>
+<h2>Receitas Cadastradas</h2>
+<div class="receita">
+  {% for receita in receitas %}
+    <div class="receita-item">
+      <h3>{{ receita.nome }}</h3>
+      <p>{{ receita.descricao }}</p>
+ {% for receita in receitas %}
+    {% if receita.imagem %}
+        <img src="{{ receita.imagem.url }}" alt="{{ receita.nome }}">
+    {% else %}
+        <img src="{% static 'assets/img/placeholder_receita.png' %}" alt="Imagem não disponível">
+    {% endif %}
+{% endfor %}
+ 
+ 
+      {% endif %}
+      <p><strong>Ingredientes:</strong> {{ receita.ingredientes }}</p>
+      <p><strong>Modo de Preparo:</strong> {{ receita.modo_preparo }}</p>
+    </div>
+  {% empty %}
+    <p>Nenhuma receita cadastrada ainda.</p>
+  {% endfor %}
+</div>
+{% endblock %}
+
+
+
+{% comment %} {% extends 'global/base.html' %}
+{% load static %}
 
 {% block receitas %}
 
@@ -90,4 +128,4 @@
 
 
 {% endblock receitas %}
-
+ {% endcomment %}

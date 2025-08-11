@@ -43,6 +43,36 @@
               <a href={% url "cadastro" %} class="btn btn-outline-light"><i class="bi bi-person-plus"></i> Cadastre-se</a>
             </div>
 
+
+
+            <div class="search-login-group ms-lg-3">
+
+                {% if user.is_authenticated %}
+                    <span class="navbar-text me-3" >
+                        Olá, 
+                        {% if user.perfil.nome_negocio %}
+                            {{ user.perfil.nome_negocio }}
+                        {% else %}
+                            {{ user.username }}
+                        {% endif %}
+                        !
+                    </span>
+
+                    <a href="{% url 'logout' %}" class="btn btn-danger">
+                        <i class="bi bi-box-arrow-right"></i> Sair
+                    </a>
+
+                {% else %}
+                    <a href="{% url 'telalogin' %}" class="btn btn-primary me-2">
+                        <i class="bi bi-box-arrow-in-right"></i> Login
+                    </a>
+                    <a href="{% url 'cadastro' %}" class="btn btn-success">
+                        Cadastre-se
+                    </a>
+                
+                {% endif %}
+
+            </div>
           </div>
         </div>
       </div>
