@@ -3,80 +3,62 @@
 {% block head %}
 {% endblock head %}
 
-  <header>
-    <nav class="navbar navbar-expand-lg navbar-light">
-      <div class="container-fluid">
-        <div class="d-flex align-items-center divlogo">
-          <a href={% url "index" %}>
-            <img src={% static "assets/img/logo.png" %} alt="logo" class="logo me-2">
-            <h1> Aproveite+</h1>
-          </a>
-        </div>
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuHamburguer" aria-controls="menuHamburguer" aria-expanded="false" aria-label="Toggle navigation">
-          <p class="navbar-toggler-icon"> </p>
-        </button>
+      <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
+        <img src="{% static 'assets/img/logo.png' %}" alt="logo" class="logo me-2" style="height: 40px;">
+        <h1 class="mb-0 fs-4">Aproveite+</h1>
+      </a>
 
-        <div class="collapse navbar-collapse" id="menuHamburguer">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal" aria-controls="menuPrincipal" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
+      <div class="collapse navbar-collapse" id="menuPrincipal">
 
-          <ul class="navbar-nav d-flex align-items-center mb-2 mb-lg-0">
-            <li class="nav-item"><a class="nav-link" href={% url "receitas" %}><i class="bi bi-egg-fried"></i>Receitas</a></li>
-            <li class="nav-item"><a class="nav-link" href={% url "videos" %}><i class="bi bi-collection-play"></i>Videos</a></li>
-            <li class="nav-item"><a class="nav-link" href={% url "produtos" %}><i class="bi bi-wallet2"></i>Produtos</a></li>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="{% url 'receitas' %}"><i class="bi bi-egg-fried"></i> Receitas</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'videos' %}"><i class="bi bi-collection-play"></i> Vídeos</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'produtos' %}"><i class="bi bi-shop-window"></i> Produtos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-recycle"></i> Dicas</a></li>
+        </ul>
 
-            <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8000/admin"><i class="bi bi-shop"></i>ADMIN</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-basket"></i>Mercado</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-recycle"></i>Dicas Sustentáveis</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person-circle"></i>Meu Perfil</a></li>
-          </ul>
+        <div class="d-flex align-items-center">
 
-          <div class="search-login-group ms-lg-3">
-            <form class="d-flex" role="search" method='get' action={% url "buscar_produtos" %}>
-              {% csrf_token %}
-              <input class="form-control me-2" type="search" placeholder="Pesquisar..." aria-label="Pesquisar" name="termo">
-              <button class="btn btn-light" type="submit"><i class="bi bi-search"></i></button>
-            </form>
+          <form class="d-flex me-3" role="search" method="get" action="{% url 'buscar_produtos' %}">
+            <input class="form-control me-2" type="search" placeholder="Pesquisar..." name="termo">
+            <button class="btn btn-outline-light" type="submit"><i class="bi bi-search"></i></button>
+          </form>
 
-            <div class="d-flex text-center">
-              <a href={% url "telalogin" %} class="btn btn-success me-2"><i class="bi bi-box-arrow-in-right"></i> Login</a>
-              <a href={% url "cadastro" %} class="btn btn-outline-light"><i class="bi bi-person-plus"></i> Cadastre-se</a>
-            </div>
-
-
-
-            <div class="search-login-group ms-lg-3">
-
-                {% if user.is_authenticated %}
-                    <span class="navbar-text me-3" >
-                        Olá, 
-                        {% if user.perfil.nome_negocio %}
-                            {{ user.perfil.nome_negocio }}
-                        {% else %}
-                            {{ user.username }}
-                        {% endif %}
-                        !
-                    </span>
-
-                    <a href="{% url 'logout' %}" class="btn btn-danger">
-                        <i class="bi bi-box-arrow-right"></i> Sair
-                    </a>
-
-                {% else %}
-                    <a href="{% url 'telalogin' %}" class="btn btn-primary me-2">
-                        <i class="bi bi-box-arrow-in-right"></i> Login
-                    </a>
-                    <a href="{% url 'cadastro' %}" class="btn btn-success">
-                        Cadastre-se
-                    </a>
+          {% if user.is_authenticated %}
+            <a href="{% url 'carrinho' %}" class="btn btn-light position-relative me-3">
+              <i class="bi bi-cart"></i>
+            </a>
+            
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                Olá, {{ user.username|truncatechars:15 }}
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="#"><i class="bi bi-person-circle"></i> Meu Perfil</a></li>
+                <li><a class="dropdown-item" href="#"><i class="bi bi-box-seam"></i> Meus Pedidos</a></li>
                 
+                {% if user.is_staff %}
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="{% url 'admin:index' %}"><i class="bi bi-gear"></i> Administração</a></li>
                 {% endif %}
-
+                
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
+              </ul>
             </div>
-          </div>
-        </div>
-      </div>
-    </nav>
-  </header>
 
-
+          {% else %}
+            <a href="{% url 'telalogin' %}" class="btn btn-outline-light me-2">Login</a>
+            <a href="{% url 'cadastro' %}" class="btn btn-success">Cadastre-se</a>
+          {% endif %}
+          
+        </div> </div> </div> </nav>
+</header>

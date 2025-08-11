@@ -1,5 +1,6 @@
 from django import forms
-from .models import Perfil
+from django.forms import inlineformset_factory
+from .models import Perfil, Receita, Ingrediente, EtapaPreparo
 from django.contrib.auth.models import User
 
 class CadastroForm(forms.ModelForm):
@@ -35,3 +36,38 @@ class CadastroForm(forms.ModelForm):
         if User.objects.filter(username=email).exists():
             raise forms.ValidationError("Este e-mail já está cadastrado!")
         return email
+    
+class ReceitaForm(forms.ModelForm):
+    class Meta:
+        model = Receita
+        # Lista de campos do modelo Receita que o usuário irá preencher
+        fields = [
+            'nome', 
+            'descricao', 
+            'tempo_preparo', 
+            'rendimento', 
+            'categoria', 
+            'imagem'
+        ]
+        # Excluímos 'autor', 'data_criacao' e 'disponivel' porque serão
+        # definidos automaticamente na view ou terão um valor padrão.
+
+# --- Formsets para Itens Relacionados ---
+
+# Cria um conjunto de formulários para os Ingredientes ligados a uma Receita
+IngredienteFormSet = inlineformset_factory(
+    Receita,          # Modelo Pai
+    Ingrediente,      # Modelo Filho
+    fields=('nome', 'quantidade'), # Campos do Ingrediente a serem exibidos
+    extra=1,          # Quantos formulários em branco devem aparecer para adição
+    can_delete=True   # Permite que o usuário marque ingredientes para deletar
+)
+
+# Cria um conjunto de formulários para as Etapas de Preparo
+EtapaPreparoFormSet = inlineformset_factory(
+    Receita,
+    EtapaPreparo,
+    fields=('ordem', 'descricao'),
+    extra=1,
+    can_delete=True
+)
