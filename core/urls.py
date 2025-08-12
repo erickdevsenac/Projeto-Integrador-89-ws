@@ -31,4 +31,5 @@ urlpatterns = [
     # Rotas do Carrinho
     path('carrinho/', views.ver_carrinho, name='ver_carrinho'), 
     path('carrinho/adicionar/<int:produto_id>/', views.adicionar_carrinho, name='adicionar_carrinho'),
+    path('checkout/', views.finalizar_pedido, name='finalizar_pedido'),
 ]

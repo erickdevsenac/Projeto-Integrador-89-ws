@@ -50,7 +50,7 @@
                         <h4 class="card-title">Total do Carrinho</h4>
                         <h3 class="card-text">R$ {{ total_carrinho|floatformat:2 }}</h3>
                         <hr>
-                        <a href="#" class="btn btn-success w-100">Finalizar Compra</a>
+                        <a href="{% url 'core:finalizar_pedido' %}" class="btn btn-success w-100">Finalizar Compra</a>
                     </div>
                 </div>
             </div>
@@ -60,7 +60,7 @@
         <div class="text-center p-5">
             <h3>Seu carrinho está vazio.</h3>
             <p class="lead text-muted">Que tal adicionar alguns produtos incríveis?</p>
-            <a href="#" class="btn btn-primary mt-3">Ver Produtos</a> </div>
+            <a href="{% url 'core:produtos' %}"" class="btn btn-primary mt-3">Ver Produtos</a> </div>
     {% endif %}
 </div>
 {% endblock content %}

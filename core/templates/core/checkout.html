@@ -1,0 +1,49 @@
+{% extends 'global/base.html' %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <h2 class="text-center mb-4">Finalizar Compra</h2>
+
+    <div class="row">
+        <div class="col-lg-7">
+            <h4>Resumo dos Itens</h4>
+            <ul class="list-group mb-3">
+                {% for item in carrinho %}
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">{{ item.nome }}</h6>
+                            <small class="text-muted">Quantidade: {{ item.quantidade }}</small>
+                        </div>
+                        <span class="text-muted">R$ {{ item.subtotal|floatformat:2 }}</span>
+                    </li>
+                {% endfor %}
+                <li class="list-group-item d-flex justify-content-between bg-light">
+                    <div class="text-success">
+                        <h6 class="my-0">Total</h6>
+                    </div>
+                    <strong class="text-success">R$ {{ total_carrinho|floatformat:2 }}</strong>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-lg-5">
+            <h4>Confirmação</h4>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Endereço de Entrega</h5>
+                    <p class="card-text">{{ request.user.perfil.endereco }}</p>
+                    <hr>
+                    <h5 class="card-title">Forma de Pagamento</h5>
+                    <p class="card-text">PIX (Padrão)</p>
+                    
+                    <form method="post" action="{% url 'core:finalizar_pedido' %}">
+                        {% csrf_token %}
+                        <p class="mt-4">Ao clicar em "Confirmar Compra", seu pedido será processado.</p>
+                        <button type="submit" class="btn btn-primary w-100">Confirmar Compra</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

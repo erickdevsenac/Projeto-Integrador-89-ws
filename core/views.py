@@ -1,4 +1,4 @@
-from .models import Receita, Produto, Perfil
+from .models import Receita, Produto, Perfil, Pedido, ItemPedido,PedidoVendedor
 from django.contrib.auth.decorators import login_required
 from .forms import CadastroForm, ReceitaForm, IngredienteFormSet, EtapaPreparoFormSet
 from django.contrib.auth.models import User
@@ -151,6 +151,7 @@ def cria_receita(request):
 
 
 def ver_carrinho(request):
+    print(f"Ver - Session Key: {request.session.session_key}")
     # Pega o carrinho da sessão. O valor padrão deve ser um dicionário VAZIO.
     carrinho = request.session.get('carrinho', {})
     
@@ -183,6 +184,7 @@ def ver_carrinho(request):
     return render(request, 'core/carrinho.html', context)
 
 def adicionar_carrinho(request, produto_id):
+    print(f"Adicionar - Session Key: {request.session.session_key}")
     produto = get_object_or_404(Produto, id=produto_id)
     carrinho = request.session.get('carrinho', {})
     quantidade_solicitada = int(request.POST.get('quantidade', 1))
@@ -210,9 +212,101 @@ def adicionar_carrinho(request, produto_id):
             'imagem_url': produto.imagem.url if produto.imagem else '',
         }
 
+    request.session['carrinho'] = carrinho
+    
+    # Esta linha continua sendo uma boa prática para garantir o salvamento
     request.session.modified = True
     
     # 3. Adiciona uma mensagem de sucesso
     messages.success(request, f"'{produto.nome}' foi adicionado ao seu carrinho!")
     
     return redirect('core:ver_carrinho')
+
+
+@login_required
+def finalizar_pedido(request):
+    carrinho_session = request.session.get('carrinho', {})
+    if not carrinho_session:
+        messages.error(request, "Seu carrinho está vazio.")
+        return redirect('core:produtos')
+
+    # Preparar dados do carrinho para exibição (mesma lógica da ver_carrinho)
+    carrinho_detalhado = []
+    total_carrinho = Decimal('0.00')
+    for produto_id, item_info in carrinho_session.items():
+        subtotal = Decimal(item_info['preco']) * item_info['quantidade']
+        total_carrinho += subtotal
+        carrinho_detalhado.append({
+            'produto_id': produto_id,
+            'nome': item_info['nome'],
+            'quantidade': item_info['quantidade'],
+            'preco': Decimal(item_info['preco']),
+            'subtotal': subtotal
+        })
+
+    # Se a requisição for POST, o usuário confirmou a compra
+    if request.method == 'POST':
+        try:
+            # transaction.atomic garante que todas as operações no banco de dados
+            # sejam executadas com sucesso. Se qualquer uma falhar, todas são revertidas.
+            with transaction.atomic():
+                cliente_perfil = request.user.perfil
+
+                # 1. Cria o Pedido principal
+                pedido = Pedido.objects.create(
+                    cliente=cliente_perfil,
+                    valor_total=total_carrinho,
+                    endereco_entrega=cliente_perfil.endereco # Usando o endereço do perfil
+                )
+
+                # 2. Agrupa os itens do carrinho por vendedor
+                pedidos_por_vendedor = {}
+                for item in carrinho_detalhado:
+                    produto = Produto.objects.get(id=item['produto_id'])
+                    vendedor_perfil = produto.vendedor
+
+                    if vendedor_perfil not in pedidos_por_vendedor:
+                        pedidos_por_vendedor[vendedor_perfil] = {
+                            'itens': [],
+                            'subtotal': Decimal('0.00')
+                        }
+                    
+                    pedidos_por_vendedor[vendedor_perfil]['itens'].append(item)
+                    pedidos_por_vendedor[vendedor_perfil]['subtotal'] += item['subtotal']
+
+                # 3. Cria os Pedidos de Vendedor (sub-pedidos) e os Itens do Pedido
+                for vendedor, dados_pedido in pedidos_por_vendedor.items():
+                    sub_pedido = PedidoVendedor.objects.create(
+                        pedido_principal=pedido,
+                        vendedor=vendedor,
+                        valor_subtotal=dados_pedido['subtotal']
+                    )
+
+                    for item_data in dados_pedido['itens']:
+                        produto = Produto.objects.get(id=item_data['produto_id'])
+                        ItemPedido.objects.create(
+                            sub_pedido=sub_pedido,
+                            produto=produto,
+                            quantidade=item_data['quantidade'],
+                            preco_unitario=item_data['preco']
+                        )
+                        # 4. Atualiza o estoque
+                        produto.quantidade_estoque -= item_data['quantidade']
+                        produto.save()
+
+                # 5. Limpa o carrinho da sessão
+                del request.session['carrinho']
+                messages.success(request, "Seu pedido foi finalizado com sucesso!")
+                # Redireciona para uma página de "meus pedidos" (a ser criada)
+                return redirect('core:index') # Mude para 'meus_pedidos' no futuro
+
+        except Exception as e:
+            messages.error(request, f"Ocorreu um erro ao finalizar seu pedido: {e}")
+            return redirect('core:ver_carrinho')
+
+    # Se a requisição for GET, apenas mostra a página de confirmação
+    context = {
+        'carrinho': carrinho_detalhado,
+        'total_carrinho': total_carrinho,
+    }
+    return render(request, 'core/checkout.html', context)
