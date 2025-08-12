@@ -3,14 +3,22 @@ from django.contrib.auth.decorators import login_required
 from .forms import CadastroForm, ReceitaForm, IngredienteFormSet, EtapaPreparoFormSet
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from decimal import Decimal
+from django.core.paginator import Paginator
+from django.contrib import messages
 
 def index(request):
     return render(request, 'core/index.html')
 
 def produtos(request):
-    return render(request, 'core/produtos.html')
+    lista_produtos = Produto.objects.filter(ativo=True, quantidade_estoque__gt=0).order_by('-data_criacao')
+    
+    paginator = Paginator(lista_produtos, 9)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'core/produtos.html', {'page_obj': page_obj})
 
 def contato(request):
     return render(request, 'core/contato.html')
@@ -26,20 +34,23 @@ def cadastro(request):
     if request.method == 'POST':
         form = CadastroForm(request.POST)
         if form.is_valid():
-            data = form.cleaned_data
-           
-            user = User.objects.create_user(
-                username=data['email'],
-                email=data['email'],
-                password=data['senha']
-            )
-           
-            perfil = form.save(commit=False)
-            perfil.usuario = user
-            perfil.save()
-           
-            login(request, user)
-            return redirect('index')
+            try:
+                data = form.cleaned_data
+            
+                user = User.objects.create_user(
+                    username=data['email'],
+                    email=data['email'],
+                    password=data['senha']
+                )
+            
+                perfil = form.save(commit=False)
+                perfil.usuario = user
+                perfil.save()
+            
+                login(request, user)
+                return redirect('core:index')
+            except Exception as e:
+                    form.add_error(None, f"Erro ao criar conta: {str(e)}")
     else:
         form = CadastroForm()
  
@@ -60,18 +71,15 @@ def login_view(request):
         if user is not None:
             # Agora a chamada para login() não é mais ambígua
             login(request, user) 
-            return redirect('index')
+            return redirect('core:index')
         else:
             mensagem = "Email ou senha incorretos."
 
     return render(request, "core/telalogin.html", {"mensagem": mensagem})
  
 def logout_view(request):
-    """
-    Desconecta o usuário e o redireciona para a página principal.
-    """
     logout(request)
-    return redirect('index')
+    return redirect('core:index')
 
 def receitas(request):
     lista_receitas = Receita.objects.filter(disponivel=True).order_by('-data_criacao')
@@ -124,7 +132,7 @@ def cria_receita(request):
             etapa_formset.save()
 
             # Redireciona para uma página de sucesso (ex: minhas receitas)
-            return redirect('index') # Altere para a URL desejada
+            return redirect('core:index') # Altere para a URL desejada
 
     # Se a requisição for GET, o usuário está visitando a página pela primeira vez
     else:
@@ -133,7 +141,6 @@ def cria_receita(request):
         ingrediente_formset = IngredienteFormSet(prefix='ingredientes')
         etapa_formset = EtapaPreparoFormSet(prefix='etapas')
 
-    # Prepara o contexto para enviar ao template
     context = {
         'form': form,
         'ingrediente_formset': ingrediente_formset,
@@ -142,7 +149,7 @@ def cria_receita(request):
     
     return render(request, 'receitas/cria_receita.html', context)
 
-# Supondo que você tenha renomeado a view para 'ver_carrinho' como no passo a passo anterior
+
 def ver_carrinho(request):
     # Pega o carrinho da sessão. O valor padrão deve ser um dicionário VAZIO.
     carrinho = request.session.get('carrinho', {})
@@ -150,22 +157,19 @@ def ver_carrinho(request):
     carrinho_detalhado = []
     total_carrinho = Decimal('0.00')
 
-    # CORREÇÃO DO LOOP: Iteramos pegando a chave (produto_id) e o valor (item_info)
     for produto_id, item_info in carrinho.items():
-        # Acessamos os dados DENTRO do dicionário 'item_info'
         preco_unitario = Decimal(item_info['preco'])
         quantidade = item_info['quantidade']
         
         # Calculamos o subtotal
         subtotal = quantidade * preco_unitario
         
-        # Adicionamos um dicionário limpo ao nosso contexto
         carrinho_detalhado.append({
             'produto_id': produto_id,
             'nome': item_info['nome'],
             'quantidade': quantidade,
             'preco': preco_unitario,
-            'imagem_url': item_info.get('imagem_url', ''), # Usar .get() é mais seguro
+            'imagem_url': item_info.get('imagem_url', ''),
             'subtotal': subtotal,
         })
         
@@ -177,3 +181,38 @@ def ver_carrinho(request):
     }
 
     return render(request, 'core/carrinho.html', context)
+
+def adicionar_carrinho(request, produto_id):
+    produto = get_object_or_404(Produto, id=produto_id)
+    carrinho = request.session.get('carrinho', {})
+    quantidade_solicitada = int(request.POST.get('quantidade', 1))
+    produto_id_str = str(produto.id)
+
+    # --- LÓGICA DE VERIFICAÇÃO DE ESTOQUE ---
+    quantidade_no_carrinho = carrinho.get(produto_id_str, {}).get('quantidade', 0)
+    quantidade_total_desejada = quantidade_no_carrinho + quantidade_solicitada
+
+    if quantidade_total_desejada > produto.quantidade_estoque:
+        # 2. Adiciona uma mensagem de erro
+        messages.error(request, f"Desculpe, temos apenas {produto.quantidade_estoque} unidades de '{produto.nome}' em estoque.")
+        # Redireciona de volta para a página anterior
+        return redirect(request.META.get('HTTP_REFERER', 'core:produtos'))
+    # --- FIM DA VERIFICAÇÃO ---
+
+    # Se o estoque for suficiente, continua com a lógica normal
+    if produto_id_str in carrinho:
+        carrinho[produto_id_str]['quantidade'] = quantidade_total_desejada
+    else:
+        carrinho[produto_id_str] = {
+            'quantidade': quantidade_total_desejada,
+            'preco': str(produto.preco),
+            'nome': produto.nome,
+            'imagem_url': produto.imagem.url if produto.imagem else '',
+        }
+
+    request.session.modified = True
+    
+    # 3. Adiciona uma mensagem de sucesso
+    messages.success(request, f"'{produto.nome}' foi adicionado ao seu carrinho!")
+    
+    return redirect('core:ver_carrinho')

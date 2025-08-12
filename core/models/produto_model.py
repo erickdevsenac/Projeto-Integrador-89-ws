@@ -33,6 +33,13 @@ class Produto(models.Model):
     nome = models.CharField(max_length=100)
     descricao = models.TextField(blank=True)
     preco = models.DecimalField(max_digits=10, decimal_places=2)
+
+    imagem = models.ImageField(
+        upload_to='produtos/',
+        blank=True,
+        null=True,
+        help_text="Imagem de apresentação do produto"
+    )
     
     quantidade_estoque = models.PositiveIntegerField(
         default=0,

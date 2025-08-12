@@ -9,7 +9,7 @@
 <div class="login-box">
     <h2 class="login-title">Entrar</h2>
 
-    <form id="login-form" method="post" action="{% url 'telalogin' %}">
+    <form id="login-form" method="post" action="{% url 'core:telalogin' %}">
         {% csrf_token %}
         <label for="id_email" class="form-label">E-mail</label>
         <input type="email" name="email" id="id_email" class="text-input" required>
@@ -26,8 +26,8 @@
 
     <div class="extra-links">
         <ul>
-            <li><a href="{% url 'cadastro' %}">Criar conta</a></li>
-            <li><a href="{% url 'alterar_senha' %}">Esqueci minha senha</a></li>
+            <li><a href="{% url 'core:cadastro' %}">Criar conta</a></li>
+            <li><a href="{% url 'core:alterar_senha' %}">Esqueci minha senha</a></li>
         </ul>
     </div>
 </div>

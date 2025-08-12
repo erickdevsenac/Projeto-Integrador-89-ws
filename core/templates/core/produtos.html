@@ -5,155 +5,38 @@
 {% block produtos %}
 {% block head %}
     <title>Aproveite+</title>
-    <link rel="stylesheet" href="{% static 'core/cssstyle_produto.css' %}" />
+    <link rel="stylesheet" href="{% static 'core/css/style_produto.css' %}" />
     <script src={% static 'core/js/produtos.js' %}></script>
 {% endblock head %}
-
-<div class="produtos">
-    <div class="body">
-    <div id="inicio" class="container mt-5">
-        <h2 class="text-center">Bem-vindo ao Aproveite+</h2>
-        <p class="text-center">
-            Aqui você encontra frutas, verduras e legumes que normalmente seriam desperdiçados,
-            com preços especiais e qualidade.
-        </p>
-    </div>
-    <div id="produtos" class="container mt-5">
-        <h2 class="text-center mb-4">Produtos em Oferta</h2>
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+<div id="produtos" class="container mt-5">
+    <h2 class="text-center mb-4">Produtos em Oferta</h2>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        
+        {% for produto in page_obj %}
             <div class="col">
-                <div class="card" onclick="mostrarMensagem(this, 'Maçã Gala')">
-                    <img src="https://images.tcdn.com.br/img/img_prod/450860/muda_de_maca_gala_climas_frios_ou_amenos_1m_enxertadas_566_1_20190611093558.jpg" class="card-img-top" alt="Maçã Gala">
-                    <div class="card-body">
-                        <h5 class="card-title">Maçã Gala</h5>
-                        <p class="card-text">Fresca e suculenta, ideal para lanches saudáveis.</p>
-                        <p class="preco">R$ 6,90 / kg</p>
+                <div class="card h-100">
+                    {% if produto.imagem %}
+                        <img src="{{ produto.imagem.url }}" class="card-img-top" alt="{{ produto.nome }}">
+                    {% else %}
+                        <img src="{% static 'assets/img/placeholder_produto.png' %}" class="card-img-top" alt="Sem imagem">
+                    {% endif %}
+                    
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ produto.nome }}</h5>
+                        <p class="card-text">{{ produto.descricao|truncatewords:15 }}</p>
+                        <p class="preco fs-4">R$ {{ produto.preco|floatformat:2 }}</p>
+                        
+                        <form action="{% url 'core:adicionar_carrinho' produto.id %}" method="post" class="mt-auto">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantidade" value="1">
+                            <button type="submit" class="btn btn-success w-100">Adicionar ao Carrinho</button>
+                        </form>
                     </div>
                 </div>
             </div>
-
-            <div class="col">
-                <div class="card" onclick="mostrarMensagem(this, 'Banana Nanica')">
-                    <img src="https://vallefrutas.com.br/wp-content/uploads/banana-nanica.png" class="card-img-top" alt="Banana Nanica">
-                    <div class="card-body">
-                        <h5 class="card-title">Banana Nanica</h5>
-                        <p class="card-text">Fonte de energia e potássio. Direto do produtor.</p>
-                        <p class="preco">R$ 4,50 / kg</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card" onclick="mostrarMensagem(this, 'Tomate')">
-                    <img src="https://redemix.vteximg.com.br/arquivos/ids/206084-1000-1000/1644.jpg?v=638350587987700000" class="card-img-top" alt="Tomate">
-                    <div class="card-body">
-                        <h5 class="card-title">Tomate</h5>
-                        <p class="card-text">Ideal para saladas frescas e molhos caseiros.</p>
-                        <p class="preco">R$ 5,20 / kg</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card" onclick="mostrarMensagem(this, 'Cenoura')">
-                    <img src="https://www.maisquitanda.com.br/image/cache/1-verduras-legumes/cenoura%20rama-800x800.png" class="card-img-top" alt="Cenoura">
-                    <div class="card-body">
-                        <h5 class="card-title">Cenoura</h5>
-                        <p class="card-text">Rica em vitamina A, perfeita para sucos e pratos.</p>
-                        <p class="preco">R$ 3,80 / kg</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card" onclick="mostrarMensagem(this, 'Alface')">
-                    <img src="https://www.proativaalimentos.com.br/image/cache/catalog/img_prod/1839128[1]-1000x1000.jpg" class="card-img-top" alt="Alface">
-                    <div class="card-body">
-                        <h5 class="card-title">Alface</h5>
-                        <p class="card-text">Folha verde crocante para suas saladas.</p>
-                        <p class="preco">R$ 2,90 / unidade</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card" onclick="mostrarMensagem(this, 'Beterraba')">
-                    <img src="https://muffatosupermercados.vtexassets.com/arquivos/ids/370787/3612-1.jpg?v=638319605239000000" class="card-img-top" alt="Beterraba">
-                    <div class="card-body">
-                        <h5 class="card-title">Beterraba</h5>
-                        <p class="card-text">Ótimo para saladas e sucos.</p>
-                        <p class="preco">R$ 2,90 / unidade</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card" onclick="mostrarMensagem(this, 'Abobrinha')">
-                    <img src="{% static 'images/abobrinha.jpg' %}" class="card-img-top" alt="Abobrinha">
-                    <div class="card-body">
-                        <h5 class="card-title">Abobrinha</h5>
-                        <p class="card-text">Versátil e saborosa para grelhados e refogados.</p>
-                        <p class="preco">R$ 4,00 / kg</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card" onclick="mostrarMensagem(this, 'Laranja')">
-                    <img src="{% static 'images/laranja.jpg' %}" class="card-img-top" alt="Laranja">
-                    <div class="card-body">
-                        <h5 class="card-title">Laranja</h5>
-                        <p class="card-text">Suculenta e doce, perfeita para sucos naturais.</p>
-                        <p class="preco">R$ 3,50 / kg</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card" onclick="mostrarMensagem(this, 'Pepino')">
-                    <img src="{% static 'images/pepino.jpg' %}" class="card-img-top" alt="Pepino">
-                    <div class="card-body">
-                        <h5 class="card-title">Pepino</h5>
-                        <p class="card-text">Refrescante, ideal para saladas e conservas.</p>
-                        <p class="preco">R$ 3,00 / kg</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card" onclick="mostrarMensagem(this, 'Morango')">
-                    <img src="{% static 'images/morango.jpg' %}" class="card-img-top" alt="Morango">
-                    <div class="card-body">
-                        <h5 class="card-title">Morango</h5>
-                        <p class="card-text">Doce e fresco, perfeito para sobremesas.</p>
-                        <p class="preco">R$ 8,00 / caixa</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card" onclick="mostrarMensagem(this, 'Brócolis')">
-                    <img src="{% static 'images/brocolis.jpg' %}" class="card-img-top" alt="Brócolis">
-                    <div class="card-body">
-                        <h5 class="card-title">Brócolis</h5>
-                        <p class="card-text">Rico em nutrientes, ótimo para cozinhar no vapor.</p>
-                        <p class="preco">R$ 6,50 / unidade</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card" onclick="mostrarMensagem(this, 'Couve')">
-                    <img src="{% static 'images/couve.jpg' %}" class="card-img-top" alt="Couve">
-                    <div class="card-body">
-                        <h5 class="card-title">Couve</h5>
-                        <p class="card-text">Folha verde escura, ideal para refogados e sucos verdes.</p>
-                        <p class="preco">R$ 3,00 / maço</p>
-                    </div>
-                </div>
-            </div>
-
+        {% empty %}
+            <p class="text-center">Nenhum produto disponível no momento.</p>
+        {% endfor %}
         </div>
-
-        <div id="mensagem-produto" class="mt-4 text-center"></div>
-      </div>
     </div>
-</div>
 {% endblock produtos %}

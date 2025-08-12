@@ -3,3 +3,4 @@ from .produto_model import *
 from .item_pedido_model import *
 from .pedido_model import *
 from .receita_model import *
+from .doacoes_model import *
