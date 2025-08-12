@@ -1,30 +1,8 @@
-:root {
-    --primary-color: #5c8b6c;
-    --secondary-color: #407254;
-    --text-color-dark: #333;
-    --text-color-light: #fff;
-    --bg-light: #f4f4f4;
-    --bg-white: #fff;
-    --shadow-light: rgba(0, 0, 0, 0.1);
-    --shadow-medium: rgba(0, 0, 0, 0.15);
-}
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-.body {
-    font-family: 'Roboto', sans-serif;
-    background-color: var(--bg-light);
-    color: var(--text-color-dark);
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
 .main-logo {
     width: 200px;
     margin-bottom: 40px;
 }
+
 .main {
     max-width: 960px;
     margin: 40px auto;
@@ -33,6 +11,29 @@
     border-radius: 12px;
     box-shadow: 0 6px 12px var(--shadow-medium);
 }
+
+.main-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.inline-logo {
+    width: 200px;
+    height: auto;
+}
+
+.main-title {
+    font-size: 40px;
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 9px;
+}
+
 .section-title {
     font-size: 26px;
     color: var(--secondary-color);
@@ -123,6 +124,43 @@
     box-shadow: 0 6px 12px var(--shadow-medium);
 }
 
+.product-form {
+    background-color: var(--bg-white);
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.product-form label {
+    color: #407254;
+    display: block;
+    text-align: left ;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text-color-dark);
+}
+
+.product-form input,
+.product-form textarea{
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    background-color: #fdfdfd;
+    transition: border 0.3s ease;
+}
+
+.product-form input:focus,
+.product-form textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px var(--shadow-light);
+}
+
+/* Media Queries */
 @media (max-width: 768px) {
     .main-title {
         font-size: 24px;
@@ -145,28 +183,8 @@
         font-size: 15px;
     }
 }
-.main-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 40px;
-    flex-wrap: wrap;
-    text-align: center;
-}
 
-.inline-logo {
-    width: 200px;
-    height: auto;
-}
-.main-title {
-    font-size: 40px;
-    text-align: center;
-    color: var(--primary-color);
-    margin-bottom: 9px;
-}
 @media (max-width: 480px) {
-
     .header-title {
         font-size: 22px;
     }

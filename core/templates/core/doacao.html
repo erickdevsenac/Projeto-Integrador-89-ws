@@ -5,17 +5,16 @@
 
 {% block head %}
   <title>Cadastro Usuario</title>
-  <link rel="stylesheet" href="style_doacao.css">
+  <link rel="stylesheet" href="{% static 'core/css/style_doacao.css' %}">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 {% endblock head %}
 
-<body>
-  <h1>Doações</h1>
+  <h1 class="doacao">Doações</h1>
       
-  <div class="container">
-    <div class="caixa container-fluid">
-      <h2>ONGs</h2>
-      <div class="inf_ongs">
+  <div class="container doacao">
+    <div class="caixa container-fluid doacao">
+      <h2 class="doacao">ONGs</h2>
+      <div class="inf_ongs doacao">
           <h3>Importancia das ONGs:</h3>
           <p>As ONGs (Organizações Não Governamentais) têm um papel fundamental na sociedade,
             especialmente em contextos onde o Estado ou o setor privado não conseguem atender plenamente às necessidades da população,
@@ -23,10 +22,8 @@
             os produtos que seriam desperdiçados pela aparencia ou algum machucado, por isso incentivamos a doação de alimentos a ONGs
             e instituições de caridade ou de ajuda humanitaria.</p>
       </div>
-      <div class="ongs">
+      <div class="ongs doacao">
          {% for ong in instituicoes %}
-
-
           
           {% if ong.logo_ong %}
             <img src="{{ ong.logo_ong.url }}" alt="{{ ong.nome_negocio }}">

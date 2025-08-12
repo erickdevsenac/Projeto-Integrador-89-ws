@@ -1,63 +1,10 @@
 {% extends 'global/base.html' %}
 {% load static %}
 
-
 {% block content %}
     {% block head %}
         <title>Resultados da Busca</title>
-        <style>
-            .busca h2 {
-                font-size: 28px;
-                margin-bottom: 40px;
-                color: #111827;
-                text-align: center;
-            }
-            ul{
-                list-style-type: none;
-            }
-    
-            .busca ul {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                gap: 24px;
-                list-style: none;
-                padding: 0;
-                max-width: 1200px;
-                margin: 0 auto;
-            }
-    
-            .busca li {
-                background-color: #ffffff;
-                padding: 18px;
-                border-radius: 12px;
-                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-                border: 1px solid #e5e7eb;
-            }
-    
-            .busca li:hover {
-                box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
-            }
-    
-            .busca li strong {
-                display: block;
-                font-size: 18px;
-                margin-bottom: 10px;
-                color: #2563eb;
-            }
-    
-            .busca li span {
-                font-size: 15px;
-                color: #374151;
-            }
-    
-            .busca .empty {
-                text-align: center;
-                background-color: #fef2f2;
-                border: 1px solid #fca5a5;
-                color: #ca3030;
-            }
-        </style>
+        <link rel="stylesheet" href="{% static 'core/css/style_busca.css' %}">
     {% endblock head %}
    
     <h2 class="busca">Resultados para "{{ termo }}"</h2>
@@ -75,4 +22,4 @@
         </li>
         {% endfor %}
     </ul>
-  {% endblock content %}
+{% endblock content %}

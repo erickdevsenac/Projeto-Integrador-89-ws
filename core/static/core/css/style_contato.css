@@ -3,21 +3,21 @@
 .body_contato {
     font-family: 'Roboto', sans-serif;
     background: linear-gradient(to right, #aacdb4 100%);
-    min-height: 100vh;
+    min-height: 80vh;
 }
 
 .body_contato  .container {
     display: flex;
     justify-content: flex-start; /* Alinhando a imagem à esquerda */
     align-items: flex-start;
-    margin: 100px auto;
+    margin: 20px auto;
+    padding: 20px;
     width: 90%;
     max-width: 1100px;
     gap: 30px;
 }
 
 .body_contato .imagem-container {
-    flex: 1;
     display: flex;
     justify-content: center;
     align-items: flex-start;

@@ -1,6 +1,3 @@
-/* Removemos qualquer estilo direto na tag 'body' para não afetar o base.html */
-/* Apenas a classe .body que está no seu template de cadastro será estilizada. */
-
 .body {
     display: flex;
     flex-direction: column;
