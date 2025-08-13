@@ -1,0 +1,31 @@
+a {
+    text-decoration: none;
+    color: #38a169;
+}
+
+.container {
+    display: flex;
+}
+
+.fotos-alunos {
+    width: 200px;
+    border-radius: 10px;
+    box-shadow: 5px 1px 15px black;
+}
+
+.aluno1 {
+    margin-left: 25px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-family: 'Roboto', sans-serif;
+
+}
+
+.logosenac {
+    width: 100px;
+    height: 100px;
+}
+

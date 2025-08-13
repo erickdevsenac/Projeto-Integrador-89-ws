@@ -5,6 +5,7 @@ from core.models.item_pedido_model import ItemPedido
 from core.models.pedido_model import Pedido, PedidoVendedor
 from core.models.doacoes_model import Doacao
 from core.models.receita_model import Receita
+from core.models.equipe_models import EquipeDev
 
 
 # core/admin.py
@@ -63,3 +64,4 @@ admin.site.register(Receita)
 #     def get_total_item(self, obj):
 #         return obj.get_total_item()
 #     get_total_item.short_description = 'Total'
+admin.site.register(EquipeDev)
