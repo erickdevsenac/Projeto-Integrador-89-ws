@@ -1,17 +1,17 @@
 {% extends 'global/base.html' %}
 {% load static %}
-{% block alterarsenha %}
+{% block recuperarsenha %}
   {% block head %}
     <title>Aproveite Mais</title>
-    <link rel="stylesheet" href="{% static 'core/css/style_alterar.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/style_recuperarsenha.css' %}">
   {% endblock %}
   <div class="caixinha">
     <form class="form-senha" action="/alterar-senha" method="POST">
-      <h2><strong>Alterar Senha </strong></h2>
+      <h2><strong>Recuperar Senha</strong></h2>
 
-      <label for="senha-atual">Senha Atual</label>
-      <input type="password" id="senha-atual" name="senha_atual" placeholder="Digite sua Senha" required />
-
+      <label for="recuperarsenha">Email: </label>
+      <input type="email" name="recuperarsenha" id="recuperarsenha" placeholder="Digite seu Email" required />
+      
       <label for="nova-senha">Nova Senha</label>
       <input type="password" id="nova-senha" name="nova_senha"  placeholder="Nova Senha" required />
 
@@ -22,5 +22,4 @@
     </form>
 
   </div>
-
-{% endblock %}
+{% endblock recuperarsenha %}

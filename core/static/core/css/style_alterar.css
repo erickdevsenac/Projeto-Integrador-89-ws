@@ -1,0 +1,85 @@
+.caixinha {
+    max-width: 480px;
+    margin: 60px auto;
+    padding: 30px 25px;
+    background-color: var(--bg-white);
+    border-radius: 12px;
+    box-shadow: 0 6px 12px var(--shadow-medium);
+}
+
+.form-senha {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-senha h2 {
+    font-size: 24px;
+    margin-bottom: 25px;
+    text-align: center;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.form-senha label {
+    margin-bottom: 6px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-color-dark);
+}
+
+.form-senha input[type="password"] {
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: border 0.3s ease;
+}
+
+.form-senha input[type="password"]:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+.form-senha button[type="submit"] {
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+    font-size: 16px;
+    font-weight: bold;
+    padding: 14px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 3px 6px var(--shadow-light);
+}
+
+.form-senha button[type="submit"]:hover {
+    background-color: var(--secondary-color);
+    box-shadow: 0 6px 12px var(--shadow-medium);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 480px) {
+    .caixinha {
+        padding: 20px;
+        margin: 40px 15px;
+    }
+
+    .form-senha h2 {
+        font-size: 20px;
+    }
+
+    .form-senha input[type="password"] {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+
+    .form-senha button[type="submit"] {
+        font-size: 14px;
+        padding: 12px;
+    }
+}

@@ -1,4 +1,3 @@
-# Em core/urls.py
 
 from django.urls import path
 from . import views
@@ -19,6 +18,7 @@ urlpatterns = [
     path('alterar-senha/', views.alterarsenha, name='alterar_senha'), # BOA PRÁTICA: URL com hífen
     path('perfil/', views.perfil, name='perfil'),
     path('configuracoes/', views.configuracoes, name='configuracoes'),
+    path('recuperar-senha/', views.recuperarsenha, name='recuperar-senha'), 
 
     # Rotas de Receitas
     path('receitas/', views.receitas, name='receitas'),
@@ -36,4 +36,9 @@ urlpatterns = [
     path('checkout/', views.finalizar_pedido, name='finalizar_pedido'),
     path('remover_item/<int:item_id>/', views.remover_item, name='remover_item'),
     path('atualizar_carrinho/', views.atualizar_carrinho, name='atualizar_carrinho'),
-]
+
+    # Rotas do Footer
+    path('timedev/', views.devs, name='timedev')
+    ]
+
+

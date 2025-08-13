@@ -5,6 +5,7 @@ from core.models.item_pedido_model import ItemPedido
 from core.models.pedido_model import Pedido, PedidoVendedor
 from core.models.doacoes_model import Doacao
 from core.models.receita_model import Receita
+from core.models.equipe_models import EquipeDev
 
 
 # core/admin.py
@@ -36,3 +37,31 @@ admin.site.register(Categoria)
 admin.site.register(Pedido)
 admin.site.register(Doacao)
 admin.site.register(Receita)
+
+
+# Lista os Pedidos
+# from django.contrib import admin
+# from .models import Pedido, ItemPedido
+
+# class ItemPedidoInline(admin.TabularInline):
+#     model = ItemPedido
+#     extra = 1
+
+# @admin.register(Pedido)
+# class PedidoAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'usuario', 'data_criacao', 'total', 'status')
+#     list_filter = ('status', 'data_criacao')
+#     search_fields = ('usuario__username', 'id')
+#     inlines = [ItemPedidoInline]
+#     ordering = ('-data_criacao',)
+
+# @admin.register(ItemPedido)
+# class ItemPedidoAdmin(admin.ModelAdmin):
+#     list_display = ('pedido', 'produto', 'quantidade', 'preco', 'get_total_item')
+#     list_filter = ('pedido__status',)
+#     search_fields = ('produto__nome', 'pedido__id')
+    
+#     def get_total_item(self, obj):
+#         return obj.get_total_item()
+#     get_total_item.short_description = 'Total'
+admin.site.register(EquipeDev)
