@@ -1,4 +1,4 @@
-from .models import Receita, Produto, Perfil, Pedido, ItemPedido,PedidoVendedor
+from .models import Receita, Produto, Perfil, Pedido, ItemPedido,PedidoVendedor,EquipeDev
 from django.contrib.auth.decorators import login_required
 from .forms import CadastroForm, ReceitaForm, IngredienteFormSet, EtapaPreparoFormSet
 from django.contrib.auth.models import User
@@ -22,6 +22,13 @@ def produtos(request):
 
 def contato(request):
     return render(request, 'core/contato.html')
+
+def devs(request):
+    desenvolvedores = EquipeDev.objects.all()
+    context = {
+        "equipe": desenvolvedores
+    }
+    return render(request, 'core/timedev.html', context)
 
 def doacao(request):
     ongs = Perfil.objects.filter(tipo = "ONG").all()
@@ -310,3 +317,4 @@ def finalizar_pedido(request):
         'total_carrinho': total_carrinho,
     }
     return render(request, 'core/checkout.html', context)
+
