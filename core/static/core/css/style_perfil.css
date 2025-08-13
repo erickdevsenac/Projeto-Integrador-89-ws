@@ -1,0 +1,142 @@
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background-color: #f9f9f9;
+}
+
+.perfil-container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 30px auto;
+}
+
+h2, h3 {
+  color: #333;
+}
+
+h3 {
+  margin-top: 20px;
+}
+
+/* Estilo para a foto de perfil */
+.foto-perfil {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #ddd;
+  margin-bottom: 20px;
+}
+
+/* Estilo do formulário */
+form .mb-3 {
+  margin-bottom: 15px;
+}
+
+form label {
+  font-weight: bold;
+  color: #333;
+}
+
+form .form-control {
+  border-radius: 5px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+form .form-control:focus {
+  border-color: #5b9bd5;
+  box-shadow: 0 0 5px rgba(91, 155, 213, 0.5);
+}
+
+/* Botões */
+button.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+button.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+/* Estilos para os links de ação */
+.acoes {
+  margin-top: 20px;
+}
+
+.acoes .btn {
+  margin-right: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.acoes .btn-outline-secondary {
+  color: #6c757d;
+  border-color: #6c757d;
+}
+
+.acoes .btn-outline-secondary:hover {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.acoes .btn-outline-primary {
+  color: #007bff;
+  border-color: #007bff;
+}
+
+.acoes .btn-outline-primary:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* Estilo para a lista de produtos e doações */
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+ul li {
+  background-color: #f1f1f1;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+ul li:nth-child(odd) {
+  background-color: #e9ecef;
+}
+
+/* Estilo para os produtos e doações */
+ul li {
+  font-size: 16px;
+}
+
+ul li a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+ul li a:hover {
+  text-decoration: underline;
+}
+
+/* Estilos para os textos de informações */
+.info-text {
+  font-size: 14px;
+  color: #6c757d;
+}
+
+hr {
+  margin: 20px 0;
+  border: 1px solid #ddd;
+}

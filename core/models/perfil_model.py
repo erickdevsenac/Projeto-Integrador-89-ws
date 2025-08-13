@@ -9,6 +9,7 @@ class Perfil(models.Model):
 
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     tipo = models.CharField(max_length=20, choices=TipoUsuario.choices)
+    foto_perfil = models.ImageField(null=True, blank=True, upload_to='fotos_perfil/')
 
     nome_negocio = models.CharField(
         "Nome da Loja/Negócio",
@@ -22,6 +23,10 @@ class Perfil(models.Model):
     endereco = models.CharField(max_length=255)
     cnpj = models.CharField("CNPJ", max_length=18, unique=True, null=True, blank=True, help_text="Obrigatório para Vendedores e ONGs")
     descricao_parceiro = models.TextField("Descrição da Empresa/ONG", blank=True, help_text="Uma breve descrição sobre o parceiro")
+
+    class Meta:
+        verbose_name = "Perfil"
+        verbose_name_plural = "Perfis"
 
     def __str__(self):
         if self.tipo == self.TipoUsuario.VENDEDOR and self.nome_negocio:

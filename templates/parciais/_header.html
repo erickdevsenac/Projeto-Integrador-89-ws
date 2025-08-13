@@ -90,7 +90,7 @@
               aria-labelledby="dropdownMenuButton"
             >
               <li>
-                <a class="dropdown-item" href="#"
+                <a class="dropdown-item" href="{% url 'core:perfil' %}"
                   ><i class="bi bi-person-circle"></i> Meu Perfil</a
                 >
               </li>
@@ -99,7 +99,11 @@
                   ><i class="bi bi-box-seam"></i> Meus Pedidos</a
                 >
               </li>
-
+              <li>
+                <a class="dropdown-item" href="{% url 'core:configuracoes' %}"
+                  ><i class="bi bi-box-seam"></i> Configurações</a
+                >
+              </li>
               {% if user.is_staff %}
               <li><hr class="dropdown-divider" /></li>
               <li>

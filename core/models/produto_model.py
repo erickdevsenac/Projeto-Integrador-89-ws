@@ -50,9 +50,10 @@ class Produto(models.Model):
         default=True,
         help_text="O vendedor pode desmarcar para 'pausar' o anúncio do produto."
     )
-    
     data_criacao = models.DateTimeField(default=timezone.now)
-
+    class Meta:
+        verbose_name = "Produto"
+        verbose_name_plural = "Produtos"
     # Propriedade para verificar a disponibilidade real (ativo e com estoque)
     @property
     def disponivel_para_venda(self):

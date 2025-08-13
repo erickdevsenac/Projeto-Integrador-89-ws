@@ -1,0 +1,98 @@
+{% extends 'global/base.html' %}
+{% load static %}
+
+{% block configuracoes %}
+<!-- Adicionando as classes diretamente ao BODY ou uma div principal -->
+<body class="
+    {% if request.session.theme == 'escuro' %}tema-escuro{% else %}tema-claro{% endif %}
+    {% if request.session.fonte == 'grande' %}fonte-grande{% elif request.session.fonte == 'extra_grande' %}fonte-extra-grande{% else %}fonte-normal{% endif %}
+    {% if request.session.acessibilidade == 'alto_contraste' %}acessibilidade-alto-contraste{% elif request.session.acessibilidade == 'leitura_facilitada' %}acessibilidade-leitura-facilitada{% endif %}
+">
+
+  <div class="container mt-5">
+    <h2>Configurações da Conta</h2>
+
+    <!-- Carregar o CSS e JS -->
+    <link rel="stylesheet" href="{% static 'core/css/style_configuracoes.css' %}">
+    <script src="{% static 'js/configuracao.js' %}"></script>
+
+    <!-- Formulário de Configurações -->
+    <form method="POST">
+      {% csrf_token %}
+    
+      <h3>Configurações de Preferências</h3>
+
+      <!-- Tema -->
+      <div class="mb-3">
+        <label for="tema">Tema:</label>
+        <select name="tema" class="form-control" id="tema">
+          <option value="claro" {% if request.session.theme == 'claro' %}selected{% endif %}>Claro</option>
+          <option value="escuro" {% if request.session.theme == 'escuro' %}selected{% endif %}>Escuro</option>
+        </select>
+      </div>
+
+      <!-- Fonte -->
+      <div class="mb-3">
+        <label for="fonte">Fonte:</label>
+        <select name="fonte" class="form-control" id="fonte">
+          <option value="normal" {% if request.session.fonte == 'normal' %}selected{% endif %}>Normal</option>
+          <option value="grande" {% if request.session.fonte == 'grande' %}selected{% endif %}>Grande</option>
+          <option value="extra_grande" {% if request.session.fonte == 'extra_grande' %}selected{% endif %}>Extra Grande</option>
+        </select>
+      </div>
+
+      <!-- Acessibilidade -->
+      <div class="mb-3">
+        <label for="acessibilidade">Acessibilidade:</label>
+        <select name="acessibilidade" class="form-control" id="acessibilidade">
+          <option value="nenhuma" {% if request.session.acessibilidade == 'nenhuma' %}selected{% endif %}>Nenhuma</option>
+          <option value="alto_contraste" {% if request.session.acessibilidade == 'alto_contraste' %}selected{% endif %}>Alto Contraste</option>
+          <option value="leitura_facilitada" {% if request.session.acessibilidade == 'leitura_facilitada' %}selected{% endif %}>Leitura Facilitada</option>
+        </select>
+      </div>
+
+      <!-- Notificações -->
+      <h3>Notificações</h3>
+      <div class="mb-3">
+        <label for="notificacoes">Receber Notificações:</label>
+        <select name="notificacoes" class="form-control" id="notificacoes">
+          <option value="sim" {% if request.session.notificacoes == 'sim' %}selected{% endif %}>Sim</option>
+          <option value="nao" {% if request.session.notificacoes == 'nao' %}selected{% endif %}>Não</option>
+        </select>
+      </div>
+
+      <!-- Excluir Conta -->
+      <h3>Excluir Conta</h3>
+      <div class="alert alert-danger">
+        <p>Se você deseja excluir sua conta permanentemente, clique no botão abaixo. Esta ação não pode ser desfeita.</p>
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">Excluir Conta</button>
+      </div>
+
+      <!-- Modal de Confirmação para Excluir Conta -->
+      <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Confirmar Exclusão de Conta</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" >
+              Tem certeza de que deseja excluir sua conta? Esta ação não pode ser desfeita.
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+              <button type="submit" name="excluir_conta" class="btn btn-danger">Excluir Conta</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botão de Envio -->
+      <button type="submit" class="btn btn-success">Salvar Alterações</button>
+    </form>
+  </div>
+
+</body>
+{% endblock configuracoes %}

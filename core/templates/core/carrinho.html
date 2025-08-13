@@ -1,14 +1,22 @@
 {% extends 'global/base.html' %}
 {% load static %}
-
+ 
 {% block content %}
 {% block head %}
     <title>Carrinho de Compras</title>
-    <link rel="stylesheet" href="{% static 'core/css/style_carrinho.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/carrinhostyle.css' %}">
 {% endblock head %}
 <div class="container mt-5 mb-5">
     <h2 class="text-center mb-4">Seu Carrinho de Compras 🛒</h2>
-
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+    {% endif %}
+ 
     {% if carrinho %}
         <div class="table-responsive">
             <table class="table align-middle">
@@ -32,17 +40,24 @@
                             </td>
                             <td>{{ item.nome }}</td>
                             <td>R$ {{ item.preco|floatformat:2 }}</td>
-                            <td>{{ item.quantidade }}</td>
+                            <td>
+                                <form action="{% url 'atualizar_carrinho' %}" method="POST" class="d-flex align-items-center">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="item_id" value="{{ item.id }}">
+                                    <input type="number" name="quantidade" value="{{ item.quantidade }}" min="1" class="form-control form-control-sm me-2" style="width: 70px;">
+                                    <button type="submit" class="btn btn-sm btn-primary">Atualizar</button>
+                                </form>
+                            </td>
                             <td>R$ {{ item.subtotal|floatformat:2 }}</td>
                             <td>
-                                <a href="#" class="btn btn-outline-danger btn-sm">Remover</a>
+                                <a href="{% url 'remover_item' item.id %}" class="btn btn-outline-danger btn-sm">Remover</a>
                             </td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-
+ 
         <div class="row justify-content-end mt-4">
             <div class="col-md-4">
                 <div class="card">
@@ -50,17 +65,17 @@
                         <h4 class="card-title">Total do Carrinho</h4>
                         <h3 class="card-text">R$ {{ total_carrinho|floatformat:2 }}</h3>
                         <hr>
-                        <a href="{% url 'core:finalizar_pedido' %}" class="btn btn-success w-100">Finalizar Compra</a>
+                        <a href="#" class="btn btn-success w-100">Finalizar Compra</a>
                     </div>
                 </div>
             </div>
         </div>
-
+ 
     {% else %}
         <div class="text-center p-5">
             <h3>Seu carrinho está vazio.</h3>
             <p class="lead text-muted">Que tal adicionar alguns produtos incríveis?</p>
-            <a href="{% url 'core:produtos' %}"" class="btn btn-primary mt-3">Ver Produtos</a> </div>
+            <a href="{% url 'core:produtos' %}" class="btn btn-primary mt-3">Ver Produtos</a> </div>
     {% endif %}
 </div>
 {% endblock content %}

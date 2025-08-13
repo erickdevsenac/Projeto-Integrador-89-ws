@@ -1,0 +1,96 @@
+{% extends 'global/base.html' %}
+
+{% load static %}  <!-- Carrega o tag static -->
+
+{% block head %}
+<title>Meu Perfil</title>
+<link rel="stylesheet" href="{% static 'core/css/style_perfil.css' %}">
+{% endblock head %}
+
+{% block content %}
+<div class="perfil-container">
+  <h2>Olá, {{ user.username }}!</h2>
+
+  {% if user.perfil.foto_perfil %}
+    <img src="{{ user.perfil.foto_perfil.url }}" alt="Foto do Perfil" class="foto-perfil">
+  {% else %}
+    
+  {% endif %}
+
+  <h3>Informações do Perfil</h3>
+  
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="foto_perfil">Foto do Perfil</label>
+      <input type="file" name="foto_perfil" class="form-control">
+      {% if perfil.foto_perfil %}
+        <img src="{{ perfil.foto_perfil.url }}" alt="Foto de Perfil Atual" width="100" class="mt-2">
+      {% endif %}
+    </div>
+
+    <div class="mb-3">
+      <label for="nome_negocio">Nome do Negócio</label>
+      <input type="text" name="nome_negocio" class="form-control" value="{{ perfil.nome_negocio }}">
+    </div>
+
+    <div class="mb-3">
+      <label for="telefone">Telefone</label>
+      <input type="text" name="telefone" class="form-control" value="{{ perfil.telefone }}">
+    </div>
+
+    <div class="mb-3">
+      <label for="endereco">Endereço</label>
+      <input type="text" name="endereco" class="form-control" value="{{ perfil.endereco }}">
+    </div>
+
+    <div class="mb-3">
+      <label for="descricao_parceiro">Descrição do Negócio/ONG</label>
+      <textarea name="descricao_parceiro" class="form-control">{{ perfil.descricao_parceiro }}</textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="cnpj">CNPJ</label>
+      <input type="text" name="cnpj" class="form-control" value="{{ perfil.cnpj }}">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+  </form>
+
+  <hr>
+
+  {% if perfil.tipo == 'VENDEDOR' %}
+    <h3>Seus Produtos Cadastrados</h3>
+    <ul>
+      {% for produto in produtos_do_usuario %}
+        <li>{{ produto.nome }} - R$ {{ produto.preco }}</li>
+      {% empty %}
+        <li>Nenhum produto cadastrado.</li>
+      {% endfor %}
+    </ul>
+  {% elif perfil.tipo == 'CLIENTE' %}
+    <h3>Suas Doações</h3>
+    <ul>
+      {% for doacao in doacoes %}
+        <li>R$ {{ doacao.valor }} para {{ doacao.ong.nome }} em {{ doacao.data }}</li>
+      {% empty %}
+        <li>Você ainda não fez nenhuma doação.</li>
+      {% endfor %}
+    </ul>
+  {% elif perfil.tipo == 'ONG' %}
+    <h3>Doações Recebidas</h3>
+    <ul>
+      {% for doacao in doacoes_recebidas %}
+        <li>R$ {{ doacao.valor }} de {{ doacao.usuario.user.username }} em {{ doacao.data }}</li>
+      {% empty %}
+        <li>Ainda não recebeu doações.</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <div class="acoes">
+    <a href="{% url 'core:configuracoes' %}" class="btn btn-outline-secondary">⚙️ Configurações</a>
+    <a href="#" class="btn btn-outline-primary">📦 Meus Pedidos</a>
+  </div>
+</div>
+{% endblock %}

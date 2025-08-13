@@ -42,7 +42,9 @@ class Pedido(models.Model):
         choices=StatusPagamento.choices,
         default=StatusPagamento.AGUARDANDO
     )
-
+    class Meta:
+        verbose_name = "Pedido"
+        verbose_name_plural = "Pedidos"
     def __str__(self):
         return f"Pedido #{self.id} - {self.cliente.usuario.username}"
 
@@ -69,6 +71,8 @@ class PedidoVendedor(models.Model):
     
     status = models.CharField(max_length=20, choices=StatusPedidoVendedor.choices, default=StatusPedidoVendedor.AGUARDANDO)
     valor_subtotal = models.DecimalField(max_digits=10, decimal_places=2, help_text="Valor total dos itens deste vendedor.")
-    
+    class Meta:
+        verbose_name = "Vendedor"
+        verbose_name_plural = "Vendedores"
     def __str__(self):
         return f"Sub-Pedido para {self.vendedor.nome_negocio} (Pedido #{self.pedido_principal.id})"

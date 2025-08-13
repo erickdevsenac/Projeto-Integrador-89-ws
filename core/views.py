@@ -7,6 +7,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from decimal import Decimal
 from django.core.paginator import Paginator
 from django.contrib import messages
+from django.views.decorators.http import require_POST
+from django.db import transaction
+from django.shortcuts import render
+from .models import Produto, Pedido
+from .forms import PerfilForm,ConfiguracaoForm
+from django.utils.translation import activate
+
 
 def index(request):
     return render(request, 'core/index.html')
@@ -310,3 +317,88 @@ def finalizar_pedido(request):
         'total_carrinho': total_carrinho,
     }
     return render(request, 'core/checkout.html', context)
+def remover_item(request, item_id):
+    carrinho = request.session.get('carrinho', {})
+    if str(item_id) in carrinho:
+        del carrinho[str(item_id)]
+        request.session['carrinho'] = carrinho
+        messages.success(request, "Item removido do carrinho com sucesso!")
+    else:
+        messages.error(request, "Item não encontrado no carrinho.")
+    return redirect('ver_carrinho')
+@require_POST
+def atualizar_carrinho(request):
+    item_id = str(request.POST.get('item_id'))
+    nova_qtd = int(request.POST.get('quantidade', 1))
+    carrinho = request.session.get('carrinho', {})
+ 
+    if item_id in carrinho:
+        if nova_qtd > 0:
+            carrinho[item_id]['quantidade'] = nova_qtd
+            messages.success(request, "Quantidade atualizada com sucesso!")
+        else:
+            del carrinho[item_id]
+            messages.success(request, "Item removido do carrinho.")
+        request.session['carrinho'] = carrinho
+    else:
+        messages.error(request, "Item não encontrado no carrinho.")
+ 
+    return redirect('ver_carrinho')
+
+
+def perfil(request):
+    # Obtém o perfil do usuário logado
+    perfil = request.user.perfil
+
+    if request.method == 'POST':
+        form = PerfilForm(request.POST, request.FILES, instance=perfil)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Perfil atualizado com sucesso!")
+            return redirect('core:perfil')  # Redireciona para a página do perfil após salvar
+    else:
+        form = PerfilForm(instance=perfil)
+
+    return render(request, 'core/perfil.html', {
+        'form': form,
+        'perfil': perfil,
+    })
+
+def configuracoes(request):
+    if request.method == "POST":
+        # Alterações nas preferências de exibição
+        tema = request.POST.get('tema', 'claro')  # Default to 'claro'
+        fonte = request.POST.get('fonte', 'normal')  # Default to 'normal'
+        acessibilidade = request.POST.get('acessibilidade', 'nenhuma')  # Default to 'nenhuma'
+        notificacoes = request.POST.get('notificacoes', 'sim')  # Default to 'sim'
+
+        # Atualiza as configurações na sessão
+        request.session['theme'] = tema
+        request.session['fonte'] = fonte
+        request.session['acessibilidade'] = acessibilidade
+        request.session['notificacoes'] = notificacoes
+
+        # Mensagem de sucesso para as configurações
+        messages.success(request, "Suas configurações foram salvas com sucesso!")
+
+        # Se o usuário escolheu excluir a conta, processa a exclusão
+        if 'excluir_conta' in request.POST:
+            user = request.user
+            user.delete()
+            messages.success(request, "Sua conta foi excluída com sucesso!")
+            return redirect('index')  # Redireciona para a página inicial após exclusão
+
+        return redirect('core:configuracoes')  # Redireciona novamente para a página de configurações
+
+    # Carregar configurações atuais da sessão
+    tema = request.session.get('theme', 'claro')
+    fonte = request.session.get('fonte', 'normal')
+    acessibilidade = request.session.get('acessibilidade', 'nenhuma')
+    notificacoes = request.session.get('notificacoes', 'sim')
+
+    return render(request, 'core/configuracoes.html', {
+        'tema': tema,
+        'fonte': fonte,
+        'acessibilidade': acessibilidade,
+        'notificacoes': notificacoes,
+    })

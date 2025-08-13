@@ -37,7 +37,9 @@ class Receita(models.Model):
     
     data_criacao = models.DateTimeField(default=timezone.now)
     disponivel = models.BooleanField(default=True)
-
+    class Meta:
+        verbose_name = "Receita"
+        verbose_name_plural = "Receitas"
     def __str__(self):
         return self.nome
 

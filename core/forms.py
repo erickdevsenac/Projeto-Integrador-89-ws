@@ -71,3 +71,39 @@ EtapaPreparoFormSet = inlineformset_factory(
     extra=1,
     can_delete=True
 )
+class PerfilForm(forms.ModelForm):
+    class Meta:
+        model = Perfil
+        fields = ['nome_negocio', 'telefone', 'endereco', 'foto_perfil', 'descricao_parceiro', 'cnpj']
+class ConfiguracaoForm(forms.Form):
+    # Opções de Tema
+    tema_choices = [
+        ('claro', 'Claro'),
+        ('escuro', 'Escuro'),
+    ]
+    # Opções de Fonte
+    fonte_choices = [
+        ('normal', 'Normal'),
+        ('grande', 'Grande'),
+        ('extra_grande', 'Extra Grande'),
+    ]
+    # Opções de Acessibilidade
+    acessibilidade_choices = [
+        ('nenhuma', 'Nenhuma'),
+        ('alto_contraste', 'Alto Contraste'),
+        ('leitura_facilitada', 'Leitura Facilitada'),
+    ]
+    # Opções de Notificação
+    notificacoes_choices = [
+        ('sim', 'Sim'),
+        ('nao', 'Não'),
+    ]
+    
+    # Campos do formulário
+    tema = forms.ChoiceField(choices=tema_choices, required=False)
+    fonte = forms.ChoiceField(choices=fonte_choices, required=False)
+    acessibilidade = forms.ChoiceField(choices=acessibilidade_choices, required=False)
+    notificacoes = forms.ChoiceField(choices=notificacoes_choices, required=False)
+
+    class Media:
+        js = ('core/js/configuracao.js',)

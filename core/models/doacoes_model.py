@@ -30,6 +30,8 @@ class Doacao(models.Model):
     data_doacao = models.DateTimeField() 
     
     status = models.CharField(max_length=20, choices=StatusDoacao.choices, default=StatusDoacao.AGUARDANDO_RETIRADA)
-    
+    class Meta:
+        verbose_name = "Doacão"
+        verbose_name_plural = "Doacões"
     def __str__(self):
         return f"Doação de {self.doador} para {self.ong}"

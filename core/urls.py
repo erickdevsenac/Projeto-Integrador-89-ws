@@ -17,6 +17,8 @@ urlpatterns = [
     path('login/', views.login_view, name='telalogin'), # BOA PRÁTICA: URL mais curta
     path('logout/', views.logout_view, name='logout'),
     path('alterar-senha/', views.alterarsenha, name='alterar_senha'), # BOA PRÁTICA: URL com hífen
+    path('perfil/', views.perfil, name='perfil'),
+    path('configuracoes/', views.configuracoes, name='configuracoes'),
 
     # Rotas de Receitas
     path('receitas/', views.receitas, name='receitas'),
@@ -32,4 +34,6 @@ urlpatterns = [
     path('carrinho/', views.ver_carrinho, name='ver_carrinho'), 
     path('carrinho/adicionar/<int:produto_id>/', views.adicionar_carrinho, name='adicionar_carrinho'),
     path('checkout/', views.finalizar_pedido, name='finalizar_pedido'),
+    path('remover_item/<int:item_id>/', views.remover_item, name='remover_item'),
+    path('atualizar_carrinho/', views.atualizar_carrinho, name='atualizar_carrinho'),
 ]
