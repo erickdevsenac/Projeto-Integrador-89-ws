@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-{% include 'parciais/_head.html' %}
-{% comment %} {% include "parciais/_fazerheader2.html" %} {% endcomment %}
- {% include 'parciais/_header.html' %} 
+    {% include 'parciais/_head.html' %}
 
-<main class="container mt-4">
-    {% block alterarsenha %}{% endblock alterarsenha %}
-    {% block cadastro %}{% endblock cadastro %}
-    {% block contato %}{% endblock contato %}
-    {% block content %}{% endblock content %}
-    {% block conteudologin%}{% endblock conteudologin %}
-    {% block produtos %}{% endblock produtos %}
-    {% block receitas %}{% endblock receitas %}
-    {% block videos %}{% endblock videos %}
-    {% block cadastroproduto %}{% endblock cadastroproduto %}
-</main>
+<body>
+    {% include 'parciais/_header.html' %} 
 
+    <main class="container mt-4">
+        {% block alterarsenha %}{% endblock alterarsenha %}
+        {% block cadastro %}{% endblock cadastro %}
+        {% block contato %}{% endblock contato %}
+        {% block content %}{% endblock content %}
+        {% block conteudologin%}{% endblock conteudologin %}
+        {% block produtos %}{% endblock produtos %}
+        {% block receitas %}{% endblock receitas %}
+        {% block videos %}{% endblock videos %}
+        {% block cadastroproduto %}{% endblock cadastroproduto %}
+        {% block doacao %}{% endblock doacao %}
+    </main>
 
-{% include 'parciais/_footer.html' %}
+    {% include 'parciais/_footer.html' %}
 
 </body>
 </html>

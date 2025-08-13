@@ -4,7 +4,7 @@
 
 
   {% block head %}
-    <link rel="stylesheet" href="{% static 'core/stylecadastroproduto.css' %}" />
+    <link rel="stylesheet" href="{% static 'core/css/stylecadastroproduto.css' %}" />
     <title>Cadastro de Produtos Alimentícios</title>
   {% endblock %}
 
@@ -28,7 +28,7 @@
       <div class="mb-3">
         <label for="categoria">Categoria Alimentar:</label>
         <input type="text" id="categoria" name="categoria" required>
-        <select id="categoria" name="categoria" style="position: left: 12px;" required>
+        <select id="categoria" name="categoria" style="position: left" required>
           <option value="">Selecione uma categoria</option>
           <option value="Doce">🍬 Doce</option>
           <option value="Salgado">🥪 Salgado</option>

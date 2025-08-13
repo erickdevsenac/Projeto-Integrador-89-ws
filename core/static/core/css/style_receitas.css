@@ -1,0 +1,13 @@
+.receita-item {
+    border: 1px solid #eee;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+}
+.receita-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}

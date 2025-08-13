@@ -1,10 +1,4 @@
-
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-p{
+.doacao p{
   font-family: "Noto Sans", sans-serif;
   font-optical-sizing: auto;
   font-weight: weight;
@@ -15,7 +9,7 @@ p{
 h1{
     text-align: center;
 }
-.ongs{
+.doacao .ongs{
     max-width: 700px;
     background-color: #bbe4ff;
     display: flex;
@@ -24,11 +18,11 @@ h1{
     border-radius: 20px;
     padding: 15px 30px;
 }
-.container{
+.doacao .container{
     background: linear-gradient(to right, #70e0ff, #0072ff);
     border-radius: 15px;
 }
-.inf_ongs{
+.doacao .inf_ongs{
     background-color: aliceblue;
     max-width: 700px;
     border-radius: 15px;
@@ -39,11 +33,11 @@ h2{
     padding: 20px;
     text-align: center;
 }
-.ong_img{
+.doacao .ong_img{
     border-radius: 15px;
 }
 
-.caixa {
+.doacao .caixa {
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -51,6 +45,6 @@ h2{
 h3{
     padding: 20px;
 }
-.col-auto{
+.doacao .col-auto{
     padding-bottom: 20px;
 }

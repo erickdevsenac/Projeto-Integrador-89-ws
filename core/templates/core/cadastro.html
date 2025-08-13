@@ -4,7 +4,7 @@
 {% block cadastro %}
 {% block head %}
   <title>Cadastro Usuário</title>
-  <link rel="stylesheet" href="{% static 'core/stylecadastro.css' %}">
+  <link rel="stylesheet" href="{% static 'core/css/stylecadastro.css' %}">
 {% endblock head %}
 
 <div class="body">
@@ -16,7 +16,13 @@
 
     <div class="caixa">
       <h2>Cadastro de Usuário</h2>
-
+        {% if messages %}
+          <ul class="messages">
+              {% for message in messages %}
+                  <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+              {% endfor %}
+          </ul>
+        {% endif %}
       <form method="post" action="">
         {% csrf_token %}
 

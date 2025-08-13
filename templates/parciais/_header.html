@@ -1,52 +1,131 @@
-{% load static %}
+{% load static %} 
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
+      <a
+        class="navbar-brand d-flex align-items-center"
+        href="{% url 'core:index' %}"
+      >
+        <img
+          src="{% static 'assets/img/logo.png' %}"
+          alt="logo"
+          class="logo me-2"
+          style="height: 40px"
+        />
+        <h1 class="mb-0 fs-4">Aproveite+</h1>
+      </a>
 
-{% block head %}
-{% endblock head %}
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#menuPrincipal"
+        aria-controls="menuPrincipal"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-  <header>
-    <nav class="navbar navbar-expand-lg navbar-light">
-      <div class="container-fluid">
-        <div class="d-flex align-items-center divlogo">
-          <a href={% url "index" %}>
-            <img src={% static "assets/img/logo.png" %} alt="logo" class="logo me-2">
-            <h1> Aproveite+</h1>
+      <div class="collapse navbar-collapse" id="menuPrincipal">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'core:receitas' %}"
+              ><i class="bi bi-egg-fried"></i> Receitas</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'core:videos' %}"
+              ><i class="bi bi-collection-play"></i> Vídeos</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'core:produtos' %}"
+              ><i class="bi bi-shop-window"></i> Produtos</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="bi bi-recycle"></i> Dicas</a>
+          </li>
+        </ul>
+
+        <div class="d-flex align-items-center">
+          <form
+            class="d-flex me-3"
+            role="search"
+            method="get"
+            action="{% url 'core:buscar_produtos' %}"
+          >
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Pesquisar..."
+              name="termo"
+            />
+            <button class="btn btn-outline-light" type="submit">
+              <i class="bi bi-search"></i>
+            </button>
+          </form>
+
+          {% if user.is_authenticated %}
+          <a
+            href="{% url 'core:ver_carrinho' %}"
+            class="btn btn-light position-relative me-3"
+          >
+            <i class="bi bi-cart"></i>
           </a>
-        </div>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuHamburguer" aria-controls="menuHamburguer" aria-expanded="false" aria-label="Toggle navigation">
-          <p class="navbar-toggler-icon"> </p>
-        </button>
+          <div class="dropdown">
+            <button
+              class="btn btn-secondary dropdown-toggle"
+              type="button"
+              id="dropdownMenuButton"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Olá, {{ user.username|truncatechars:15 }}
+            </button>
+            <ul
+              class="dropdown-menu dropdown-menu-end"
+              aria-labelledby="dropdownMenuButton"
+            >
+              <li>
+                <a class="dropdown-item" href="#"
+                  ><i class="bi bi-person-circle"></i> Meu Perfil</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" href="#"
+                  ><i class="bi bi-box-seam"></i> Meus Pedidos</a
+                >
+              </li>
 
-        <div class="collapse navbar-collapse" id="menuHamburguer">
+              {% if user.is_staff %}
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a class="dropdown-item" href="{% url 'admin:index' %}"
+                  ><i class="bi bi-gear"></i> Administração</a
+                >
+              </li>
+              {% endif %}
 
-
-          <ul class="navbar-nav d-flex align-items-center mb-2 mb-lg-0">
-            <li class="nav-item"><a class="nav-link" href={% url "receitas" %}><i class="bi bi-egg-fried"></i>Receitas</a></li>
-            <li class="nav-item"><a class="nav-link" href={% url "videos" %}><i class="bi bi-collection-play"></i>Videos</a></li>
-            <li class="nav-item"><a class="nav-link" href={% url "produtos" %}><i class="bi bi-wallet2"></i>Produtos</a></li>
-
-            <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8000/admin"><i class="bi bi-shop"></i>ADMIN</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-basket"></i>Mercado</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-recycle"></i>Dicas Sustentáveis</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person-circle"></i>Meu Perfil</a></li>
-          </ul>
-
-          <div class="search-login-group ms-lg-3">
-            <form class="d-flex" role="search" method='get' action={% url "buscar_produtos" %}>
-              {% csrf_token %}
-              <input class="form-control me-2" type="search" placeholder="Pesquisar..." aria-label="Pesquisar" name="termo">
-              <button class="btn btn-light" type="submit"><i class="bi bi-search"></i></button>
-            </form>
-
-            <div class="d-flex text-center">
-              <a href={% url "telalogin" %} class="btn btn-success me-2"><i class="bi bi-box-arrow-in-right"></i> Login</a>
-              <a href={% url "cadastro" %} class="btn btn-outline-light"><i class="bi bi-person-plus"></i> Cadastre-se</a>
-            </div>
-
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a class="dropdown-item text-danger" href="{% url 'core:logout' %}"
+                  ><i class="bi bi-box-arrow-right"></i> Sair</a
+                >
+              </li>
+            </ul>
           </div>
+
+          {% else %}
+          <a href="{% url 'core:telalogin' %}" class="btn btn-outline-light me-2"
+            >Login</a
+          >
+          <a href="{% url 'core:cadastro' %}" class="btn btn-success">Cadastre-se</a>
+          {% endif %}
         </div>
       </div>
-    </nav>
-  </header>
-
-
+    </div>
+  </nav>
+</header>

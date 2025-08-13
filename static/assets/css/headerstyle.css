@@ -1,51 +1,48 @@
-    
-    header {
-      background: linear-gradient(to right, #70e0ff, #0072ff);
-      color: white;
-      padding: 5px;
-      border-radius: 15px;
-      margin: 20px;
-    }
-    header a {
-      text-decoration: none;
-    }
+header {
+  background: linear-gradient(to right, #70e0ff, #0072ff);
+  color: white;
+  padding: 5px;
+  border-radius: 15px;
+  margin: 20px;
+}
 
-    header .logo {
-      height: 65px;
-      padding-left: 10px;
-    }
 
-    header .divlogo{
-      margin-right: 20px;
-    }
+header .logo {
+  height: 65px;
+  padding-left: 10px;
+}
 
-    header a h1 {
-      font-size: 30px;
-      font-family: 'Playfair Display', serif;
-      color: #ffffff;
-      font-weight: 700px;
-      text-shadow: 5px 2px 4px rgba(0, 0, 0, 0.3);
-    }
+header .divlogo{
+  margin-right: 20px;
+}
 
-    header .nav-link {
-      color: white;
-      font-weight: 400px;
-      transition: 0.3s ease;
-    }
+header a h1 {
+  font-size: 30px;
+  font-family: 'Playfair Display', serif;
+  color: #ffffff;
+  font-weight: 700px;
+  text-shadow: 5px 2px 4px rgba(0, 0, 0, 0.3);
+}
 
-    header .nav-link i {
-      margin-right: 10px;
-      
-    }
+header .nav-link {
+  color: white;
+  font-weight: 400px;
+  transition: 0.3s ease;
+}
 
-    header .search-login-group {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding-left: 100px;
-    } 
+header .nav-link i {
+  margin-right: 10px;
+  
+}
 
-    header .form {
-        display: flex;
-    } 
+header .search-login-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 100px;
+} 
+
+header .form {
+    display: flex;
+} 
 

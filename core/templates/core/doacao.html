@@ -1,27 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'global/base.html' %}
+{% load static %}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block doacao %}
+
+{% block head %}
   <title>Cadastro Usuario</title>
-  <link rel="stylesheet" href="style_doacao.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
-    crossorigin="anonymous"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com"> 
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-</head>
+  <link rel="stylesheet" href="{% static 'core/css/style_doacao.css' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+{% endblock head %}
 
-<body>
-  <h1>Doações</h1>
-  <div class="container">
-    <div class="caixa container-fluid">
-      <h2>ONGs</h2>
-      <div class="inf_ongs">
+  <h1 class="doacao">Doações</h1>
+      
+  <div class="container doacao">
+    <div class="caixa container-fluid doacao">
+      <h2 class="doacao">ONGs</h2>
+      <div class="inf_ongs doacao">
           <h3>Importancia das ONGs:</h3>
           <p>As ONGs (Organizações Não Governamentais) têm um papel fundamental na sociedade,
             especialmente em contextos onde o Estado ou o setor privado não conseguem atender plenamente às necessidades da população,
@@ -29,40 +22,22 @@
             os produtos que seriam desperdiçados pela aparencia ou algum machucado, por isso incentivamos a doação de alimentos a ONGs
             e instituições de caridade ou de ajuda humanitaria.</p>
       </div>
-      <div class="ongs">
-          <img src="./img/generated_image.png"
-            alt="logoong" class="ong_img" >
-          <h3>SASF - Suporte a Saude Familiar</h3>
-          <p>A SASF – Suporte à Saúde Familiar é uma organização sem fins lucrativos dedicada a promover o bem-estar e a
-            qualidade de vida de famílias em situação de vulnerabilidade.</p>
-          <div class="col-auto">
-            <button type="submit" class="btn btn-primary mb-3">Saiba +</button>
-          </div>
+      <div class="ongs doacao">
+         {% for ong in instituicoes %}
           
-          <img src="./img/img_ong.png"
-              alt="logoong" class="ong_img" >
-            <h3>NGO - Natureza, Gente e Organização</h3>
-            <p>A Natureza, Gente e Organização é uma ONG comprometida com a transformação social por meio da educação,
-              do acesso à saúde e da inclusão social. Atuando em comunidades carentes, a organização desenvolve projetos
-              que visam oferecer oportunidades reais de crescimento e autonomia para crianças, jovens e famílias.</p>
+          {% if ong.logo_ong %}
+            <img src="{{ ong.logo_ong.url }}" alt="{{ ong.nome_negocio }}">
+            {% else %}
+              <img src="{% static 'assets/img/placeholder_re.png' %}" alt="Imagem não disponível">
+            {% endif %}
+            <h3>{{ong.nome_negocio}}</h3>
+            <p>{{ong.descricao_parceiro}}</p>
           <div class="col-auto">
             <button type="submit" class="btn btn-primary mb-3">Saiba +</button>
           </div>
-          
-          <img src="https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/f03954102626951.5f3af4d9ea592.png"
-              alt="logoong" class="ong_img" height="200px" width="200px">
-            <h3>Assistência Sem Fronteiras</h3>
-            <p>A Assistência Sem Fronteiras é uma organização não governamental dedicada a levar ajuda humanitária,
-              suporte social e inclusão a comunidades em situação de vulnerabilidade, independentemente de fronteiras geográficas,
-              culturais ou sociais.</p>
-          <div class="col-auto">
-            <button type="submit" class="btn btn-primary mb-3">Saiba +</button>
-          </div>
-
+          {% endfor %}
       </div>
     </div>
   </div>
     
-</body>
-
-</html>
+{% endblock doacao %}

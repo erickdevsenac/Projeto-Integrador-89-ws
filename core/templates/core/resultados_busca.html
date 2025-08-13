@@ -1,22 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-    <h2>Resultados para "{{ termo }}"</h2>
-    
-    <ul>
+{% extends 'global/base.html' %}
+{% load static %}
+
+{% block content %}
+    {% block head %}
+        <title>Resultados da Busca</title>
+        <link rel="stylesheet" href="{% static 'core/css/style_busca.css' %}">
+    {% endblock head %}
+   
+    <h2 class="busca">Resultados para "{{ termo }}"</h2>
+   
+    <ul class="busca">
         {% for produto in resultados %}
-        <li>{{ produto.nome }} - R$ {{ produto.preco }}</li>
+        <li class="busca">
+            <strong>{{ produto.nome }}</strong>
+            <span>Preço: R$ {{ produto.preco }}</span>
+        </li>
         {% empty %}
-        <li>Não encontramos nenhum produto com o nome "{{ termo }}".</li>
+        <li class="empty busca">
+            <strong>Nenhum produto encontrado</strong>
+            <span>Não encontramos nenhum produto com o nome "{{ termo }}".</span>
+        </li>
         {% endfor %}
     </ul>
-    
-</body>
-</html>
-
+{% endblock content %}

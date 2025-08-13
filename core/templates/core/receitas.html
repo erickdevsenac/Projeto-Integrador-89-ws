@@ -80,10 +80,13 @@
    <li>Deixe esfriar: Espere esfriar antes de cortar e saborear!</li>
    </ol>
     
-</body>
+  </style>
+{% endblock %}
 
-<h2> Frango Grelhado com Legumes Assados</h2>
-<h4> Prato completo e saboroso! Frango grelhado macio e legumes assados com um toque caramelizado. Uma refeição nutritiva e equilibrada.</h4>
+{% block content %}
+<div class="container mt-4">
+  <h2 class="text-center">Receitas Cadastradas</h2>
+  <hr>
 
 <body>
     
@@ -97,14 +100,18 @@
     <li>pimenta;</li>
     <li>ervas (opcional).</li></ul>
 
-    <h3>Modo de preparo</h3>
-    <ol><li> Tempere o frango e os legumes com azeite, sal, pimenta e ervas;</li>
-    <li> Asse os legumes a 200°C por 20 minutos;</li>
-    <li>Adicione o frango e asse por mais 15-20 minutos.</li></ol>
-</body>
+      {% if receita.imagem %}
+        <img src="{{ receita.imagem.url }}" alt="{{ receita.nome }}">
+      {% else %}
+        <img src="{% static 'assets/img/placeholder_receita.png' %}" alt="Imagem não disponível">
+      {% endif %}
 
-<h2>Omelete de Espinafre e Queijo</h2>
-<h4>Omelete rápida e nutritiva, rica em proteínas e vitaminas. Uma opção perfeita para um café da manhã ou lanche saudável.</h4>
+      <h4>Ingredientes:</h4>
+      <ul>
+        {% for ingrediente in receita.ingredientes.all %}
+          <li>{{ ingrediente.quantidade }} de {{ ingrediente.nome }}</li>
+        {% endfor %}
+      </ul>
 
 <body>
 
@@ -143,4 +150,16 @@
  {% endcomment %}
 
 {% endblock receitas %} {% endcomment %}
+      <h4>Modo de Preparo:</h4>
+      <ol>
+        {% for etapa in receita.etapas.all %}
+          <li>{{ etapa.descricao }}</li>
+        {% endfor %}
+      </ol>
 
+    </div>{% empty %}
+    <p class="text-center">Nenhuma receita cadastrada ainda.</p>
+  
+  {% endfor %}
+  </div>
+{% endblock %}
