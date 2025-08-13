@@ -222,6 +222,8 @@ def adicionar_carrinho(request, produto_id):
     
     return redirect('core:ver_carrinho')
 
+def recuperarsenha(request):
+    return render (request, 'core/recuperarsenha.html')
 
 @login_required
 def finalizar_pedido(request):
@@ -245,250 +247,68 @@ def finalizar_pedido(request):
         })
 
     # Se a requisição for POST, o usuário confirmou a compra
-    if request.method == 'POST':
-        try:
-            # transaction.atomic garante que todas as operações no banco de dados
-            # sejam executadas com sucesso. Se qualquer uma falhar, todas são revertidas.
-            with transaction.atomic():
-                cliente_perfil = request.user.perfil
+    # if request.method == 'POST':
+    #     try:
+    #         # transaction.atomic garante que todas as operações no banco de dados
+    #         # sejam executadas com sucesso. Se qualquer uma falhar, todas são revertidas.
+    #         with transaction.atomic():
+    #             cliente_perfil = request.user.perfil
 
-                # 1. Cria o Pedido principal
-                pedido = Pedido.objects.create(
-                    cliente=cliente_perfil,
-                    valor_total=total_carrinho,
-                    endereco_entrega=cliente_perfil.endereco # Usando o endereço do perfil
-                )
+    #             # 1. Cria o Pedido principal
+    #             pedido = Pedido.objects.create(
+    #                 cliente=cliente_perfil,
+    #                 valor_total=total_carrinho,
+    #                 endereco_entrega=cliente_perfil.endereco # Usando o endereço do perfil
+    #             )
 
-                # 2. Agrupa os itens do carrinho por vendedor
-                pedidos_por_vendedor = {}
-                for item in carrinho_detalhado:
-                    produto = Produto.objects.get(id=item['produto_id'])
-                    vendedor_perfil = produto.vendedor
+    #             # 2. Agrupa os itens do carrinho por vendedor
+    #             pedidos_por_vendedor = {}
+    #             for item in carrinho_detalhado:
+    #                 produto = Produto.objects.get(id=item['produto_id'])
+    #                 vendedor_perfil = produto.vendedor
 
-                    if vendedor_perfil not in pedidos_por_vendedor:
-                        pedidos_por_vendedor[vendedor_perfil] = {
-                            'itens': [],
-                            'subtotal': Decimal('0.00')
-                        }
+    #                 if vendedor_perfil not in pedidos_por_vendedor:
+    #                     pedidos_por_vendedor[vendedor_perfil] = {
+    #                         'itens': [],
+    #                         'subtotal': Decimal('0.00')
+    #                     }
                     
-                    pedidos_por_vendedor[vendedor_perfil]['itens'].append(item)
-                    pedidos_por_vendedor[vendedor_perfil]['subtotal'] += item['subtotal']
+    #                 pedidos_por_vendedor[vendedor_perfil]['itens'].append(item)
+    #                 pedidos_por_vendedor[vendedor_perfil]['subtotal'] += item['subtotal']
 
-                # 3. Cria os Pedidos de Vendedor (sub-pedidos) e os Itens do Pedido
-                for vendedor, dados_pedido in pedidos_por_vendedor.items():
-                    sub_pedido = PedidoVendedor.objects.create(
-                        pedido_principal=pedido,
-                        vendedor=vendedor,
-                        valor_subtotal=dados_pedido['subtotal']
-                    )
+    #             # 3. Cria os Pedidos de Vendedor (sub-pedidos) e os Itens do Pedido
+    #             for vendedor, dados_pedido in pedidos_por_vendedor.items():
+    #                 sub_pedido = PedidoVendedor.objects.create(
+    #                     pedido_principal=pedido,
+    #                     vendedor=vendedor,
+    #                     valor_subtotal=dados_pedido['subtotal']
+    #                 )
 
-                    for item_data in dados_pedido['itens']:
-                        produto = Produto.objects.get(id=item_data['produto_id'])
-                        ItemPedido.objects.create(
-                            sub_pedido=sub_pedido,
-                            produto=produto,
-                            quantidade=item_data['quantidade'],
-                            preco_unitario=item_data['preco']
-                        )
-                        # 4. Atualiza o estoque
-                        produto.quantidade_estoque -= item_data['quantidade']
-                        produto.save()
+    #                 for item_data in dados_pedido['itens']:
+    #                     produto = Produto.objects.get(id=item_data['produto_id'])
+    #                     ItemPedido.objects.create(
+    #                         sub_pedido=sub_pedido,
+    #                         produto=produto,
+    #                         quantidade=item_data['quantidade'],
+    #                         preco_unitario=item_data['preco']
+    #                     )
+    #                     # 4. Atualiza o estoque
+    #                     produto.quantidade_estoque -= item_data['quantidade']
+    #                     produto.save()
 
-                # 5. Limpa o carrinho da sessão
-                del request.session['carrinho']
-                messages.success(request, "Seu pedido foi finalizado com sucesso!")
-                # Redireciona para uma página de "meus pedidos" (a ser criada)
-                return redirect('core:index') # Mude para 'meus_pedidos' no futuro
+    #             # 5. Limpa o carrinho da sessão
+    #             del request.session['carrinho']
+    #             messages.success(request, "Seu pedido foi finalizado com sucesso!")
+    #             # Redireciona para uma página de "meus pedidos" (a ser criada)
+    #             return redirect('core:index') # Mude para 'meus_pedidos' no futuro
 
-        except Exception as e:
-            messages.error(request, f"Ocorreu um erro ao finalizar seu pedido: {e}")
-            return redirect('core:ver_carrinho')
+    #     except Exception as e:
+    #         messages.error(request, f"Ocorreu um erro ao finalizar seu pedido: {e}")
+    #         return redirect('core:ver_carrinho')
 
-    # Se a requisição for GET, apenas mostra a página de confirmação
-    context = {
-        'carrinho': carrinho_detalhado,
-        'total_carrinho': total_carrinho,
-    }
-    return render(request, 'core/checkout.html', context)
-
-#lista os Pedidos
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib import messages
-from django.db.models import Q, Count, Sum, F
-from django.db.models.functions import TruncDay, TruncWeek, TruncMonth
-from django.core.paginator import Paginator
-from django.utils import timezone
-from datetime import timedelta
-import logging
-from .models import Pedido, ItemPedido, Produto
-from .forms import PedidoForm, AtualizarStatusForm
-
-# Configuração do logger
-logger = logging.getLogger(__name__)
-
-@login_required
-def historico_pedidos(request):
-    """
-    Exibe o histórico de pedidos do usuário com filtros avançados por período e status.
-    Inclui paginação e busca textual.
-    """
-    try:
-        # Base queryset
-        pedidos = Pedido.objects.filter(usuario=request.user).select_related('usuario')\
-                              .prefetch_related('itens__produto').order_by('-data_criacao')
-        
-        # Filtros
-        periodo = request.GET.get('periodo', '6m')
-        status_filter = request.GET.get('status')
-        search_query = request.GET.get('q', '').strip()
-        
-        # Mapeamento de períodos
-        period_map = {
-            '1m': (30, "últimos 30 dias"),
-            '3m': (90, "últimos 3 meses"),
-            '6m': (180, "últimos 6 meses"),
-            '1y': (365, "último ano"),
-            'all': (None, "todo o período")
-        }
-        
-        # Aplica filtro de período
-        days, periodo_texto = period_map.get(periodo, (180, "últimos 6 meses"))
-        if days:
-            data_inicio = timezone.now() - timedelta(days=days)
-            pedidos = pedidos.filter(data_criacao__gte=data_inicio)
-        
-        # Filtro por status
-        if status_filter and status_filter in dict(Pedido.STATUS_CHOICES):
-            pedidos = pedidos.filter(status=status_filter)
-            periodo_texto += f" - Status: {Pedido.STATUS_CHOICES[int(status_filter)][1]}"
-        
-        # Busca textual
-        if search_query:
-            pedidos = pedidos.filter(
-                Q(id__icontains=search_query) |
-                Q(itens__produto__nome__icontains=search_query) |
-                Q(observacoes__icontains=search_query)
-            ).distinct()
-            periodo_texto += f" - Busca: '{search_query}'"
-        
-        # Paginação
-        paginator = Paginator(pedidos, 10)
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        
-        context = {
-            'page_obj': page_obj,
-            'periodo': periodo_texto,
-            'current_period': periodo,
-            'current_status': status_filter,
-            'search_query': search_query,
-            'status_choices': Pedido.STATUS_CHOICES,
-            'period_options': period_map.items()
-        }
-        return render(request, 'pedidos/historico_pedidos.html', context)
-    
-    except Exception as e:
-        logger.error(f"Erro no histórico de pedidos: {str(e)}")
-        messages.error(request, "Ocorreu um erro ao carregar o histórico de pedidos.")
-        return redirect('lista_pedidos')
-
-@user_passes_test(lambda u: u.is_staff)
-def relatorio_pedidos(request):
-    """
-    Relatórios administrativos com métricas detalhadas e visualização de dados.
-    Inclui filtros por período, status e agrupamentos.
-    """
-    try:
-        # Filtros básicos
-        periodo = request.GET.get('periodo', '30d')
-        status_filter = request.GET.get('status')
-        agrupamento = request.GET.get('agrupar_por', 'dia')
-        
-        # Determina o período
-        period_map = {
-            '7d': (7, "últimos 7 dias"),
-            '30d': (30, "últimos 30 dias"),
-            '90d': (90, "últimos 90 dias"),
-            '180d': (180, "últimos 180 dias")
-        }
-        
-        days, periodo_texto = period_map.get(periodo, (30, "últimos 30 dias"))
-        data_inicio = timezone.now() - timedelta(days=days)
-        data_fim = timezone.now()
-        
-        # Query base
-        pedidos = Pedido.objects.filter(
-            data_criacao__range=[data_inicio, data_fim]
-        ).select_related('usuario')
-        
-        # Filtro por status
-        if status_filter and status_filter in dict(Pedido.STATUS_CHOICES):
-            pedidos = pedidos.filter(status=status_filter)
-            periodo_texto += f" - Status: {Pedido.STATUS_CHOICES[int(status_filter)][1]}"
-        
-        # Agregações principais
-        pedidos_por_status = pedidos.values('status').annotate(
-            total=Count('id'),
-            valor_total=Sum('total')
-        ).order_by('status')
-        
-        total_geral = pedidos.aggregate(
-            total_pedidos=Count('id'),
-            valor_total=Sum('total'),
-            ticket_medio=Sum('total') / Count('id', distinct=True)
-        )
-        
-        # Evolução temporal
-        if agrupamento == 'dia':
-            trunc = TruncDay('data_criacao')
-        elif agrupamento == 'semana':
-            trunc = TruncWeek('data_criacao')
-        else:  # mês
-            trunc = TruncMonth('data_criacao')
-        
-        evolucao_temporal = pedidos.annotate(
-            periodo=trunc
-        ).values('periodo').annotate(
-            total=Count('id'),
-            valor=Sum('total')
-        ).order_by('periodo')
-        
-        # Top produtos
-        top_produtos = ItemPedido.objects.filter(
-            pedido__in=pedidos
-        ).values('produto__nome', 'produto__id').annotate(
-            quantidade=Sum('quantidade'),
-            total_vendido=Sum('preco')
-        ).order_by('-total_vendido')[:10]
-        
-        # Clientes mais ativos
-        top_clientes = pedidos.values('usuario__username', 'usuario__id').annotate(
-            total_pedidos=Count('id'),
-            total_gasto=Sum('total')
-        ).order_by('-total_gasto')[:5]
-        
-        context = {
-            'pedidos_por_status': pedidos_por_status,
-            'total_geral': total_geral,
-            'top_produtos': top_produtos,
-            'top_clientes': top_clientes,
-            'evolucao_temporal': evolucao_temporal,
-            'data_inicio': data_inicio.date(),
-            'data_fim': data_fim.date(),
-            'current_period': periodo,
-            'current_status': status_filter,
-            'current_agrupamento': agrupamento,
-            'period_options': period_map.items(),
-            'agrupamento_options': [
-                ('dia', 'Por Dia'),
-                ('semana', 'Por Semana'),
-                ('mes', 'Por Mês')
-            ]
-        }
-        return render(request, 'pedidos/relatorio_pedidos.html', context)
-    
-    except Exception as e:
-        logger.error(f"Erro no relatório de pedidos: {str(e)}")
-        messages.error(request, "Ocorreu um erro ao gerar o relatório.")
-        return redirect('painel_administrativo')
+    # # Se a requisição for GET, apenas mostra a página de confirmação
+    # context = {
+    #     'carrinho': carrinho_detalhado,
+    #     'total_carrinho': total_carrinho,
+    # }
+    # return render(request, 'core/checkout.html', context)

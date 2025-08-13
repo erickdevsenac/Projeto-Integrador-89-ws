@@ -1,12 +1,13 @@
+{% extends 'global/base.html' %}
 {% load static %}
 {% block alterarsenha %}
   {% block head %}
     <title>Aproveite Mais</title>
-    <link rel="stylesheet" href="{% static 'core/css/style_alterarsenha.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/style_alterar.css' %}">
   {% endblock %}
-  <div class="container">
+  <div class="caixinha">
     <form class="form-senha" action="/alterar-senha" method="POST">
-      <h2>Alterar Senha</h2>
+      <h2><strong>Alterar Senha </strong></h2>
 
       <label for="senha-atual">Senha Atual</label>
       <input type="password" id="senha-atual" name="senha_atual" placeholder="Digite sua Senha" required />

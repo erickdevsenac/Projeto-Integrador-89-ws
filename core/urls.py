@@ -1,4 +1,3 @@
-# Em core/urls.py
 
 from django.urls import path
 from . import views
@@ -17,6 +16,7 @@ urlpatterns = [
     path('login/', views.login_view, name='telalogin'), # BOA PRÁTICA: URL mais curta
     path('logout/', views.logout_view, name='logout'),
     path('alterar-senha/', views.alterarsenha, name='alterar_senha'), # BOA PRÁTICA: URL com hífen
+    path('recuperar-senha/', views.recuperarsenha, name='recuperar-senha'), 
 
     # Rotas de Receitas
     path('receitas/', views.receitas, name='receitas'),
@@ -32,10 +32,6 @@ urlpatterns = [
     path('carrinho/', views.ver_carrinho, name='ver_carrinho'), 
     path('carrinho/adicionar/<int:produto_id>/', views.adicionar_carrinho, name='adicionar_carrinho'),
     path('checkout/', views.finalizar_pedido, name='finalizar_pedido'),
-
-    # Listar Pedidos
-    path('lista_pedidos', views.lista_pedidos, name='lista_pedidos'),
-    path('novo/', views.criar_pedido, name='criar_pedido'),
-    path('<int:pk>/', views.detalhe_pedido, name='detalhe_pedido'),
-
 ]
+
+
