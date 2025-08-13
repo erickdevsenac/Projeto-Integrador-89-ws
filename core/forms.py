@@ -71,3 +71,22 @@ EtapaPreparoFormSet = inlineformset_factory(
     extra=1,
     can_delete=True
 )
+
+#Lista de Pedidos
+from django import forms
+from .models import Pedido, ItemPedido
+
+class PedidoForm(forms.ModelForm):
+    class Meta:
+        model = Pedido
+        fields = []
+    
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = user
+    
+    def save(self, commit=True):
+        pedido = super().save(commit=False)
+        if commit:
+            pedido.save()
+        return pedido

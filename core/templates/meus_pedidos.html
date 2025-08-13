@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Detalhes do Pedido #{{ pedido.id }}</h2>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5>Informações do Pedido</h5>
+        </div>
+        <div class="card-body">
+            <p><strong>Data:</strong> {{ pedido.data_criacao|date:"d/m/Y H:i" }}</p>
+            <p><strong>Status:</strong> 
+                <span class="badge 
+                    {% if pedido.status == 'P' %}bg-warning
+                    {% elif pedido.status == 'A' %}bg-info
+                    {% elif pedido.status == 'C' %}bg-success
+                    {% else %}bg-danger
+                    {% endif %}">
+                    {{ pedido.get_status_display }}
+                </span>
+            </p>
+            <p><strong>Total:</strong> R$ {{ pedido.total }}</p>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <h5>Itens do Pedido</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Preço Unitário</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in pedido.itens.all %}
+                        <tr>
+                            <td>{{ item.produto.nome }}</td>
+                            <td>{{ item.quantidade }}</td>
+                            <td>R$ {{ item.preco }}</td>
+                            <td>R$ {{ item.get_total_item }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr class="table-active">
+                            <td colspan="3"><strong>Total do Pedido</strong></td>
+                            <td><strong>R$ {{ pedido.total }}</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <a href="{% url 'pedidos:lista_pedidos' %}" class="btn btn-secondary mt-3">
+        Voltar para Lista de Pedidos
+    </a>
+</div>
+{% endblock %}
