@@ -1,5 +1,6 @@
 {% extends 'global/base.html' %}
 {% load static %}
+
  
 {% block content %}
 {% block head %}
@@ -68,6 +69,21 @@
                         <a href="#" class="btn btn-success w-100">Finalizar Compra</a>
                     </div>
                 </div>
+              </div>
+            </div>
+          {% endfor %}
+
+          <div class="total-display" id="total">
+            Total: R$0,00
+          </div>
+    
+          <div class="d-flex justify-content-end gap-3">
+            <button type="submit" class="btn btn-outline-danger">Remover Selecionados</button>
+            <a href="{% url 'core:finalizar_pedido' %}" class="btn btn-primary">Finalizar Compra</a>
+          </div>
+        </form>
+
+      {% else %}
             </div>
         </div>
  
@@ -75,6 +91,12 @@
         <div class="text-center p-5">
             <h3>Seu carrinho está vazio.</h3>
             <p class="lead text-muted">Que tal adicionar alguns produtos incríveis?</p>
+            <a href="{% url 'core:produtos' %}" class="btn btn-primary mt-3">Ver Produtos</a>
+        </div>
+      {% endif %}
+
+    </section>
+  </main>
             <a href="{% url 'core:produtos' %}" class="btn btn-primary mt-3">Ver Produtos</a> </div>
     {% endif %}
 </div>

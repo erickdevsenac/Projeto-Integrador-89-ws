@@ -1,4 +1,4 @@
-from .models import Receita, Produto, Perfil, Pedido, ItemPedido,PedidoVendedor,EquipeDev, Dica
+from .models import Receita, Produto, Perfil, Pedido, ItemPedido,PedidoVendedor,EquipeDev, Dica, Categoria
 from django.contrib.auth.decorators import login_required
 from .forms import CadastroForm, ReceitaForm, IngredienteFormSet, EtapaPreparoFormSet
 from django.contrib.auth.models import User
@@ -14,18 +14,35 @@ from .models import Produto, Pedido
 from .forms import PerfilForm,ConfiguracaoForm
 from django.utils.translation import activate
 
+from django.db import transaction
 
 def index(request):
     return render(request, 'core/index.html')
 
 def produtos(request):
+    # Base da consulta: todos os produtos disponíveis
     lista_produtos = Produto.objects.filter(ativo=True, quantidade_estoque__gt=0).order_by('-data_criacao')
     
+    # Pega todas as categorias para exibir na barra lateral
+    categorias = Categoria.objects.all()
+    
+    # --- LÓGICA DE FILTRO ---
+    categoria_slug = request.GET.get('categoria')
+    if categoria_slug:
+        # Filtra a lista de produtos se uma categoria foi selecionada na URL
+        lista_produtos = lista_produtos.filter(categoria__slug=categoria_slug)
+
+    # --- LÓGICA DE PAGINAÇÃO (já estava correta) ---
     paginator = Paginator(lista_produtos, 9)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'core/produtos.html', {'page_obj': page_obj})
+    context = {
+        'page_obj': page_obj,
+        'categorias': categorias,
+        'categoria_atual': categoria_slug, # Envia a categoria atual para o template
+    }
+    return render(request, 'core/produtos.html', context)
 
 def contato(request):
     return render(request, 'core/contato.html')
@@ -186,6 +203,7 @@ def ver_carrinho(request):
             'preco': preco_unitario,
             'imagem_url': item_info.get('imagem_url', ''),
             'subtotal': subtotal,
+            'vendedor_nome': item_info.get('vendedor_nome', 'Vendedor não informado'),
         })
         
         total_carrinho += subtotal
@@ -224,6 +242,7 @@ def adicionar_carrinho(request, produto_id):
             'preco': str(produto.preco),
             'nome': produto.nome,
             'imagem_url': produto.imagem.url if produto.imagem else '',
+            'vendedor_nome': produto.vendedor.nome_negocio,
         }
 
     request.session['carrinho'] = carrinho
@@ -424,3 +443,246 @@ def dicas(request):
     }
     
     return render(request, 'core/dicas.html', context)
+#lista os Pedidos
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib import messages
+from django.db.models import Q, Count, Sum, F
+from django.db.models.functions import TruncDay, TruncWeek, TruncMonth
+from django.core.paginator import Paginator
+from django.utils import timezone
+from datetime import timedelta
+import logging
+from .models import Pedido, ItemPedido, Produto
+
+# Configuração do logger
+logger = logging.getLogger(__name__)
+
+@login_required
+def historico_pedidos(request):
+    """
+    Exibe o histórico de pedidos do usuário com filtros avançados por período e status.
+    Inclui paginação e busca textual.
+    """
+    try:
+        # Base queryset
+        pedidos = Pedido.objects.filter(usuario=request.user).select_related('usuario')\
+                              .prefetch_related('itens__produto').order_by('-data_criacao')
+        
+        # Filtros
+        periodo = request.GET.get('periodo', '6m')
+        status_filter = request.GET.get('status')
+        search_query = request.GET.get('q', '').strip()
+        
+        # Mapeamento de períodos
+        period_map = {
+            '1m': (30, "últimos 30 dias"),
+            '3m': (90, "últimos 3 meses"),
+            '6m': (180, "últimos 6 meses"),
+            '1y': (365, "último ano"),
+            'all': (None, "todo o período")
+        }
+        
+        # Aplica filtro de período
+        days, periodo_texto = period_map.get(periodo, (180, "últimos 6 meses"))
+        if days:
+            data_inicio = timezone.now() - timedelta(days=days)
+            pedidos = pedidos.filter(data_criacao__gte=data_inicio)
+        
+        # Filtro por status
+        if status_filter and status_filter in dict(Pedido.STATUS_CHOICES):
+            pedidos = pedidos.filter(status=status_filter)
+            periodo_texto += f" - Status: {Pedido.STATUS_CHOICES[int(status_filter)][1]}"
+        
+        # Busca textual
+        if search_query:
+            pedidos = pedidos.filter(
+                Q(id__icontains=search_query) |
+                Q(itens__produto__nome__icontains=search_query) |
+                Q(observacoes__icontains=search_query)
+            ).distinct()
+            periodo_texto += f" - Busca: '{search_query}'"
+        
+        # Paginação
+        paginator = Paginator(pedidos, 10)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        
+        context = {
+            'page_obj': page_obj,
+            'periodo': periodo_texto,
+            'current_period': periodo,
+            'current_status': status_filter,
+            'search_query': search_query,
+            'status_choices': Pedido.STATUS_CHOICES,
+            'period_options': period_map.items()
+        }
+        return render(request, 'pedidos/historico_pedidos.html', context)
+    
+    except Exception as e:
+        logger.error(f"Erro no histórico de pedidos: {str(e)}")
+        messages.error(request, "Ocorreu um erro ao carregar o histórico de pedidos.")
+        return redirect('lista_pedidos')
+
+@user_passes_test(lambda u: u.is_staff)
+def relatorio_pedidos(request):
+    """
+    Relatórios administrativos com métricas detalhadas e visualização de dados.
+    Inclui filtros por período, status e agrupamentos.
+    """
+    try:
+        # Filtros básicos
+        periodo = request.GET.get('periodo', '30d')
+        status_filter = request.GET.get('status')
+        agrupamento = request.GET.get('agrupar_por', 'dia')
+        
+        # Determina o período
+        period_map = {
+            '7d': (7, "últimos 7 dias"),
+            '30d': (30, "últimos 30 dias"),
+            '90d': (90, "últimos 90 dias"),
+            '180d': (180, "últimos 180 dias")
+        }
+        
+        days, periodo_texto = period_map.get(periodo, (30, "últimos 30 dias"))
+        data_inicio = timezone.now() - timedelta(days=days)
+        data_fim = timezone.now()
+        
+        # Query base
+        pedidos = Pedido.objects.filter(
+            data_criacao__range=[data_inicio, data_fim]
+        ).select_related('usuario')
+        
+        # Filtro por status
+        if status_filter and status_filter in dict(Pedido.STATUS_CHOICES):
+            pedidos = pedidos.filter(status=status_filter)
+            periodo_texto += f" - Status: {Pedido.STATUS_CHOICES[int(status_filter)][1]}"
+        
+        # Agregações principais
+        pedidos_por_status = pedidos.values('status').annotate(
+            total=Count('id'),
+            valor_total=Sum('total')
+        ).order_by('status')
+        
+        total_geral = pedidos.aggregate(
+            total_pedidos=Count('id'),
+            valor_total=Sum('total'),
+            ticket_medio=Sum('total') / Count('id', distinct=True)
+        )
+        
+        # Evolução temporal
+        if agrupamento == 'dia':
+            trunc = TruncDay('data_criacao')
+        elif agrupamento == 'semana':
+            trunc = TruncWeek('data_criacao')
+        else:  # mês
+            trunc = TruncMonth('data_criacao')
+        
+        evolucao_temporal = pedidos.annotate(
+            periodo=trunc
+        ).values('periodo').annotate(
+            total=Count('id'),
+            valor=Sum('total')
+        ).order_by('periodo')
+        
+        # Top produtos
+        top_produtos = ItemPedido.objects.filter(
+            pedido__in=pedidos
+        ).values('produto__nome', 'produto__id').annotate(
+            quantidade=Sum('quantidade'),
+            total_vendido=Sum('preco')
+        ).order_by('-total_vendido')[:10]
+        
+        # Clientes mais ativos
+        top_clientes = pedidos.values('usuario__username', 'usuario__id').annotate(
+            total_pedidos=Count('id'),
+            total_gasto=Sum('total')
+        ).order_by('-total_gasto')[:5]
+        
+        context = {
+            'pedidos_por_status': pedidos_por_status,
+            'total_geral': total_geral,
+            'top_produtos': top_produtos,
+            'top_clientes': top_clientes,
+            'evolucao_temporal': evolucao_temporal,
+            'data_inicio': data_inicio.date(),
+            'data_fim': data_fim.date(),
+            'current_period': periodo,
+            'current_status': status_filter,
+            'current_agrupamento': agrupamento,
+            'period_options': period_map.items(),
+            'agrupamento_options': [
+                ('dia', 'Por Dia'),
+                ('semana', 'Por Semana'),
+                ('mes', 'Por Mês')
+            ]
+        }
+        return render(request, 'pedidos/relatorio_pedidos.html', context)
+    
+    except Exception as e:
+        logger.error(f"Erro no relatório de pedidos: {str(e)}")
+        messages.error(request, "Ocorreu um erro ao gerar o relatório.")
+        return redirect('painel_administrativo')
+    
+@login_required(login_url='/telalogin/') # 1. Protege a view e redireciona para a URL de login correta
+def meus_pedidos(request):
+    """
+    Exibe os pedidos relevantes para o usuário logado,
+    diferenciando entre Cliente e Vendedor.
+    """
+    try:
+        # Pega o perfil do usuário logado
+        perfil_usuario = request.user.perfil
+    except Perfil.DoesNotExist:
+        # Caso o usuário não tenha um perfil (ex: superuser sem perfil)
+        return render(request, 'core/meus_pedidos.html', {'pedidos': []})
+
+    # 2. Verifica o tipo de perfil do usuário
+    if perfil_usuario.tipo == Perfil.TipoUsuario.CLIENTE:
+        # Se for um Cliente, busca os Pedidos principais que ele fez
+        # Acessamos através do campo 'cliente' no modelo Pedido
+        pedidos = Pedido.objects.filter(cliente=perfil_usuario).order_by('-data_pedido')
+        context = {
+            'pedidos': pedidos,
+            'is_cliente': True # Variável para ajudar o template a se adaptar
+        }
+    elif perfil_usuario.tipo == Perfil.TipoUsuario.VENDEDOR:
+        # Se for um Vendedor, busca os PedidoVendedor (sub-pedidos) que ele recebeu
+        # Acessamos através do campo 'vendedor' no modelo PedidoVendedor
+        pedidos = PedidoVendedor.objects.filter(vendedor=perfil_usuario).order_by('-id')
+        context = {
+            'pedidos': pedidos,
+            'is_cliente': False
+        }
+    else:
+        # Para outros tipos de perfil (como ONG), não mostra nenhum pedido
+        pedidos = []
+        context = {'pedidos': pedidos}
+
+    return render(request, 'core/meus_pedidos.html', context)
+
+
+
+def cadastroproduto(request):
+    if request.method == 'POST':
+        categoria_nome = request.POST.get('categoria')
+
+        try:
+            categoria_obj = Categoria.objects.get(nome=categoria_nome)
+            Produto.objects.create(
+                nome=request.POST.get('nome'),
+                categoria=categoria_obj, # Pass the object here
+                fabricacao=request.POST.get('fabricacao'),
+                validade=request.POST.get('validade'),
+                preco=request.POST.get('preco'),
+                estoque=request.POST.get('estoque'),
+                codigo=request.POST.get('codigo'),
+                descricao=request.POST.get('descricao'),
+            )
+            return redirect('core:cadastroproduto')
+        except Categoria.DoesNotExist:
+
+            pass
+
+    categorias = Categoria.objects.all()
+    return render(request, 'core/cadastroproduto.html', {'categorias': categorias})

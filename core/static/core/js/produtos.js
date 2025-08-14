@@ -1,7 +1,11 @@
-function mostrarMensagem(card, nomeProduto) {
-    document.querySelectorAll('.card').forEach(c => c.classList.remove('selecionado'));
-    card.classList.add('selecionado');
+document.addEventListener('DOMContentLoaded', function() {
+    const quantidadeInputs = document.querySelectorAll('input[name="quantidade"]');
 
-    const msg = document.getElementById('mensagem-produto');
-    msg.textContent = `Você selecionou: ${nomeProduto}`;
-}
+    quantidadeInputs.forEach(function(input) {
+        input.addEventListener('change', function() {
+            if (input.value < 1) {
+                input.value = 1;
+            }
+        });
+    });
+});
