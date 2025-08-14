@@ -1,4 +1,4 @@
-from .models import Receita, Produto, Perfil, Pedido, ItemPedido,PedidoVendedor,EquipeDev
+from .models import Receita, Produto, Perfil, Pedido, ItemPedido,PedidoVendedor,EquipeDev, Dica
 from django.contrib.auth.decorators import login_required
 from .forms import CadastroForm, ReceitaForm, IngredienteFormSet, EtapaPreparoFormSet
 from django.contrib.auth.models import User
@@ -259,73 +259,73 @@ def finalizar_pedido(request):
             'preco': Decimal(item_info['preco']),
             'subtotal': subtotal
         })
+ 
+    if request.method == 'POST':
+        try:
+            # transaction.atomic garante que todas as operações no banco de dados
+            # sejam executadas com sucesso. Se qualquer uma falhar, todas são revertidas.
+            with transaction.atomic():
+                cliente_perfil = request.user.perfil
 
-    # Se a requisição for POST, o usuário confirmou a compra
-    # if request.method == 'POST':
-    #     try:
-    #         # transaction.atomic garante que todas as operações no banco de dados
-    #         # sejam executadas com sucesso. Se qualquer uma falhar, todas são revertidas.
-    #         with transaction.atomic():
-    #             cliente_perfil = request.user.perfil
+                # 1. Cria o Pedido principal
+                pedido = Pedido.objects.create(
+                    cliente=cliente_perfil,
+                    valor_total=total_carrinho,
+                    endereco_entrega=cliente_perfil.endereco # Usando o endereço do perfil
+                )
 
-    #             # 1. Cria o Pedido principal
-    #             pedido = Pedido.objects.create(
-    #                 cliente=cliente_perfil,
-    #                 valor_total=total_carrinho,
-    #                 endereco_entrega=cliente_perfil.endereco # Usando o endereço do perfil
-    #             )
+                # 2. Agrupa os itens do carrinho por vendedor
+                pedidos_por_vendedor = {}
+                for item in carrinho_detalhado:
+                    produto = Produto.objects.get(id=item['produto_id'])
+                    vendedor_perfil = produto.vendedor
 
-    #             # 2. Agrupa os itens do carrinho por vendedor
-    #             pedidos_por_vendedor = {}
-    #             for item in carrinho_detalhado:
-    #                 produto = Produto.objects.get(id=item['produto_id'])
-    #                 vendedor_perfil = produto.vendedor
-
-    #                 if vendedor_perfil not in pedidos_por_vendedor:
-    #                     pedidos_por_vendedor[vendedor_perfil] = {
-    #                         'itens': [],
-    #                         'subtotal': Decimal('0.00')
-    #                     }
+                    if vendedor_perfil not in pedidos_por_vendedor:
+                        pedidos_por_vendedor[vendedor_perfil] = {
+                            'itens': [],
+                            'subtotal': Decimal('0.00')
+                        }
                     
-    #                 pedidos_por_vendedor[vendedor_perfil]['itens'].append(item)
-    #                 pedidos_por_vendedor[vendedor_perfil]['subtotal'] += item['subtotal']
+                    pedidos_por_vendedor[vendedor_perfil]['itens'].append(item)
+                    pedidos_por_vendedor[vendedor_perfil]['subtotal'] += item['subtotal']
 
-    #             # 3. Cria os Pedidos de Vendedor (sub-pedidos) e os Itens do Pedido
-    #             for vendedor, dados_pedido in pedidos_por_vendedor.items():
-    #                 sub_pedido = PedidoVendedor.objects.create(
-    #                     pedido_principal=pedido,
-    #                     vendedor=vendedor,
-    #                     valor_subtotal=dados_pedido['subtotal']
-    #                 )
+                # 3. Cria os Pedidos de Vendedor (sub-pedidos) e os Itens do Pedido
+                for vendedor, dados_pedido in pedidos_por_vendedor.items():
+                    sub_pedido = PedidoVendedor.objects.create(
+                        pedido_principal=pedido,
+                        vendedor=vendedor,
+                        valor_subtotal=dados_pedido['subtotal']
+                    )
 
-    #                 for item_data in dados_pedido['itens']:
-    #                     produto = Produto.objects.get(id=item_data['produto_id'])
-    #                     ItemPedido.objects.create(
-    #                         sub_pedido=sub_pedido,
-    #                         produto=produto,
-    #                         quantidade=item_data['quantidade'],
-    #                         preco_unitario=item_data['preco']
-    #                     )
-    #                     # 4. Atualiza o estoque
-    #                     produto.quantidade_estoque -= item_data['quantidade']
-    #                     produto.save()
+                    for item_data in dados_pedido['itens']:
+                        produto = Produto.objects.get(id=item_data['produto_id'])
+                        ItemPedido.objects.create(
+                            sub_pedido=sub_pedido,
+                            produto=produto,
+                            quantidade=item_data['quantidade'],
+                            preco_unitario=item_data['preco']
+                        )
+                        # 4. Atualiza o estoque
+                        produto.quantidade_estoque -= item_data['quantidade']
+                        produto.save()
 
-    #             # 5. Limpa o carrinho da sessão
-    #             del request.session['carrinho']
-    #             messages.success(request, "Seu pedido foi finalizado com sucesso!")
-    #             # Redireciona para uma página de "meus pedidos" (a ser criada)
-    #             return redirect('core:index') # Mude para 'meus_pedidos' no futuro
+                # 5. Limpa o carrinho da sessão
+                del request.session['carrinho']
+                messages.success(request, "Seu pedido foi finalizado com sucesso!")
+                # Redireciona para uma página de "meus pedidos" (a ser criada)
+                return redirect('core:index') # Mude para 'meus_pedidos' no futuro
 
-    #     except Exception as e:
-    #         messages.error(request, f"Ocorreu um erro ao finalizar seu pedido: {e}")
-    #         return redirect('core:ver_carrinho')
+        except Exception as e:
+            messages.error(request, f"Ocorreu um erro ao finalizar seu pedido: {e}")
+            return redirect('core:ver_carrinho')
 
-    # # Se a requisição for GET, apenas mostra a página de confirmação
-    # context = {
-    #     'carrinho': carrinho_detalhado,
-    #     'total_carrinho': total_carrinho,
-    # }
-    # return render(request, 'core/checkout.html', context)
+    # Se a requisição for GET, apenas mostra a página de confirmação
+    context = {
+        'carrinho': carrinho_detalhado,
+        'total_carrinho': total_carrinho,
+    }
+    return render(request, 'core/checkout.html', context)
+
 def remover_item(request, item_id):
     carrinho = request.session.get('carrinho', {})
     if str(item_id) in carrinho:
@@ -412,5 +412,15 @@ def configuracoes(request):
         'notificacoes': notificacoes,
     })
 
-
-
+def dicas(request):
+    """
+    Busca todas as dicas publicadas na base de dados e as exibe na página.
+    """
+    # Filtra apenas as dicas que estão marcadas como 'publicada=True'
+    lista_dicas = Dica.objects.filter(publicada=True)
+    
+    context = {
+        'dicas': lista_dicas,
+    }
+    
+    return render(request, 'core/dicas.html', context)

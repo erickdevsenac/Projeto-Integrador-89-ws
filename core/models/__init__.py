@@ -5,3 +5,4 @@ from .pedido_model import *
 from .receita_model import *
 from .doacoes_model import *
 from .equipe_models import *
+from .dicas_sustentaveis import *

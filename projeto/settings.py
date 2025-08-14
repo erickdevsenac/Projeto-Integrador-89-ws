@@ -142,11 +142,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
  
-LANGUAGES = [
-    ('en', _('English')),
-    ('pt', _('Portuguese')),
-    # Outros idiomas que você deseja oferecer
-]
 
 LOCALE_PATHS = [
     BASE_DIR / 'locale',

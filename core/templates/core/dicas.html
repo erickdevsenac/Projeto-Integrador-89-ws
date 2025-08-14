@@ -1,0 +1,78 @@
+{% extends 'global/base.html' %}
+{% load static %}
+ 
+{% block content %}
+{% block head %}
+<title>Dicas Sustentáveis</title>
+<link rel="stylesheet" href="{% static 'core/style_dicas.css' %}">
+<style>
+body {
+    font-family: Arial, sans-serif;
+}
+ 
+h1, h2 {
+    color: #2e7d32;
+    font-weight: bold;
+}
+ 
+.dica-card {
+    border-radius: 12px;
+    transition: transform 0.2s ease-in-out;
+}
+ 
+.dica-card:hover {
+    transform: scale(1.02);
+}
+ 
+.card-title {
+    font-size: 1.2rem;
+    color: #1b5e20;
+}
+ 
+.btn-primary {
+    background-color: #388e3c;
+    border: none;
+}
+ 
+.btn-primary:hover {
+    background-color: #2e7d32;
+}
+ </style>
+{% endblock head %}
+
+ 
+<body class="bg-light">
+ 
+    <div class="container mt-5">
+        <h2 class="mb-4">♻️ Dicas Sustentáveis</h2>
+        <div class="row">
+            {% for dica in dicas %}
+                <div class="col-md-4 mb-4">
+                    <div class="card dica-card shadow-sm">
+                        {% if dica.imagem %}
+                            <img src="{{ dica.imagem.url }}" class="card-img-top" alt="Imagem da dica">
+                        {% else %}
+                            <img src="{% static 'core/img/placeholder.png' %}" class="card-img-top" alt="Imagem padrão">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ dica.titulo }}</h5>
+                            <p class="card-text">{{ dica.descricao }}</p>
+                            {% if dica.categoria %}
+                                <span class="badge bg-success">{{ dica.categoria }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>Nenhuma dica cadastrada ainda.</p>
+            {% endfor %}
+        </div>
+ 
+        <div class="mt-4 text-center">
+            <a href="/" class="btn btn-outline-secondary">Voltar ao Início</a>
+        </div>
+    </div>
+</body>
+{% endblock content%}
+            <!-- <a href="{% url 'nova_dica' %}" class="btn btn-primary">Cadastrar Nova Dica</a> -->
+ 
