@@ -1,4 +1,5 @@
-{% extends 'base.html' %}
+{% extends 'global/base.html' %}
+{% load static %}
 
 {% block content %}
 <div class="container mt-4">
@@ -58,8 +59,8 @@
         </div>
     </div>
     
-    <a href="{% url 'pedidos:lista_pedidos' %}" class="btn btn-secondary mt-3">
+    {% comment %} <a href="{% url 'pedidos:lista_pedidos' %}" class="btn btn-secondary mt-3">
         Voltar para Lista de Pedidos
-    </a>
+    </a> {% endcomment %}
 </div>
 {% endblock %}

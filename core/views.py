@@ -1,4 +1,4 @@
-from .models import Receita, Produto, Perfil, Pedido, ItemPedido,PedidoVendedor
+from .models import Receita, Produto, Perfil, Pedido, ItemPedido,PedidoVendedor, Categoria
 from django.contrib.auth.decorators import login_required
 from .forms import CadastroForm, ReceitaForm, IngredienteFormSet, EtapaPreparoFormSet
 from django.contrib.auth.models import User
@@ -7,18 +7,35 @@ from django.shortcuts import render, redirect, get_object_or_404
 from decimal import Decimal
 from django.core.paginator import Paginator
 from django.contrib import messages
+from django.db import transaction
 
 def index(request):
     return render(request, 'core/index.html')
 
 def produtos(request):
+    # Base da consulta: todos os produtos disponíveis
     lista_produtos = Produto.objects.filter(ativo=True, quantidade_estoque__gt=0).order_by('-data_criacao')
     
+    # Pega todas as categorias para exibir na barra lateral
+    categorias = Categoria.objects.all()
+    
+    # --- LÓGICA DE FILTRO ---
+    categoria_slug = request.GET.get('categoria')
+    if categoria_slug:
+        # Filtra a lista de produtos se uma categoria foi selecionada na URL
+        lista_produtos = lista_produtos.filter(categoria__slug=categoria_slug)
+
+    # --- LÓGICA DE PAGINAÇÃO (já estava correta) ---
     paginator = Paginator(lista_produtos, 9)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'core/produtos.html', {'page_obj': page_obj})
+    context = {
+        'page_obj': page_obj,
+        'categorias': categorias,
+        'categoria_atual': categoria_slug, # Envia a categoria atual para o template
+    }
+    return render(request, 'core/produtos.html', context)
 
 def contato(request):
     return render(request, 'core/contato.html')
@@ -172,6 +189,7 @@ def ver_carrinho(request):
             'preco': preco_unitario,
             'imagem_url': item_info.get('imagem_url', ''),
             'subtotal': subtotal,
+            'vendedor_nome': item_info.get('vendedor_nome', 'Vendedor não informado'),
         })
         
         total_carrinho += subtotal
@@ -210,6 +228,7 @@ def adicionar_carrinho(request, produto_id):
             'preco': str(produto.preco),
             'nome': produto.nome,
             'imagem_url': produto.imagem.url if produto.imagem else '',
+            'vendedor_nome': produto.vendedor.nome_negocio,
         }
 
     request.session['carrinho'] = carrinho
@@ -322,7 +341,6 @@ from django.utils import timezone
 from datetime import timedelta
 import logging
 from .models import Pedido, ItemPedido, Produto
-from .forms import PedidoForm, AtualizarStatusForm
 
 # Configuração do logger
 logger = logging.getLogger(__name__)
@@ -492,3 +510,66 @@ def relatorio_pedidos(request):
         logger.error(f"Erro no relatório de pedidos: {str(e)}")
         messages.error(request, "Ocorreu um erro ao gerar o relatório.")
         return redirect('painel_administrativo')
+    
+@login_required(login_url='/telalogin/') # 1. Protege a view e redireciona para a URL de login correta
+def meus_pedidos(request):
+    """
+    Exibe os pedidos relevantes para o usuário logado,
+    diferenciando entre Cliente e Vendedor.
+    """
+    try:
+        # Pega o perfil do usuário logado
+        perfil_usuario = request.user.perfil
+    except Perfil.DoesNotExist:
+        # Caso o usuário não tenha um perfil (ex: superuser sem perfil)
+        return render(request, 'core/meus_pedidos.html', {'pedidos': []})
+
+    # 2. Verifica o tipo de perfil do usuário
+    if perfil_usuario.tipo == Perfil.TipoUsuario.CLIENTE:
+        # Se for um Cliente, busca os Pedidos principais que ele fez
+        # Acessamos através do campo 'cliente' no modelo Pedido
+        pedidos = Pedido.objects.filter(cliente=perfil_usuario).order_by('-data_pedido')
+        context = {
+            'pedidos': pedidos,
+            'is_cliente': True # Variável para ajudar o template a se adaptar
+        }
+    elif perfil_usuario.tipo == Perfil.TipoUsuario.VENDEDOR:
+        # Se for um Vendedor, busca os PedidoVendedor (sub-pedidos) que ele recebeu
+        # Acessamos através do campo 'vendedor' no modelo PedidoVendedor
+        pedidos = PedidoVendedor.objects.filter(vendedor=perfil_usuario).order_by('-id')
+        context = {
+            'pedidos': pedidos,
+            'is_cliente': False
+        }
+    else:
+        # Para outros tipos de perfil (como ONG), não mostra nenhum pedido
+        pedidos = []
+        context = {'pedidos': pedidos}
+
+    return render(request, 'core/meus_pedidos.html', context)
+
+
+
+def cadastroproduto(request):
+    if request.method == 'POST':
+        categoria_nome = request.POST.get('categoria')
+
+        try:
+            categoria_obj = Categoria.objects.get(nome=categoria_nome)
+            Produto.objects.create(
+                nome=request.POST.get('nome'),
+                categoria=categoria_obj, # Pass the object here
+                fabricacao=request.POST.get('fabricacao'),
+                validade=request.POST.get('validade'),
+                preco=request.POST.get('preco'),
+                estoque=request.POST.get('estoque'),
+                codigo=request.POST.get('codigo'),
+                descricao=request.POST.get('descricao'),
+            )
+            return redirect('core:cadastroproduto')
+        except Categoria.DoesNotExist:
+
+            pass
+
+    categorias = Categoria.objects.all()
+    return render(request, 'core/cadastroproduto.html', {'categorias': categorias})
