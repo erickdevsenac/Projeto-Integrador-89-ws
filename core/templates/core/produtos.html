@@ -1,22 +1,95 @@
 {% extends 'global/base.html' %}
 {% load static %}
 
-
-
-
-{% block content %}  
 {% block head %}
     <title>Aproveite+ - Produtos</title>
     <link rel="stylesheet" href="{% static 'core/css/style_produto.css' %}" />
     <script src="{% static 'core/js/produtos.js' %}"></script>
 {% endblock head %}
+
+
+{% block content %}
 <div id="produtos" class="container mt-5">
-    <h2 class="text-center mb-4">Produtos em Oferta</h2>
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {% for produto in page_obj %}
-            {% empty %}
-            <p class="text-center">Nenhum produto disponível no momento.</p>
-        {% endfor %}
+    <div class="row">
+        <!-- Coluna de Filtros (Melhoria) -->
+        <div class="col-lg-3">
+            <h4 class="mb-3">Categorias</h4>
+            <div class="list-group">
+                <a href="{% url 'core:produtos' %}" class="list-group-item list-group-item-action {% if not categoria_atual %}active{% endif %}">
+                    Todas as Categorias
+                </a>
+                {% for categoria in categorias %}
+                    <a href="?categoria={{ categoria.slug }}" class="list-group-item list-group-item-action {% if categoria_atual == categoria.slug %}active{% endif %}">
+                        {{ categoria.nome }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Coluna de Produtos -->
+        <div class="col-lg-9">
+            <h2 class="text-center mb-4">Produtos em Oferta</h2>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                
+                {% for produto in page_obj %}
+                    <div class="col">
+                        <div class="card h-100 shadow-sm">
+                            {% if produto.imagem %}
+                                <img src="{{ produto.imagem.url }}" class="card-img-top" alt="{{ produto.nome }}" style="height: 200px; object-fit: cover;">
+                            {% else %}
+                                <img src="{% static 'assets/img/placeholder_produto.png' %}" class="card-img-top" alt="Sem imagem" style="height: 200px; object-fit: cover;">
+                            {% endif %}
+                            
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">{{ produto.nome }}</h5>
+                                <p class="card-text text-muted">{{ produto.descricao|truncatewords:15 }}</p>
+                                <p class="preco fs-4 fw-bold text-success">R$ {{ produto.preco|floatformat:2 }}</p>
+
+                                <p class="card-text mb-2">
+                                    <small class="text-muted">
+                                        Em estoque: 
+                                        <span class="fw-bold {% if produto.quantidade_estoque <= 5 %}text-danger{% else %}text-dark{% endif %}">
+                                            {{ produto.quantidade_estoque }} unidades
+                                        </span>
+                                    </small>
+                                </p>
+                                
+                                <form action="{% url 'core:adicionar_carrinho' produto.id %}" method="post" class="mt-auto">
+                                    {% csrf_token %}
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="quantidade" value="1" min="1" max="{{ produto.quantidade_estoque }}" aria-label="Quantidade">
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="bi bi-cart-plus"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col-12">
+                        <p class="text-center">Nenhum produto disponível no momento para esta categoria.</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Paginação -->
+            {% if page_obj.has_other_pages %}
+                <nav aria-label="Paginação de produtos" class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a></li>
+                        {% endif %}
+
+                        <li class="page-item disabled"><span class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span></li>
+
+                        {% if page_obj.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Próxima</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
     </div>
 </div>
 {% endblock content %}

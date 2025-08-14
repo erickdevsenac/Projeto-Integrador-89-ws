@@ -8,7 +8,7 @@ urlpatterns = [
     # Rotas Principais
     path('', views.index, name='index'),
     path('produtos/', views.produtos, name='produtos'),
-    path('busca/', views.buscarprodutos, name='buscar_produtos'),
+    path('busca/', views.buscar_produtos, name='buscar_produtos'),
     path('contato/', views.contato, name='contato'),
 
     # Rotas de Autenticação e Usuário
@@ -23,8 +23,7 @@ urlpatterns = [
     # Rotas de Receitas
     path('receitas/', views.receitas, name='receitas'),
     path('videos/', views.videos, name='videos'),
-    # Lembre-se de adicionar a URL para criar receitas também
-    # path('receitas/criar/', views.cria_receita, name='cria_receita'),
+    path('receitas/criar/', views.cria_receita, name='cria_receita'),
 
     # Rotas de Produtos e Doação
     path('cadastro-produto/', views.cadastroproduto, name='cadastroproduto'), # BOA PRÁTICA: URL com hífen

@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import inlineformset_factory
-from .models import Perfil, Receita, Ingrediente, EtapaPreparo
+from .models import Perfil, Receita, Ingrediente, EtapaPreparo, Categoria, Produto
 from django.contrib.auth.models import User
 
 class CadastroForm(forms.ModelForm):
@@ -107,3 +107,35 @@ class ConfiguracaoForm(forms.Form):
 
     class Media:
         js = ('core/js/configuracao.js',)
+        
+
+class ProdutoForm(forms.ModelForm):
+    class Meta:
+        model = Produto
+        # Lista de campos que o vendedor irá preencher
+        fields = [
+            'nome',
+            'categoria',
+            'preco',
+            'quantidade_estoque',
+            'imagem',
+            'descricao',
+            'codigo_produto',
+            'data_fabricacao',
+            'data_validade',
+        ]
+        # Excluímos 'vendedor', 'ativo' e 'data_criacao' porque serão
+        # definidos automaticamente na view.
+
+        # Adiciona widgets para melhorar a experiência do usuário
+        widgets = {
+            'data_fabricacao': forms.DateInput(attrs={'type': 'date'}),
+            'data_validade': forms.DateInput(attrs={'type': 'date'}),
+            'descricao': forms.Textarea(attrs={'rows': 4}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Deixa o campo de categoria mais amigável, mostrando os nomes
+        self.fields['categoria'].queryset = Categoria.objects.all()
+        self.fields['categoria'].label_from_instance = lambda obj: obj.nome

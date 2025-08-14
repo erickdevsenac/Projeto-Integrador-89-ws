@@ -1,94 +1,153 @@
 {% extends 'global/base.html' %}
 {% load static %}
 
-{% block cadastro %}
+
+
+{% block content %}
 {% block head %}
-  <title>Cadastro Usuário</title>
+  <title>Cadastre-se - Aproveite+</title>
   <link rel="stylesheet" href="{% static 'core/css/stylecadastro.css' %}">
-{% endblock head %}
+{% endblock head %}<div class="cadastro-body">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8">
+        
+        <div class="logo logo-container text-center mb-4">
+          <img src="{% static 'assets/img/logo.png' %}" alt="Logo Aproveite+" style="width: 120px;">
+          <h1 class="mt-2">Aproveite+</h1>
+        </div>
 
-<div class="body">
-  <div class="container-fluid">
-    <div class="logo">
-      <img src="{% static 'assets/img/logo.png' %}" alt="">
-      <h1>APROVEITE+</h1>
-    </div>
-
-    <div class="caixa">
-      <h2>Cadastro de Usuário</h2>
-        {% if messages %}
+        <div class="caixa card shadow-lg">
+          <div class="card-body p-4 p-md-5">
+            <h2 class="card-title text-center mb-4">Crie sua Conta</h2>
+            {% if messages %}
           <ul class="messages">
               {% for message in messages %}
                   <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
               {% endfor %}
           </ul>
         {% endif %}
-      <form method="post" action="">
-        {% csrf_token %}
 
-        {% if form.non_field_errors %}
-          <div class="form-errors">
-            {% for error in form.non_field_errors %}
-              <p style="color: red;">{{ error }}</p>
-            {% endfor %}
-          </div>
-        {% endif %}
+            <form method="post" enctype="multipart/form-data" novalidate>
+              {% csrf_token %}
 
-        <div class="form-group">
-            {{ form.tipo.label_tag }}
-            {{ form.tipo }}
-            {% if form.tipo.errors %}
+              {% if form.non_field_errors %}
+                <div class="form-errors alert alert-danger">
+                  {% for error in form.non_field_errors %}
+                    <p style="color: red;">{{ error }}</p>
+                  {% endfor %}
+                </div>
+              {% endif %}
+
+              <div class="mb-3 form-group">
+                <label for="{{ form.tipo.id_for_label }}" class="form-label">{{ form.tipo.label }}</label>
+                {{ form.tipo }}
+                {% if form.tipo.errors %}
                 <div class="field-errors">
                     {% for error in form.tipo.errors %}
                         <p style="color: red;">{{ error }}</p>
                     {% endfor %}
                 </div>
             {% endif %}
-        </div>
-        
-        <div id="campos-comuns">
-            <div class="form-group">{{ form.nome_negocio.label_tag }} {{ form.nome_negocio }}</div>
-            <div class.form-group>{{ form.email.label_tag }} {{ form.email }}</div>
-            <div class="form-group">{{ form.senha.label_tag }} {{ form.senha }}</div>
-            <div class="form-group">{{ form.confirmar_senha.label_tag }} {{ form.confirmar_senha }}</div>
-            <div class="form-group">{{ form.telefone.label_tag }} {{ form.telefone }}</div>
-            <div class="form-group">{{ form.endereco.label_tag }} {{ form.endereco }}</div>
-        </div>
-        
-        <div id="campos-parceiro" style="display:none;">
-            <div class="form-group">{{ form.cnpj.label_tag }} {{ form.cnpj }}</div>
-            <div class="form-group">{{ form.descricao_parceiro.label_tag }} {{ form.descricao_parceiro }}</div>
-        </div>
+            
 
-        <button type="submit" class="botao botao-verde">Cadastrar</button>
-      </form>
+                {% for error in form.tipo.errors %}
+                  <div class="invalid-feedback d-block">{{ error }}</div>
+                {% endfor %}
+              </div>
+              
+              <!-- Campos Comuns -->
+              <div id="campos-comuns">
+                <div class="mb-3">
+                  <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }}</label>
+                  {{ form.email }}
+                  {% for error in form.email.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                  {% endfor %}
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="{{ form.senha.id_for_label }}" class="form-label">{{ form.senha.label }}</label>
+                    {{ form.senha }}
+                    {% for error in form.senha.errors %}
+                      <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="{{ form.confirmar_senha.id_for_label }}" class="form-label">{{ form.confirmar_senha.label }}</label>
+                    {{ form.confirmar_senha }}
+                    {% for error in form.confirmar_senha.errors %}
+                      <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Campos para Vendedor/ONG -->
+              <div id="campos-parceiro" class="d-none">
+                 <div class="mb-3">
+                  <label for="{{ form.nome_negocio.id_for_label }}" class="form-label">{{ form.nome_negocio.label }}</label>
+                  {{ form.nome_negocio }}
+                  {% for error in form.nome_negocio.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                  {% endfor %}
+                </div>
+                <div class="mb-3">
+                  <label for="{{ form.cnpj.id_for_label }}" class="form-label">{{ form.cnpj.label }}</label>
+                  {{ form.cnpj }}
+                  {% for error in form.cnpj.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                  {% endfor %}
+                </div>
+                <div class="mb-3">
+                  <label for="{{ form.descricao_parceiro.id_for_label }}" class="form-label">{{ form.descricao_parceiro.label }}</label>
+                  {{ form.descricao_parceiro }}
+                  {% for error in form.descricao_parceiro.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                  {% endfor %}
+                </div>
+              </div>
+
+              <!-- Campos para Cliente -->
+               <div id="campos-cliente" class="d-none">
+                 <div class="mb-3">
+                  <label for="{{ form.nome_negocio.id_for_label }}" class="form-label">Nome Completo</label>
+                  {{ form.nome_negocio }}
+                   {% for error in form.nome_negocio.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                  {% endfor %}
+                </div>
+              </div>
+
+              <!-- Campos de Contato (comuns a todos) -->
+              <div class="mb-3">
+                <label for="{{ form.telefone.id_for_label }}" class="form-label">{{ form.telefone.label }}</label>
+                {{ form.telefone }}
+                {% for error in form.telefone.errors %}
+                  <div class="invalid-feedback d-block">{{ error }}</div>
+                {% endfor %}
+              </div>
+              <div class="mb-3">
+                <label for="{{ form.endereco.id_for_label }}" class="form-label">{{ form.endereco.label }}</label>
+                {{ form.endereco }}
+                {% for error in form.endereco.errors %}
+                  <div class="invalid-feedback d-block">{{ error }}</div>
+                {% endfor %}
+              </div>
+
+              <div class="d-grid">
+                <button type="submit" class="btn btn-success btn-lg">Cadastrar</button>
+              </div>
+            </form>
+            <div class="text-center mt-3">
+              <small>Já tem uma conta? <a href="{% url 'core:telalogin' %}">Faça login</a></small>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<script>
-  // Função para mostrar/ocultar campos com base no tipo de usuário
-  function mostrarCamposParceiro() {
-    // Django gera o ID como "id_nome_do_campo"
-    const tipo = document.getElementById('id_tipo').value;
-    const camposParceiro = document.getElementById('campos-parceiro');
-
-    // Mostra os campos se for VENDEDOR ou ONG
-    if (tipo === 'VENDEDOR' || tipo === 'ONG') {
-      camposParceiro.style.display = 'block';
-    } else {
-      camposParceiro.style.display = 'none';
-    }
-  }
-
-  // Adiciona o 'listener' para chamar a função quando o valor do select mudar
-  document.getElementById('id_tipo').addEventListener('change', mostrarCamposParceiro);
-
-  // Chama a função uma vez no carregamento da página para garantir que o estado inicial esteja correto
-  // (útil se o formulário for recarregado com um tipo já selecionado após um erro)
-  document.addEventListener('DOMContentLoaded', mostrarCamposParceiro);
-</script>
-
-
-
-{% endblock cadastro %}
+<script src={% static "core/js/cadastro.js" %}></script>
+{% endblock content %}
