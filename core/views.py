@@ -514,9 +514,21 @@ def meus_pedidos(request):
 
 
 def receitas(request):
-    lista_receitas = Receita.objects.filter(disponivel=True).order_by("-data_criacao")
-    return render(request, "core/receitas.html", {"receitas": lista_receitas})
+    # AJUSTE: Adicionada paginação para a lista de receitas
+    lista_receitas = Receita.objects.filter(disponivel=True).order_by('-data_criacao')
+    
+    paginator = Paginator(lista_receitas, 9) # Exibe 9 receitas por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'core/receitas.html', {'page_obj': page_obj})
 
+def receita_detalhe(request, receita_id):
+    """
+    Exibe os detalhes completos de uma única receita.
+    """
+    receita = get_object_or_404(Receita, id=receita_id, disponivel=True)
+    return render(request, 'core/receita_detalhe.html', {'receita': receita})
 
 def dicas(request):
     lista_dicas = Dica.objects.filter(publicada=True)

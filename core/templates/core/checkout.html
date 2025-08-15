@@ -1,48 +1,93 @@
 {% extends 'global/base.html' %}
+{% load static %}
+
 
 {% block content %}
+{% block head %}
+    <title>Finalizar Compra - Aproveite+</title>
+    <style>
+        /* Estilos para os radio buttons de pagamento */
+        .payment-options .form-check {
+            padding: 1rem;
+            border: 1px solid #dee2e6;
+            border-radius: .375rem;
+            margin-bottom: 0.5rem;
+        }
+        .payment-options .form-check-input:checked + .form-check-label {
+            font-weight: bold;
+        }
+    </style>
+{% endblock %}
 <div class="container mt-5 mb-5">
     <h2 class="text-center mb-4">Finalizar Compra</h2>
 
-    <div class="row">
-        <div class="col-lg-7">
-            <h4>Resumo dos Itens</h4>
+    <div class="row g-5">
+        <!-- Coluna de Resumo do Pedido -->
+        <div class="col-md-5 col-lg-4 order-md-last">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-primary">Seu Carrinho</span>
+                <span class="badge bg-primary rounded-pill">{{ carrinho|length }}</span>
+            </h4>
             <ul class="list-group mb-3">
                 {% for item in carrinho %}
                     <li class="list-group-item d-flex justify-content-between lh-sm">
                         <div>
                             <h6 class="my-0">{{ item.nome }}</h6>
-                            <small class="text-muted">Quantidade: {{ item.quantidade }}</small>
+                            <small class="text-muted">Qtd: {{ item.quantidade }}</small>
                         </div>
-                        <span class="text-muted">R$ {{ item.subtotal|floatformat:2 }}</span>
+                        <span class="text-muted">R$ {{ item.preco|floatformat:2 }}</span>
                     </li>
                 {% endfor %}
-                <li class="list-group-item d-flex justify-content-between bg-light">
-                    <div class="text-success">
-                        <h6 class="my-0">Total</h6>
-                    </div>
-                    <strong class="text-success">R$ {{ total_carrinho|floatformat:2 }}</strong>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>Total (BRL)</span>
+                    <strong>R$ {{ total_carrinho|floatformat:2 }}</strong>
                 </li>
             </ul>
         </div>
 
-        <div class="col-lg-5">
-            <h4>Confirmação</h4>
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Endereço de Entrega</h5>
-                    <p class="card-text">{{ request.user.perfil.endereco }}</p>
-                    <hr>
-                    <h5 class="card-title">Forma de Pagamento</h5>
-                    <p class="card-text">PIX (Padrão)</p>
-                    
-                    <form method="post" action="{% url 'core:finalizar_pedido' %}">
-                        {% csrf_token %}
-                        <p class="mt-4">Ao clicar em "Confirmar Compra", seu pedido será processado.</p>
-                        <button type="submit" class="btn btn-primary w-100">Confirmar Compra</button>
-                    </form>
+        <!-- Coluna de Confirmação e Formulário -->
+        <div class="col-md-7 col-lg-8">
+            <h4 class="mb-3">Detalhes da Compra</h4>
+            
+            <form method="post" action="{% url 'core:finalizar_pedido' %}" novalidate>
+                {% csrf_token %}
+                
+                <!-- Exibe erros gerais do formulário -->
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Campo Endereço de Entrega -->
+                <div class="mb-3">
+                    <label for="{{ form.endereco_entrega.id_for_label }}" class="form-label">{{ form.endereco_entrega.label }}</label>
+                    {{ form.endereco_entrega }}
+                    {% for error in form.endereco_entrega.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
                 </div>
-            </div>
+                
+                <hr class="my-4">
+
+                <!-- Campo Forma de Pagamento -->
+                <h5 class="mb-3">{{ form.forma_pagamento.label }}</h5>
+                <div class="payment-options">
+                    {{ form.forma_pagamento }}
+                </div>
+                {% for error in form.forma_pagamento.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                {% endfor %}
+
+                <hr class="my-4">
+
+                <p>Ao clicar em "Confirmar Compra", seu pedido será processado.</p>
+                
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg w-100">Confirmar Compra</button>
+                    <a href="{% url 'core:ver_carrinho' %}" class="btn btn-outline-secondary btn-lg">Cancelar</a>
+                </div>
+            </form>
         </div>
     </div>
 </div>

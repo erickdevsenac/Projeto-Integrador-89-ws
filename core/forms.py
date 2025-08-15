@@ -1,4 +1,3 @@
-from tkinter import Widget
 from turtle import width
 from django import forms
 from django.contrib.auth.models import User
@@ -12,8 +11,8 @@ from .models import (
     Perfil,
     Produto,
     Receita,
+    Pedido
 )
-
 
 class CadastroForm(forms.ModelForm):
     email = forms.EmailField(label="Email",  widget=forms.EmailInput(attrs={'placeholder': 'Digite seu email'}),)
@@ -210,3 +209,27 @@ class CupomForm(forms.ModelForm):
         if codigo:
             return codigo.upper()
         return codigo
+
+        
+        
+
+class CheckoutForm(forms.ModelForm):
+    """
+    Formulário para o cliente confirmar os detalhes do pedido.
+    """
+    class Meta:
+        model = Pedido
+        # Campos que o cliente irá preencher/confirmar
+        fields = ['endereco_entrega', 'forma_pagamento']
+        
+        # Widgets para melhorar a aparência dos campos
+        widgets = {
+            'endereco_entrega': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
+            'forma_pagamento': forms.RadioSelect(attrs={'class': 'form-check-input'}),
+        }
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Deixa os rótulos mais amigáveis
+        self.fields['endereco_entrega'].label = "Endereço de Entrega"
+        self.fields['forma_pagamento'].label = "Escolha a Forma de Pagamento"
