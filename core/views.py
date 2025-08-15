@@ -223,8 +223,39 @@ def adicionar_carrinho(request, produto_id):
 
 @require_POST
 def atualizar_carrinho(request):
-    # TODO: Implementar a lógica para atualizar a quantidade de múltiplos itens
-    messages.info(request, "Funcionalidade de atualizar carrinho ainda não implementada.")
+    carrinho = request.session.get('carrinho', {})
+    
+    # Percorre todos os itens enviados pelo formulário
+    for key, value in request.POST.items():
+        # Procuramos por chaves que começam com 'quantidade_'
+        if key.startswith('quantidade_'):
+            produto_id_str = key.split('_')[1]
+            nova_quantidade = int(value)
+            
+            # Garante que o item ainda existe no carrinho
+            if produto_id_str in carrinho:
+                try:
+                    produto = Produto.objects.get(id=int(produto_id_str))
+                    
+                    # Verificação de estoque
+                    if nova_quantidade > produto.quantidade_estoque:
+                        messages.error(request, f"Estoque insuficiente para '{produto.nome}'. Apenas {produto.quantidade_estoque} disponíveis.")
+                        # Pula para o próximo item sem alterar este
+                        continue
+                    
+                    # Se a quantidade for 0, remove o item. Senão, atualiza.
+                    if nova_quantidade > 0:
+                        carrinho[produto_id_str]['quantidade'] = nova_quantidade
+                    else:
+                        del carrinho[produto_id_str]
+                        
+                except Produto.DoesNotExist:
+                    # Se o produto foi removido do banco, remove do carrinho também
+                    del carrinho[produto_id_str]
+                    
+    request.session['carrinho'] = carrinho
+    request.session.modified = True
+    messages.success(request, "Carrinho atualizado com sucesso!")
     return redirect('core:ver_carrinho')
 
 def remover_item(request, produto_id):
@@ -305,8 +336,21 @@ def meus_pedidos(request):
 # ==============================================================================
 
 def receitas(request):
+    # AJUSTE: Adicionada paginação para a lista de receitas
     lista_receitas = Receita.objects.filter(disponivel=True).order_by('-data_criacao')
-    return render(request, 'core/receitas.html', {'receitas': lista_receitas})
+    
+    paginator = Paginator(lista_receitas, 9) # Exibe 9 receitas por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'core/receitas.html', {'page_obj': page_obj})
+
+def receita_detalhe(request, receita_id):
+    """
+    Exibe os detalhes completos de uma única receita.
+    """
+    receita = get_object_or_404(Receita, id=receita_id, disponivel=True)
+    return render(request, 'core/receita_detalhe.html', {'receita': receita})
 
 def dicas(request):
     lista_dicas = Dica.objects.filter(publicada=True)

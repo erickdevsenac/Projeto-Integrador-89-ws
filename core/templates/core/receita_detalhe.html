@@ -1,0 +1,73 @@
+{% extends 'global/base.html' %}
+{% load static %}
+
+{% block head %}
+  <title>{{ receita.nome }} - Aproveite+</title>
+  <style>
+    .recipe-detail-img {
+      max-height: 450px;
+      width: 100%;
+      object-fit: cover;
+      border-radius: 15px;
+    }
+    .recipe-meta {
+      font-size: 1.1rem;
+      color: #555;
+    }
+    .ingredient-list, .steps-list {
+      padding-left: 20px;
+    }
+  </style>
+{% endblock head %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+  <div class="row">
+    <div class="col-lg-8 offset-lg-2">
+
+      <h1 class="display-4">{{ receita.nome }}</h1>
+      <p class="lead text-muted">{{ receita.descricao }}</p>
+
+      <div class="recipe-meta d-flex justify-content-around bg-light p-3 rounded mb-4">
+        <span><strong>Autor:</strong> {{ receita.autor.username|default:"Desconhecido" }}</span>
+        <span><strong>Preparo:</strong> {{ receita.tempo_preparo }} min</span>
+        <span><strong>Rendimento:</strong> {{ receita.rendimento }}</span>
+      </div>
+
+      {% if receita.imagem %}
+        <img src="{{ receita.imagem.url }}" alt="{{ receita.nome }}" class="img-fluid recipe-detail-img shadow-sm mb-4">
+      {% endif %}
+
+      <div class="row">
+        <div class="col-md-5">
+          <h3>Ingredientes</h3>
+          <ul class="ingredient-list">
+            {% for ingrediente in receita.ingredientes.all %}
+              <li>{{ ingrediente.quantidade }} de {{ ingrediente.nome }}</li>
+            {% empty %}
+              <li>Nenhum ingrediente listado.</li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="col-md-7">
+          <h3>Modo de Preparo</h3>
+          <ol class="steps-list">
+            {% for etapa in receita.etapas.all %}
+              <li class="mb-2">{{ etapa.descricao }}</li>
+            {% empty %}
+              <li>Nenhum modo de preparo listado.</li>
+            {% endfor %}
+          </ol>
+        </div>
+      </div>
+
+      <hr class="my-5">
+
+      <div class="text-center">
+        <a href="{% url 'core:receitas' %}" class="btn btn-secondary">Voltar para todas as receitas</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock content %}

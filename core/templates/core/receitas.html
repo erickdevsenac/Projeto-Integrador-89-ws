@@ -1,162 +1,80 @@
 {% extends 'global/base.html' %}
 {% load static %}
- 
+
 {% block head %}
-<title>Aproveite+ - Adicionar Receitas</title>
-<link rel="stylesheet" href="{% static 'core/style_receitas.css' %}">
-{% endblock %}
- 
-{% block receitas %}
-{% comment %} <form class="form_receitas" action="{% url 'core:adicionar_receita' %}" method="post" enctype="multipart/form-data"> {% endcomment %}
-<form class="form_receitas" action="" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <h1>Adicionar Receita</h1>
- 
-    <label for="nome">Nome da Receita:</label>
-    <input type="text" id="nome" name="nome" required>
- 
-    <label for="descricao">Descrição:</label>
-    <textarea id="descricao" name="descricao" rows="4" required></textarea>
- 
-    <label for="ingredientes">Ingredientes:</label>
-    <textarea id="ingredientes" name="ingredientes" rows="4" required></textarea>
- 
-    <label for="modo_preparo">Modo de Preparo:</label>
-    <textarea id="modo_preparo" name="modo_preparo" rows="4" required></textarea>
- 
-    <label for="imagem">Imagem:</label>
-    <input type="file" id="imagem" name="imagem" accept="image/*">
- 
-    <button type="submit">Salvar Receita</button>
-</form> 
- 
-<hr>
- 
-<h2>Receitas Cadastradas</h2>
- 
-<div class="receita">
-    {% for receita in receitas %}
-        <div class="receita-item">
-            <h3>{{ receita.nome }}</h3>
-            <p>{{ receita.descricao }}</p>
- 
-            {% if receita.imagem %}
-                <img src="{{ receita.imagem.url }}" alt="{{ receita.nome }}">
-            {% else %}
-                <img src="{% static 'assets/img/placeholder_receita.png' %}" alt="Imagem não disponível">
-            {% endif %}
- 
-            <p><strong>Ingredientes:</strong> {{ receita.ingredientes }}</p>
-            <p><strong>Modo de Preparo:</strong> {{ receita.modo_preparo }}</p>
-     
-
-        </div>
-    {% empty %}
-        <p>Nenhuma receita cadastrada ainda.</p>
-    {% endfor %}
-</div>
-{% endblock %}
-
-<h1>RECEITAS:</h1>
-<h2>Brownie</h2>
-<h4>Brownie irresistível: textura macia e úmida, sabor intenso de chocolate, pedacinhos crocantes... um doce delicioso!</h4>
-<body>
-    
-    <h3>Ingredientes</h3>
-   <ul><li>100g de chocolate meio amargo, derretido;</li>
-   <li>100g de manteiga sem sal, derretida;</li>
-   <li>2 ovos;</li>
-   <li>1 xícara de açúcar;</li>
-   <li>1 colher de chá de extrato de baunilha;</li>
-   <li>1/2 xícara de farinha de trigo;</li>
-   <li>1/4 xícara de cacau em pó;</li>
-   <li>1/4 colher de chá de fermento em pó;</li>
-   <li>(opcional) 1/2 xícara de gotas de chocolate para uma explosão extra de chocolate!</li></ul>
-
-   <h3>Modo de preparo</h3>
-   <ol><li>Misture os molhados: Em uma tigela, misture o chocolate derretido, a manteiga derretida, os ovos, o açúcar e a baunilha até ficar homogêneo.</li>
-   <li>Misture os secos: Em outra tigela, misture a farinha, o cacau e o fermento.</li>
-   <li>Una tudo: Adicione os ingredientes secos aos molhados, misturando delicadamente até incorporar. Acrescente as gotas de chocolate (opcional).</li>
-   <li>Asse: Coloque em forma untada e asse a 180°C por 25-30 minutos, ou até o palito sair limpo (ou com alguns farelos úmidos)</li>
-   <li>Deixe esfriar: Espere esfriar antes de cortar e saborear!</li>
-   </ol>
-    
+  <title>Receitas - Aproveite+</title>
+  <style>
+    .recipe-card {
+      margin-bottom: 30px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: box-shadow 0.3s ease-in-out;
+      height: 100%;
+    }
+    .recipe-card:hover {
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .recipe-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
   </style>
+{% endblock head %}
 
 {% block content %}
-<div class="container mt-4">
-  <h2 class="text-center">Receitas Cadastradas</h2>
-  <hr>
-
-<body>
-    
-    <h3>Ingredientes</h3>
-    <ul><li> 2 filés de frango (sem pele);</li>
-    <li>1 xícara de brócolis;</li>
-    <li> 1 xícara de cenoura;</li>
-    <li> 1/2 xícara de abobrinha;</li>
-    <li> azeite;</li>
-    <li>sal;</li>
-    <li>pimenta;</li>
-    <li>ervas (opcional).</li></ul>
-
-      {% if receita.imagem %}
-        <img src="{{ receita.imagem.url }}" alt="{{ receita.nome }}">
-      {% else %}
-        <img src="{% static 'assets/img/placeholder_receita.png' %}" alt="Imagem não disponível">
-      {% endif %}
-
-      <h4>Ingredientes:</h4>
-      <ul>
-        {% for ingrediente in receita.ingredientes.all %}
-          <li>{{ ingrediente.quantidade }} de {{ ingrediente.nome }}</li>
-        {% endfor %}
-      </ul>
-
-<body>
-
-    <h3>Ingredientes</h3>
-    <ul><li>2 ovos;</li>
-    <li>1 xícara de espinafre picado;</li>
-    <li>1/4 xícara de queijo cottage;</li>
-    <li>sal;</li>
-    <li>pimenta;</li>
-    </ul>
-
-    <h3>Modo de preparo</h3>
-    <ol><li> Bata os ovos;</li>
-    <li> Adicione o espinafre e o queijo;</li>
-    <li>Cozinhe em frigideira antiaderente até dourar e depois tempere.</li></ol>
-</body>
-
-<h2>Sopa de Lentilha</h2>
-<h4> Sopa reconfortante e nutritiva, rica em fibras e proteínas. Ideal para um almoço ou jantar leve e saboroso.</h4>
-
-<body>
-   
-    <h3>Ingredientes</h3>
-    <ul><li> 1 xícara de lentilha;</li>
-    <li> 4 xícaras de caldo de legumes;</li>
-    <li> 1 cebola picada;</li>
-    <li>2 cenouras picadas;</li>
-    <li> temperos a gosto;</li>
-    </ul>
-
-    <h3>Modo de preparo</h3>
-    <ol><li> Cozinhe a cebola e a cenoura;</li>
-    <li> Adicione a lentilha e o caldo.;</li>
-    <li>Cozinhe até a lentilha ficar macia e depois tempere.</li></ol>
-</body>
-
-      <h4>Modo de Preparo:</h4>
-      <ol>
-        {% for etapa in receita.etapas.all %}
-          <li>{{ etapa.descricao }}</li>
-        {% endfor %}
-      </ol>
-
-    </div>
-    <p class="text-center">Nenhuma receita cadastrada ainda.</p>
-  
+<div class="container mt-5">
+  <div class="text-center mb-5">
+    <h2 class="display-5">Nossas Receitas</h2>
+    <p class="lead text-muted">Inspire-se com pratos deliciosos e sustentáveis.</p>
   </div>
-{% endblock %}
+
+  <div class="row">
+    {% for receita in page_obj %}
+      <div class="col-md-6 col-lg-4">
+        <div class="card recipe-card shadow-sm">
+          {% if receita.imagem %}
+            <img src="{{ receita.imagem.url }}" class="card-img-top" alt="{{ receita.nome }}">
+          {% else %}
+            <img src="{% static 'assets/img/placeholder_receita.png' %}" class="card-img-top" alt="Imagem não disponível">
+          {% endif %}
+          <div class="card-body d-flex flex-column">
+            {% if receita.categoria %}
+              <strong class="text-success mb-2">{{ receita.categoria.nome }}</strong>
+            {% endif %}
+            <h5 class="card-title">{{ receita.nome }}</h5>
+            <p class="card-text text-muted">{{ receita.descricao|truncatewords:20 }}</p>
+            <div class="mt-auto">
+              <a href="{% url 'core:receita_detalhe' receita.id %}" class="btn btn-primary">Ver Receita Completa</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col-12">
+        <p class="text-center">Nenhuma receita cadastrada ainda.</p>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if page_obj.has_other_pages %}
+    <nav aria-label="Paginação de receitas" class="mt-5">
+      <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a></li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+        {% endif %}
+        <li class="page-item disabled"><span class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span></li>
+        {% if page_obj.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Próxima</a></li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">Próxima</span></li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}
+
+</div>
+{% endblock content %}

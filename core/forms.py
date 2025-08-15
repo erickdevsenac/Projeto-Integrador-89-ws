@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import inlineformset_factory
-from .models import Perfil, Receita, Ingrediente, EtapaPreparo, Categoria, Produto
+from .models import Perfil, Receita, Ingrediente, EtapaPreparo, Categoria, Produto, Pedido
 from django.contrib.auth.models import User
 
 class CadastroForm(forms.ModelForm):
@@ -139,3 +139,26 @@ class ProdutoForm(forms.ModelForm):
         # Deixa o campo de categoria mais amigável, mostrando os nomes
         self.fields['categoria'].queryset = Categoria.objects.all()
         self.fields['categoria'].label_from_instance = lambda obj: obj.nome
+        
+        
+
+class CheckoutForm(forms.ModelForm):
+    """
+    Formulário para o cliente confirmar os detalhes do pedido.
+    """
+    class Meta:
+        model = Pedido
+        # Campos que o cliente irá preencher/confirmar
+        fields = ['endereco_entrega', 'forma_pagamento']
+        
+        # Widgets para melhorar a aparência dos campos
+        widgets = {
+            'endereco_entrega': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
+            'forma_pagamento': forms.RadioSelect(attrs={'class': 'form-check-input'}),
+        }
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Deixa os rótulos mais amigáveis
+        self.fields['endereco_entrega'].label = "Endereço de Entrega"
+        self.fields['forma_pagamento'].label = "Escolha a Forma de Pagamento"
