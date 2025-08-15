@@ -1,3 +1,5 @@
+from tkinter import Widget
+from turtle import width
 from django import forms
 from django.contrib.auth.models import User
 from django.forms import inlineformset_factory
@@ -14,22 +16,30 @@ from .models import (
 
 
 class CadastroForm(forms.ModelForm):
-    email = forms.EmailField(label="Email")
-    senha = forms.CharField(label="Senha", widget=forms.PasswordInput)
+    email = forms.EmailField(label="Email",  widget=forms.EmailInput(attrs={'placeholder': 'Digite seu email'}),)
+    senha = forms.CharField(label="Senha", widget=forms.PasswordInput(attrs={'placeholder': 'Senha'}))
     confirmar_senha = forms.CharField(
-        label="Confirmar Senha", widget=forms.PasswordInput
+        label="Confirmar Senha", widget=forms.PasswordInput(attrs={'placeholder': 'Senha'},)
     )
-
+    
     class Meta:
         model = Perfil
-        fields = [
+        fields = [ 
             "tipo",
             "nome_negocio",
-            "telefone",
+            "telefone", 
             "endereco",
             "cnpj",
             "descricao_parceiro",
+            
         ]
+        widgets = {
+        "nome_negocio":forms.TextInput(attrs={'placeholder':'Nome do Negócio'}) ,
+        "telefone":forms.TextInput(attrs={'placeholder':'Digite seu Telefone'}) ,
+        "cnpj":forms.TextInput(attrs={'placeholder':'Digite seu CNPJ'}) ,
+        "descricao_parceiro":forms.Textarea(attrs={'placeholder':'Descrição...'}) ,
+        "endereco":forms.TextInput(attrs={'placeholder':'Seu Endereço'}) ,
+    }
 
     def clean_confirmar_senha(self):
         senha = self.cleaned_data.get("senha")
