@@ -54,7 +54,9 @@
     <section id="acoes" class="actions">
       <h2 class="section-title">Como você pode ajudar</h2>
       <div class="action-button">
-        <a href="#doar" class="cta-button">Doar Alimentos</a>
+        {% if request.user.is_vendedor %}
+          <a href="core:doacao" class="cta-button">Doar Alimentos</a>
+        {% endif %}
       </div>
       <div class="action-button">
         <a href="{% url 'core:produtos' %}" class="cta-button">Pedir Alimentos</a>

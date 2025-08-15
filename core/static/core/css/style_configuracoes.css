@@ -1,103 +1,103 @@
-CSS
+/* CSS Otimizado com Variáveis */
+
+/* Definindo variáveis CSS para os temas e cores */
+:root {
+  /* Cores do Tema Claro */
+  --bg-claro: white;
+  --text-claro: #333;
+  --border-claro: #ccc;
+
+  /* Cores do Tema Escuro */
+  --bg-escuro: #2c2c2c;
+  --text-escuro: #ddd;
+  --border-escuro: #666;
+  --bg-input-escuro: #444;
+
+  /* Cores de Ação (Sucesso, Perigo) */
+  --bg-sucesso: #28a745;
+  --bg-perigo: #dc3545;
+  --text-perigo: #721c24;
+  --bg-alerta-perigo: #f8d7da;
+  --alto-contraste-bg: black;
+  --alto-contraste-text: #FFFF00;
+}
+
 
 /* Tema Claro */
 .tema-claro {
-  background-color: white;
-  color: #333; /* Cor mais suave para o texto */
+  background-color: var(--bg-claro);
+  color: var(--text-claro);
+}
+
+.tema-claro label,
+.tema-claro h2,
+.tema-claro h3 {
+  color: var(--text-claro);
+}
+
+.tema-claro select,
+.tema-claro input {
+  font-size: 1rem;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid var(--border-claro);
+  background-color: var(--bg-claro);
+  color: var(--text-claro);
 }
 
 /* Tema Escuro */
 .tema-escuro {
-  background-color: #2c2c2c;
-  color: #ddd; /* Suavizando o texto no tema escuro */
+  background-color: var(--bg-escuro);
+  color: var(--text-escuro);
 }
 
-/* Fontes ajustadas para a visibilidade */
-.fonte-grande,
-.fonte-extra-grande,
+.tema-escuro label,
+.tema-escuro h2,
+.tema-escuro h3 {
+  color: var(--text-escuro);
+}
+
+.tema-escuro select,
+.tema-escuro input {
+  font-size: 1rem;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid var(--border-escuro);
+  background-color: var(--bg-input-escuro);
+  color: var(--text-escuro);
+}
+
+/* Fontes ajustadas (usando rem para acessibilidade) */
 .fonte-normal {
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 .fonte-grande {
-  font-size: 18px;
+  font-size: 1.125rem;
 }
 
 .fonte-extra-grande {
-  font-size: 22px;
-}
-
-.fonte-normal {
-  font-size: 14px;
-}
-
-/* Estilo para as labels */
-.tema-claro label {
-  color: #333; /* Preto no tema claro */
-  font-weight: bold;
-}
-
-.tema-escuro label {
-  color: #fff; /* Branco no tema escuro */
-  font-weight: bold;
-}
-
-/* Estilo dos selects */
-.tema-claro select {
-  font-size: 16px;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  background-color: white;
-  color: #333;
-}
-
-.tema-escuro select {
-  font-size: 16px;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #666;
-  background-color: #444;
-  color: #ddd;
-}
-
-/* Estilo para o botão de notificações */
-.notificacao-container select {
-  border: 1px solid #ccc;
-  padding: 5px;
+  font-size: 1.375rem;
 }
 
 /* Estilo do modal de exclusão de conta */
 .modal-content {
-  background-color: #f5c6cb;
-  border: 1px solid #f1b0b7;
-  color: #721c24;
+  background-color: var(--bg-alerta-perigo);
+  border: 1px solid #f5c6cb;
+  color: var(--text-perigo);
 }
 
-.modal-header {
-  background-color: #f5c6cb;
-}
-
+.modal-header,
 .modal-footer {
-  background-color: #f5c6cb;
+  background-color: var(--bg-alerta-perigo);
+  border-bottom: 1px solid #f5c6cb;
 }
 
-.modal-footer .btn-danger {
-  background-color: #dc3545;
-  border-color: #dc3545;
-}
-
-/* Estilo de segurança do botão de excluir conta */
-.modal-footer .btn-danger:hover {
-  background-color: #c82333;
-  border-color: #bd2130;
-}
-
-/* Estilo de botão do tipo "salvar alterações" */
+/* Estilos de Botão */
 .btn-success {
-  background-color: #28a745;
+  background-color: var(--bg-sucesso);
   color: white;
-  border-color: #28a745;
+  border-color: var(--bg-sucesso);
 }
 
 .btn-success:hover {
@@ -105,46 +105,23 @@ CSS
   border-color: #1e7e34;
 }
 
-.btn-success:focus {
-  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
+.btn-danger {
+  background-color: var(--bg-perigo);
+  border-color: var(--bg-perigo);
 }
 
-/* Para garantir um layout mais limpo nas opções de configuração */
-.container.mt-5 {
-  max-width: 800px;
-  margin: 0 auto;
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
 }
 
-/* Garantir que os inputs e selects sejam mais acessíveis */
-.tema-claro input,
-.tema-claro select {
-  font-size: 16px;
-  padding: 10px;
-  margin: 10px 0;
-  color: #333; /* Preto no tema claro */
-  background-color: white;
-}
-
-.tema-escuro input,
-.tema-escuro select {
-  font-size: 16px;
-  padding: 10px;
-  margin: 10px 0;
-  color: #ddd; /* Branco no tema escuro */
-  background-color: #444;
-  border: 1px solid #666;
-}
-
+/* Acessibilidade - Foco nos elementos interativos */
+button:focus,
 input:focus,
 select:focus {
   outline: none;
   box-shadow: 0 0 5px #66afe9;
   border-color: #66afe9;
-}
-
-/* Acessibilidade - Foco no botão */
-button:focus {
-  box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.75);
 }
 
 /* Estilo do aviso de exclusão da conta */
@@ -155,43 +132,52 @@ button:focus {
   border: 1px solid #eb2236;
   margin-top: 20px;
 }
-
-.alert-danger button {
-  background-color: #dd4c28c0;
-  border: none;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  color: white;
+.acessibilidade-alto-contraste {
+    background-color: var(--alto-contraste-bg) !important;
+    color: var(--alto-contraste-text) !important;
 }
 
-.alert-danger button:hover {
-  background-color: #f1b0b7;
-  color: #721c24;
+.acessibilidade-alto-contraste h2,
+.acessibilidade-alto-contraste h3,
+.acessibilidade-alto-contraste label {
+    color: var(--alto-contraste-text) !important;
 }
 
-/* Ajuste da cor dos títulos */
-.tema-claro h2,
-.tema-claro h3 {
-  color: #333;
+.acessibilidade-alto-contraste input,
+.acessibilidade-alto-contraste select {
+    background-color: black !important;
+    color: var(--alto-contraste-text) !important;
+    border-color: var(--alto-contraste-text) !important;
 }
 
-.tema-escuro h2,
-.tema-escuro h3 {
-  color: #fff;
-}
-/* Estilo do modal de exclusão de conta */
-.modal-content {
-    background-color: #f8d7da; /* Fundo do modal */
-    color: #721c24; /* Cor do texto no modal */
+/* Garanta que links e botões tenham um contraste forte */
+.acessibilidade-alto-contraste a,
+.acessibilidade-alto-contraste .btn {
+    color: var(--alto-contraste-text) !important;
+    background-color: black !important;
+    border-color: var(--alto-contraste-text) !important;
 }
 
-/* Garante que o título do modal também tenha a cor correta */
-.modal-title {
-    color: #721c24;
+.acessibilidade-alto-contraste .btn-danger,
+.acessibilidade-alto-contraste .btn-success {
+    color: var(--alto-contraste-text) !important;
+    background-color: black !important;
+    border-color: var(--alto-contraste-text) !important;
+}
+/* No seu arquivo style_configuracoes.css */
+
+/* Garante que o botão de fechar (o "X") tenha a cor e o tamanho corretos */
+.modal-header .close {
+    font-size: 1.2rem !important; /* Tamanho da fonte menor e forçado */
+    padding: 0.5rem !important;   /* Adiciona um pequeno padding para facilitar o clique */
+    margin: -0.5rem -0.5rem -0.5rem auto !important; /* Ajusta a margem para alinhar o X */
+    color: #721c24 !important;  /* Cor do texto do modal */
+    opacity: 1 !important;      /* Garante que a opacidade seja total */
 }
 
-/* Garante que o corpo do modal tenha a cor correta */
-.modal-body {
-    color: #721c24;
+/* Estilo ao passar o mouse ou focar no botão */
+.modal-header .close:hover,
+.modal-header .close:focus {
+    color: #000 !important;     /* Cor mais escura para o estado hover/focus */
+    opacity: 0.8 !important;    /* Adiciona uma pequena opacidade para feedback visual */
 }

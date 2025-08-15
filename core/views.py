@@ -7,7 +7,12 @@ from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
+from django.core.mail import send_mail
 
 from .forms import (
     CadastroForm,
@@ -132,12 +137,72 @@ def perfil(request):
 
 @login_required(login_url="/login/")
 def configuracoes(request):
-    # TODO: Implementar a lógica de configurações do usuário
+    if request.method == 'POST':
+        # Checa a lógica de exclusão primeiro
+        if 'excluir_conta' in request.POST:
+            # Lógica para deletar a conta do usuário
+            request.user.delete()
+            return redirect('core:index')
+
+        # Se não for uma exclusão, processa as outras configurações
+        tema = request.POST.get('tema')
+        fonte = request.POST.get('fonte')
+        acessibilidade = request.POST.get('acessibilidade')
+        notificacoes = request.POST.get('notificacoes')
+
+        if tema:
+            request.session['theme'] = tema
+        if fonte:
+            request.session['fonte'] = fonte
+        if acessibilidade: 
+            request.session['acessibilidade'] = acessibilidade
+        if notificacoes:
+            request.session['notificacoes'] = notificacoes
+        
+        return redirect('core:configuracoes')
+
+    # Lógica GET para apenas renderizar a página
     return render(request, "core/configuracoes.html")
 
 
 # TODO: Implementar a lógica de recuperação de senha (geralmente envolve envio de email)
 def recuperarsenha(request):
+    if request.method == 'POST':
+        email_do_usuario = request.POST.get('email')
+    
+        try:
+            usuario = User.objects.get(email=email_do_usuario)
+        except User.DoesNotExist:
+            messages.error(request, 'Não há conta associada a este e-mail.')
+            return render(request, 'recuperarsenha.html')
+            
+        # Cria o token de recuperação de senha
+        uid = urlsafe_base64_encode(force_bytes(usuario.pk))
+        token = default_token_generator.make_token(usuario)
+        
+        # Cria o link de redefinição
+        link_de_reset = request.build_absolute_uri(
+            f'/redefinir-senha/{uid}/{token}/' # Substitua pela sua URL real
+        )
+        
+        # Cria o corpo do e-mail com o link de reset
+        corpo_email = render_to_string('email/senha_reset.html', {
+            'usuario': usuario,
+            'link_de_reset': link_de_reset,
+        })
+        
+        try:
+            send_mail(
+                'Redefinição de Senha',
+                corpo_email,
+                'seu_email@exemplo.com', 
+                [usuario.email],
+                fail_silently=False,
+            )
+            messages.success(request, 'Um e-mail com instruções foi enviado.')
+            return redirect('core:telalogin') # Redireciona para uma página de sucesso
+        except Exception as e:
+            messages.error(request, f'Ocorreu um erro ao enviar o e-mail: {e}')
     return render(request, "core/recuperarsenha.html")
 
 
