@@ -54,8 +54,23 @@ def is_vendedor(user):
 
 
 def index(request):
-    return render(request, "core/index.html")
+    return render(request, 'core/index.html')
 
+def ongs_pagina(request, usuario_id):
+    ongs_pagina = get_object_or_404(Perfil, tipo = "ONG", usuario_id = usuario_id)
+    context = {
+        "inf_ongs": ongs_pagina
+    }
+    return render(request, 'core/ong_pagina.html', context)
+
+def produtos(request):
+    lista_produtos = Produto.objects.filter(ativo=True, quantidade_estoque__gt=0).order_by('-data_criacao')
+    
+    paginator = Paginator(lista_produtos, 9)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'core/produtos.html', {'page_obj': page_obj})
 
 def contato(request):
     return render(request, "core/contato.html")

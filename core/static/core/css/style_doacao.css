@@ -17,10 +17,12 @@ h1{
     align-items: center;
     border-radius: 20px;
     padding: 15px 30px;
+    margin: 20px;
 }
-.doacao .container{
+.container-doacao{
     background: linear-gradient(to right, #70e0ff, #0072ff);
     border-radius: 15px;
+    margin-bottom: 10px;
 }
 .doacao .inf_ongs{
     background-color: aliceblue;

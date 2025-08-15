@@ -25,10 +25,10 @@ urlpatterns = [
     path("videos/", views.videos, name="videos"),
     path("receitas/criar/", views.cria_receita, name="cria_receita"),
     # Rotas de Produtos e Doação
-    path(
-        "cadastro-produto/", views.cadastroproduto, name="cadastroproduto"
-    ),  # BOA PRÁTICA: URL com hífen
-    path("doacao/", views.doacao, name="doacao"),
+    path('cadastro-produto/', views.cadastroproduto, name='cadastroproduto'), # BOA PRÁTICA: URL com hífen
+    path('doacao/', views.doacao, name='doacao'), 
+    path('ong_pagina/<int:usuario_id>/', views.ongs_pagina, name='ongs_pagina'),
+
     # Rotas do Carrinho
     path("carrinho/", views.ver_carrinho, name="ver_carrinho"),
     path(
