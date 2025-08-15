@@ -1,0 +1,86 @@
+.boxcupom {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px 25px;
+    background-color: var(--bg-white);
+    border-radius: 12px;
+    box-shadow: 0 6px 12px var(--shadow-medium);
+    font-family: 'Roboto', sans-serif;
+    color: var(--text-color-dark);
+}
+
+.boxcupom h1 {
+    font-size: 26px;
+    color: var(--secondary-color);
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.boxcupom label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: rgb(6, 69, 20);
+    margin-top: 20px;
+}
+
+.boxcupom input[type="text"],
+.boxcupom input[type="date"] {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--shadow-light);
+    transition: border-color 0.3s ease;
+}
+
+.boxcupom input:focus {
+    border-color: rgb(228, 217, 216);
+    outline: none;
+}
+
+.boxcupom button {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    margin-top: 30px;
+    background-color: rgba(8, 105, 8, 0.733);
+    color: rgb(240, 253, 245);
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 6px var(--shadow-light);
+}
+
+.boxcupom button:hover {
+    background-color: rgb(41, 127, 38);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px var(--shadow-medium);
+    color: #f7fcf8;
+}
+
+
+.boxcupom {
+    padding: 20px;
+}
+
+.boxcupom h1 {
+    font-size: 20px;
+}
+
+.boxcupom input {
+    font-size: 14px;
+}
+
+.boxcupom button {
+    padding: 12px;
+    font-size: 14px;
+}

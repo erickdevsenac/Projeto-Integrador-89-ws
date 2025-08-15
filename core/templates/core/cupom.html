@@ -1,0 +1,112 @@
+{% extends 'global/base.html' %}
+{% load static %}
+
+{% block cupom %}
+
+{% block head %}
+<title>Criar Cupom de Desconto - Aproveite+</title>
+<link rel="stylesheet" href={% static "core/css/style_cupom.css" %}>
+{% endblock head %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="card-title text-center mb-4">Criar Novo Cupom</h2>
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <!-- Exibe erros que não são de um campo específico -->
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <!-- Renderiza cada campo individualmente para maior controle -->
+                        <div class="mb-3">
+                            <label for="{{ form.codigo.id_for_label }}" class="form-label">{{ form.codigo.label }}</label>
+                            {{ form.codigo }}
+                            {% for error in form.codigo.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.tipo_desconto.id_for_label }}" class="form-label">{{ form.tipo_desconto.label }}</label>
+                                {{ form.tipo_desconto }}
+                                {% for error in form.tipo_desconto.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.valor_desconto.id_for_label }}" class="form-label">{{ form.valor_desconto.label }}</label>
+                                {{ form.valor_desconto }}
+                                {% for error in form.valor_desconto.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.limite_uso.id_for_label }}" class="form-label">{{ form.limite_uso.label }}</label>
+                                {{ form.limite_uso }}
+                                {% for error in form.limite_uso.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.data_validade.id_for_label }}" class="form-label">{{ form.data_validade.label }}</label>
+                                {{ form.data_validade }}
+                                {% for error in form.data_validade.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.valor_minimo_compra.id_for_label }}" class="form-label">{{ form.valor_minimo_compra.label }}</label>
+                            {{ form.valor_minimo_compra }}
+                            {% for error in form.valor_minimo_compra.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="form-check mb-4">
+                            {{ form.ativo }}
+                            <label class="form-check-label" for="{{ form.ativo.id_for_label }}">
+                                {{ form.ativo.label }}
+                            </label>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">Salvar Cupom</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock cupom %}
+{% comment %} 
+<label for="codigo">codigo</label>
+    <input type="text">
+
+    <label for="tipo de desconto"> tipo de desconto:</label>
+    <input type=" ">
+
+    <label for="valor do desconto"> valor do desconto:</label>
+    <input type="text">
+
+    <label for="data de validade">data de validade:</label>
+    <input type="date">
+
+    <label for="limite de uso">limite de uso:</label>
+    <input type="text">
+
+    <label for="valor minimo da compra"> valor minimo da compra:</label>
+    <input type="text"> {% endcomment %}
