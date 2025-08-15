@@ -22,6 +22,10 @@ class Perfil(models.Model):
     endereco = models.CharField(max_length=255)
     cnpj = models.CharField("CNPJ", max_length=18, unique=True, null=True, blank=True, help_text="Obrigatório para Vendedores e ONGs")
     descricao_parceiro = models.TextField("Descrição da Empresa/ONG", blank=True, help_text="Uma breve descrição sobre o parceiro")
+    imagem_carrossel1 = models.ImageField(upload_to='carrossel/', null=True, blank=True, help_text="Apenas para ONGs")
+    imagem_carrossel2 = models.ImageField(upload_to='carrossel/', null=True, blank=True, help_text="Apenas para ONGs")
+    imagem_carrossel3 = models.ImageField(upload_to='carrossel/', null=True, blank=True, help_text="Apenas para ONGs")
+    objetivo = models.TextField("Descrição da Empresa/ONG", null=True, blank=True, help_text="Descrição dos seus objetivos e trabalhos da ONG")
 
     def __str__(self):
         if self.tipo == self.TipoUsuario.VENDEDOR and self.nome_negocio:

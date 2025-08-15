@@ -11,6 +11,13 @@ from django.contrib import messages
 def index(request):
     return render(request, 'core/index.html')
 
+def ongs_pagina(request, usuario_id):
+    ongs_pagina = get_object_or_404(Perfil, tipo = "ONG", usuario_id = usuario_id)
+    context = {
+        "inf_ongs": ongs_pagina
+    }
+    return render(request, 'core/ong_pagina.html', context)
+
 def produtos(request):
     lista_produtos = Produto.objects.filter(ativo=True, quantidade_estoque__gt=0).order_by('-data_criacao')
     
@@ -310,3 +317,4 @@ def finalizar_pedido(request):
         'total_carrinho': total_carrinho,
     }
     return render(request, 'core/checkout.html', context)
+

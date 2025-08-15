@@ -4,13 +4,13 @@
 {% block doacao %}
 
 {% block head %}
-  <title>Cadastro Usuario</title>
+  <title>Doações</title>
   <link rel="stylesheet" href="{% static 'core/css/style_doacao.css' %}">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 {% endblock head %}
 
   <h1 class="doacao">Doações</h1>
-      
+  <div class="container-doacao">
   <div class="container doacao">
     <div class="caixa container-fluid doacao">
       <h2 class="doacao">ONGs</h2>
@@ -33,11 +33,14 @@
             <h3>{{ong.nome_negocio}}</h3>
             <p>{{ong.descricao_parceiro}}</p>
           <div class="col-auto">
+            <a href="{% url 'core:ongs_pagina' ong.usuario_id %}">
             <button type="submit" class="btn btn-primary mb-3">Saiba +</button>
+            </a>
           </div>
           {% endfor %}
       </div>
     </div>
   </div>
+</div>
     
 {% endblock doacao %}

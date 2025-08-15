@@ -27,6 +27,7 @@ urlpatterns = [
     # Rotas de Produtos e Doação
     path('cadastro-produto/', views.cadastroproduto, name='cadastroproduto'), # BOA PRÁTICA: URL com hífen
     path('doacao/', views.doacao, name='doacao'), 
+    path('ong_pagina/<int:usuario_id>/', views.ongs_pagina, name='ongs_pagina'),
 
     # Rotas do Carrinho
     path('carrinho/', views.ver_carrinho, name='ver_carrinho'), 
