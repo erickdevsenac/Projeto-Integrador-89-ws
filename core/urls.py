@@ -1,5 +1,7 @@
 from django.urls import path
 
+from rest_framework.urlpatterns import format_suffix_patterns
+
 from . import views
 
 app_name = "core"
@@ -12,11 +14,11 @@ urlpatterns = [
     path("contato/", views.contato, name="contato"),
     # Rotas de Autenticação e Usuário
     path("cadastro/", views.cadastro, name="cadastro"),
-    path("login/", views.login_view, name="telalogin"),  # BOA PRÁTICA: URL mais curta
+    path("login/", views.login_view, name="telalogin"),  
     path("logout/", views.logout_view, name="logout"),
     path(
         "alterar-senha/", views.alterarsenha, name="alterar_senha"
-    ),  # BOA PRÁTICA: URL com hífen
+    ),  
     path("perfil/", views.perfil, name="perfil"),
     path("configuracoes/", views.configuracoes, name="configuracoes"),
     path("recuperar-senha/", views.recuperarsenha, name="recuperar-senha"),
@@ -26,7 +28,7 @@ urlpatterns = [
     path("videos/", views.videos, name="videos"),
     path("receitas/criar/", views.cria_receita, name="cria_receita"),
     # Rotas de Produtos e Doação
-    path('cadastro-produto/', views.cadastroproduto, name='cadastroproduto'), # BOA PRÁTICA: URL com hífen
+    path('cadastro-produto/', views.cadastroproduto, name='cadastroproduto'), 
     path('doacao/', views.doacao, name='doacao'), 
     path('ong_pagina/<int:usuario_id>/', views.ongs_pagina, name='ongs_pagina'),
 
@@ -41,8 +43,11 @@ urlpatterns = [
     path("remover_item/<int:item_id>/", views.remover_item, name="remover_item"),
     path("meus_pedidos/", views.meus_pedidos, name="meus_pedidos"),
     path("atualizar_carrinho/", views.atualizar_carrinho, name="atualizar_carrinho"),
+    
     # Rotas do Footer
     path("timedev/", views.devs, name="timedev"),
     path("dicas/", views.dicas, name="dicas"),
     path("cupom/", views.criar_cupom, name="cupom"),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
