@@ -1,1 +1,1 @@
-from .classeSerializer import *   
+from .dicas_sustentaveisSerializer import *

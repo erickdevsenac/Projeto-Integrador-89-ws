@@ -1,1 +1,1 @@
-from .classeViewSet import *
+from .dicas_sustentaveisViewset import *

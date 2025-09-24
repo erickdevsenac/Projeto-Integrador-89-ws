@@ -1,15 +1,15 @@
 from django.contrib import admin
 from django.urls import path, include
-
 from django.conf import settings
 from django.conf.urls.static import static
-
 from rest_framework import routers
 
-from core.viewsets import classeViewSet
+from core.viewsets import dicas_sustentaveisViewset
 
 router = routers.DefaultRouter()
-router.register(r'users', classeViewSet.ClasseViewSet)
+
+router.register(r'categoriasdicas',dicas_sustentaveisViewset.CategoriaDicaViewSet)
+router.register(r'dicas',dicas_sustentaveisViewset.DicaViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
