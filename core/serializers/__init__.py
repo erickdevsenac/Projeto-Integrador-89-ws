@@ -1,3 +1,1 @@
-from .userSerializer import *   
-from .produtoSerializer import *   
-from .perfilPublicoSerializer import *   
+from .classeSerializer import *   

@@ -6,13 +6,10 @@ from django.conf.urls.static import static
 
 from rest_framework import routers
 
-from core.viewsets import categoriaViewSet, perfilViewSet, userViewSet, produtoViewSet
+from core.viewsets import classeViewSet
 
 router = routers.DefaultRouter()
-router.register(r'users', userViewSet.UserViewSet)
-router.register(r'produtos', produtoViewSet.ProdutoViewSet)
-router.register(r'categorias', categoriaViewSet.CategoriaViewSet)
-router.register(r'perfis', perfilViewSet.PerfilViewSet)
+router.register(r'users', classeViewSet.ClasseViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
