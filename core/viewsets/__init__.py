@@ -1,1 +1,1 @@
-from .classeViewSet import *
+from .PerfilViewSet import *
