@@ -1,1 +1,2 @@
-from .classeSerializer import *   
+from .classeSerializer import *
+from .usuarioSerializer import *
