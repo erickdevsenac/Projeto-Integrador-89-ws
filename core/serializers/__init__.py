@@ -1,1 +1,2 @@
-from .categoriaSerializer import *   
+from .categoriaSerializer import *
+from .vendedorSerializer import *
