@@ -10,6 +10,7 @@ from core.viewsets import classeViewSet
 
 router = routers.DefaultRouter()
 router.register(r'users', classeViewSet.ClasseViewSet)
+router.register(r'ItemPedido', ItemPedidoViewSet, basename="Item_pedido")
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
