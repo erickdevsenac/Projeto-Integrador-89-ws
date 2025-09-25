@@ -1,1 +1,1 @@
-from .classeViewSet import *
+from .produtoViewset import *

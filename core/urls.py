@@ -48,6 +48,7 @@ urlpatterns = [
     path("timedev/", views.devs, name="timedev"),
     path("dicas/", views.dicas, name="dicas"),
     path("cupom/", views.criar_cupom, name="cupom"),
+    
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

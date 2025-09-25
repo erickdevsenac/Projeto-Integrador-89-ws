@@ -1,1 +1,1 @@
-from .classeSerializer import *   
+from core.serializers import *   
