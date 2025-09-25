@@ -2,7 +2,7 @@ from rest_framework import serializers
 from ..models import Perfil
 
 class PerfilSerializer(serializers.ModelSerializer):
-    class meta:
+    class Meta:
         model= Perfil
-        fields= ['Cliente','Vendedor','ONG']
+        fields= ['usuario','tipo','telefone']
 

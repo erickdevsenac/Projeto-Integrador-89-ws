@@ -1,21 +1,18 @@
 from django.db import models
+from .pedido_vendedor import PedidoVendedor
+from .produto_model import Produto
 
 class ItemPedido(models.Model):
-    """
-    Representa um item específico dentro do sub-pedido de um vendedor.
-    """
-    # A qual sub-pedido este item pertence?
-    # Este é o vínculo principal na lógica do marketplace.
+    """Modelo melhorado para itens do pedido"""
+    
     sub_pedido = models.ForeignKey(
-        'core.PedidoVendedor', # Usando string para evitar importação circular
+        PedidoVendedor,
         on_delete=models.CASCADE,
         related_name='itens'
     )
 
-    # Qual produto está sendo comprado?
-    # Protegemos o produto para que ele não possa ser deletado se estiver em um pedido.
     produto = models.ForeignKey(
-        'core.Produto', # Usando string para evitar importação circular
+        Produto,
         on_delete=models.PROTECT,
         related_name='itens_pedidos'
     )
@@ -25,31 +22,47 @@ class ItemPedido(models.Model):
         help_text="Quantidade de unidades do produto neste item."
     )
     
-    # Campo para o preço no momento da compra.
     preco_unitario = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        help_text="Preço do produto no momento da compra. Preenchido automaticamente se deixado em branco.",
-        null=True, # Permite que o campo fique temporariamente nulo antes de salvar
-        blank=True
+        help_text="Preço do produto no momento da compra."
+    )
+    
+    # Informações adicionais do produto no momento da compra
+    nome_produto = models.CharField(
+        max_length=200,
+        help_text="Nome do produto no momento da compra"
+    )
+    codigo_produto = models.CharField(
+        max_length=50,
+        blank=True,
+        help_text="Código do produto no momento da compra"
     )
 
     class Meta:
-        # Garante que um produto não possa ser adicionado duas vezes ao mesmo sub-pedido.
         unique_together = ('sub_pedido', 'produto')
         verbose_name = "Item do Pedido"
         verbose_name_plural = "Itens dos Pedidos"
+        indexes = [
+            models.Index(fields=['sub_pedido']),
+            models.Index(fields=['produto']),
+        ]
 
     def save(self, *args, **kwargs):
-        # Se o preço unitário não foi definido, busca o preço do produto relacionado
-        if self.preco_unitario is None and self.produto:
+        # Preencher informações do produto automaticamente
+        if not self.nome_produto and self.produto:
+            self.nome_produto = self.produto.nome
+        if not self.codigo_produto and self.produto:
+            self.codigo_produto = self.produto.codigo_produto or ''
+        if not self.preco_unitario and self.produto:
             self.preco_unitario = self.produto.preco
-        super().save(*args, **kwargs) # Chama o método save original
+        super().save(*args, **kwargs)
 
     def subtotal(self):
+        """Calcula o subtotal do item"""
         if self.quantidade and self.preco_unitario is not None:
             return self.quantidade * self.preco_unitario
         return 0
     
     def __str__(self):
-        return f'{self.quantidade}x {self.produto.nome} (Sub-Pedido: #{self.sub_pedido.id})'
+        return f'{self.quantidade}x {self.nome_produto} (Sub-Pedido: #{self.sub_pedido.id})'

@@ -65,7 +65,7 @@
                         <h4 class="card-title">Total do Carrinho</h4>
                         <h3 class="card-text">R$ {{ total_carrinho|floatformat:2 }}</h3>
                         <hr>
-                        <a href="{% url "core:finalizar_pedido" %}" class="btn btn-success w-100">Finalizar Compra</a>
+                        <a href="{% url "core:checkout" %}" class="btn btn-success w-100">Finalizar Compra</a>
                     </div>
                 </div>
               </div>

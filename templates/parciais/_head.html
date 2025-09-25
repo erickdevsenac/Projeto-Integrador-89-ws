@@ -2,14 +2,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}{{ site_description|default:'Marketplace sustentável para produtos próximos ao vencimento' }}{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}marketplace, sustentabilidade, produtos, vencimento, economia{% endblock %}">
+    <meta name="author" content="Aproveite+">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:title" content="{% block og_title %}{{ page_title|default:'Aproveite+' }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ site_description|default:'Marketplace sustentável' }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% load static %}{% static 'assets/img/logo-og.png' %}{% endblock %}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ request.build_absolute_uri }}">
+    <meta property="twitter:title" content="{% block twitter_title %}{{ page_title|default:'Aproveite+' }}{% endblock %}">
+    <meta property="twitter:description" content="{% block twitter_description %}{{ site_description|default:'Marketplace sustentável' }}{% endblock %}">
+    <meta property="twitter:image" content="{% block twitter_image %}{% load static %}{% static 'assets/img/logo-og.png' %}{% endblock %}">
+    
+
     {% block head %}{% endblock head %}
+     <!-- CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href={% static "assets/css/style.css" %}>
+
+    <!-- Preload critical resources -->
+    <link rel="preload" href="{% static 'assets/css/style.css' %}" as="style">
+    <link rel="preload" href="{% static 'assets/js/main.js' %}" as="script">
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Quicksand:wght@700&display=swap" rel="stylesheet">
 
+    <!-- Favicon -->
+    {% comment %} <link rel="icon" type="image/x-icon" href="{% static 'assets/img/favicon.ico' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'assets/img/apple-touch-icon.png' %}"> {% endcomment %}
+
     <link rel="stylesheet" href={% static "assets/css/headerstyle.css" %}>
-    <link rel="stylesheet" href={% static "assets/css/style.css" %}>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
