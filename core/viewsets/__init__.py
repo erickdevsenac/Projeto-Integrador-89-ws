@@ -1,1 +1,1 @@
-from .classeViewSet import *
+from .cupomViewset import *
