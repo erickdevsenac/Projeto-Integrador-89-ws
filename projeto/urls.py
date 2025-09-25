@@ -5,11 +5,13 @@ from django.conf.urls.static import static
 from rest_framework import routers
 
 from core.viewsets import dicas_sustentaveisViewset
+from core.viewsets import notificacaoViewset
 
 router = routers.DefaultRouter()
 
 router.register(r'categoriasdicas',dicas_sustentaveisViewset.CategoriaDicaViewSet)
 router.register(r'dicas',dicas_sustentaveisViewset.DicaViewSet)
+router.register(r'notificacao', notificacaoViewset.NotificacaoViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),

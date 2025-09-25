@@ -22,6 +22,8 @@ urlpatterns = [
     path("perfil/", views.perfil, name="perfil"),
     path("configuracoes/", views.configuracoes, name="configuracoes"),
     path("recuperar-senha/", views.recuperarsenha, name="recuperar-senha"),
+    path("notificacao/", views.notificacao, name="notificacao"),
+    
     # Rotas de Receitas
     path("receitas/", views.receitas, name="receitas"),
     path('receitas/<int:receita_id>/', views.receita_detalhe, name='receita_detalhe'),

@@ -587,3 +587,6 @@ def criar_cupom(request):
         form = CupomForm()
 
     return render(request, "core/cupom.html", {"form": form})
+
+def notificacao(request):
+    return render(request,"core/notificacoes.html")
