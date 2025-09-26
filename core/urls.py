@@ -22,6 +22,7 @@ urlpatterns = [
     path("perfil/", views.perfil, name="perfil"),
     path("configuracoes/", views.configuracoes, name="configuracoes"),
     path("recuperar-senha/", views.recuperarsenha, name="recuperar-senha"),
+    path("vendedor/", views.vendedor, name="Vendedorperfil"),
     # Rotas de Receitas
     path("receitas/", views.receitas, name="receitas"),
     path('receitas/<int:receita_id>/', views.receita_detalhe, name='receita_detalhe'),
@@ -48,6 +49,7 @@ urlpatterns = [
     path("timedev/", views.devs, name="timedev"),
     path("dicas/", views.dicas, name="dicas"),
     path("cupom/", views.criar_cupom, name="cupom"),
+    
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
