@@ -1,3 +1,5 @@
+from .receitaViewset import *
+from .comentariosViewSet import *
 from .pedidoViewset import *
 from .cupomViewset import *
 from .classeViewSet import *

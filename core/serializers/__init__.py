@@ -1,3 +1,5 @@
+from .receitaSerializer import *  
+from .comentarioserializer import * 
 from .pedidoserializers import *   
 from .classeSerializer import *   
 from .cupomSerializer import *   
