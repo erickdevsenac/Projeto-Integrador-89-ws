@@ -33,7 +33,7 @@ from .models import (
     Pedido,
     PedidoVendedor,
     Perfil,
-    Produto,
+    ProdutoVendedor,
     Receita,
 )
 
@@ -64,7 +64,7 @@ def ongs_pagina(request, usuario_id):
     return render(request, 'core/ong_pagina.html', context)
 
 def produtos(request):
-    lista_produtos = Produto.objects.filter(ativo=True, quantidade_estoque__gt=0).order_by('-data_criacao')
+    lista_produtos = ProdutoVendedor.objects.filter(ativo=True, quantidade_estoque__gt=0).order_by('-data_criacao')
     
     paginator = Paginator(lista_produtos, 9)
     page_number = request.GET.get('page')
@@ -232,7 +232,7 @@ def alterarsenha(request):
 
 
 def produtos(request):
-    lista_produtos = Produto.objects.filter(
+    lista_produtos = ProdutoVendedor.objects.filter(
         ativo=True, quantidade_estoque__gt=0
     ).order_by("-data_criacao")
     print(lista_produtos)
@@ -258,7 +258,7 @@ def produtos(request):
 def buscar_produtos(request):
     termo = request.GET.get("termo", "")
     if termo:
-        resultados = Produto.objects.filter(nome__icontains=termo)
+        resultados = ProdutoVendedor.objects.filter(nome__icontains=termo)
     else:
         resultados = []
     return render(
@@ -331,7 +331,7 @@ def ver_carrinho(request):
 
 @require_POST
 def adicionar_carrinho(request, produto_id):
-    produto = get_object_or_404(Produto, id=produto_id)
+    produto = get_object_or_404(ProdutoVendedor, id=produto_id)
     carrinho = request.session.get("carrinho", {})
     quantidade_solicitada = int(request.POST.get("quantidade", 1))
     produto_id_str = str(produto.id)
@@ -375,7 +375,7 @@ def atualizar_carrinho(request):
             # Garante que o item ainda existe no carrinho
             if produto_id_str in carrinho:
                 try:
-                    produto = Produto.objects.get(id=int(produto_id_str))
+                    produto = ProdutoVendedor.objects.get(id=int(produto_id_str))
 
                     # Verificação de estoque
                     if nova_quantidade > produto.quantidade_estoque:
@@ -392,7 +392,7 @@ def atualizar_carrinho(request):
                     else:
                         del carrinho[produto_id_str]
 
-                except Produto.DoesNotExist:
+                except ProdutoVendedor.DoesNotExist:
                     # Se o produto foi removido do banco, remove do carrinho também
                     del carrinho[produto_id_str]
 
@@ -448,7 +448,7 @@ def finalizar_pedido(request):
                 )
                 pedidos_por_vendedor = {}
                 for item in carrinho_detalhado:
-                    produto = Produto.objects.get(id=item["produto_id"])
+                    produto = ProdutoVendedor.objects.get(id=item["produto_id"])
                     vendedor_perfil = produto.vendedor
                     if vendedor_perfil not in pedidos_por_vendedor:
                         pedidos_por_vendedor[vendedor_perfil] = {
@@ -467,7 +467,7 @@ def finalizar_pedido(request):
                         valor_subtotal=dados_pedido["subtotal"],
                     )
                     for item_data in dados_pedido["itens"]:
-                        produto = Produto.objects.get(id=item_data["produto_id"])
+                        produto = ProdutoVendedor.objects.get(id=item_data["produto_id"])
                         ItemPedido.objects.create(
                             sub_pedido=sub_pedido,
                             produto=produto,
@@ -588,5 +588,10 @@ def criar_cupom(request):
 
     return render(request, "core/cupom.html", {"form": form})
 
+
 def notificacao(request):
     return render(request,"core/notificacoes.html")
+
+def vendedor(request):
+    return render(request,"core/vendedor.html")
+
