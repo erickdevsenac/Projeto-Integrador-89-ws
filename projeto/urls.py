@@ -6,10 +6,13 @@ from django.conf.urls.static import static
 
 from rest_framework import routers
 
-from core.viewsets import classeViewSet
+
+from core.viewsets import receitaViewset
 
 router = routers.DefaultRouter()
 router.register(r'users', classeViewSet.ClasseViewSet)
+router.register(r'Receitas', receitaViewset.ReceitaViewSet)
+# router.register(r'comentarios', comentariosViewset.comentariosViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
@@ -22,5 +25,3 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
-

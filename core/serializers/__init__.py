@@ -1,1 +1,1 @@
-from .classeSerializer import *   
+from .receitaSerializer import *   

@@ -34,11 +34,8 @@ urlpatterns = [
 
     # Rotas do Carrinho
     path("carrinho/", views.ver_carrinho, name="ver_carrinho"),
-    path(
-        "carrinho/adicionar/<int:produto_id>/",
-        views.adicionar_carrinho,
-        name="adicionar_carrinho",
-    ),
+    path("carrinho/adicionar/<int:produto_id>/",views.adicionar_carrinho,name="adicionar_carrinho",),
+
     path("checkout/", views.finalizar_pedido, name="finalizar_pedido"),
     path("remover_item/<int:item_id>/", views.remover_item, name="remover_item"),
     path("meus_pedidos/", views.meus_pedidos, name="meus_pedidos"),
@@ -48,6 +45,7 @@ urlpatterns = [
     path("timedev/", views.devs, name="timedev"),
     path("dicas/", views.dicas, name="dicas"),
     path("cupom/", views.criar_cupom, name="cupom"),
+   
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
