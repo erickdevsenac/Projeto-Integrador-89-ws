@@ -8,3 +8,4 @@ from .pedido_model import *
 from .perfil_model import *
 from .produto_model import *
 from .receita_model import *
+from .vendedor import *
