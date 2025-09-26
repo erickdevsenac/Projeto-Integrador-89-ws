@@ -1,3 +1,4 @@
+from .pedidoViewset import *
 from .cupomViewset import *
 from .classeViewSet import *
 from .itemPedidoViewSet import *

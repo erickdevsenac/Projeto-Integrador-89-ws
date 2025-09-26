@@ -1,3 +1,4 @@
+from .pedidoserializers import *   
 from .classeSerializer import *   
 from .cupomSerializer import *   
 from .classeSerializer import *  

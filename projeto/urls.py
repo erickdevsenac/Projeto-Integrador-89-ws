@@ -4,14 +4,17 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
 
+from core.viewsets import pedidoViewset
+
 from core.viewsets.cupomViewset import CupomViewSet
 from core.viewsets import ProdutoViewSet
 from core.viewsets import dicas_sustentaveisViewset
 from core.viewsets import notificacaoViewset
 from core.viewsets import UsuarioViewSet
 from core.viewsets import categoriaViewset, vendedorViewset
- 
+
 router = routers.DefaultRouter()
+router.register(r'pedido', pedidoViewset.PedidoViewSet, basename='Pedido') 
 router.register(r'cupom', CupomViewSet)
 router.register(r'users', classeViewSet.ClasseViewSet)
 router.register(r'ItemPedido', ItemPedidoViewSet, basename="Item_pedido")
