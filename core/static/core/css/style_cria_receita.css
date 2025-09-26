@@ -1,22 +1,94 @@
+/* ============================
+   CONTAINER DO FORMSET
+============================= */
 .formset-container {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
+    background-color: var(--bg-light, #f9fbfc);
+    padding: 32px;
+    border-radius: 16px;
+    border: 1px solid #e0e6ed;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
+    margin-bottom: 48px;
 }
-.formset-item {
-    border-left: 3px solid #dee2e6;
-    padding-left: 15px;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #eee;
-}
+
+/* ============================
+   TÍTULOS (LEGENDAS)
+============================= */
 legend {
-    font-weight: 600;
-    color: #333;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-color-dark, #2c3e50);
+    margin-bottom: 24px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--primary-color, #4caf50);
 }
+
+/* ============================
+   ITEM DO FORMSET
+============================= */
+.formset-item {
+    padding: 60px;
+    background-color: #ffffff;
+    border-left: 5px solid var(--primary-color, #4caf50);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.035);
+    margin-bottom: 24px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.formset-item:hover {
+    background-color: #fdfdfd;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+}
+
+/* ============================
+   BOTÃO "ADICIONAR LINHA"
+============================= */
 .add-formset-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: var(--primary-color, #4caf50);
+    border: none;
+    border-radius: 10px;
     cursor: pointer;
-    color: #0d6efd;
-    font-weight: 500;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.add-formset-row:hover {
+    background-color: var(--secondary-color, #388e3c);
+    transform: translateY(-2px);
+}
+
+.add-formset-row::before {
+    content: "+";
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* ============================
+   BOTÃO "REMOVER LINHA"
+============================= */
+.remove-formset-row {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: #dc3545;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.remove-formset-row:hover {
+    color: #b52b3a;
+    text-decoration: underline;
 }
