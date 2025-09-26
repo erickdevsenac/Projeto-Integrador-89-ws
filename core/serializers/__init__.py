@@ -1,2 +1,2 @@
 from .produtoSerializer import *   
-from .PerfilSerializer import *   
+from .perfilSerializer import *   

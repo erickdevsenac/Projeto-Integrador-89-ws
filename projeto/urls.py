@@ -6,10 +6,11 @@ from django.conf.urls.static import static
 
 from rest_framework import routers
 
-from core.viewsets import ProdutoViewSet
+from core.viewsets import ProdutoViewSet,perfilViewSet
 
 router = routers.DefaultRouter()
 router.register(r'users',ProdutoViewSet)
+router.register(r'perfil',perfilViewSet.PerfilViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
