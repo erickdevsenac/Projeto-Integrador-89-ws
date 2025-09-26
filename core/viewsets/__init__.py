@@ -1,3 +1,5 @@
+from .classeViewSet import *
+from .itemPedidoViewSet import *
 from .categoriaViewset import *
 from .vendedorViewset import *
 

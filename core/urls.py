@@ -44,6 +44,7 @@ urlpatterns = [
     path("remover_item/<int:item_id>/", views.remover_item, name="remover_item"),
     path("meus_pedidos/", views.meus_pedidos, name="meus_pedidos"),
     path("atualizar_carrinho/", views.atualizar_carrinho, name="atualizar_carrinho"),
+    path("itemPedido/", views.ItemPedido, name="item_pedido"),
     
     # Rotas do Footer
     path("timedev/", views.devs, name="timedev"),

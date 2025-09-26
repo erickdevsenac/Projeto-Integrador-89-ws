@@ -11,6 +11,8 @@ from core.viewsets import UsuarioViewSet
 from core.viewsets import categoriaViewset, vendedorViewset
  
 router = routers.DefaultRouter()
+router.register(r'users', classeViewSet.ClasseViewSet)
+router.register(r'ItemPedido', ItemPedidoViewSet, basename="Item_pedido")
 router.register(r'users', UsuarioViewSet, basename='usuario')
 router.register(r'categoria', categoriaViewset.CategoriaViewSet)
 router.register(r'vendedor', vendedorViewset.VendedorViewSet)
