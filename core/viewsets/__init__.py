@@ -2,9 +2,9 @@ from .classeViewSet import *
 from .itemPedidoViewSet import *
 from .categoriaViewset import *
 from .vendedorViewset import *
-
 from .doacaoViewsets import *
 from .PerfilViewSet import *
 from .produtoViewset import *
-
+from .dicas_sustentaveisViewset import *
+from .notificacaoViewset import *
 from .usuarioViewSet import *

@@ -588,5 +588,10 @@ def criar_cupom(request):
 
     return render(request, "core/cupom.html", {"form": form})
 
+
+def notificacao(request):
+    return render(request,"core/notificacoes.html")
+
 def vendedor(request):
     return render(request,"core/vendedor.html")
+
