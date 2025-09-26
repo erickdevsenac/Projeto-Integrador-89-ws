@@ -1,1 +1,2 @@
-from .receitaSerializer import *   
+from .receitaSerializer import *  
+from .comentarioserializer import * 

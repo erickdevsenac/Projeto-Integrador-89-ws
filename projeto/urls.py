@@ -7,12 +7,12 @@ from django.conf.urls.static import static
 from rest_framework import routers
 
 
-from core.viewsets import receitaViewset
+from core.viewsets import receitaViewset,comentariosViewSet
 
 router = routers.DefaultRouter()
-router.register(r'users', classeViewSet.ClasseViewSet)
+
 router.register(r'Receitas', receitaViewset.ReceitaViewSet)
-# router.register(r'comentarios', comentariosViewset.comentariosViewSet)
+router.register(r'comentarios', comentariosViewSet.ComentariosViewset)
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
