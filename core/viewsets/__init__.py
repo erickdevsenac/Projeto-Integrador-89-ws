@@ -1,1 +1,1 @@
-from .classeViewSet import *
+from .pedidoViewset import *
