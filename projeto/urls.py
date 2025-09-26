@@ -10,6 +10,8 @@ from core.viewsets import doacaoViewsets
 
 router = routers.DefaultRouter()
 router.register(r'doacao', doacaoViewsets.DoacaoViewSet)
+router.register(r'users',ProdutoViewSet)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),

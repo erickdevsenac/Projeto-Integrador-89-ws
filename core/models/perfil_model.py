@@ -38,3 +38,5 @@ class Perfil(models.Model):
             
         return self.usuario.get_full_name() or self.usuario.username
     
+    
+    
