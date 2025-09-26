@@ -9,3 +9,4 @@ from .perfil_model import *
 from .produto_model import *
 from .receita_model import *
 from .vendedor import *
+from django.contrib.auth.models import *
