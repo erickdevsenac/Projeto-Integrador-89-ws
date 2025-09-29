@@ -1,4 +1,3 @@
-
 from .itemPedidoSerializers import *
 from .categoriaSerializer import *
 from .vendedorSerializer import *
@@ -11,3 +10,4 @@ from .PerfilSerializer import *
 from .usuarioSerializer import *
 from .cupomSerializer import *
 from .faleconoscoSerializer  import *
+from .avaliacaoSerialiazer import *
