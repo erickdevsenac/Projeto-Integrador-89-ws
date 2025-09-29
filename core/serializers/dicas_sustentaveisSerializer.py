@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import Dica, CategoriaDica
+from core.models import Dica, CategoriaDica
 
 class CategoriaDicaSerializer(serializers.ModelSerializer):
     class Meta:
