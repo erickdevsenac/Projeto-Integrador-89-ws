@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import FaleConosco
+from  core.models.fale_conosco_model import FaleConosco
  
 class FaleConoscoSerializer(serializers.ModelSerializer):
     class Meta:
