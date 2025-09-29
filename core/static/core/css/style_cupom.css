@@ -1,86 +1,134 @@
-.boxcupom {
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 30px 25px;
-    background-color: var(--bg-white);
+/* ===== CONTAINER GERAL ===== */
+.card-body {
+    background-color: #f1fff2;  /* tom mais claro que #00ff15 */
     border-radius: 12px;
-    box-shadow: 0 6px 12px var(--shadow-medium);
+    padding: 30px 25px;
     font-family: 'Roboto', sans-serif;
-    color: var(--text-color-dark);
+    color: #1b5e20;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
-.boxcupom h1 {
-    font-size: 26px;
-    color: var(--secondary-color);
+/* ===== TÍTULO ===== */
+.card-title {
+    font-size: 28px;
+    color: #2e7d32;
     text-align: center;
-    margin-bottom: 25px;
-    font-weight: 700;
+    margin-bottom: 24px;
+    font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
-.boxcupom label {
-    display: block;
-    margin-bottom: 6px;
+/* ===== LABELS ===== */
+.form-label {
     font-weight: 600;
-    color: rgb(6, 69, 20);
-    margin-top: 20px;
+    color: #1b5e20;
+    margin-bottom: 8px;
+    display: block;
 }
 
-.boxcupom input[type="text"],
-.boxcupom input[type="date"] {
+/* ===== INPUTS, SELECTS ===== */
+input[type="text"],
+input[type="date"],
+input[type="number"],
+select {
     width: 100%;
-    padding: 12px 15px;
-    font-size: 16px;
-    border: 1px solid #ccc;
+    padding: 12px 14px;
+    font-size: 15px;
+    border: 1px solid #a5d6a7;
     border-radius: 8px;
-    box-shadow: 0 2px 4px var(--shadow-light);
-    transition: border-color 0.3s ease;
+    background-color: #ffffff;
+    color: #2e7d32;
+    transition: border-color 0.3s ease, box-shadow 0.2s ease;
 }
 
-.boxcupom input:focus {
-    border-color: rgb(228, 217, 216);
+input:focus,
+select:focus {
+    border-color: #66bb6a;
+    box-shadow: 0 0 0 2px rgba(102, 187, 106, 0.3);
     outline: none;
 }
 
-.boxcupom button {
-    display: block;
-    width: 100%;
-    padding: 14px;
-    margin-top: 30px;
-    background-color: rgba(8, 105, 8, 0.733);
-    color: rgb(240, 253, 245);
-    font-size: 16px;
-    font-weight: bold;
-    text-transform: uppercase;
-    border: none;
+/* ===== CHECKBOX ===== */
+.form-check-input {
+    margin-right: 10px;
+    transform: scale(1.2);
+    accent-color: #43a047;
+}
+
+.form-check-label {
+    font-weight: 500;
+    color: #2e7d32;
+    cursor: pointer;
+}
+
+/* ===== BOTÃO SUBMIT ===== */
+.boxcupom {
+    background-color: #43a047;
     border-radius: 30px;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #ffffff;
+    border: none;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 3px 6px var(--shadow-light);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.boxcupom button:hover {
-    background-color: rgb(41, 127, 38);
+.boxcupom:hover {
+    background-color: #388e3c;
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px var(--shadow-medium);
-    color: #f7fcf8;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
-
-.boxcupom {
-    padding: 20px;
+/* ===== MENSAGENS DE ERRO ===== */
+.invalid-feedback {
+    font-size: 13px;
+    color: #d32f2f;
+    margin-top: 4px;
 }
 
-.boxcupom h1 {
-    font-size: 20px;
-}
-
-.boxcupom input {
-    font-size: 14px;
-}
-
-.boxcupom button {
+.alert-danger {
+    background-color: #ffcdd2;
+    color: #c62828;
+    border: 1px solid #ef9a9a;
+    border-radius: 6px;
     padding: 12px;
     font-size: 14px;
+    margin-bottom: 16px;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 24px 20px;
+    }
+
+    .card-title {
+        font-size: 24px;
+    }
+
+    .boxcupom {
+        font-size: 14px;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .card-body {
+        padding: 20px 14px;
+    }
+
+    .card-title {
+        font-size: 20px;
+    }
+
+    input,
+    select,
+    .boxcupom {
+        font-size: 14px;
+        padding: 10px;
+    }
 }
