@@ -1,6 +1,5 @@
-/* ===== CONTAINER GERAL ===== */
 .card-body {
-    background-color: #f1fff2;  /* tom mais claro que #00ff15 */
+    background-color: #f1fff2;  
     border-radius: 12px;
     padding: 30px 25px;
     font-family: 'Roboto', sans-serif;
@@ -8,7 +7,6 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
-/* ===== TÍTULO ===== */
 .card-title {
     font-size: 28px;
     color: #2e7d32;
@@ -19,7 +17,6 @@
     letter-spacing: 1px;
 }
 
-/* ===== LABELS ===== */
 .form-label {
     font-weight: 600;
     color: #1b5e20;
@@ -27,11 +24,7 @@
     display: block;
 }
 
-/* ===== INPUTS, SELECTS ===== */
-input[type="text"],
-input[type="date"],
-input[type="number"],
-select {
+input[type="text"],input[type="date"],input[type="number"],select {
     width: 100%;
     padding: 12px 14px;
     font-size: 15px;
@@ -42,14 +35,12 @@ select {
     transition: border-color 0.3s ease, box-shadow 0.2s ease;
 }
 
-input:focus,
-select:focus {
+input:focus,select:focus {
     border-color: #66bb6a;
     box-shadow: 0 0 0 2px rgba(102, 187, 106, 0.3);
     outline: none;
 }
 
-/* ===== CHECKBOX ===== */
 .form-check-input {
     margin-right: 10px;
     transform: scale(1.2);
@@ -62,7 +53,6 @@ select:focus {
     cursor: pointer;
 }
 
-/* ===== BOTÃO SUBMIT ===== */
 .boxcupom {
     background-color: #43a047;
     border-radius: 30px;
@@ -83,7 +73,6 @@ select:focus {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
-/* ===== MENSAGENS DE ERRO ===== */
 .invalid-feedback {
     font-size: 13px;
     color: #d32f2f;
@@ -100,7 +89,6 @@ select:focus {
     margin-bottom: 16px;
 }
 
-/* ===== RESPONSIVIDADE ===== */
 @media (max-width: 768px) {
     .card-body {
         padding: 24px 20px;

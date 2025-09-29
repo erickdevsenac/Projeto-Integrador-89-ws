@@ -5,6 +5,3 @@ from ..serializers import PerfilSerializer
 class PerfilViewSetv(viewsets.ModelViewSet):
     queryset= Perfil.objects.all()
     serializer_class = PerfilSerializer
-
-
-
