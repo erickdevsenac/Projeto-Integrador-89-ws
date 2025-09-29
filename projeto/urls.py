@@ -4,21 +4,22 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
 
-from core.viewsets import ProdutoViewSet
+from core.viewsets import produtoViewset
 from core.viewsets import dicas_sustentaveisViewset
 from core.viewsets import notificacaoViewset
 from core.viewsets import UsuarioViewSet
-
-from core.viewsets import categoriaViewset, vendedorViewset
- 
+from core.viewsets import ItemPedidoViewSet
+from core.viewsets import doacaoViewsets
+from core.viewsets import categoriaViewset, vendedorViewset,cupomViewset,faleconoscoViewset
 router = routers.DefaultRouter()
-router.register(r'users', classeViewSet.ClasseViewSet)
 router.register(r'ItemPedido', ItemPedidoViewSet, basename="Item_pedido")
 router.register(r'users', UsuarioViewSet, basename='usuario')
 router.register(r'categoria', categoriaViewset.CategoriaViewSet)
 router.register(r'vendedor', vendedorViewset.VendedorViewSet)
 router.register(r'doacao', doacaoViewsets.DoacaoViewSet)
-router.register(r'produto',ProdutoViewSet)
+router.register(r'cupom',cupomViewset.CupomViewSet)
+router.register(r'faleConosco',faleconoscoViewset.FaleConoscoViewSet)
+router.register(r'produto',produtoViewset.ProdutoViewSet)
 
 router.register(r'categoriasdicas',dicas_sustentaveisViewset.CategoriaDicaViewSet)
 router.register(r'dicas',dicas_sustentaveisViewset.DicaViewSet)

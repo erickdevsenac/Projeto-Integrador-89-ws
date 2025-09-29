@@ -1,4 +1,4 @@
-from .classeSerializer import *  
+
 from .itemPedidoSerializers import *
 from .categoriaSerializer import *
 from .vendedorSerializer import *
@@ -9,3 +9,5 @@ from .dicas_sustentaveisSerializer import *
 from .notificacaoSerializer import *
 from .PerfilSerializer import *
 from .usuarioSerializer import *
+from .cupomSerializer import *
+from .faleconoscoSerializer  import *

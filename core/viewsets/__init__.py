@@ -1,4 +1,4 @@
-from .classeViewSet import *
+
 from .itemPedidoViewSet import *
 from .categoriaViewset import *
 from .vendedorViewset import *
@@ -8,3 +8,5 @@ from .produtoViewset import *
 from .dicas_sustentaveisViewset import *
 from .notificacaoViewset import *
 from .usuarioViewSet import *
+from .cupomViewset import *
+from .faleconoscoViewset import *
