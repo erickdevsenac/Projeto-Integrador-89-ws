@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from models.item_pedido_model import ItemPedido
-from..serializers import ItemPedidoSerializer
+from core.models.item_pedido_model import ItemPedido
+from core.serializers import ItemPedidoSerializer
 
 class ItemPedidoViewSet(viewsets.ModelViewSet):
     queryset = ItemPedido.objects.all()

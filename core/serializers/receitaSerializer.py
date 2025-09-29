@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from ..models import Receita
+from core.models import Receita
 
 class ReceitaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Receita
-        fields = ['id', 'titulo', 'descricao', 'porcoes', 'modo_de_preparo', 'tempo_de_preparo', 'avaliacao']
+        fields = ['id', 'nome', 'descricao',  'tempo_preparo', 'rendimento', 'categoria', 'autor', 'imagem', 'disponivel']

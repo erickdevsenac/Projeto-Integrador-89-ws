@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from ..models import Receita
-from ..serializers import ReceitaSerializer
+from core.models import Receita
+from core.serializers import ReceitaSerializer
 
 class ReceitaViewSet(viewsets.ModelViewSet):
     queryset = Receita.objects.all().order_by('id')

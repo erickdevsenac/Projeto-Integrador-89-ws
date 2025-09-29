@@ -2,7 +2,6 @@ from .receitaViewset import *
 from .comentariosViewSet import *
 from .pedidoViewset import *
 from .cupomViewset import *
-from .classeViewSet import *
 from .itemPedidoViewSet import *
 from .categoriaViewset import *
 from .vendedorViewset import *

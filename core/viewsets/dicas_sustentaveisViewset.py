@@ -1,10 +1,10 @@
 from rest_framework import viewsets
-from ..models import Dica, CategoriaDica
-from ..serializers import DicaSerializer, CategoriaDicaSerializer
+from core.models import Dica, CategoriaDica
+from core.serializers import DicaSerializer, Categoria
 
 class CategoriaDicaViewSet(viewsets.ModelViewSet):
     queryset = CategoriaDica.objects.all()
-    serializer_class = CategoriaDicaSerializer
+    serializer_class = Categoria
 
 class DicaViewSet(viewsets.ModelViewSet):
     queryset = Dica.objects.all()

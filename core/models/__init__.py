@@ -11,3 +11,4 @@ from .receita_model import *
 from .comentarios import *
 from .notificacao_model import *
 from .vendedor import *
+from .loja import *
