@@ -10,3 +10,5 @@ from .produto_model import *
 from .receita_model import *
 from .notificacao_model import *
 from .vendedor import *
+from .avaliacao_model import *
+from .meuspedidos import *

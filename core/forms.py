@@ -10,9 +10,11 @@ from .models import (
     EtapaPreparo,
     Ingrediente,
     Perfil,
-    ProdutoVendedor,
+    Produto,
     Receita,
-    Pedido
+    Pedido,
+    Avaliacao,
+
 )
 
 class CadastroForm(forms.ModelForm):
@@ -153,7 +155,7 @@ class ConfiguracaoForm(forms.Form):
 
 class ProdutoForm(forms.ModelForm):
     class Meta:
-        model = ProdutoVendedor
+        model = Produto
         # Lista de campos que o vendedor irá preencher
         fields = [
             "nome",
@@ -255,4 +257,13 @@ class ProdutovendedorForm(forms.ModelForm):
             "data_fabricacao": forms.DateInput(attrs={"type": "date"}),
             "data_validade": forms.DateInput(attrs={"type": "date"}),
             "descricao": forms.Textarea(attrs={"rows": 4}),
+        }
+
+
+class AvaliacaoForm(forms.ModelForm):
+    class Meta:
+        model = Avaliacao
+        fields = ['titulo', 'descricao', 'nota']
+        widgets = {
+            'nota': forms.RadioSelect()
         }

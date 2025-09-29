@@ -1,5 +1,6 @@
 from decimal import Decimal
-
+from .models import Avaliacao
+from .forms import AvaliacaoForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -595,3 +596,19 @@ def notificacao(request):
 def vendedor(request):
     return render(request,"core/vendedor.html")
 
+def avaliacao(request):
+    avaliacoes = Avaliacao.objects.all().order_by('-data_avaliacao')
+    return render(request, 'core/avaliacao.html', {'avaliacoes': avaliacoes})
+
+@login_required
+def nova_avaliacao(request):
+    if request.method == 'POST':
+        form = AvaliacaoForm(request.POST)
+        if form.is_valid():
+            avaliacao = form.save(commit=False)
+            avaliacao.usuario = request.user
+            avaliacao.save()
+            return redirect('lista_avaliacoes')
+    else:
+        form = AvaliacaoForm()
+    return render(request, 'core/nova_avaliacao.html', {'form': form})
