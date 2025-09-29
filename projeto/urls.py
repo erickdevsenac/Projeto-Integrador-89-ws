@@ -10,7 +10,7 @@ from core.viewsets import notificacaoViewset
 from core.viewsets import UsuarioViewSet
 from core.viewsets import ItemPedidoViewSet
 from core.viewsets import doacaoViewsets
-from core.viewsets import categoriaViewset, vendedorViewset,cupomViewset,faleconoscoViewset
+from core.viewsets import categoriaViewset, vendedorViewset,cupomViewset,faleconoscoViewset,avaliacaoViewset
 router = routers.DefaultRouter()
 router.register(r'ItemPedido', ItemPedidoViewSet, basename="Item_pedido")
 router.register(r'users', UsuarioViewSet, basename='usuario')
@@ -24,7 +24,7 @@ router.register(r'produto',produtoViewset.ProdutoViewSet)
 router.register(r'categoriasdicas',dicas_sustentaveisViewset.CategoriaDicaViewSet)
 router.register(r'dicas',dicas_sustentaveisViewset.DicaViewSet)
 router.register(r'notificacao', notificacaoViewset.NotificacaoViewSet)
-
+router.register(r'avaliacoes', avaliacaoViewset.AvaliacaoViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path('', include('core.urls')),

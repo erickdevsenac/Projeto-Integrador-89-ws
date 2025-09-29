@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import Cupom
+from core.models.cupom_model import Cupom
 
 
 class CupomSerializer(serializers.ModelSerializer):
