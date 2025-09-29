@@ -11,7 +11,7 @@ from core.viewsets import  PerfilViewSet, PedidosViewSet, ReceitasViewSet
 router = routers.DefaultRouter()
 router.register(r'Perfil', PerfilViewSet.PerfilViewSetv)
 router.register(r'Pedido', PedidosViewSet.PedidosViewSetv)
-
+router.register(r'Receita', ReceitasViewSet.ReceitasViewSetv)
 
 
 urlpatterns = [
