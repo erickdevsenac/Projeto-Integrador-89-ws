@@ -12,3 +12,6 @@ from .dicas_sustentaveisSerializer import *
 from .notificacaoSerializer import *
 from .PerfilSerializer import *
 from .usuarioSerializer import *
+from .cupomSerializer import *
+from .faleconoscoSerializer  import *
+from .avaliacaoSerialiazer import *

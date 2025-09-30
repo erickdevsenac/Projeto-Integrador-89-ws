@@ -11,3 +11,6 @@ from .produtoViewset import *
 from .dicas_sustentaveisViewset import *
 from .notificacaoViewset import *
 from .usuarioViewSet import *
+from .cupomViewset import *
+from .faleconoscoViewset import *
+from .avaliacaoViewset import *

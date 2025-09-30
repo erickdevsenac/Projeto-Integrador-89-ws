@@ -11,4 +11,6 @@ from .receita_model import *
 from .comentarios import *
 from .notificacao_model import *
 from .vendedor import *
+from .avaliacao_model import *
+from .meuspedidos import *
 from .loja import *

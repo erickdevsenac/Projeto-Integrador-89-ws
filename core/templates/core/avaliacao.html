@@ -1,0 +1,32 @@
+{% extends 'global/base.html' %}
+{% load static %}
+
+{% block content %}
+  {% block head %}
+    <title>Avaliações</title>
+    <link rel="stylesheet" href="{% static 'core/css/style_avaliacao.css' %}">
+  {% endblock %}
+  
+  <div class="caixinha">
+    <h1>Avaliações</h1>
+    <a href="{% url 'nova_avaliacao' %}">Nova Avaliação</a>
+    <ul>
+      {% for avaliacao in avaliacoes %}
+        <li>
+          <strong>{{ avaliacao.titulo|default:"(Sem título)" }}</strong> por {{ avaliacao.usuario.username if avaliacao.usuario else "Anônimo" }}<br>
+          {% for i in "12345" %}
+            {% if forloop.counter <= avaliacao.nota %}
+              <span class="estrela preenchida">★</span>
+            {% else %}
+              <span class="estrela">☆</span>
+            {% endif %}
+          {% endfor %}
+          <p>{{ avaliacao.descricao }}</p>
+          <small>Enviado em {{ avaliacao.data_avaliacao|date:"d/m/Y H:i" }}</small>
+        </li>
+      {% empty %}
+        <li>Não há avaliações.</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock content %}
