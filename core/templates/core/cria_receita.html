@@ -11,7 +11,7 @@
 {% endblock head %}
 
 <div class="container mt-5 mb-5">
-    <h2 class="text-center mb-4">Cadastrar Nova Receita</h2>
+    <h2 class="form-title">Cadastrar Nova Receita</h2>
 
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -24,56 +24,66 @@
         
         <hr>
 
-        <!-- Formulários para os Ingredientes (Formset) -->
+        <!-- Ingredientes (Formset) -->
         <div class="formset-container">
             <legend>Ingredientes</legend>
             {{ ingrediente_formset.management_form }}
-            <!-- AJUSTE: ID alterado para o plural -->
+
             <div id="ingredientes-form-list">
                 {% for form in ingrediente_formset %}
                     <div class="formset-item">
                         {{ form.as_p }}
+                        <button type="button" class="remove-formset-row">Remover</button>
                     </div>
                 {% endfor %}
             </div>
-            <!-- AJUSTE: ID alterado para o plural -->
+
             <div id="empty-ingredientes-form" class="d-none">
                 <div class="formset-item">
                     {{ ingrediente_formset.empty_form.as_p }}
+                    <button type="button" class="remove-formset-row">Remover</button>
                 </div>
             </div>
-            <!-- AJUSTE: ID alterado para o plural -->
-            <span id="add-ingredientes" class="add-formset-row"><i class="bi bi-plus-circle"></i> Adicionar Ingrediente</span>
+
+            <button type="button" id="add-ingredientes" class="add-formset-row">
+                <i class="bi bi-plus-circle"></i> Adicionar Ingrediente
+            </button>
         </div>
 
-        <!-- Formulários para o Modo de Preparo (Formset) -->
+        <!-- Etapas (Formset) -->
         <div class="formset-container">
             <legend>Modo de Preparo</legend>
             {{ etapa_formset.management_form }}
-            <!-- AJUSTE: ID alterado para o plural -->
+
             <div id="etapas-form-list">
                 {% for form in etapa_formset %}
                     <div class="formset-item">
                         {{ form.as_p }}
+                        <button type="button" class="remove-formset-row">Remover</button>
                     </div>
                 {% endfor %}
             </div>
-            <!-- AJUSTE: ID alterado para o plural -->
+
             <div id="empty-etapas-form" class="d-none">
                 <div class="formset-item">
                     {{ etapa_formset.empty_form.as_p }}
+                    <button type="button" class="remove-formset-row">Remover</button>
                 </div>
             </div>
-            <!-- AJUSTE: ID alterado para o plural -->
-            <span id="add-etapas" class="add-formset-row"><i class="bi bi-plus-circle"></i> Adicionar Etapa</span>
+
+            <button type="button" id="add-etapas" class="add-formset-row">
+                <i class="bi bi-plus-circle"></i> Adicionar Etapa
+            </button>
         </div>
-        
+
+        <!-- Botão de envio -->
         <div class="d-grid gap-2 mt-4">
             <button type="submit" class="btn btn-primary btn-lg">Salvar Receita</button>
         </div>
     </form>
 </div>
 
-<script src="{% static "core/js/criareceita.js" %}"></script>
+<!-- Script para lidar com os formsets dinamicamente -->
+<script src="{% static 'core/js/criareceita.js' %}"></script>
 
 {% endblock %}
