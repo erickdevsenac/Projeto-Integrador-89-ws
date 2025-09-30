@@ -17,14 +17,17 @@ from core.viewsets import (produtoViewset,
                            comentariosViewSet, 
                            pedidoViewset, 
                            perfilViewSet,
+                           pedidosViewSet,
                            receitasViewSet,
+                           itemPedidoViewSet,
+                           usuarioViewSet,
+                           produtosview
                            itemPedidoViewSet
                           )
 
 router = routers.DefaultRouter()
 router.register(r'Perfil', perfilViewSet.PerfilViewSet)
 router.register(r'Pedido', pedidoViewset.PedidoViewSet)
-router.register(r'Receita', receitasViewSet.ReceitasViewSet)
 # router.register(r'receitas', receitaViewset.ReceitaViewSet)
 router.register(r'comentarios', comentariosViewSet.ComentariosViewset)
 router.register(r'pedido', pedidoViewset.PedidoViewSet, basename='Pedido') 
@@ -41,6 +44,7 @@ router.register(r'categoriasdicas', dicas_sustentaveisViewset.CategoriaDicaViewS
 router.register(r'dicas', dicas_sustentaveisViewset.DicaViewSet)
 router.register(r'notificacao', notificacaoViewset.NotificacaoViewSet)
 router.register(r'avaliacoes', avaliacaoViewset.AvaliacaoViewSet)
+router.register(r'produtos', produtosview.ProdutoViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
