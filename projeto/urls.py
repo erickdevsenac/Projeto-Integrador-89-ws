@@ -7,7 +7,7 @@ from core.viewsets import (produtoViewset,
                            dicas_sustentaveisViewset,
                            notificacaoViewset,
                            UsuarioViewSet,
-                           ItemPedidoViewSet,
+                           itemPedidoViewSet,
                            doacaoViewsets,
                            categoriaViewset, 
                            vendedorViewset,
@@ -29,7 +29,6 @@ router.register(r'users', UsuarioViewSet, basename='usuario')
 router.register(r'categoria', categoriaViewset.CategoriaViewSet)
 router.register(r'vendedor', vendedorViewset.VendedorViewSet)
 router.register(r'doacao', doacaoViewsets.DoacaoViewSet)
-router.register(r'cupom',cupomViewset.CupomViewSet)
 router.register(r'faleConosco',faleconoscoViewset.FaleConoscoViewSet)
 router.register(r'produto',produtoViewset.ProdutoViewSet)
 router.register(r'categoriasdicas',dicas_sustentaveisViewset.CategoriaDicaViewSet)
