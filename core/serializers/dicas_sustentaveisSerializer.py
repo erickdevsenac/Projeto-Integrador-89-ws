@@ -1,10 +1,6 @@
 from rest_framework import serializers
 from core.models import Dica, CategoriaDica
 
-class CategoriaDicaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CategoriaDica
-        fields = ['id', 'nome', 'slug']
 
 class DicaSerializer(serializers.ModelSerializer):
     categoria = serializers.PrimaryKeyRelatedField(queryset=CategoriaDica.objects.all())

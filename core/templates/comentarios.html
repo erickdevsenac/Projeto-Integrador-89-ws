@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Plataforma de Vendas{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/comments.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <a href="/" class="logo">Minha Plataforma</a>
+                <div class="nav-links">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'profile' %}">Meu Perfil</a>
+                        <a href="{% url 'logout' %}">Sair</a>
+                    {% else %}
+                        <a href="{% url 'login' %}">Entrar</a>
+                        <a href="{% url 'register' %}">Cadastrar</a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+    </header>
+ 
+    <main class="main-content">
+        <div class="container">
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+ 
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+ 
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Minha Plataforma. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+ 
+    <script src="{% static 'js/base.js' %}"></script>
+    <script src="{% static 'js/comments.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

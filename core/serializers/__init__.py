@@ -1,3 +1,7 @@
+from .receitaSerializer import *  
+from .comentarioserializer import * 
+from .pedidoserializers import *   
+from .cupomSerializer import *   
 from .itemPedidoSerializers import *
 from .categoriaSerializer import *
 from .vendedorSerializer import *

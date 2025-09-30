@@ -7,3 +7,4 @@ class CupomSerializer(serializers.ModelSerializer):
         model = Cupom
         fields = '__all__' 
         read_only_fields = ['usos_realizados']  
+        fields = ['PERCENTUAL', 'VALOR_FIXO']

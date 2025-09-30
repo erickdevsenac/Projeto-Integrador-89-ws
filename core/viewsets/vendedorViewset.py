@@ -8,4 +8,4 @@ class VendedorViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Loja.objects.filter(user=self.request.user)
+        return Loja.objects.filter(proprietario=self.request.user)
