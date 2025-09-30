@@ -36,6 +36,7 @@ from .models import (
     Perfil,
     ProdutoVendedor,
     Receita,
+    Produto
 )
 
 
@@ -232,7 +233,7 @@ def produtos(request):
     Lista todos os produtos disponíveis, com suporte a paginação e filtro por categoria.
     Esta é a versão correta e completa.
     """
-    lista_produtos = ProdutoVendedor.objects.filter(
+    lista_produtos = Produto.objects.filter(
         ativo=True, quantidade_estoque__gt=0
     ).order_by("-data_criacao")
     
