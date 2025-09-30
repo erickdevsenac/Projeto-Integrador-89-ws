@@ -4,7 +4,7 @@ from core.serializers import DicaSerializer, CategoriaDicaSerializer
 
 class CategoriaDicaViewSet(viewsets.ModelViewSet):
     queryset = CategoriaDica.objects.all()
-    serializer_class = CategoriaDicaSerializer
+    serializer_class = Categoria
 
 class DicaViewSet(viewsets.ModelViewSet):
     queryset = Dica.objects.all()
