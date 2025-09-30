@@ -24,8 +24,8 @@ urlpatterns = [
     path("configuracoes/", views.configuracoes, name="configuracoes"),
     path("recuperar-senha/", views.recuperarsenha, name="recuperar-senha"),
     path("vendedor/", views.vendedor, name="Vendedorperfil"),
-    path('avaliacao/', views.avaliacao, name='lista_avaliacoes'),
-    path('nova_avaliacao/', views.nova_avaliacao, name='nova_avaliacao'),
+    path('avaliacao/', views.avaliacao, name='avaliacao'), 
+    path('nova_avaliacao/', views.nova_avaliacao, name='nova_avaliacao'),  
 
 
   # Rotas de Receitas
