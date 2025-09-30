@@ -2,6 +2,7 @@ from turtle import width
 from django import forms
 from django.contrib.auth.models import User
 from django.forms import inlineformset_factory
+from core.models.vendedor import ProdutoVendedor  
 
 from .models import (
     Categoria,
@@ -11,7 +12,9 @@ from .models import (
     Perfil,
     Produto,
     Receita,
-    Pedido
+    Pedido,
+    Avaliacao,
+
 )
 
 class CadastroForm(forms.ModelForm):
@@ -233,3 +236,34 @@ class CheckoutForm(forms.ModelForm):
         # Deixa os rótulos mais amigáveis
         self.fields['endereco_entrega'].label = "Endereço de Entrega"
         self.fields['forma_pagamento'].label = "Escolha a Forma de Pagamento"
+
+
+
+class ProdutovendedorForm(forms.ModelForm):
+    class Meta:
+        model = ProdutoVendedor
+        fields = [
+            'nome',
+            'preco',
+            'imagem',
+            'codigo_produto',
+            'data_fabricacao',
+            'data_validade',
+            'quantidade_estoque',
+            'descricao',  # deixe esta linha se quiser manter a descrição
+        ]
+
+        widgets = {
+            "data_fabricacao": forms.DateInput(attrs={"type": "date"}),
+            "data_validade": forms.DateInput(attrs={"type": "date"}),
+            "descricao": forms.Textarea(attrs={"rows": 4}),
+        }
+
+
+class AvaliacaoForm(forms.ModelForm):
+    class Meta:
+        model = Avaliacao
+        fields = ['titulo', 'descricao', 'nota']
+        widgets = {
+            'nota': forms.RadioSelect()
+        }

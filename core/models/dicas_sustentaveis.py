@@ -41,7 +41,7 @@ class Dica(models.Model):
     data_publicacao = models.DateTimeField(default=timezone.now)
 
     class Meta:
-        ordering = ['-data_publicacao'] # Mostra as dicas mais recentes primeiro
+        ordering = ['-data_publicacao'] 
 
     def __str__(self):
         return self.titulo
