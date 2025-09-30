@@ -1,3 +1,6 @@
+from .PerfilSerializer import *   
+from .PedidosSerializer import *
+from .ReceitasSerializer import *
 from .receitaSerializer import *  
 from .comentarioserializer import * 
 from .pedidoserializers import *   
