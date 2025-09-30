@@ -8,6 +8,3 @@ class PerfilViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = Perfil.objects.all()
     serializer_class = PerfilSerializer
-
-
-
