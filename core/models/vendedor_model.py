@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from core.models.produto_model import Categoria
+from core.models.loja import Loja
 
 class ProdutoVendedor(models.Model):
     nome = models.CharField(max_length=100)

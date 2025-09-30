@@ -6,29 +6,26 @@ from rest_framework import routers
 from core.viewsets import (produtoViewset,
                            dicas_sustentaveisViewset,
                            notificacaoViewset,
-                           usuarioViewSet,
                            doacaoViewsets,
                            categoriaViewset, 
                            vendedorViewset,
                            cupomViewset,
                            faleconoscoViewset,
                            avaliacaoViewset,
-                           receitaViewset,
                            comentariosViewSet, 
                            pedidoViewset, 
-                           perfilViewSet,
-                           pedidosViewSet,
-                           receitasViewSet,
                            itemPedidoViewSet,
+                           itemPedidoViewSet,
+                           perfilViewSet,
+                           cadastro_produtoViewset,
                            usuarioViewSet,
-                           produtosview
-                           itemPedidoViewSet
+                           receitaViewset
                           )
 
 router = routers.DefaultRouter()
 router.register(r'Perfil', perfilViewSet.PerfilViewSet)
 router.register(r'Pedido', pedidoViewset.PedidoViewSet)
-# router.register(r'receitas', receitaViewset.ReceitaViewSet)
+router.register(r'receitas', receitaViewset.ReceitaViewSet)
 router.register(r'comentarios', comentariosViewSet.ComentariosViewset)
 router.register(r'pedido', pedidoViewset.PedidoViewSet, basename='Pedido') 
 router.register(r'cupom', cupomViewset.CupomViewSet)
@@ -37,15 +34,12 @@ router.register(r'itemPedido', itemPedidoViewSet.ItemPedidoViewSet, basename="It
 router.register(r'categoria', categoriaViewset.CategoriaViewSet)
 router.register(r'vendedor', vendedorViewset.VendedorViewSet)
 router.register(r'doacao', doacaoViewsets.DoacaoViewSet)
-# router.register(r'cupom', cupomViewset.CupomViewSet)
 router.register(r'faleConosco', faleconoscoViewset.FaleConoscoViewSet)
 router.register(r'produto', produtoViewset.ProdutoViewSet)
 router.register(r'categoriasdicas', dicas_sustentaveisViewset.CategoriaDicaViewSet)
 router.register(r'dicas', dicas_sustentaveisViewset.DicaViewSet)
 router.register(r'notificacao', notificacaoViewset.NotificacaoViewSet)
 router.register(r'avaliacoes', avaliacaoViewset.AvaliacaoViewSet)
-router.register(r'produtos', produtosview.ProdutoViewSet)
-router.register(r'users',produtoViewset.ProdutoViewSet)
 router.register(r'cadastro_produto',cadastro_produtoViewset.CadastroProdutoViewSet )
 
 urlpatterns = [

@@ -2,7 +2,7 @@ from .categoriaViewset import *
 from .vendedorViewset import *
 from .cadastro_produtoViewset import *
 from .doacaoViewsets import *
-from .PerfilViewSet import *
+from .perfilViewSet import *
 from .produtoViewset import *
 from .dicas_sustentaveisViewset import *
 from .notificacaoViewset import *
