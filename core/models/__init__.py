@@ -14,7 +14,6 @@ from .vendedor_model import *
 from .avaliacao_model import *
 from .meuspedidos import *
 from .loja import *
-from .produtosmodel import *
 
 from .vendedor_model import *
 from .cadastroprodutos_model import *
