@@ -10,6 +10,8 @@ from core.viewsets import doacaoViewsets, produtosview
 
 router = routers.DefaultRouter()
 router.register(r'doacao', doacaoViewsets.DoacaoViewSet)
+router.register(r'users',ProdutoViewSet)
+
 router.register(r'produtos', produtosview.ProdutoViewSet)
 
 urlpatterns = [

@@ -1,2 +1,3 @@
 from .doacaoSerializer import *   
-from .produtosSerializer import *
+from .produtoSerializer import *   
+from .PerfilSerializer import *   

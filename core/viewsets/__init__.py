@@ -1,2 +1,3 @@
 from .doacaoViewsets import *
-from .produtosview import *
+from .PerfilViewSet import *
+from .produtoViewset import *
