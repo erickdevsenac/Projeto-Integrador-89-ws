@@ -8,5 +8,13 @@ from .pedido_model import *
 from .perfil_model import *
 from .produto_model import *
 from .receita_model import *
+from .comentarios import *
+from .notificacao_model import *
+from .vendedor import *
+from .avaliacao_model import *
+from .meuspedidos import *
+from .loja import *
+from .produtosmodel import *
+
 from .vendedor_model import *
 from .cadastroprodutos_model import *
