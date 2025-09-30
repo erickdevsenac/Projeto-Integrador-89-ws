@@ -4,7 +4,7 @@
 {% block content %}
   {% block head %}
     <title>Nova Avaliação</title>
-    <link rel="stylesheet" href="{% static 'core/css/avaliacoes.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/style_avaliacao.css' %}">
   {% endblock %}
   
   <div class="caixinha">
@@ -14,6 +14,6 @@
       {{ form.as_p }}
       <button type="submit">Enviar Avaliação</button>
     </form>
-    <a href="{% url 'lista_avaliacoes' %}">Voltar para lista</a>
+    <a href="{% url 'core:avaliacao' %}">Voltar para lista</a>
   </div>
 {% endblock content %}
