@@ -1,5 +1,5 @@
--from rest_framework import serializers
-from ..models import Perfil
+from rest_framework import serializers
+from core.models import Perfil
 from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
