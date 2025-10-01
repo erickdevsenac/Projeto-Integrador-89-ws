@@ -1,5 +1,6 @@
-from decimal import Decimal
-
+from decimal import Decimal, InvalidOperation # Importado InvalidOperation para maior robustez no carrinho
+from .models import Avaliacao
+from .forms import AvaliacaoForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -35,6 +36,7 @@ from .models import (
     Perfil,
     ProdutoVendedor,
     Receita,
+    Produto
 )
 
 
@@ -63,14 +65,8 @@ def ongs_pagina(request, usuario_id):
     }
     return render(request, 'core/ong_pagina.html', context)
 
-def produtos(request):
-    lista_produtos = ProdutoVendedor.objects.filter(ativo=True, quantidade_estoque__gt=0).order_by('-data_criacao')
-    
-    paginator = Paginator(lista_produtos, 9)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    return render(request, 'core/produtos.html', {'page_obj': page_obj})
+# NOTA: A definição duplicada de 'produtos' (originalmente na linha 100) foi removida.
+# A versão mais completa (abaixo, na seção Marketplace) foi mantida.
 
 def contato(request):
     return render(request, "core/contato.html")
@@ -157,6 +153,7 @@ def configuracoes(request):
         if 'excluir_conta' in request.POST:
             # Lógica para deletar a conta do usuário
             request.user.delete()
+            messages.success(request, "Sua conta foi excluída com sucesso.")
             return redirect('core:index')
 
         # Se não for uma exclusão, processa as outras configurações
@@ -174,6 +171,7 @@ def configuracoes(request):
         if notificacoes:
             request.session['notificacoes'] = notificacoes
         
+        messages.success(request, "Configurações atualizadas com sucesso!")
         return redirect('core:configuracoes')
 
     # Lógica GET para apenas renderizar a página
@@ -189,16 +187,15 @@ def recuperarsenha(request):
             usuario = User.objects.get(email=email_do_usuario)
         except User.DoesNotExist:
             messages.error(request, 'Não há conta associada a este e-mail.')
-            return render(request, 'recuperarsenha.html')
+            return render(request, 'core/recuperarsenha.html')
             
         # Cria o token de recuperação de senha
         uid = urlsafe_base64_encode(force_bytes(usuario.pk))
         token = default_token_generator.make_token(usuario)
         
         # Cria o link de redefinição
-        link_de_reset = request.build_absolute_uri(
-            f'/redefinir-senha/{uid}/{token}/' # Substitua pela sua URL real
-        )
+        current_site = request.get_host()
+        link_de_reset = f"http://{current_site}/redefinir-senha/{uid}/{token}/"
         
         # Cria o corpo do e-mail com o link de reset
         corpo_email = render_to_string('email/senha_reset.html', {
@@ -214,8 +211,8 @@ def recuperarsenha(request):
                 [usuario.email],
                 fail_silently=False,
             )
-            messages.success(request, 'Um e-mail com instruções foi enviado.')
-            return redirect('core:telalogin') # Redireciona para uma página de sucesso
+            messages.success(request, 'Um e-mail com instruções foi enviado. Verifique sua caixa de entrada.')
+            return redirect('core:login_view') 
         except Exception as e:
             messages.error(request, f'Ocorreu um erro ao enviar o e-mail: {e}')
     return render(request, "core/recuperarsenha.html")
@@ -232,10 +229,14 @@ def alterarsenha(request):
 
 
 def produtos(request):
-    lista_produtos = ProdutoVendedor.objects.filter(
+    """
+    Lista todos os produtos disponíveis, com suporte a paginação e filtro por categoria.
+    Esta é a versão correta e completa.
+    """
+    lista_produtos = Produto.objects.filter(
         ativo=True, quantidade_estoque__gt=0
     ).order_by("-data_criacao")
-    print(lista_produtos)
+    
     categorias = Categoria.objects.all()
 
     categoria_slug = request.GET.get("categoria")
@@ -245,7 +246,6 @@ def produtos(request):
     paginator = Paginator(lista_produtos, 9)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
-    print(page_obj)
 
     context = {
         "page_obj": page_obj,
@@ -258,13 +258,18 @@ def produtos(request):
 def buscar_produtos(request):
     termo = request.GET.get("termo", "")
     if termo:
-        resultados = ProdutoVendedor.objects.filter(nome__icontains=termo)
+        resultados = ProdutoVendedor.objects.filter(nome__icontains=termo, ativo=True)
     else:
         resultados = []
+        
+    paginator = Paginator(resultados, 9)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    
     return render(
         request,
         "core/resultados_busca.html",
-        {"resultados": resultados, "termo": termo},
+        {"page_obj": page_obj, "termo": termo},
     )
 
 
@@ -298,27 +303,33 @@ def ver_carrinho(request):
         if not produto_id or not produto_id.isdigit():
             keys_para_remover.append(produto_id)
             continue
-
-        preco_unitario = Decimal(item_info["preco"])
-        quantidade = item_info["quantidade"]
-        subtotal = quantidade * preco_unitario
-        carrinho_detalhado.append(
-            {
-                "produto_id": produto_id,
-                "nome": item_info["nome"],
-                "quantidade": quantidade,
-                "preco": preco_unitario,
-                "imagem_url": item_info.get("imagem_url", ""),
-                "subtotal": subtotal,
-                "vendedor_nome": item_info.get("vendedor_nome", "N/A"),
-            }
-        )
-        total_carrinho += subtotal
+        
+        try:
+            preco_unitario = Decimal(item_info["preco"])
+            quantidade = item_info["quantidade"]
+            subtotal = quantidade * preco_unitario
+            
+            carrinho_detalhado.append(
+                {
+                    "produto_id": produto_id,
+                    "nome": item_info["nome"],
+                    "quantidade": quantidade,
+                    "preco": preco_unitario,
+                    "imagem_url": item_info.get("imagem_url", ""),
+                    "subtotal": subtotal,
+                    "vendedor_nome": item_info.get("vendedor_nome", "N/A"),
+                }
+            )
+            total_carrinho += subtotal
+        except (KeyError, InvalidOperation, TypeError):
+             keys_para_remover.append(produto_id)
+             continue
 
     # Limpa a sessão de quaisquer chaves inválidas encontradas
     if keys_para_remover:
         for key in keys_para_remover:
-            del carrinho_session[key]
+            if key in carrinho_session:
+                del carrinho_session[key]
         request.session["carrinho"] = carrinho_session
         request.session.modified = True
 
@@ -333,7 +344,16 @@ def ver_carrinho(request):
 def adicionar_carrinho(request, produto_id):
     produto = get_object_or_404(ProdutoVendedor, id=produto_id)
     carrinho = request.session.get("carrinho", {})
-    quantidade_solicitada = int(request.POST.get("quantidade", 1))
+    
+    try:
+        quantidade_solicitada = int(request.POST.get("quantidade", 1))
+        if quantidade_solicitada <= 0:
+            messages.error(request, "A quantidade deve ser positiva.")
+            return redirect(request.META.get("HTTP_REFERER", "core:produtos"))
+    except ValueError:
+        messages.error(request, "Quantidade inválida.")
+        return redirect(request.META.get("HTTP_REFERER", "core:produtos"))
+        
     produto_id_str = str(produto.id)
     quantidade_no_carrinho = carrinho.get(produto_id_str, {}).get("quantidade", 0)
     quantidade_total_desejada = quantidade_no_carrinho + quantidade_solicitada
@@ -353,7 +373,7 @@ def adicionar_carrinho(request, produto_id):
             "preco": str(produto.preco),
             "nome": produto.nome,
             "imagem_url": produto.imagem.url if produto.imagem else "",
-            "vendedor_nome": produto.vendedor.nome_negocio,
+            "vendedor_nome": produto.vendedor.nome_negocio if produto.vendedor else "N/A",
         }
     request.session["carrinho"] = carrinho
     request.session.modified = True
@@ -370,7 +390,10 @@ def atualizar_carrinho(request):
         # Procuramos por chaves que começam com 'quantidade_'
         if key.startswith("quantidade_"):
             produto_id_str = key.split("_")[1]
-            nova_quantidade = int(value)
+            try:
+                nova_quantidade = int(value)
+            except ValueError:
+                continue
 
             # Garante que o item ainda existe no carrinho
             if produto_id_str in carrinho:
@@ -391,10 +414,12 @@ def atualizar_carrinho(request):
                         carrinho[produto_id_str]["quantidade"] = nova_quantidade
                     else:
                         del carrinho[produto_id_str]
+                        messages.info(request, f"Item '{produto.nome}' removido.")
 
                 except ProdutoVendedor.DoesNotExist:
                     # Se o produto foi removido do banco, remove do carrinho também
                     del carrinho[produto_id_str]
+                    messages.warning(request, "Um item do catálogo foi removido do seu carrinho.")
 
     request.session["carrinho"] = carrinho
     request.session.modified = True
@@ -406,10 +431,11 @@ def remover_item(request, produto_id):
     carrinho = request.session.get("carrinho", {})
     produto_id_str = str(produto_id)
     if produto_id_str in carrinho:
+        nome_produto = carrinho[produto_id_str].get("nome", "Item")
         del carrinho[produto_id_str]
         request.session["carrinho"] = carrinho
         request.session.modified = True
-        messages.success(request, "Item removido do carrinho.")
+        messages.success(request, f"'{nome_produto}' removido do carrinho.")
     return redirect("core:ver_carrinho")
 
 
@@ -425,60 +451,87 @@ def finalizar_pedido(request):
 
     carrinho_detalhado = []
     total_carrinho = Decimal("0.00")
+    
     for produto_id, item_info in carrinho_session.items():
-        subtotal = Decimal(item_info["preco"]) * item_info["quantidade"]
-        total_carrinho += subtotal
-        carrinho_detalhado.append(
-            {
-                "produto_id": produto_id,
-                "quantidade": item_info["quantidade"],
-                "preco": Decimal(item_info["preco"]),
-                "subtotal": subtotal,
-            }
-        )
+        try:
+            subtotal = Decimal(item_info["preco"]) * item_info["quantidade"]
+            total_carrinho += subtotal
+            carrinho_detalhado.append(
+                {
+                    "produto_id": produto_id,
+                    "quantidade": item_info["quantidade"],
+                    "preco": Decimal(item_info["preco"]),
+                    "subtotal": subtotal,
+                    "nome": item_info["nome"],
+                }
+            )
+        except (KeyError, InvalidOperation, TypeError):
+             messages.error(request, "Erro de formatação nos dados do carrinho. Por favor, tente novamente.")
+             return redirect("core:ver_carrinho")
+
 
     if request.method == "POST":
         try:
             with transaction.atomic():
                 cliente_perfil = request.user.perfil
+                
+                # 1. Cria o Pedido Principal
                 pedido = Pedido.objects.create(
                     cliente=cliente_perfil,
                     valor_total=total_carrinho,
-                    endereco_entrega=cliente_perfil.endereco,
+                    endereco_entrega=cliente_perfil.endereco, # Assumindo que Perfil tem um campo 'endereco'
                 )
+                
                 pedidos_por_vendedor = {}
+                
+                # 2. Agrupa itens por Vendedor e verifica estoque final
                 for item in carrinho_detalhado:
-                    produto = ProdutoVendedor.objects.get(id=item["produto_id"])
+                    # Usar select_for_update para garantir atomicidade no estoque
+                    produto = ProdutoVendedor.objects.select_for_update().get(id=item["produto_id"])
+                    
+                    if produto.quantidade_estoque < item["quantidade"]:
+                         # Isso causará um rollback no transaction.atomic()
+                         raise Exception(f"Estoque insuficiente para {produto.nome}. Apenas {produto.quantidade_estoque} disponíveis.")
+                         
                     vendedor_perfil = produto.vendedor
+                    
                     if vendedor_perfil not in pedidos_por_vendedor:
                         pedidos_por_vendedor[vendedor_perfil] = {
                             "itens": [],
                             "subtotal": Decimal("0.00"),
                         }
+                    
                     pedidos_por_vendedor[vendedor_perfil]["itens"].append(item)
-                    pedidos_por_vendedor[vendedor_perfil]["subtotal"] += item[
-                        "subtotal"
-                    ]
+                    pedidos_por_vendedor[vendedor_perfil]["subtotal"] += item["subtotal"]
 
+                # 3. Cria Sub-Pedidos (PedidoVendedor) e Itens
                 for vendedor, dados_pedido in pedidos_por_vendedor.items():
                     sub_pedido = PedidoVendedor.objects.create(
                         pedido_principal=pedido,
                         vendedor=vendedor,
                         valor_subtotal=dados_pedido["subtotal"],
                     )
+                    
                     for item_data in dados_pedido["itens"]:
                         produto = ProdutoVendedor.objects.get(id=item_data["produto_id"])
+                        
+                        # Cria o ItemPedido
                         ItemPedido.objects.create(
                             sub_pedido=sub_pedido,
                             produto=produto,
                             quantidade=item_data["quantidade"],
                             preco_unitario=item_data["preco"],
                         )
+                        
+                        # Diminui o estoque do produto 
                         produto.quantidade_estoque -= item_data["quantidade"]
                         produto.save()
+                        
+                # 4. Limpa o carrinho
                 del request.session["carrinho"]
-                messages.success(request, "Seu pedido foi finalizado com sucesso!")
+                messages.success(request, f"Seu pedido #{pedido.id} foi finalizado com sucesso!")
                 return redirect("core:meus_pedidos")
+                
         except Exception as e:
             messages.error(request, f"Ocorreu um erro ao finalizar seu pedido: {e}")
             return redirect("core:ver_carrinho")
@@ -495,7 +548,8 @@ def meus_pedidos(request):
     try:
         perfil_usuario = request.user.perfil
     except Perfil.DoesNotExist:
-        return render(request, "core/meus_pedidos.html", {"pedidos": []})
+        messages.error(request, "Seu perfil não foi encontrado.")
+        return redirect("core:index")
 
     if perfil_usuario.tipo == Perfil.TipoUsuario.CLIENTE:
         pedidos = Pedido.objects.filter(cliente=perfil_usuario).order_by("-data_pedido")
@@ -505,6 +559,7 @@ def meus_pedidos(request):
         context = {"pedidos": pedidos, "is_cliente": False}
     else:
         context = {"pedidos": []}
+        
     return render(request, "core/meus_pedidos.html", context)
 
 
@@ -531,7 +586,7 @@ def receita_detalhe(request, receita_id):
     return render(request, 'core/receita_detalhe.html', {'receita': receita})
 
 def dicas(request):
-    lista_dicas = Dica.objects.filter(publicada=True)
+    lista_dicas = Dica.objects.filter(publicada=True).order_by('-data_publicacao')
     return render(request, "core/dicas.html", {"dicas": lista_dicas})
 
 
@@ -553,11 +608,16 @@ def cria_receita(request):
             ingrediente_formset.save()
             etapa_formset.instance = receita
             etapa_formset.save()
+            messages.success(request, f"Receita '{receita.titulo}' criada com sucesso!")
             return redirect("core:receitas")
+        else:
+            messages.error(request, "Erro ao criar receita. Por favor, verifique os campos.")
+            
     else:
         form = ReceitaForm()
         ingrediente_formset = IngredienteFormSet(prefix="ingredientes")
         etapa_formset = EtapaPreparoFormSet(prefix="etapas")
+        
     return render(
         request,
         "core/cria_receita.html",
@@ -574,7 +634,7 @@ def is_admin(user):
     return user.is_staff
 
 
-@user_passes_test(is_admin)
+@user_passes_test(is_admin, login_url="/login/")
 def criar_cupom(request):
     if request.method == "POST":
         form = CupomForm(request.POST)
@@ -595,3 +655,35 @@ def notificacao(request):
 def vendedor(request):
     return render(request,"core/vendedor.html")
 
+def avaliacao(request):
+    avaliacoes = Avaliacao.objects.all().order_by('-data_avaliacao')
+    
+    # Adicionando paginação
+    paginator = Paginator(avaliacoes, 10) # 10 avaliações por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'core/avaliacao.html', {'page_obj': page_obj})
+
+
+@login_required
+def nova_avaliacao(request):
+    """
+    Permite que um usuário autenticado crie uma nova avaliação.
+    Corrigida para usar mensagens e redirecionar corretamente.
+    """
+    if request.method == 'POST':
+        form = AvaliacaoForm(request.POST)
+        if form.is_valid():
+            avaliacao = form.save(commit=False)
+            avaliacao.usuario = request.user 
+            avaliacao.save()  
+            messages.success(request, 'Sua avaliação foi enviada com sucesso! ✨')
+            return redirect('core:avaliacao') 
+        else:
+            messages.error(request, 'Não foi possível enviar a avaliação. Por favor, verifique os dados.')
+        
+    else:
+        form = AvaliacaoForm()
+
+    return render(request, 'core/nova_avaliacao.html', {'form': form})

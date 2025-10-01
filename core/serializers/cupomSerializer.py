@@ -1,7 +1,9 @@
 from rest_framework import serializers
-from core.models import Cupom
+from core.models.cupom_model import Cupom
+
 
 class CupomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cupom
-        fields = ['PERCENTUAL', 'VALOR_FIXO']
+        fields = '__all__' 
+        read_only_fields = ['usos_realizados']  
