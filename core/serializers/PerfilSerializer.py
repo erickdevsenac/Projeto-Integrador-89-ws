@@ -4,4 +4,4 @@ from core.models.perfil_model import Perfil
 class PerfilSerializer(serializers.ModelSerializer):
     class Meta:
         model= Perfil
-        fields= ['Cliente','Vendedor','ONG']
+        fields= ['usuario','tipo','foto_perfil', 'nome_negocio', 'logo_ong', 'telefone', 'endereco', 'cnpj', 'descricao_parceiro']

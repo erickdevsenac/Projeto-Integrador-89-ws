@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 class Avaliacao(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    titulo = models.CharField(max_length=100, blank=True)
+    titulo = models.CharField(max_length=110, blank=True)
     descricao = models.TextField(blank=True)
     nota = models.PositiveSmallIntegerField(
         choices=[(i, f"{i} Estrela{'s' if i > 1 else ''}") for i in range(1, 6)]

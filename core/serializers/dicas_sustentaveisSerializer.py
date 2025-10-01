@@ -7,6 +7,11 @@ class DicaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Dica
-        fields = ['id', 'titulo', 'resumo', 'conteudo', 'imagem', 'categoria', 'autor', 'publicada', 'data_publicacao']
+        fields = '__all__' 
     
         read_only_fields = ['autor'] 
+        
+class CategoriaDicaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CategoriaDica
+        fields = '__all__' 
