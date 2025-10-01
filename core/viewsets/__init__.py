@@ -11,3 +11,4 @@ from .produtoViewset import *
 from .dicas_sustentaveisViewset import *
 from .notificacaoViewset import *
 from .usuarioViewSet import *
+from .loginViewSet import *
