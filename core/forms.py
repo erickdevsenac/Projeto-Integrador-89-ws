@@ -2,7 +2,7 @@ from turtle import width
 from django import forms
 from django.contrib.auth.models import User
 from django.forms import inlineformset_factory
-from core.models.vendedor import ProdutoVendedor  
+from core.models.vendedor_model import ProdutoVendedor  
 
 from .models import (
     Categoria,
@@ -250,7 +250,7 @@ class ProdutovendedorForm(forms.ModelForm):
             'data_fabricacao',
             'data_validade',
             'quantidade_estoque',
-            'descricao',  # deixe esta linha se quiser manter a descrição
+            'descricao',  
         ]
 
         widgets = {

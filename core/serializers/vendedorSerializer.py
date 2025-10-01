@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.models import Loja, ProdutoVendedor, EstatisticaVenda
+from core.models.vendedor_model import Loja, ProdutoVendedor, EstatisticaVenda
 
 class ProdutoSerializer(serializers.ModelSerializer):
     class Meta:

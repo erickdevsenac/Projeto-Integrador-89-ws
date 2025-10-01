@@ -1,3 +1,6 @@
+from .PerfilSerializer import *   
+from .PedidosSerializer import *
+from .ReceitasSerializer import *
 from .receitaSerializer import *  
 from .comentarioserializer import * 
 from .pedidoserializers import *   
@@ -15,3 +18,5 @@ from .usuarioSerializer import *
 from .cupomSerializer import *
 from .faleconoscoSerializer  import *
 from .avaliacaoSerialiazer import *
+
+from .cadastroprodutoSerializer import *
