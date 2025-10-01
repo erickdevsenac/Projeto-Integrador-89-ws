@@ -1,0 +1,19 @@
+{% extends 'global/base.html' %}
+{% load static %}
+
+{% block content %}
+  {% block head %}
+    <title>Nova Avaliação</title>
+    <link rel="stylesheet" href="{% static 'core/css/style_avaliacao.css' %}">
+  {% endblock %}
+  
+  <div class="caixinha">
+    <h1>Nova Avaliação</h1>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Enviar Avaliação</button>
+    </form>
+    <a href="{% url 'core:avaliacao' %}">Voltar para lista</a>
+  </div>
+{% endblock content %}

@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from faker import Faker
 
+#python manage.py seed
+
 # --- IMPORTAÇÃO DOS SEUS MODELOS (AJUSTE O 'core.models' SE NECESSÁRIO) ---
 # Importe todos os modelos para os quais você precisa gerar dados
 try:

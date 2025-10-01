@@ -1,10 +1,16 @@
-from .classeViewSet import *
-from .itemPedidoViewSet import *
 from .categoriaViewset import *
 from .vendedorViewset import *
-
+from .cadastro_produtoViewset import *
 from .doacaoViewsets import *
-from .PerfilViewSet import *
+from .perfilViewSet import *
 from .produtoViewset import *
-
+from .dicas_sustentaveisViewset import *
+from .notificacaoViewset import *
 from .usuarioViewSet import *
+from .cupomViewset import *
+from .faleconoscoViewset import *
+from .comentariosViewSet import *
+from .pedidoViewset import *
+from .cupomViewset import *
+from .itemPedidoViewSet import *
+from .avaliacaoViewset import *

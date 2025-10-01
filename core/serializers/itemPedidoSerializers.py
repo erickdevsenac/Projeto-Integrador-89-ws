@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from models import ItemPedido
+from core.models.item_pedido_model import ItemPedido
 
 class ItemPedidoSerializer(serializers.ModelSerializer):
     class Meta:

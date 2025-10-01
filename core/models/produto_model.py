@@ -15,22 +15,19 @@ class Categoria(models.Model):
 
 
 class Produto(models.Model):
-    # --- Relacionamentos ---
     vendedor = models.ForeignKey(
         'core.Perfil', 
         on_delete=models.CASCADE,
         related_name='produtos',
-        limit_choices_to={'tipo': 'VENDEDOR'}
     )
     categoria = models.ForeignKey(
         Categoria,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='produtos'
+        related_name='produtos' 
     )
     
-    # --- Informações Básicas ---
     nome = models.CharField(max_length=100)
     descricao = models.TextField(blank=True)
     preco = models.DecimalField(max_digits=10, decimal_places=2)
@@ -41,7 +38,6 @@ class Produto(models.Model):
         help_text="Imagem de apresentação do produto"
     )
     
-    # --- Novos Campos Adicionados ---
     codigo_produto = models.CharField(
         "Código do Produto (SKU)",
         max_length=50,
@@ -50,39 +46,23 @@ class Produto(models.Model):
         null=True,
         help_text="Código de barras ou SKU. Deve ser único."
     )
-    data_fabricacao = models.DateField(
-        "Data de Fabricação",
-        blank=True,
-        null=True
-    )
-    data_validade = models.DateField(
-        "Data de Validade",
-        blank=True,
-        null=True,
-        help_text="Importante para produtos perecíveis."
-    )
+    data_fabricacao = models.DateField("Data de Fabricação", blank=True, null=True)
+    data_validade = models.DateField("Data de Validade", blank=True, null=True)
     
-    # --- Controle de Estoque e Status ---
-    quantidade_estoque = models.PositiveIntegerField(
-        default=0,
-        help_text="Quantidade total que o vendedor tem disponível."
-    )
-    ativo = models.BooleanField(
-        default=True,
-        help_text="O vendedor pode desmarcar para 'pausar' o anúncio do produto."
-    )
-    data_criacao = models.DateTimeField(default=timezone.now)
+    quantidade_estoque = models.PositiveIntegerField(default=0)
+    ativo = models.BooleanField(default=True)
+    data_criacao = models.DateTimeField(auto_now_add=True) 
+
     class Meta:
         verbose_name = "Produto"
         verbose_name_plural = "Produtos"
-    # Propriedade para verificar a disponibilidade real (ativo e com estoque)
+
     @property
     def disponivel_para_venda(self):
         return self.ativo and self.quantidade_estoque > 0
 
     def __str__(self):
-        return f'{self.nome} | Vendedor: {self.vendedor.nome_negocio}'
+        return f'{self.nome} | Vendedor: {self.vendedor.user.username}'
 
     def get_absolute_url(self):
-        # Você precisará criar uma URL com o nome 'produto_detalhe' no futuro
         return reverse('core:produto_detalhe', kwargs={'pk': self.pk})
