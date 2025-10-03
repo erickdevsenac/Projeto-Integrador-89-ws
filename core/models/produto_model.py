@@ -62,7 +62,8 @@ class Produto(models.Model):
         return self.ativo and self.quantidade_estoque > 0
 
     def __str__(self):
-        return f'{self.nome} | Vendedor: {self.vendedor.user.username}'
+       return f'{self.nome} | Vendedor: {self.vendedor.usuario.username}'
+
 
     def get_absolute_url(self):
         return reverse('core:produto_detalhe', kwargs={'pk': self.pk})

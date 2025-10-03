@@ -8,6 +8,7 @@ from core.models.pedido_model import Pedido, PedidoVendedor
 from core.models.perfil_model import Perfil
 from core.models.produto_model import Categoria, Produto
 from core.models.receita_model import Receita
+from core.models.notificacao_model import Notificacao
 
 # ... seus imports
 
@@ -53,6 +54,7 @@ admin.site.register(Pedido)
 admin.site.register(Doacao)
 admin.site.register(Receita)
 admin.site.register(EquipeDev)
+admin.site. register(Notificacao)
 
 
 # Lista os Pedidos
