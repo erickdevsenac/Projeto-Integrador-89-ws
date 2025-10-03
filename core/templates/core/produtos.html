@@ -23,6 +23,9 @@
                         {{ categoria.nome }}
                     </a>
                 {% endfor %}
+                {% if request.user.is_authenticated and request.user.perfil.tipo == 'VENDEDOR' %}
+                <a href="{% url 'core:cadastroproduto' %}" class="list-group-item list-group-item-action">Cadastre seu produto</a>
+                {% endif %}
             </div>
         </div>
 
@@ -58,7 +61,7 @@
                                     {% csrf_token %}
                                     <div class="input-group">
                                         <input type="number" class="form-control" name="quantidade" value="1" min="1" max="{{ produto.quantidade_estoque }}" aria-label="Quantidade">
-                                        <button type="submit" class="btn btn-success">
+                                        <button type="submit" class="btn btn-success" >
                                             <i class="bi bi-cart-plus"></i>
                                         </button>
                                     </div>
