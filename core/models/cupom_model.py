@@ -1,7 +1,5 @@
 # Em core/models.py
 from django.db import models
-from django.utils import timezone
- 
  
 class Cupom(models.Model):
     class TipoDesconto(models.TextChoices):
