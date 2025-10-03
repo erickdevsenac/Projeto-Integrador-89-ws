@@ -23,6 +23,11 @@
                         {{ categoria.nome }}
                     </a>
                 {% endfor %}
+                {% if request.user.is_authenticated and request.user.perfil.tipo == 'VENDEDOR' %}
+                    <a href="{% url 'core:cadastroproduto' %}" class="list-group-item list-group-item-action">
+                        Cadastre Seu Produto
+                    </a>
+                {% endif %}
             </div>
         </div>
 
