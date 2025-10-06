@@ -57,18 +57,19 @@ class Cupom(TimeStampedModel):
         help_text="Quantas vezes este cupom pode ser usado no total."
     )
     
-    limite_uso_por_usuario = models.PositiveIntegerField(
-        default=1,
-        help_text="Quantas vezes cada usuário pode usar este cupom"
+    # limite_uso_por_usuario = models.PositiveIntegerField(
+    #     default=1,
+    #     help_text="Quantas vezes cada usuário pode usar este cupom",
+    
+    #     ativo = models.BooleanField(default=True),
+    #     usos_realizados = models.PositiveIntegerField(
+    #         default=0, editable=False
+    #     )
+    # )
  
-    ativo = models.BooleanField(default=True)
-    usos_realizados = models.PositiveIntegerField(
-        default=0, editable=False
-    )  
- 
-    limite_uso = models.PositiveIntegerField(
-        default=1, help_text="Quantas vezes este cupom pode ser usado no total."
-    )
+    # limite_uso = models.PositiveIntegerField(
+    #     default=1, help_text="Quantas vezes este cupom pode ser usado no total."
+    # )
  
     valor_minimo_compra = models.DecimalField(
         max_digits=10,

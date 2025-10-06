@@ -2,9 +2,9 @@ from django.db import models
 from django.urls import reverse
 from .time_stamp_model import TimeStampedModel
 
-class Categoria(TimeStampedModel):
+class CategoriaItem(models.Model):
     """Modelo para categorias de produtos"""
-    nome = models.CharField(max_length=100, unique=True)
+    nome = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(
         max_length=100, 
         unique=True, 

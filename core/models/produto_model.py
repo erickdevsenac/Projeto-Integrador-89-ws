@@ -21,9 +21,6 @@ class Categoria(models.Model):
 
 
 class Produto(models.Model):
-
-
-class Produto(TimeStampedModel):
     """Modelo melhorado para produtos"""
     
     # Relacionamentos
