@@ -8,6 +8,21 @@ from .time_stamp_model import TimeStampedModel
 from .categoria_model import Categoria
 from .produto_manager import ProdutoManager
 
+class Categoria(models.Model):
+    nome = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=100, unique=True, help_text="Versão do nome amigável para URLs, ex: 'dicas-sustentaveis'")
+
+    class Meta:
+        verbose_name = "Categoria"
+        verbose_name_plural = "Categorias"
+
+    def __str__(self):
+        return self.nome
+
+
+class Produto(models.Model):
+
+
 class Produto(TimeStampedModel):
     """Modelo melhorado para produtos"""
     
@@ -16,14 +31,13 @@ class Produto(TimeStampedModel):
         'core.Perfil', 
         on_delete=models.CASCADE,
         related_name='produtos',
-        limit_choices_to={'tipo': 'VENDEDOR'}
     )
     categoria = models.ForeignKey(
         Categoria,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='produtos'
+        related_name='produtos' 
     )
     
     # Informações básicas
@@ -132,6 +146,13 @@ class Produto(TimeStampedModel):
 
     objects = ProdutoManager()
 
+    data_fabricacao = models.DateField("Data de Fabricação", blank=True, null=True)
+    data_validade = models.DateField("Data de Validade", blank=True, null=True)
+    
+    quantidade_estoque = models.PositiveIntegerField(default=0)
+    ativo = models.BooleanField(default=True)
+    data_criacao = models.DateTimeField(auto_now_add=True) 
+
     class Meta:
         verbose_name = "Produto"
         verbose_name_plural = "Produtos"
@@ -182,3 +203,7 @@ class Produto(TimeStampedModel):
         if not self.codigo_produto:
             self.codigo_produto = f'PROD-{uuid.uuid4().hex[:8].upper()}'
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.nome} | Vendedor: {self.vendedor.usuario.username}'
+

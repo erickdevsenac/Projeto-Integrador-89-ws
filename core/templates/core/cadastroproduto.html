@@ -1,29 +1,41 @@
 {% extends 'global/base.html' %}
 {% load static %}
 
+{% block content %}
 {% block head %}
   <link rel="stylesheet" href="{% static 'core/css/style_cadastroproduto.css' %}" />
   <title>Cadastro de Produtos</title>
 {% endblock %}
-
-{% block content %}
 <div class="main">
+  <!-- Header -->
   <div class="main-header">
     <h1 class="main-title">Cadastro de Produtos</h1>
     <img class="inline-logo" src="{% static 'assets/img/logo.png' %}" alt="Logo Aproveite +" />
   </div>
   
+  <!-- Descrição -->
   <section class="about">
     <p>Preencha o formulário abaixo para cadastrar um novo produto no sistema.</p>
   </section>
 
-  <!-- O 'enctype' é essencial para o upload de imagens funcionar -->
+  <!-- Formulário -->
   <form method="post" enctype="multipart/form-data" class="product-form">
     {% csrf_token %}
+    
+    <!-- Renderização com mais controle visual: substituí {{ form.as_p }} por controle manual -->
+    {% for field in form %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+          <div class="form-errors">
+            {{ field.errors }}
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
 
-    <!-- Renderiza o formulário do Django como parágrafos -->
-    {{ form.as_p }}
-
+    <!-- Botão de ação -->
     <div class="actions">
       <div class="action-button">
         <button type="submit" class="cta-button">Cadastrar Produto</button>

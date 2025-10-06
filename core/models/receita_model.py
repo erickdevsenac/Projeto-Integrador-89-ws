@@ -65,7 +65,7 @@ class EtapaPreparo(models.Model):
     def __str__(self):
         return f"Etapa {self.ordem}"
 
-class Avaliacao(models.Model):
+class ReceitaAvaliacao(models.Model):
     """ Modelo unificado para avaliações (nota) e comentários (texto). """
     receita = models.ForeignKey(Receita, on_delete=models.CASCADE, related_name='avaliacoes')
     autor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='avaliacoes_feitas')

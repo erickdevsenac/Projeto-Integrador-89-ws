@@ -31,6 +31,11 @@ urlpatterns = [
     # Recuperação de senha
     path("alterar-senha/", views.alterarsenha, name="alterar_senha"),  
     path("recuperar-senha/", views.recuperarsenha, name="recuperar-senha"),
+    path("vendedor/", views.vendedor, name="Vendedorperfil"),
+    path('avaliacao/', views.avaliacao, name='avaliacao'), 
+    path('nova_avaliacao/', views.nova_avaliacao, name='nova_avaliacao'),  
+
+
     #TODO:
     # path("reset-senha/<uidb64>/<token>/", views.reset_senha, name="reset_senha"),
 

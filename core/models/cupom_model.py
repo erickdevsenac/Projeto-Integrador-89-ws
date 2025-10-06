@@ -11,7 +11,7 @@ class Cupom(TimeStampedModel):
     class TipoDesconto(models.TextChoices):
         PERCENTUAL = "PERCENTUAL", "% Percentual"
         VALOR_FIXO = "VALOR_FIXO", "R$ Valor Fixo"
-
+ 
     codigo = models.CharField(
         max_length=50,
         unique=True,
@@ -45,7 +45,7 @@ class Cupom(TimeStampedModel):
         default=timezone.now,
         help_text="Data de início da validade do cupom"
     )
-    
+     
     data_validade = models.DateTimeField(
         null=True,
         blank=True,
@@ -60,8 +60,16 @@ class Cupom(TimeStampedModel):
     limite_uso_por_usuario = models.PositiveIntegerField(
         default=1,
         help_text="Quantas vezes cada usuário pode usar este cupom"
+ 
+    ativo = models.BooleanField(default=True)
+    usos_realizados = models.PositiveIntegerField(
+        default=0, editable=False
+    )  
+ 
+    limite_uso = models.PositiveIntegerField(
+        default=1, help_text="Quantas vezes este cupom pode ser usado no total."
     )
-
+ 
     valor_minimo_compra = models.DecimalField(
         max_digits=10,
         decimal_places=2,
@@ -147,4 +155,5 @@ class Cupom(TimeStampedModel):
     def usar_cupom(self):
         """Incrementa o contador de uso do cupom"""
         self.usos_realizados += 1
-        self.save(update_fields=['usos_realizados'])
+        self.save(update_fields=['usos_realizados']) 
+ 

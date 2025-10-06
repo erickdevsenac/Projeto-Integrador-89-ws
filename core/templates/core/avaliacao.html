@@ -1,0 +1,77 @@
+{% extends 'global/base.html' %}
+{% load static %}
+
+{% block content %}
+  {% block head %}
+    <title>Avaliações</title>
+    <link rel="stylesheet" href="{% static 'core/css/style_avaliacao.css' %}">
+  {% endblock %}
+  
+  <div class="caixinha">
+    <h1>Avaliações</h1>
+    
+    {# Exibe as mensagens de sucesso/erro (como após criar uma avaliação) #}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <a href="{% url 'core:nova_avaliacao' %}" class="btn-nova-avaliacao">Nova Avaliação</a>
+    
+    <ul>
+      {% for avaliacao in page_obj.object_list %}
+        <li>
+            <div class="avaliacao-header">
+                <strong>{{ avaliacao.titulo|default:"(Sem título)" }}</strong> por 
+                {% if avaliacao.usuario %}
+                    {{ avaliacao.usuario.username }}
+                {% else %}
+                    Anônimo
+                {% endif %}
+            </div>
+            
+            <div class="estrelas">
+                {# Loop para exibir as estrelas baseado no campo 'nota' #}
+                {% for i in "12345" %}
+                  {% if forloop.counter <= avaliacao.nota %}
+                    <span class="estrela preenchida">★</span>
+                  {% else %}
+                    <span class="estrela">☆</span>
+                  {% endif %}
+                {% endfor %}
+            </div>
+            
+            <p>{{ avaliacao.descricao }}</p>
+            <small>Enviado em {{ avaliacao.data_avaliacao|date:"d/m/Y H:i" }}</small>
+        </li>
+      {% empty %}
+        <li>Não há avaliações. Seja o primeiro a deixar uma!</li>
+      {% endfor %}
+    </ul>
+    
+    {# --- CONTROLES DE PAGINAÇÃO --- #}
+    {% if page_obj.has_other_pages %}
+        <div class="paginacao">
+            
+            {% comment %} Link para a página anterior {% endcomment %}
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="btn-paginacao">« Anterior</a>
+            {% endif %}
+            
+            {% comment %} Exibe o número da página atual/total {% endcomment %}
+            <span class="current">
+                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+            </span>
+            
+            {% comment %} Link para a próxima página {% endcomment %}
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="btn-paginacao">Próxima »</a>
+            {% endif %}
+        </div>
+    {% endif %}
+    
+  </div>
+{% endblock content %}
