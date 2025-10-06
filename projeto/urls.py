@@ -3,6 +3,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
+from rest_framework.authtoken.views import obtain_auth_token
 from core.viewsets import (produtoViewset,
                            dicas_sustentaveisViewset,
                            notificacaoViewset,
@@ -17,7 +18,8 @@ from core.viewsets import (produtoViewset,
                            itemPedidoViewSet,
                            perfilViewSet,
                            cadastro_produtoViewset,
-                           receitaViewset
+                           receitaViewset,
+                           usuarioViewSet
                           )
 
 router = routers.DefaultRouter()
@@ -28,7 +30,7 @@ router.register(r'comentarios', comentariosViewSet.ComentariosViewset)
 router.register(r'pedido', pedidoViewset.PedidoViewSet, basename='Pedido') 
 router.register(r'cupom', cupomViewset.CupomViewSet)
 router.register(r'itemPedido', itemPedidoViewSet.ItemPedidoViewSet, basename="Item_pedido")
-# router.register(r'users', usuarioViewSet, basename='usuario')
+router.register(r'users', usuarioViewSet.UsuarioViewSet, basename='usuario')
 router.register(r'categoria', categoriaViewset.CategoriaViewSet)
 router.register(r'vendedor', vendedorViewset.VendedorViewSet)
 router.register(r'doacao', doacaoViewsets.DoacaoViewSet)
@@ -44,7 +46,8 @@ urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path('', include('core.urls')),
     path('api/', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls'))
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/token-auth/', obtain_auth_token),
 ]
 
 
