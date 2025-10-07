@@ -3,25 +3,26 @@
 
 {% block content %}
 <div class="container mt-4">
+    {% for pedido in pedidos %}
     <h2>Detalhes do Pedido #{{ pedido.id }}</h2>
-    
+
     <div class="card mb-4">
         <div class="card-header">
             <h5>Informações do Pedido</h5>
         </div>
         <div class="card-body">
-            <p><strong>Data:</strong> {{ pedido.data_criacao|date:"d/m/Y H:i" }}</p>
-            <p><strong>Status:</strong> 
-                <span class="badge 
-                    {% if pedido.status == 'P' %}bg-warning
-                    {% elif pedido.status == 'A' %}bg-info
-                    {% elif pedido.status == 'C' %}bg-success
-                    {% else %}bg-danger
-                    {% endif %}">
-                    {{ pedido.get_status_display }}
-                </span>
-            </p>
-            <p><strong>Total:</strong> R$ {{ pedido.total }}</p>
+            <p><strong>Data:</strong> {{ pedido.data_pedido|date:"d/m/Y H:i" }}</p>
+            <p><strong>Status:</strong>
+                    <span class="badge 
+                        {% if pedido.status_pagamento == 'CANCELADO' %}bg-warning
+                        {% elif pedido.status_pagamento == 'AGUARDANDO' %}bg-info
+                        {% elif pedido.status_pagamento == 'PAGO' %}bg-success
+                        {% else %}bg-danger
+                        {% endif %}">
+                        {{ pedido.status_pagamento }}
+                    </span>
+                </p>
+            <p><strong>Total:</strong> R$ {{ pedido.valor_total }}</p>
         </div>
     </div>
     
@@ -58,6 +59,7 @@
             </div>
         </div>
     </div>
+    {% endfor %}
     
     {% comment %} <a href="{% url 'pedidos:lista_pedidos' %}" class="btn btn-secondary mt-3">
         Voltar para Lista de Pedidos
