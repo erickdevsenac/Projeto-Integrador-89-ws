@@ -1,21 +1,13 @@
-# Viewsets dos modelos principais
-from .usuarioViewSet import *
-from .perfilViewSet import *
-from .categoriaViewset import *
-from .produtoViewset import *
-from .pedidoViewset import *
-from .itemPedidoViewSet import *
-from .receitaViewset import *
-
-# Viewsets de conteúdo e outros
-from .avaliacaoViewset import *
-from .cupomViewset import *
-from .dicas_sustentaveisViewset import *
-from .doacaoViewsets import *
-from .faleconoscoViewset import *
-from .notificacaoViewset import *
-
-# Os viewsets abaixo foram desativados por dependerem de modelos que não existem:
-# from .vendedorViewset import *
-# from .cadastro_produtoViewset import *
-# from .comentariosViewSet import *
+from .avaliacao_viewset import *
+from .categoria_viewset import *
+from .cupom_viewset import *
+from .dicas_sustentaveis_viewset import *
+from .doacao_viewset import *
+from .faleconosco_viewset import *
+from .item_pedido_viewset import *
+from .notificacao_viewset import *
+from .pedido_viewset import *
+from .perfil_viewset import *
+from .produto_viewset import *
+from .receita_viewset import *
+from .usuario_viewset import *

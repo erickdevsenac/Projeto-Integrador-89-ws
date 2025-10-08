@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import CategoriaProduto
+from core.models import CategoriaProduto
 
 class CategoriaProdutoSerializer(serializers.ModelSerializer):
     """Serializador para Categorias de Produto."""

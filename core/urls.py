@@ -2,8 +2,8 @@ from django.urls import path
 from django.conf import settings
 
 from .views import (
-    admin_views,
-    auth_views,
+    admin,
+    auth,
     carrinho,
     checkout,
     conteudo,
@@ -32,15 +32,15 @@ urlpatterns = [
     # ==============================================================================
     # ROTAS DE AUTENTICAÇÃO E PERFIL
     # ==============================================================================
-    path("cadastro/", auth_views.cadastro, name="cadastro"),
-    path("login/", auth_views.login_view, name="telalogin"),  
-    path("logout/", auth_views.logout_view, name="logout"),
-    path("perfil/", auth_views.perfil, name="perfil"),
-    path("configuracoes/", auth_views.configuracoes, name="configuracoes"),
+    path("cadastro/", auth.cadastro, name="cadastro"),
+    path("login/", auth.login_view, name="telalogin"),  
+    path("logout/", auth.logout_view, name="logout"),
+    path("perfil/", auth.perfil, name="perfil"),
+    path("configuracoes/", auth.configuracoes, name="configuracoes"),
 
     # Recuperação de senha
-    path("alterar-senha/", auth_views.alterarsenha, name="alterar_senha"),  
-    path("recuperar-senha/", auth_views.recuperarsenha, name="recuperar-senha"),
+    path("alterar-senha/", auth.alterarsenha, name="alterar_senha"),  
+    path("recuperar-senha/", auth.recuperarsenha, name="recuperar-senha"),
     path("vendedor/", public.vendedor, name="Vendedorperfil"),
     path('avaliacao/', avaliacao, name='avaliacao'), 
     path('nova_avaliacao/', nova_avaliacao, name='nova_avaliacao'), 
@@ -97,7 +97,7 @@ urlpatterns = [
     # ==============================================================================
     # ROTAS DE CUPONS E PROMOÇÕES
     # ==============================================================================
-    path("cupom/criar/", admin_views.criar_cupom, name="criar_cupom"),
+    path("cupom/criar/", admin.criar_cupom, name="criar_cupom"),
     #TODO:
     # path("cupons/", views.meus_cupons, name="meus_cupons"),
     # path("cupom/<int:cupom_id>/editar/", views.editar_cupom, name="editar_cupom"),
@@ -160,7 +160,7 @@ urlpatterns = [
 # Adiciona rotas de debug apenas se DEBUG=True
 if settings.DEBUG:
     urlpatterns += [
-        path("debug/email-test/", admin_views.debug_email_test, name="debug_email_test"),
-        path("debug/cache-clear/", admin_views.debug_cache_clear, name="debug_cache_clear"),
-        path("debug/session-info/", admin_views.debug_session_info, name="debug_session_info"),
+        path("debug/email-test/", admin.debug_email_test, name="debug_email_test"),
+        path("debug/cache-clear/", admin.debug_cache_clear, name="debug_cache_clear"),
+        path("debug/session-info/", admin.debug_session_info, name="debug_session_info"),
     ]

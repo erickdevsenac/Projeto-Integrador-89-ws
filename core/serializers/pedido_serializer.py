@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from ..models import Pedido, PedidoVendedor
-from .PerfilSerializer import PerfilSerializer
-from .itemPedidoSerializers import ItemPedidoSerializer
+from core.models import Pedido, PedidoVendedor
+from .perfil_serializer import PerfilSerializer
+from .item_pedido_serializers import ItemPedidoSerializer
 
 class PedidoVendedorSerializer(serializers.ModelSerializer):
     """Serializador para o sub-pedido de um vendedor."""

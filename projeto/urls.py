@@ -3,34 +3,24 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
-from core.viewsets import(produtoViewset,
-                           dicas_sustentaveisViewset,
-                           notificacaoViewset,
-                           doacaoViewsets,
-                           categoriaViewset, 
-                           cupomViewset,
-                           faleconoscoViewset,
-                           avaliacaoViewset,
-                           pedidoViewset, 
-                           itemPedidoViewSet,
-                           perfilViewSet,
-                           receitaViewset
+from core.viewsets import(avaliacao_viewset, categoria_viewset, cupom_viewset, dicas_sustentaveis_viewset, doacao_viewset, faleconosco_viewset, item_pedido_viewset, notificacao_viewset, pedido_viewset, produto_viewset, perfil_viewset,
+                           receita_viewset
                           )
 
 router = routers.DefaultRouter()
-router.register(r'Perfil', perfilViewSet.PerfilViewSet)
-router.register(r'receitas', receitaViewset.ReceitaViewSet)
-router.register(r'pedido', pedidoViewset.PedidoViewSet, basename='pedido')
-router.register(r'cupom', cupomViewset.CupomViewSet)
-router.register(r'itemPedido', itemPedidoViewSet.ItemPedidoViewSet, basename="Item_pedido")
-router.register(r'categoria', categoriaViewset.CategoriaViewSet)
-router.register(r'doacao', doacaoViewsets.DoacaoViewSet)
-router.register(r'faleConosco', faleconoscoViewset.FaleConoscoViewSet)
-router.register(r'produto', produtoViewset.ProdutoViewSet)
-router.register(r'categoriasdicas', dicas_sustentaveisViewset.CategoriaDicaViewSet)
-router.register(r'dicas', dicas_sustentaveisViewset.DicaViewSet)
-router.register(r'notificacao', notificacaoViewset.NotificacaoViewSet, basename='notificacao')
-router.register(r'avaliacoes', avaliacaoViewset.AvaliacaoViewSet)
+router.register(r'Perfil', perfil_viewset.PerfilViewSet)
+router.register(r'receitas', receita_viewset.ReceitaViewSet)
+router.register(r'pedido', pedido_viewset.PedidoViewSet, basename='pedido')
+router.register(r'cupom', cupom_viewset.CupomViewSet)
+router.register(r'itemPedido', item_pedido_viewset.ItemPedidoViewSet, basename="Item_pedido")
+router.register(r'categoria', categoria_viewset.CategoriaViewSet)
+router.register(r'doacao', doacao_viewset.DoacaoViewSet)
+router.register(r'faleConosco', faleconosco_viewset.FaleConoscoViewSet)
+router.register(r'produto', produto_viewset.ProdutoViewSet)
+router.register(r'categoriasdicas', dicas_sustentaveis_viewset.CategoriaDicaViewSet)
+router.register(r'dicas', dicas_sustentaveis_viewset.DicaViewSet)
+router.register(r'notificacao', notificacao_viewset.NotificacaoViewSet, basename='notificacao')
+router.register(r'avaliacoes', avaliacao_viewset.AvaliacaoViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),

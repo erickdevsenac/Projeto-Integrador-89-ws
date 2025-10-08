@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from ..models import ItemPedido
-from .produtoSerializer import ProdutoListSerializer
+from .produto_serializer import ProdutoListSerializer
 
 class ItemPedidoSerializer(serializers.ModelSerializer):
     """Serializador para os itens dentro de um pedido."""

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from ..models import Perfil
-from .produtoSerializer import ProdutoListSerializer
+from .produto_serializer import ProdutoListSerializer
 
 class VendedorSerializer(serializers.ModelSerializer):
     """ Serializador específico para o perfil de Vendedor, incluindo seus produtos. """

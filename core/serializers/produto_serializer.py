@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from ..models import Produto
-from .PerfilSerializer import PerfilSerializer
-from .categoriaSerializer import CategoriaProdutoSerializer
+from core.models import Produto
+from .perfil_serializer import PerfilSerializer
+from .categoria_serializer import CategoriaProdutoSerializer
 
 class ProdutoListSerializer(serializers.ModelSerializer):
-    """Serializador otimizado para LISTAS de produtos."""
-    vendedor_nome = serializers.CharField(source='vendedor.nome_negocio', read_only=True)
-    categoria_nome = serializers.CharField(source='categoria.nome', read_only=True)
+    """Serializador para LISTAS de produtos."""
+    vendedor = PerfilSerializer(read_only=True)
+    categoria = CategoriaProdutoSerializer(read_only=True)
 
     class Meta:
         model = Produto
