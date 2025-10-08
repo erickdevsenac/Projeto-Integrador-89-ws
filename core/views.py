@@ -74,6 +74,7 @@ def contato(request):
 
 def devs(request):
     desenvolvedores = EquipeDev.objects.all()
+    print (desenvolvedores)
     return render(request, "core/timedev.html", {"equipe": desenvolvedores})
 
 
