@@ -7,28 +7,25 @@ from core.viewsets import (produtoViewset,
                            dicas_sustentaveisViewset,
                            notificacaoViewset,
                            doacaoViewsets,
-                           categoriaViewset, 
+                           categoriaViewset,
                            vendedorViewset,
                            cupomViewset,
                            faleconoscoViewset,
                            avaliacaoViewset,
-                           comentariosViewSet, 
-                           pedidoViewset, 
+                           comentariosViewSet,
+                           pedidoViewset,
                            itemPedidoViewSet,
                            perfilViewSet,
                            cadastro_produtoViewset,
                            receitaViewset
                           )
-
+ 
 router = routers.DefaultRouter()
-router.register(r'users', classeViewSet.ClasseViewSet)
-router.register(r'ItemPedido', itemPedidoViewSet, basename="Item_pedido")
-router.register(r'users', UsuarioViewSet, basename='usuario')
 router.register(r'Perfil', perfilViewSet.PerfilViewSet)
 router.register(r'Pedido', pedidoViewset.PedidoViewSet)
 router.register(r'receitas', receitaViewset.ReceitaViewSet)
 router.register(r'comentarios', comentariosViewSet.ComentariosViewset)
-router.register(r'pedido', pedidoViewset.PedidoViewSet, basename='Pedido') 
+router.register(r'pedido', pedidoViewset.PedidoViewSet, basename='Pedido')
 router.register(r'cupom', cupomViewset.CupomViewSet)
 router.register(r'itemPedido', itemPedidoViewSet.ItemPedidoViewSet, basename="Item_pedido")
 # router.register(r'users', usuarioViewSet, basename='usuario')
@@ -42,15 +39,15 @@ router.register(r'dicas', dicas_sustentaveisViewset.DicaViewSet)
 router.register(r'notificacao', notificacaoViewset.NotificacaoViewSet)
 router.register(r'avaliacoes', avaliacaoViewset.AvaliacaoViewSet)
 router.register(r'cadastro_produto',cadastro_produtoViewset.CadastroProdutoViewSet )
-
+ 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path('', include('core.urls')),
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls'))
 ]
-
-
+ 
+ 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
