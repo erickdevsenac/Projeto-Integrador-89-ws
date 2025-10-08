@@ -4,14 +4,14 @@
 
 <body  class="{% block body_class %}{% endblock %}">
     <!-- Loading Spinner -->
-    <div id="loading-spinner" class="loading-spinner">
+    {% comment %} <div id="loading-spinner" class="loading-spinner">
         <div class="spinner-border text-success" role="status">
             <span class="visually-hidden">Carregando...</span>
         </div>
-    </div>
+    </div> {% endcomment %}
 
      <!-- Skip to main content (acessibilidade) -->
-    <a class="skip-link" href="#main-content">Pular para o conteúdo principal</a>
+    {% comment %} <a class="skip-link" href="#main-content">Pular para o conteúdo principal</a> {% endcomment %}
 
     <!-- Header -->
     <header class="header-main" role="banner">
@@ -73,7 +73,7 @@
             <div class="cookie-actions">
                 <button id="accept-cookies" class="btn btn-success btn-sm">Aceitar</button>
                 <button id="decline-cookies" class="btn btn-outline-secondary btn-sm">Recusar</button>
-                <a href="{% url 'core:privacidade' %}" class="btn btn-link btn-sm">Saiba mais</a>
+                {% comment %} <a href="{% url 'core:privacidade' %}" class="btn btn-link btn-sm">Saiba mais</a> {% endcomment %}
             </div>
         </div>
     </div>
