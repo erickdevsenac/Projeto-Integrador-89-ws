@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from core.models import Receita, Ingrediente, EtapaPreparo
-from .usuarioSerializer import UserSerializer
+from .usuario_serializer import UserSerializer
 
 class IngredienteSerializer(serializers.ModelSerializer):
     class Meta:

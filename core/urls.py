@@ -22,7 +22,6 @@ urlpatterns = [
     # ==============================================================================
     path("", public.index, name="index"),
     path("produtos/", marketplace.produtos, name="produtos"),
-    path("busca/", marketplace.buscar_produtos, name="buscar_produtos"),
     path("contato/", public.contato, name="contato"),
     #TODO:
     # path("sobre/", views.sobre, name="sobre"),
@@ -33,6 +32,7 @@ urlpatterns = [
     # ROTAS DE AUTENTICAÇÃO E PERFIL
     # ==============================================================================
     path("cadastro/", auth.cadastro, name="cadastro"),
+    path("cadastro/completar/", auth.completar_cadastro, name="completar_cadastro"),
     path("login/", auth.login_view, name="telalogin"),  
     path("logout/", auth.logout_view, name="logout"),
     path("perfil/", auth.perfil, name="perfil"),
@@ -52,7 +52,9 @@ urlpatterns = [
     # ROTAS DE PRODUTOS E MARKETPLACE
     # ==============================================================================
     # As rotas de "produtos" e "busca" já foram declaradas na seção principal
+    
     path("produto/<int:produto_id>/", marketplace.produto_detalhe, name="produto_detalhe"),
+    path("produto/<int:produto_id>/quick-view/", marketplace.produto_quick_view, name="produto_quick_view"),
     #TODO:
     # path("categoria/<slug:categoria_slug>/", views.produtos_por_categoria, name="produtos_categoria"),
     

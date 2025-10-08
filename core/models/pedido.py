@@ -36,7 +36,7 @@ class Pedido(TimeStampedModel):
         limit_choices_to={'tipo': 'CLIENTE'}
     )
     
-    valor_produtos = models.DecimalField(max_digits=10, decimal_places=2)
+    valor_produtos = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     valor_frete = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     valor_desconto = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     valor_total = models.DecimalField(max_digits=10, decimal_places=2)

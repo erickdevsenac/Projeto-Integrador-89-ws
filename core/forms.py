@@ -20,7 +20,7 @@ from .models import (
 # FORMULÁRIOS DE AUTENTICAÇÃO E PERFIL
 # ==============================================================================
 
-class CadastroForm(forms.ModelForm):
+class CadastroStep1Form(forms.ModelForm):
     email = forms.EmailField(
         label="Email",
         widget=forms.EmailInput(attrs={'placeholder': 'Digite seu email'}),
@@ -36,23 +36,8 @@ class CadastroForm(forms.ModelForm):
     
     class Meta:
         model = Perfil
-        fields = [ 
-            "tipo",
-            "nome_completo", # Adicionado para clientes
-            "nome_negocio",
-            "telefone", 
-            "endereco",
-            "cnpj",
-            "descricao_parceiro",
-        ]
-        widgets = {
-            "nome_completo": forms.TextInput(attrs={'placeholder':'Seu nome completo'}),
-            "nome_negocio": forms.TextInput(attrs={'placeholder':'Nome da Loja/ONG'}),
-            "telefone": forms.TextInput(attrs={'placeholder':'(11) 99999-9999'}),
-            "cnpj": forms.TextInput(attrs={'placeholder':'CNPJ (se aplicável)'}),
-            "descricao_parceiro": forms.Textarea(attrs={'placeholder':'Fale um pouco sobre você ou seu negócio...'}),
-            "endereco": forms.TextInput(attrs={'placeholder':'Seu endereço completo'}),
-        }
+        fields = ["tipo"]
+        
 
     def clean_confirmar_senha(self):
         senha = self.cleaned_data.get("senha")
@@ -80,18 +65,27 @@ class CadastroForm(forms.ModelForm):
         return email
 
 
-class PerfilForm(forms.ModelForm):
+class CompleteClientProfileForm(forms.ModelForm):
     class Meta:
         model = Perfil
-        fields = [
-            "foto_perfil",
-            "nome_completo",
-            "nome_negocio",
-            "telefone",
-            "endereco",
-            "cnpj",
-            "descricao_parceiro",
-        ]
+        fields = ["nome_completo", "telefone", "endereco"]
+        widgets = {
+            "nome_completo": forms.TextInput(attrs={'placeholder':'Seu nome completo'}),
+            "telefone": forms.TextInput(attrs={'placeholder':'(11) 99999-9999'}),
+            "endereco": forms.TextInput(attrs={'placeholder':'Seu endereço completo'}),
+        }
+        
+class CompletePartnerProfileForm(forms.ModelForm):
+    class Meta:
+        model = Perfil
+        fields = ["nome_negocio", "cnpj", "descricao_parceiro", "telefone", "endereco"]
+        widgets = {
+            "nome_negocio": forms.TextInput(attrs={'placeholder':'Nome da Loja/ONG'}),
+            "cnpj": forms.TextInput(attrs={'placeholder':'CNPJ (se aplicável)'}),
+            "descricao_parceiro": forms.Textarea(attrs={'placeholder':'Fale um pouco sobre seu negócio...'}),
+            "telefone": forms.TextInput(attrs={'placeholder':'(11) 99999-9999'}),
+            "endereco": forms.TextInput(attrs={'placeholder':'Seu endereço completo'}),
+        }
 
 
 # ==============================================================================
@@ -109,7 +103,6 @@ class ReceitaForm(forms.ModelForm):
             "categoria",
             "imagem",
         ]
-        # Adicionando um label mais amigável para a categoria
         labels = {
             'categoria': 'Categoria da Receita'
         }
@@ -144,8 +137,6 @@ class ProdutoForm(forms.ModelForm):
             "codigo_produto",
             "data_validade",
         ]
-        # REMOVIDO: O campo 'data_fabricacao' não existe no modelo Produto.
-        # CORRIGIDO: O campo 'imagem' foi renomeado para 'imagem_principal' para corresponder ao modelo.
         
         widgets = {
             "data_validade": forms.DateInput(attrs={"type": "date"}),
@@ -154,7 +145,6 @@ class ProdutoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # CORRIGIDO: A referência a 'Categoria' foi alterada para 'CategoriaProduto'.
         self.fields["categoria"].queryset = CategoriaProduto.objects.all()
         self.fields["categoria"].label_from_instance = lambda obj: obj.nome
 
@@ -175,7 +165,6 @@ class CupomForm(forms.ModelForm):
         }
 
     def clean_codigo(self):
-        # Garante que o código do cupom seja sempre salvo em maiúsculas
         codigo = self.cleaned_data.get("codigo")
         return codigo.upper() if codigo else codigo
 
@@ -199,7 +188,6 @@ class CheckoutForm(forms.ModelForm):
 class AvaliacaoForm(forms.ModelForm):
     class Meta:
         model = Avaliacao
-        # CORRIGIDO: Os campos foram alterados para 'nota' e 'texto' para corresponder ao modelo Avaliacao.
         fields = ['nota', 'texto']
         widgets = {
             'nota': forms.RadioSelect(choices=[(i, f'{i} Estrelas') for i in range(1, 6)]),
@@ -209,6 +197,3 @@ class AvaliacaoForm(forms.ModelForm):
             'nota': 'Sua Nota',
             'texto': 'Comentário'
         }
-
-# REMOVIDO: O formulário 'ProdutovendedorForm' era redundante e se referia a um modelo inexistente.
-# A funcionalidade dele deve ser coberta pelo 'ProdutoForm'.

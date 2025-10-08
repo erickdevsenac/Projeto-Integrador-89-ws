@@ -3,6 +3,8 @@ from core.models.cupom import Cupom
 
 
 class CupomSerializer(serializers.ModelSerializer):
+    """Serializador para Cupom de Produto."""
+    
     class Meta:
         model = Cupom
         fields = '__all__' 

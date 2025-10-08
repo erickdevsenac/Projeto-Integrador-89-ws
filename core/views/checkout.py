@@ -1,5 +1,3 @@
-# /views/checkout.py
-
 from decimal import Decimal
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -29,7 +27,6 @@ def finalizar_pedido(request):
     total_pedido = Decimal('0.00')
     pedidos_por_vendedor = {}
 
-    # Validação de estoque e agrupamento por vendedor
     for produto_id, item_data in carrinho_session.items():
         produto = produtos.get(produto_id)
         if not produto or item_data['quantidade'] > produto.quantidade_estoque:

@@ -1,6 +1,4 @@
-# /views/carrinho.py
-
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal
 import json
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages

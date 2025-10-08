@@ -3,10 +3,11 @@ from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
 from django.db.models import Q, Count
 from django.views.decorators.cache import cache_page
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 from core.models import Produto, CategoriaProduto
 
-@cache_page(60 * 5)  # Cache de 5 minutos
 def produtos(request):
     """View otimizada para listagem de produtos com filtros avançados"""
     queryset = Produto.objects.select_related('vendedor', 'categoria').filter(
@@ -14,7 +15,6 @@ def produtos(request):
         quantidade_estoque__gt=0
     )
     
-    # Filtros
     categoria_slug = request.GET.get('categoria')
     if categoria_slug:
         queryset = queryset.filter(categoria__slug=categoria_slug)
@@ -32,19 +32,23 @@ def produtos(request):
             queryset = queryset.filter(preco__lte=Decimal(preco_max))
         except (ValueError, TypeError):
             pass
-    
-    # Ordenação
+
     ordenacao = request.GET.get('ordenacao', '-data_criacao')
     ordenacoes_validas = ['-data_criacao', 'preco', '-preco', 'nome']
     if ordenacao in ordenacoes_validas:
         queryset = queryset.order_by(ordenacao)
     
-    # Paginação
     paginator = Paginator(queryset, 12)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
-    # Categorias com contagem de produtos
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        html = render_to_string(
+            'core/_lista_produtos.html', 
+            {'page_obj': page_obj, 'request': request}
+        )
+        return JsonResponse({'html': html})
+    
     categorias = CategoriaProduto.objects.annotate(
         produtos_count=Count('produtos', filter=Q(produtos__ativo=True, produtos__quantidade_estoque__gt=0))
     ).filter(produtos_count__gt=0)
@@ -62,32 +66,32 @@ def produtos(request):
     return render(request, 'core/produtos.html', context)
 
 
-def buscar_produtos(request):
-    """View para busca de produtos com múltiplos critérios"""
-    termo = request.GET.get('termo', '').strip()
+# def buscar_produtos(request):
+#     """View para busca de produtos com múltiplos critérios"""
+#     termo = request.GET.get('termo', '').strip()
     
-    if not termo:
-        return render(request, 'core/resultados_busca.html', {'resultados': [], 'termo': termo})
+#     if not termo:
+#         return render(request, 'core/resultados_busca.html', {'resultados': [], 'termo': termo})
     
-    resultados = Produto.objects.select_related('vendedor', 'categoria').filter(
-        Q(nome__icontains=termo) | 
-        Q(descricao__icontains=termo) |
-        Q(categoria__nome__icontains=termo) |
-        Q(vendedor__nome_negocio__icontains=termo),
-        ativo=True,
-        quantidade_estoque__gt=0
-    ).distinct().order_by('-data_criacao')
+#     resultados = Produto.objects.select_related('vendedor', 'categoria').filter(
+#         Q(nome__icontains=termo) | 
+#         Q(descricao__icontains=termo) |
+#         Q(categoria__nome__icontains=termo) |
+#         Q(vendedor__nome_negocio__icontains=termo),
+#         ativo=True,
+#         quantidade_estoque__gt=0
+#     ).distinct().order_by('-data_criacao')
     
-    paginator = Paginator(resultados, 12)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+#     paginator = Paginator(resultados, 12)
+#     page_number = request.GET.get('page')
+#     page_obj = paginator.get_page(page_number)
     
-    context = {
-        'page_obj': page_obj,
-        'termo': termo,
-        'total_resultados': paginator.count
-    }
-    return render(request, 'core/resultados_busca.html', context)
+#     context = {
+#         'page_obj': page_obj,
+#         'termo': termo,
+#         'total_resultados': paginator.count
+#     }
+#     return render(request, 'core/resultados_busca.html', context)
 
 
 def produto_detalhe(request, produto_id):
@@ -109,3 +113,8 @@ def produto_detalhe(request, produto_id):
         'produtos_relacionados': produtos_relacionados,
     }
     return render(request, 'core/produto_detalhe.html', context)
+
+def produto_quick_view(request, produto_id):
+    produto = get_object_or_404(Produto, id=produto_id)
+    html = render_to_string('core/_quick_view_content.html', {'produto': produto})
+    return JsonResponse({'html': html})

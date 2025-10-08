@@ -9,26 +9,48 @@ from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 
-from core.forms import CadastroForm, PerfilForm
+from core.forms import CadastroStep1Form, CompleteClientProfileForm, CompletePartnerProfileForm
+
 from core.models import Perfil
 
 def cadastro(request):
     if request.method == "POST":
-        form = CadastroForm(request.POST, request.FILES)
+        form = CadastroStep1Form(request.POST)
         if form.is_valid():
             data = form.cleaned_data
             user = User.objects.create_user(
-                username=data["email"], email=data["email"], password=data["senha"]
+                username=data["email"], 
+                email=data["email"], 
+                password=data["senha"]
             )
-            perfil = form.save(commit=False)
-            perfil.usuario = user
-            perfil.save()
+            Perfil.objects.create(usuario=user, tipo=data["tipo"])
+            
             login(request, user)
-            messages.success(request, f"Bem-vindo(a), {user.username}!")
+            
+            return redirect('core:completar_cadastro') 
+    else:
+        form = CadastroStep1Form()
+    return render(request, "core/cadastro_step1.html", {"form": form})
+
+@login_required(login_url="/login/")
+def completar_cadastro(request):
+    perfil = request.user.perfil
+    
+    if perfil.tipo == Perfil.TipoUsuario.CLIENTE:
+        FormClass = CompleteClientProfileForm
+    else: 
+        FormClass = CompletePartnerProfileForm
+        
+    if request.method == "POST":
+        form = FormClass(request.POST, request.FILES, instance=perfil)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Cadastro concluído com sucesso! Bem-vindo(a)!")
             return redirect("core:index")
     else:
-        form = CadastroForm()
-    return render(request, "core/cadastro.html", {"form": form})
+        form = FormClass(instance=perfil)
+        
+    return render(request, "core/cadastro_step2.html", {"form": form})
 
 def login_view(request):
     mensagem = ""

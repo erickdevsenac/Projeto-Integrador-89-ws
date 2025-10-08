@@ -41,7 +41,6 @@ class Cupom(TimeStampedModel):
         validators=[MinValueValidator(0.01)]
     )
     
-    # Restrições de uso
     data_inicio = models.DateTimeField(
         default=timezone.now,
         help_text="Data de início da validade do cupom"
@@ -72,8 +71,7 @@ class Cupom(TimeStampedModel):
         blank=True,
         help_text="Valor máximo de desconto (apenas para cupons percentuais)"
     )
-    
-    # Controles
+
     ativo = models.BooleanField(default=True)
     usos_realizados = models.PositiveIntegerField(
         default=0, 
@@ -81,7 +79,6 @@ class Cupom(TimeStampedModel):
         help_text="Contador de usos realizados"
     )
     
-    # Restrições por categoria ou vendedor
     categorias_permitidas = models.ManyToManyField(
         CategoriaProduto,
         blank=True,

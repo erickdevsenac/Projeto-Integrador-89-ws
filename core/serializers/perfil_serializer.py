@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from ..models import Perfil
-from .usuarioSerializer import UserSerializer
+from .usuario_serializer import UserSerializer
 
 class PerfilSerializer(serializers.ModelSerializer):
     """Serializador detalhado para o Perfil do usuário."""

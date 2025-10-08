@@ -175,7 +175,6 @@ CACHE_MIDDLEWARE_ALIAS = "default"
 CACHE_MIDDLEWARE_SECONDS = 600
 CACHE_MIDDLEWARE_KEY_PREFIX = "aproveite"
 
-
 # ==============================================================================
 # ARQUIVOS ESTÁTICOS E MÍDIA
 # ==============================================================================

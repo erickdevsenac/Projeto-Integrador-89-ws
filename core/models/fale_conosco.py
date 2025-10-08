@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class FaleConosco(models.Model):
     class statusMensagem(models.TextChoices):
         NOVA = "NOVA", "Nova"

@@ -122,6 +122,41 @@ button[type="submit"]:hover {
     }
 }
 
+#password-strength-feedback small {
+    color: #dc3545; /* Vermelho (inválido) por padrão */
+    transition: color 0.3s;
+}
+#password-strength-feedback small.valid {
+    color: #198754; /* Verde (válido) */
+    text-decoration: line-through;
+}
+
+
+.password-wrapper {
+    position: relative;
+    width: 100%; /* Garante que o wrapper ocupe a largura total */
+}
+
+.password-wrapper input[type="password"],
+.password-wrapper input[type="text"] {
+    padding-right: 2.5rem; /* Espaço para o ícone */
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px; /* Ajuste a posição horizontal */
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #6c757d; /* Cor do ícone */
+    font-size: 1.2em; /* Tamanho do ícone */
+    line-height: 1; /* Alinha o ícone verticalmente */
+}
+
+.password-toggle:hover {
+    color: #007bff; /* Cor ao passar o mouse */
+}
+
 @media (max-width: 480px) {
     .form-label {
         font-size: 14px;

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from core.models.avaliacao import Avaliacao
-from .usuarioSerializer import UserSerializer
+from .usuario_serializer import UserSerializer
 
 class AvaliacaoSerializer(serializers.ModelSerializer):
     """Serializador para avaliações e comentários."""
