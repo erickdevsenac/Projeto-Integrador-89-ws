@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.models import Doacao
+from core.models.doacoes import Doacao
 
 class DoacaoSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from core.models import Dica, CategoriaDica
+from core.models.dicas_sustentaveis import Dica, CategoriaDica
 from core.serializers import DicaSerializer, CategoriaDicaSerializer
 
 class CategoriaDicaViewSet(viewsets.ModelViewSet):

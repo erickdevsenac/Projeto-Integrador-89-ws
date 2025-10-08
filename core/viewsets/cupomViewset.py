@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from core.models.cupom_model import Cupom
+from core.models.cupom import Cupom
 from core.serializers.cupomSerializer import CupomSerializer
 
 class CupomViewSet(viewsets.ModelViewSet):

@@ -1,9 +1,5 @@
 from django.db import models
-from django.contrib.auth import get_user_model
 
-User = get_user_model()
-
-# Definindo as opções de tipo de notificação
 TIPO_NOTIFICACAO_CHOICES = (
     ('PEDIDO', 'Notificação de Pedido'),
     ('PROMOCAO', 'Promoção'),
@@ -14,7 +10,7 @@ TIPO_NOTIFICACAO_CHOICES = (
 class Notificacao(models.Model):
     # O usuário para quem a notificação se destina
     usuario = models.ForeignKey(
-        User,
+        'core.Perfil',
         on_delete=models.CASCADE,
         related_name='notificacoes',
         verbose_name='Usuário'
@@ -38,7 +34,6 @@ class Notificacao(models.Model):
         verbose_name='URL de Destino'
     )
     
-    # Controle de visualização
     lida = models.BooleanField(default=False, verbose_name='Lida')
     
     # Critério de Aceitação: Ordem Cronológica
@@ -50,7 +45,6 @@ class Notificacao(models.Model):
     class Meta:
         verbose_name = 'Notificação'
         verbose_name_plural = 'Notificações'
-        # Critério de Aceitação: Notificações em ordem cronológica (mais recentes primeiro)
         ordering = ['-data_criacao'] 
 
     def __str__(self):

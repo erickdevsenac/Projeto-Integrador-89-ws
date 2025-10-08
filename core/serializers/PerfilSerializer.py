@@ -1,15 +1,16 @@
 from rest_framework import serializers
-from core.models import Perfil
-from django.contrib.auth.models import User
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'email']
+from ..models import Perfil
+from .usuarioSerializer import UserSerializer
 
 class PerfilSerializer(serializers.ModelSerializer):
-    usuario = UserSerializer()  # nested user data
+    """Serializador detalhado para o Perfil do usuário."""
+    usuario = UserSerializer(read_only=True)
+    tipo_display = serializers.CharField(source='get_tipo_display', read_only=True)
 
     class Meta:
-        model= Perfil
-        fields= ['usuario','tipo','foto_perfil', 'nome_negocio', 'logo_ong', 'telefone', 'endereco', 'cnpj', 'descricao_parceiro']
+        model = Perfil
+        fields = [
+            'usuario', 'tipo', 'tipo_display', 'foto_perfil', 'nome_completo',
+            'nome_negocio', 'telefone', 'endereco', 'cnpj', 'descricao_parceiro',
+            'avaliacao_media', 'total_avaliacoes', 'verificado'
+        ]

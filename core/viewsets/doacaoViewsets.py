@@ -1,5 +1,5 @@
 from rest_framework import viewsets 
-from core.models import Doacao
+from core.models.doacoes import Doacao
 from core.serializers import DoacaoSerializer 
 
 class DoacaoViewSet(viewsets.ModelViewSet):

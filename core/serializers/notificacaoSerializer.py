@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.models.notificacao_model import Notificacao
+from core.models.notificacao import Notificacao
 
 class NotificacaoSerializer(serializers.ModelSerializer):
     tipo_display = serializers.CharField(source='get_tipo_display', read_only=True)

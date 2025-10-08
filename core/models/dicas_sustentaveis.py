@@ -3,7 +3,6 @@ from django.conf import settings
 from django.utils import timezone
 
 class CategoriaDica(models.Model):
-    """Categorias para as dicas, ex: 'Reciclagem', 'Economia de Água'."""
     nome = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
 
@@ -15,7 +14,6 @@ class CategoriaDica(models.Model):
         return self.nome
 
 class Dica(models.Model):
-    """Armazena uma dica de sustentabilidade."""
     titulo = models.CharField(max_length=200)
     resumo = models.CharField(max_length=255, help_text="Um resumo curto que aparecerá no card da dica.")
     conteudo = models.TextField(help_text="O conteúdo completo da dica.")

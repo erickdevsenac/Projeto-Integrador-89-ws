@@ -1,4 +1,4 @@
-from core.models import Categoria
+from core.models import CategoriaProduto
 
 def global_settings(request):
     """
@@ -34,5 +34,5 @@ def categorias_context(request):
     """
     Deixa as categorias disponíveis em todos os templates.
     """
-    categorias = Categoria.objects.all()
+    categorias = CategoriaProduto.objects.all()
     return {"categorias": categorias}

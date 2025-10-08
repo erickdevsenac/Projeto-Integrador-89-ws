@@ -1,20 +1,14 @@
 from rest_framework import serializers
-from core.models.vendedor_model import Loja, ProdutoVendedor, EstatisticaVenda
+from ..models import Perfil
+from .produtoSerializer import ProdutoListSerializer
 
-class ProdutoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProdutoVendedor
-        fields = ['id', 'nome', 'descricao', 'preco', 'imagem']
-
-class EstatisticaVendaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EstatisticaVenda
-        fields = ['total_vendas', 'receita_total']
-
-class LojaSerializer(serializers.ModelSerializer):
-    produtos = ProdutoSerializer(many=True, read_only=True)
-    estatisticas = EstatisticaVendaSerializer(read_only=True)
+class VendedorSerializer(serializers.ModelSerializer):
+    """ Serializador específico para o perfil de Vendedor, incluindo seus produtos. """
+    produtos = ProdutoListSerializer(many=True, read_only=True)
 
     class Meta:
-        model = Loja
-        fields = ['id', 'nome', 'imagem', 'localizacao', 'produtos', 'estatisticas']
+        model = Perfil
+        fields = [
+            'nome_negocio', 'foto_perfil', 'telefone', 'endereco', 'descricao_parceiro',
+            'avaliacao_media', 'total_avaliacoes', 'verificado', 'produtos'
+        ]

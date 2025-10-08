@@ -1,8 +1,19 @@
 from rest_framework import viewsets
-from core.serializers.produtoSerializer import ProdutoSerializer
-from core.models.produto_model import Produto
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from ..models import Produto
+from ..serializers import ProdutoListSerializer, ProdutoDetailSerializer
 
 class ProdutoViewSet(viewsets.ModelViewSet):
-    queryset = Produto.objects.all()  
-    serializer_class = ProdutoSerializer
+    """
+    ViewSet para visualizar e gerenciar Produtos.
+    """
+    queryset = Produto.objects.disponiveis()
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ProdutoListSerializer
+        return ProdutoDetailSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(vendedor=self.request.user.perfil)

@@ -3,8 +3,9 @@ from django.utils import timezone
 from django.core.validators import MinValueValidator
 from decimal import Decimal
 
-from .time_stamp_model import TimeStampedModel
-from .categoria_model import Categoria
+from .time_stamp import TimeStampedModel
+from core.models.produto import CategoriaProduto
+
 class Cupom(TimeStampedModel):
     """Modelo para cupons de desconto"""
     
@@ -56,20 +57,6 @@ class Cupom(TimeStampedModel):
         default=1, 
         help_text="Quantas vezes este cupom pode ser usado no total."
     )
-    
-    # limite_uso_por_usuario = models.PositiveIntegerField(
-    #     default=1,
-    #     help_text="Quantas vezes cada usuário pode usar este cupom",
-    
-    #     ativo = models.BooleanField(default=True),
-    #     usos_realizados = models.PositiveIntegerField(
-    #         default=0, editable=False
-    #     )
-    # )
- 
-    # limite_uso = models.PositiveIntegerField(
-    #     default=1, help_text="Quantas vezes este cupom pode ser usado no total."
-    # )
  
     valor_minimo_compra = models.DecimalField(
         max_digits=10,
@@ -96,7 +83,7 @@ class Cupom(TimeStampedModel):
     
     # Restrições por categoria ou vendedor
     categorias_permitidas = models.ManyToManyField(
-        Categoria,
+        CategoriaProduto,
         blank=True,
         help_text="Categorias onde o cupom pode ser aplicado (vazio = todas)"
     )

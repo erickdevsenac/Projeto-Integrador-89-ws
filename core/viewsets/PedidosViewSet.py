@@ -1,9 +1,9 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from ..models import Pedido
-from ..serializers import PedidosSerializer
+from core.models import Pedido
+from core.serializers import pedidoserializer
 
 class PedidosViewSetv(viewsets.ModelViewSet):
     queryset= Pedido.objects.all()
-    serializer_class = PedidosSerializer
+    serializer_class = pedidoserializer
     permission_classes = [IsAuthenticated]

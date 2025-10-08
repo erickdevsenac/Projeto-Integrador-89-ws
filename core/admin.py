@@ -1,72 +1,95 @@
-# core/admin.py
 from django.contrib import admin
-from core.models.avaliacao_model import Avaliacao
-from core.models.doacoes_model import Doacao
-from core.models.equipe_models import EquipeDev
-from core.models.item_pedido_model import ItemPedido
-from core.models.pedido_model import Pedido, PedidoVendedor
-from core.models.perfil_model import Perfil
-from core.models.produto_model import Categoria, Produto
-from core.models.receita_model import Receita
-from core.models.comentarios import Comentario
-from core.models.cupom_model import Cupom
-from core.models.notificacao_model import Notificacao
-from core.models.fale_conosco_model import FaleConosco
-from core.models.dicas_sustentaveis import Dica,CategoriaDica
+from .models import (
+    Avaliacao,
+    CategoriaDica,
+    CategoriaProduto,  
+    Cupom,
+    Dica,
+    Doacao,
+    EquipeDev,
+    FaleConosco,
+    ItemPedido,
+    Notificacao,
+    Pedido,
+    PedidoVendedor,
+    Perfil,
+    Produto,
+    Receita,
+)
 
-# ... seus imports
+class ItemPedidoInline(admin.TabularInline):
+    """Permite visualizar os itens de um PedidoVendedor diretamente em sua página."""
+    model = ItemPedido
+    extra = 0
+    readonly_fields = ("produto", "quantidade", "preco_unitario", "subtotal")
+
+    def subtotal(self, obj):
+        return obj.subtotal
+    subtotal.short_description = "Subtotal"
 
 
-# Melhora a visualização de Produtos no Admin
+class PedidoVendedorInline(admin.TabularInline):
+    """Permite visualizar os Pedidos de Vendedores (sub-pedidos) dentro de um Pedido principal."""
+    model = PedidoVendedor
+    extra = 0
+    readonly_fields = ("vendedor", "status", "valor_subtotal")
+    show_change_link = True
+
+
+@admin.register(Perfil)
+class PerfilAdmin(admin.ModelAdmin):
+    list_display = ("usuario", "get_full_name", "tipo", "nome_negocio")
+    list_filter = ("tipo",)
+    search_fields = ("usuario__username", "usuario__first_name", "usuario__last_name", "nome_negocio")
+
+    @admin.display(description='Nome Completo', ordering='usuario__first_name')
+    def get_full_name(self, obj):
+        full_name = obj.usuario.get_full_name()
+        return full_name if full_name else obj.usuario.username
+
 @admin.register(Produto)
 class ProdutoAdmin(admin.ModelAdmin):
-    list_display = (
-        "nome",
-        "vendedor",
-        "preco",
-        "quantidade_estoque",
-        "ativo",
-        "disponivel_para_venda",
-    )
+    list_display = ("nome", "vendedor", "preco", "quantidade_estoque", "ativo")
     list_filter = ("ativo", "categoria", "vendedor")
     search_fields = ("nome", "descricao", "vendedor__nome_negocio")
+    list_editable = ("preco", "quantidade_estoque", "ativo")
 
-
-# Permite ver os itens do pedido dentro do próprio pedido
-class ItemPedidoInline(admin.TabularInline):
-    model = ItemPedido
-    # extra = 0 # Não mostra formulários de itens extras por padrão
-    readonly_fields = (
-        "produto",
-        "quantidade",
-        "preco_unitario",
-        "subtotal",
-    )  # Campos não editáveis
-
+@admin.register(Pedido)
+class PedidoAdmin(admin.ModelAdmin):
+    list_display = ("numero_pedido", "cliente", "valor_total", "status_pagamento", "data_criacao")
+    list_filter = ("status_pagamento", "data_criacao")
+    search_fields = ("cliente__usuario__username", "numero_pedido")
+    readonly_fields = ("cliente", "valor_total", "data_criacao", "numero_pedido")
+    inlines = [PedidoVendedorInline]
 
 @admin.register(PedidoVendedor)
 class PedidoVendedorAdmin(admin.ModelAdmin):
-    list_display = ("id", "pedido_principal", "vendedor", "status", "valor_subtotal")
+    list_display = ("id", "get_pedido_principal_id", "vendedor", "status", "valor_subtotal", "data_pedido")
     list_filter = ("status", "vendedor")
-    inlines = [ItemPedidoInline]  # Adiciona os itens na tela do sub-pedido
+    search_fields = ("vendedor__nome_negocio", "pedido_principal__numero_pedido")
+    inlines = [ItemPedidoInline]
+
+    @admin.display(description='Pedido Principal', ordering='pedido_principal__numero_pedido')
+    def get_pedido_principal_id(self, obj):
+        return obj.pedido_principal.numero_pedido
+
+    @admin.display(description='Data do Pedido', ordering='pedido_principal__data_criacao')
+    def data_pedido(self, obj):
+        return obj.pedido_principal.data_criacao
+
+@admin.register(Cupom)
+class CupomAdmin(admin.ModelAdmin):
+    list_display = ('codigo', 'tipo_desconto', 'valor_desconto', 'ativo', 'data_validade')
+    list_filter = ('ativo', 'tipo_desconto')
+    search_fields = ('codigo',)
 
 
-# Registra os outros modelos de forma simples
-admin.site.register(Perfil)
-admin.site.register(Categoria)
-admin.site.register(Pedido)
+admin.site.register(CategoriaProduto)
 admin.site.register(Doacao)
 admin.site.register(Receita)
 admin.site.register(EquipeDev)
 admin.site.register(Avaliacao)
-admin.site.register(Comentario)
-admin.site.register(Cupom)
 admin.site.register(Notificacao)
 admin.site.register(FaleConosco)
 admin.site.register(Dica)
 admin.site.register(CategoriaDica)
-
-# Lista os Pedidos
-class ItemPedidoInline(admin.TabularInline):
-    model = ItemPedido
-    extra = 1
