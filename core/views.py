@@ -343,7 +343,7 @@ def ver_carrinho(request):
 
 @require_POST
 def adicionar_carrinho(request, produto_id):
-    produto = get_object_or_404(ProdutoVendedor, id=produto_id)
+    produto = get_object_or_404(Produto, id=produto_id)
     carrinho = request.session.get("carrinho", {})
     
     try:

@@ -15,10 +15,8 @@ from core.viewsets import (produtoViewset,
                            comentariosViewSet, 
                            pedidoViewset, 
                            itemPedidoViewSet,
-                           itemPedidoViewSet,
                            perfilViewSet,
                            cadastro_produtoViewset,
-                           usuarioViewSet,
                            receitaViewset
                           )
 

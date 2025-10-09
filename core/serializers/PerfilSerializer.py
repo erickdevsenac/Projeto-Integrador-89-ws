@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import Perfil
+from core.models import Perfil
 from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
@@ -11,19 +11,5 @@ class PerfilSerializer(serializers.ModelSerializer):
     usuario = UserSerializer()  # nested user data
 
     class Meta:
-        model = Perfil
-        fields = [
-            'usuario',
-            'tipo',
-            'foto_perfil',
-            'nome_negocio',
-            'logo_ong',
-            'telefone',
-            'endereco',
-            'cnpj',
-            'descricao_parceiro',
-            'imagem_carrossel1',
-            'imagem_carrossel2',
-            'imagem_carrossel3',
-            'objetivo',
-        ]
+        model= Perfil
+        fields= ['usuario','tipo','foto_perfil', 'nome_negocio', 'logo_ong', 'telefone', 'endereco', 'cnpj', 'descricao_parceiro']

@@ -135,7 +135,7 @@ class Migration(migrations.Migration):
             name='Avaliacao',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('titulo', models.CharField(blank=True, max_length=100)),
+                ('titulo', models.CharField(blank=True, max_length=110)),
                 ('descricao', models.TextField(blank=True)),
                 ('nota', models.PositiveSmallIntegerField(choices=[(1, '1 Estrela'), (2, '2 Estrelas'), (3, '3 Estrelas'), (4, '4 Estrelas'), (5, '5 Estrelas')])),
                 ('data_avaliacao', models.DateTimeField(auto_now_add=True)),
