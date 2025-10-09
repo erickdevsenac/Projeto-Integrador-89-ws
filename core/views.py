@@ -1,4 +1,4 @@
-from decimal import Decimal, InvalidOperation # Importado InvalidOperation para maior robustez no carrinho
+from decimal import Decimal, InvalidOperation
 from .models import Avaliacao
 from .forms import AvaliacaoForm
 from django.contrib import messages
@@ -25,7 +25,6 @@ from .forms import (
     ReceitaForm,
 )
 
-# --- Imports do Projeto ---
 from .models import (
     Categoria,
     Dica,
@@ -39,8 +38,6 @@ from .models import (
     Produto
 )
 
-
-# --- Funções de Teste para Decorators ---
 def is_vendedor(user):
     """Verifica se o usuário é um vendedor autenticado."""
     return (
@@ -48,12 +45,6 @@ def is_vendedor(user):
         and hasattr(user, "perfil")
         and user.perfil.tipo == Perfil.TipoUsuario.VENDEDOR
     )
-
-
-# ==============================================================================
-# VIEWS PÚBLICAS E INSTITUCIONAIS
-# ==============================================================================
-
 
 def index(request):
     return render(request, 'core/index.html')
@@ -64,9 +55,6 @@ def ongs_pagina(request, usuario_id):
         "inf_ongs": ongs_pagina
     }
     return render(request, 'core/ong_pagina.html', context)
-
-# NOTA: A definição duplicada de 'produtos' (originalmente na linha 100) foi removida.
-# A versão mais completa (abaixo, na seção Marketplace) foi mantida.
 
 def contato(request):
     return render(request, "core/contato.html")
@@ -85,12 +73,6 @@ def doacao(request):
 
 def videos(request):
     return render(request, "core/videos.html")
-
-
-# ==============================================================================
-# VIEWS DE AUTENTICAÇÃO E PERFIL
-# ==============================================================================
-
 
 def cadastro(request):
     if request.method == "POST":
@@ -150,14 +132,11 @@ def perfil(request):
 @login_required(login_url="/login/")
 def configuracoes(request):
     if request.method == 'POST':
-        # Checa a lógica de exclusão primeiro
         if 'excluir_conta' in request.POST:
-            # Lógica para deletar a conta do usuário
             request.user.delete()
             messages.success(request, "Sua conta foi excluída com sucesso.")
             return redirect('core:index')
 
-        # Se não for uma exclusão, processa as outras configurações
         tema = request.POST.get('tema')
         fonte = request.POST.get('fonte')
         acessibilidade = request.POST.get('acessibilidade')
@@ -175,11 +154,9 @@ def configuracoes(request):
         messages.success(request, "Configurações atualizadas com sucesso!")
         return redirect('core:configuracoes')
 
-    # Lógica GET para apenas renderizar a página
     return render(request, "core/configuracoes.html")
 
 
-# TODO: Implementar a lógica de recuperação de senha (geralmente envolve envio de email)
 def recuperarsenha(request):
     if request.method == 'POST':
         email_do_usuario = request.POST.get('email')
@@ -190,15 +167,12 @@ def recuperarsenha(request):
             messages.error(request, 'Não há conta associada a este e-mail.')
             return render(request, 'core/recuperarsenha.html')
             
-        # Cria o token de recuperação de senha
         uid = urlsafe_base64_encode(force_bytes(usuario.pk))
         token = default_token_generator.make_token(usuario)
         
-        # Cria o link de redefinição
         current_site = request.get_host()
         link_de_reset = f"http://{current_site}/redefinir-senha/{uid}/{token}/"
         
-        # Cria o corpo do e-mail com o link de reset
         corpo_email = render_to_string('email/senha_reset.html', {
             'usuario': usuario,
             'link_de_reset': link_de_reset,
@@ -218,15 +192,8 @@ def recuperarsenha(request):
             messages.error(request, f'Ocorreu um erro ao enviar o e-mail: {e}')
     return render(request, "core/recuperarsenha.html")
 
-
-# TODO: Implementar a lógica de alteração de senha
 def alterarsenha(request):
     return render(request, "core/alterarsenha.html")
-
-
-# ==============================================================================
-# VIEWS DO MARKETPLACE (PRODUTOS, CARRINHO, CHECKOUT)
-# ==============================================================================
 
 
 def produtos(request):
@@ -273,7 +240,6 @@ def buscar_produtos(request):
         {"page_obj": page_obj, "termo": termo},
     )
 
-
 @user_passes_test(is_vendedor, login_url="/login/")
 def cadastroproduto(request):
     if request.method == "POST":
@@ -290,8 +256,6 @@ def cadastroproduto(request):
         form = ProdutoForm()
     return render(request, "core/cadastroproduto.html", {"form": form})
 
-
-# --- Views do Carrinho ---
 
 
 def ver_carrinho(request):
@@ -326,7 +290,6 @@ def ver_carrinho(request):
              keys_para_remover.append(produto_id)
              continue
 
-    # Limpa a sessão de quaisquer chaves inválidas encontradas
     if keys_para_remover:
         for key in keys_para_remover:
             if key in carrinho_session:
@@ -396,21 +359,17 @@ def atualizar_carrinho(request):
             except ValueError:
                 continue
 
-            # Garante que o item ainda existe no carrinho
             if produto_id_str in carrinho:
                 try:
                     produto = ProdutoVendedor.objects.get(id=int(produto_id_str))
 
-                    # Verificação de estoque
                     if nova_quantidade > produto.quantidade_estoque:
                         messages.error(
                             request,
                             f"Estoque insuficiente para '{produto.nome}'. Apenas {produto.quantidade_estoque} disponíveis.",
                         )
-                        # Pula para o próximo item sem alterar este
                         continue
 
-                    # Se a quantidade for 0, remove o item. Senão, atualiza.
                     if nova_quantidade > 0:
                         carrinho[produto_id_str]["quantidade"] = nova_quantidade
                     else:
@@ -418,7 +377,6 @@ def atualizar_carrinho(request):
                         messages.info(request, f"Item '{produto.nome}' removido.")
 
                 except ProdutoVendedor.DoesNotExist:
-                    # Se o produto foi removido do banco, remove do carrinho também
                     del carrinho[produto_id_str]
                     messages.warning(request, "Um item do catálogo foi removido do seu carrinho.")
 
@@ -438,10 +396,6 @@ def remover_item(request, produto_id):
         request.session.modified = True
         messages.success(request, f"'{nome_produto}' removido do carrinho.")
     return redirect("core:ver_carrinho")
-
-
-# --- Views de Pedidos ---
-
 
 @login_required(login_url="/login/")
 def finalizar_pedido(request):
@@ -476,22 +430,18 @@ def finalizar_pedido(request):
             with transaction.atomic():
                 cliente_perfil = request.user.perfil
                 
-                # 1. Cria o Pedido Principal
                 pedido = Pedido.objects.create(
                     cliente=cliente_perfil,
                     valor_total=total_carrinho,
-                    endereco_entrega=cliente_perfil.endereco, # Assumindo que Perfil tem um campo 'endereco'
+                    endereco_entrega=cliente_perfil.endereco, 
                 )
                 
                 pedidos_por_vendedor = {}
                 
-                # 2. Agrupa itens por Vendedor e verifica estoque final
                 for item in carrinho_detalhado:
-                    # Usar select_for_update para garantir atomicidade no estoque
-                    produto = ProdutoVendedor.objects.select_for_update().get(id=item["produto_id"])
+                    produto = Produto.objects.select_for_update().get(id=item["produto_id"])
                     
                     if produto.quantidade_estoque < item["quantidade"]:
-                         # Isso causará um rollback no transaction.atomic()
                          raise Exception(f"Estoque insuficiente para {produto.nome}. Apenas {produto.quantidade_estoque} disponíveis.")
                          
                     vendedor_perfil = produto.vendedor
@@ -505,7 +455,6 @@ def finalizar_pedido(request):
                     pedidos_por_vendedor[vendedor_perfil]["itens"].append(item)
                     pedidos_por_vendedor[vendedor_perfil]["subtotal"] += item["subtotal"]
 
-                # 3. Cria Sub-Pedidos (PedidoVendedor) e Itens
                 for vendedor, dados_pedido in pedidos_por_vendedor.items():
                     sub_pedido = PedidoVendedor.objects.create(
                         pedido_principal=pedido,
@@ -514,9 +463,8 @@ def finalizar_pedido(request):
                     )
                     
                     for item_data in dados_pedido["itens"]:
-                        produto = ProdutoVendedor.objects.get(id=item_data["produto_id"])
+                        produto = Produto.objects.get(id=item_data["produto_id"])
                         
-                        # Cria o ItemPedido
                         ItemPedido.objects.create(
                             sub_pedido=sub_pedido,
                             produto=produto,
@@ -524,11 +472,9 @@ def finalizar_pedido(request):
                             preco_unitario=item_data["preco"],
                         )
                         
-                        # Diminui o estoque do produto 
                         produto.quantidade_estoque -= item_data["quantidade"]
                         produto.save()
                         
-                # 4. Limpa o carrinho
                 del request.session["carrinho"]
                 messages.success(request, f"Seu pedido #{pedido.id} foi finalizado com sucesso!")
                 return redirect("core:meus_pedidos")
@@ -555,25 +501,19 @@ def meus_pedidos(request):
     if perfil_usuario.tipo == Perfil.TipoUsuario.CLIENTE:
         pedidos = Pedido.objects.filter(cliente=perfil_usuario).order_by("-data_pedido")
         context = {"pedidos": pedidos, "is_cliente": True}
+        print(pedidos)
     elif perfil_usuario.tipo == Perfil.TipoUsuario.VENDEDOR:
-        pedidos = PedidoVendedor.objects.filter(vendedor=perfil_usuario).order_by("-id")
+        pedidos = Pedido.objects.filter(vendedor=perfil_usuario).order_by("-id")
         context = {"pedidos": pedidos, "is_cliente": False}
     else:
         context = {"pedidos": []}
         
     return render(request, "core/meus_pedidos.html", context)
 
-
-# ==============================================================================
-# VIEWS DE CONTEÚDO (RECEITAS, DICAS)
-# ==============================================================================
-
-
 def receitas(request):
-    # AJUSTE: Adicionada paginação para a lista de receitas
     lista_receitas = Receita.objects.filter(disponivel=True).order_by('-data_criacao')
     
-    paginator = Paginator(lista_receitas, 9) # Exibe 9 receitas por página
+    paginator = Paginator(lista_receitas, 9)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
@@ -629,8 +569,6 @@ def cria_receita(request):
         },
     )
 
-
-# Função para garantir que apenas administradores acessem
 def is_admin(user):
     return user.is_staff
 
@@ -659,8 +597,7 @@ def vendedor(request):
 def avaliacao(request):
     avaliacoes = Avaliacao.objects.all().order_by('-data_avaliacao')
     
-    # Adicionando paginação
-    paginator = Paginator(avaliacoes, 10) # 10 avaliações por página
+    paginator = Paginator(avaliacoes, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     

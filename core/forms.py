@@ -76,7 +76,6 @@ class CadastroForm(forms.ModelForm):
 class ReceitaForm(forms.ModelForm):
     class Meta:
         model = Receita
-        # Lista de campos do modelo Receita que o usuário irá preencher
         fields = [
             "nome",
             "descricao",
@@ -85,22 +84,15 @@ class ReceitaForm(forms.ModelForm):
             "categoria",
             "imagem",
         ]
-        # Excluímos 'autor', 'data_criacao' e 'disponivel' porque serão
-        # definidos automaticamente na view ou terão um valor padrão.
 
-
-# --- Formsets para Itens Relacionados ---
-
-# Cria um conjunto de formulários para os Ingredientes ligados a uma Receita
 IngredienteFormSet = inlineformset_factory(
-    Receita,  # Modelo Pai
-    Ingrediente,  # Modelo Filho
-    fields=("nome", "quantidade"),  # Campos do Ingrediente a serem exibidos
-    extra=1,  # Quantos formulários em branco devem aparecer para adição
-    can_delete=True,  # Permite que o usuário marque ingredientes para deletar
+    Receita,
+    Ingrediente,
+    fields=("nome", "quantidade"),
+    extra=1,
+    can_delete=True,
 )
 
-# Cria um conjunto de formulários para as Etapas de Preparo
 EtapaPreparoFormSet = inlineformset_factory(
     Receita, EtapaPreparo, fields=("ordem", "descricao"), extra=1, can_delete=True
 )
@@ -120,30 +112,25 @@ class PerfilForm(forms.ModelForm):
 
 
 class ConfiguracaoForm(forms.Form):
-    # Opções de Tema
     tema_choices = [
         ("claro", "Claro"),
         ("escuro", "Escuro"),
     ]
-    # Opções de Fonte
     fonte_choices = [
         ("normal", "Normal"),
         ("grande", "Grande"),
         ("extra_grande", "Extra Grande"),
     ]
-    # Opções de Acessibilidade
     acessibilidade_choices = [
         ("nenhuma", "Nenhuma"),
         ("alto_contraste", "Alto Contraste"),
         ("leitura_facilitada", "Leitura Facilitada"),
     ]
-    # Opções de Notificação
     notificacoes_choices = [
         ("sim", "Sim"),
         ("nao", "Não"),
     ]
 
-    # Campos do formulário
     tema = forms.ChoiceField(choices=tema_choices, required=False)
     fonte = forms.ChoiceField(choices=fonte_choices, required=False)
     acessibilidade = forms.ChoiceField(choices=acessibilidade_choices, required=False)
@@ -156,7 +143,6 @@ class ConfiguracaoForm(forms.Form):
 class ProdutoForm(forms.ModelForm):
     class Meta:
         model = Produto
-        # Lista de campos que o vendedor irá preencher
         fields = [
             "nome",
             "categoria",
@@ -168,10 +154,7 @@ class ProdutoForm(forms.ModelForm):
             "data_fabricacao",
             "data_validade",
         ]
-        # Excluímos 'vendedor', 'ativo' e 'data_criacao' porque serão
-        # definidos automaticamente na view.
 
-        # Adiciona widgets para melhorar a experiência do usuário
         widgets = {
             "data_fabricacao": forms.DateInput(attrs={"type": "date"}),
             "data_validade": forms.DateInput(attrs={"type": "date"}),
@@ -180,7 +163,6 @@ class ProdutoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Deixa o campo de categoria mais amigável, mostrando os nomes
         self.fields["categoria"].queryset = Categoria.objects.all()
         self.fields["categoria"].label_from_instance = lambda obj: obj.nome
 
@@ -202,7 +184,6 @@ class CupomForm(forms.ModelForm):
             "ativo",
         ]
 
-        # Widgets ajudam a melhorar a aparência dos campos no HTML.
         widgets = {
             "data_validade": forms.DateInput(attrs={"type": "date"}),
         }
@@ -222,10 +203,8 @@ class CheckoutForm(forms.ModelForm):
     """
     class Meta:
         model = Pedido
-        # Campos que o cliente irá preencher/confirmar
         fields = ['endereco_entrega', 'forma_pagamento']
-        
-        # Widgets para melhorar a aparência dos campos
+
         widgets = {
             'endereco_entrega': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
             'forma_pagamento': forms.RadioSelect(attrs={'class': 'form-check-input'}),
@@ -233,7 +212,6 @@ class CheckoutForm(forms.ModelForm):
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Deixa os rótulos mais amigáveis
         self.fields['endereco_entrega'].label = "Endereço de Entrega"
         self.fields['forma_pagamento'].label = "Escolha a Forma de Pagamento"
 
