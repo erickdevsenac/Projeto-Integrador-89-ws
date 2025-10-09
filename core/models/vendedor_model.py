@@ -13,7 +13,6 @@ class ProdutoVendedor(models.Model):
     data_validade = models.DateField(null=True, blank=True)
     quantidade_estoque = models.PositiveIntegerField(default=0)
     descricao = models.TextField(null=True, blank=True)
-
     ativo = models.BooleanField(default=True) 
 
     def __str__(self):

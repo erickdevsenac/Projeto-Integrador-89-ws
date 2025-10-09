@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from core.models import notificacao_model
+from core.models.notificacao_model import Notificacao
 
 class NotificacaoSerializer(serializers.ModelSerializer):
     tipo_display = serializers.CharField(source='get_tipo_display', read_only=True)
 
     class Meta:
-        model = notificacao_model
+        model = Notificacao
         fields = [
             'id', 
             'tipo', 

@@ -1,7 +1,88 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+ 
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9f9f9;
+}
+
 .cor-bg {
-  background: linear-gradient(to right, #a8d5ba, #d0ead7, #b2dfdb, #e0f2f1);
+  background: linear-gradient(to right, #01d472, #16b4fd);
   font-size: 20px;
   margin-bottom: -50px;
   margin-top: -50px;
-  height: -200px;
+  margin-bottom: -50px;
+}
+
+.cor-bg .container,
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.cor-bg .footer-logo,
+.footer-logo {
+  flex: 1 1 200px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+ 
+.cor-bg .footer-logo img,
+.footer-logo img {
+  max-width: 120px;
+  margin-bottom: 10px;
+}
+
+.cor-bg .footer-column,
+.footer-column {
+  flex: 1 1 200px;
+  margin-bottom: 30px;
+}
+ 
+.cor-bg .footer-column h4,
+.footer-column h4 {
+  color: #1c1c1c;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+ 
+.cor-bg .footer-column ul,
+.footer-column ul {
+  list-style: none;
+}
+ 
+.cor-bg .footer-column ul li,
+.footer-column ul li {
+  margin-bottom: 10px;
+}
+ 
+.cor-bg .footer-column ul li a,
+.footer-column ul li a {
+  color: #555;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+ 
+.cor-bg .footer-column ul li a:hover,
+.footer-column ul li a:hover {
+  color: #000;
+}
+
+@media (max-width: 768px) {
+  .cor-bg .container,
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .cor-bg .footer-column,
+  .footer-column {
+    margin-bottom: 20px;
+  }
 }
