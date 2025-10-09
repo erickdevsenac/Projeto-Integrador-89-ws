@@ -8,10 +8,11 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
+from django.db.models import F
 
 from core.forms import CadastroStep1Form, CompleteClientProfileForm, CompletePartnerProfileForm
 
-from core.models import Perfil
+from core.models import Perfil, Pedido, PedidoVendedor, Produto
 
 def cadastro(request):
     if request.method == "POST":
@@ -71,15 +72,40 @@ def logout_view(request):
 @login_required(login_url="/login/")
 def perfil(request):
     perfil = get_object_or_404(Perfil, usuario=request.user)
+
+    if perfil.tipo == Perfil.TipoUsuario.CLIENTE:
+        FormClass = CompleteClientProfileForm
+    else:  # VENDEDOR ou ONG
+        FormClass = CompletePartnerProfileForm
+    
     if request.method == "POST":
-        form = PerfilForm(request.POST, request.FILES, instance=perfil)
+        form = FormClass(request.POST, request.FILES, instance=perfil)
         if form.is_valid():
             form.save()
             messages.success(request, "Perfil atualizado com sucesso!")
             return redirect("core:perfil")
     else:
-        form = PerfilForm(instance=perfil)
-    return render(request, "core/perfil.html", {"form": form})
+        form = FormClass(instance=perfil)
+
+    dashboard_context = {}
+    if perfil.tipo == Perfil.TipoUsuario.VENDEDOR:
+        dashboard_context['ultimos_pedidos'] = PedidoVendedor.objects.filter(vendedor=perfil).order_by('-data_criacao')[:5]
+        dashboard_context['baixo_estoque'] = Produto.objects.filter(
+            vendedor=perfil, 
+            ativo=True, 
+            quantidade_estoque__lte=F('estoque_minimo')
+        ).order_by('quantidade_estoque')
+    
+    elif perfil.tipo == Perfil.TipoUsuario.CLIENTE:
+        dashboard_context['ultimos_pedidos'] = Pedido.objects.filter(cliente=perfil).order_by('-data_criacao')[:5]
+
+    context = {
+        'form': form,
+        'perfil': perfil,
+        'dashboard': dashboard_context
+    }
+    
+    return render(request, "core/perfil.html", context)
 
 @login_required
 def configuracoes(request):

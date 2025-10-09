@@ -81,35 +81,72 @@ def adicionar_carrinho(request, produto_id):
 
 @require_POST
 def atualizar_carrinho(request):
-    """View para atualizar quantidades no carrinho via AJAX"""
-    data = json.loads(request.body)
-    produto_id = str(data.get('produto_id'))
-    quantidade = int(data.get('quantidade', 0))
-    
+    """Atualiza a quantidade de um item no carrinho.
+    Responde a requisições AJAX com JSON."""
+    try:
+        data = json.loads(request.body)
+        produto_id = str(data.get('produto_id'))
+        quantidade = int(data.get('quantidade', 0))
+    except (json.JSONDecodeError, ValueError):
+        return JsonResponse({'success': False, 'message': 'Dados inválidos.'}, status=400)
+
     carrinho = request.session.get('carrinho', {})
     
-    if produto_id in carrinho:
-        produto = get_object_or_404(Produto, id=int(produto_id))
+    if produto_id not in carrinho:
+        return JsonResponse({'success': False, 'message': 'Produto não encontrado no carrinho.'}, status=404)
+
+    try:
+        produto = Produto.objects.get(id=int(produto_id))
+        
         if quantidade > 0 and quantidade <= produto.quantidade_estoque:
             carrinho[produto_id]['quantidade'] = quantidade
+            request.session['carrinho'] = carrinho
+            
+            # Recalcula totais para retornar na resposta
+            subtotal = produto.preco * quantidade
+            total_carrinho = sum(Decimal(item['preco']) * item['quantidade'] for item in carrinho.values())
+            total_itens = sum(item['quantidade'] for item in carrinho.values())
+
+            return JsonResponse({
+                'success': True,
+                'subtotal': f'R$ {subtotal:,.2f}'.replace(',', 'X').replace('.', ',').replace('X', '.'),
+                'total_carrinho': f'R$ {total_carrinho:,.2f}'.replace(',', 'X').replace('.', ',').replace('X', '.'),
+                'total_itens': total_itens,
+            })
         elif quantidade > produto.quantidade_estoque:
-             return JsonResponse({'success': False, 'message': f'Estoque insuficiente ({produto.quantidade_estoque})'})
-        else:
+            return JsonResponse({'success': False, 'message': f'Estoque insuficiente. Disponível: {produto.quantidade_estoque}'}, status=400)
+        else: # quantidade <= 0
+            # Se a quantidade for zero ou menos, remove o item
             del carrinho[produto_id]
-        
-        request.session['carrinho'] = carrinho
-        return JsonResponse({'success': True})
-    return JsonResponse({'success': False, 'message': 'Produto não encontrado'})
+            request.session['carrinho'] = carrinho
+            return JsonResponse({'success': True, 'removed': True}) # Sinaliza que o item foi removido
+
+    except Produto.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Produto não existe mais.'}, status=404)
+    
 
 @require_POST
 def remover_item_carrinho(request, produto_id):
-    """View para remover um item do carrinho"""
+    """
+    Remove um item do carrinho.
+    Responde a requisições AJAX com JSON.
+    """
     carrinho = request.session.get('carrinho', {})
     produto_id_str = str(produto_id)
     
     if produto_id_str in carrinho:
         del carrinho[produto_id_str]
         request.session['carrinho'] = carrinho
-        messages.success(request, "Item removido do carrinho.")
+        
+        # Recalcula totais para retornar na resposta
+        total_carrinho = sum(Decimal(item['preco']) * item['quantidade'] for item in carrinho.values())
+        total_itens = sum(item['quantidade'] for item in carrinho.values())
+
+        return JsonResponse({
+            'success': True,
+            'message': 'Item removido com sucesso.',
+            'total_carrinho': f'R$ {total_carrinho:,.2f}'.replace(',', 'X').replace('.', ',').replace('X', '.'),
+            'total_itens': total_itens,
+        })
     
-    return redirect("core:ver_carrinho")
+    return JsonResponse({'success': False, 'message': 'Item não encontrado.'}, status=404)

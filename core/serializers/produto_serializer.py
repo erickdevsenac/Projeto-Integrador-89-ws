@@ -11,7 +11,7 @@ class ProdutoListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Produto
         fields = [
-            'id', 'nome', 'preco', 'imagem_principal', 'vendedor_nome', 'categoria_nome', 'disponivel_para_venda'
+            'id', 'nome', 'preco', 'imagem_principal', 'vendedor', 'categoria', 'disponivel_para_venda'
         ]
 
 class ProdutoDetailSerializer(serializers.ModelSerializer):
@@ -24,5 +24,5 @@ class ProdutoDetailSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'nome', 'descricao', 'preco', 'preco_original', 'motivo_desconto',
             'imagem_principal', 'codigo_produto', 'data_validade', 'quantidade_estoque',
-            'ativo', 'destaque', 'vendedor', 'categoria', 'disponivel_para_venda'
+            'ativo', 'destaque', 'vendedor', 'categoria', 'disponivel_para_venda', 
         ]

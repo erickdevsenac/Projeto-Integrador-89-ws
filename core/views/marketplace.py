@@ -1,12 +1,15 @@
 from decimal import Decimal
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404,redirect
 from django.core.paginator import Paginator
 from django.db.models import Q, Count
 from django.views.decorators.cache import cache_page
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
-from core.models import Produto, CategoriaProduto
+from core.forms import ProdutoForm
+from core.models import Produto, CategoriaProduto, Perfil
 
 def produtos(request):
     """View otimizada para listagem de produtos com filtros avançados"""
@@ -14,6 +17,15 @@ def produtos(request):
         ativo=True, 
         quantidade_estoque__gt=0
     )
+
+    termo = request.GET.get('termo')
+    if termo:
+        queryset = queryset.filter(
+            Q(nome__icontains=termo) |
+            Q(descricao__icontains=termo) |
+            Q(categoria__nome__icontains=termo) |
+            Q(vendedor__nome_negocio__icontains=termo)
+        ).distinct()
     
     categoria_slug = request.GET.get('categoria')
     if categoria_slug:
@@ -66,32 +78,32 @@ def produtos(request):
     return render(request, 'core/produtos.html', context)
 
 
-# def buscar_produtos(request):
-#     """View para busca de produtos com múltiplos critérios"""
-#     termo = request.GET.get('termo', '').strip()
+def buscar_produtos(request):
+    """View para busca de produtos com múltiplos critérios"""
+    termo = request.GET.get('termo', '').strip()
     
-#     if not termo:
-#         return render(request, 'core/resultados_busca.html', {'resultados': [], 'termo': termo})
+    if not termo:
+        return render(request, 'core/resultados_busca.html', {'resultados': [], 'termo': termo})
     
-#     resultados = Produto.objects.select_related('vendedor', 'categoria').filter(
-#         Q(nome__icontains=termo) | 
-#         Q(descricao__icontains=termo) |
-#         Q(categoria__nome__icontains=termo) |
-#         Q(vendedor__nome_negocio__icontains=termo),
-#         ativo=True,
-#         quantidade_estoque__gt=0
-#     ).distinct().order_by('-data_criacao')
+    resultados = Produto.objects.select_related('vendedor', 'categoria').filter(
+        Q(nome__icontains=termo) | 
+        Q(descricao__icontains=termo) |
+        Q(categoria__nome__icontains=termo) |
+        Q(vendedor__nome_negocio__icontains=termo),
+        ativo=True,
+        quantidade_estoque__gt=0
+    ).distinct().order_by('-data_criacao')
     
-#     paginator = Paginator(resultados, 12)
-#     page_number = request.GET.get('page')
-#     page_obj = paginator.get_page(page_number)
+    paginator = Paginator(resultados, 12)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     
-#     context = {
-#         'page_obj': page_obj,
-#         'termo': termo,
-#         'total_resultados': paginator.count
-#     }
-#     return render(request, 'core/resultados_busca.html', context)
+    context = {
+        'page_obj': page_obj,
+        'termo': termo,
+        'total_resultados': paginator.count
+    }
+    return render(request, 'core/resultados_busca.html', context)
 
 
 def produto_detalhe(request, produto_id):
@@ -118,3 +130,22 @@ def produto_quick_view(request, produto_id):
     produto = get_object_or_404(Produto, id=produto_id)
     html = render_to_string('core/_quick_view_content.html', {'produto': produto})
     return JsonResponse({'html': html})
+
+@login_required(login_url="/login/")
+def cadastrar_produto(request):
+    if request.user.perfil.tipo != Perfil.TipoUsuario.VENDEDOR:
+        messages.error(request, "Apenas vendedores podem cadastrar produtos.")
+        return redirect('core:index')
+
+    if request.method == 'POST':
+        form = ProdutoForm(request.POST, request.FILES)
+        if form.is_valid():
+            produto = form.save(commit=False)
+            produto.vendedor = request.user.perfil 
+            produto.save()
+            messages.success(request, f'Produto "{produto.nome}" cadastrado com sucesso!')
+            return redirect('core:produtos') 
+    else:
+        form = ProdutoForm()
+
+    return render(request, 'core/cadastroproduto.html', {'form': form})

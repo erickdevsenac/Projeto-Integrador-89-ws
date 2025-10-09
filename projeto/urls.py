@@ -6,7 +6,7 @@ from rest_framework import routers
 from core.viewsets import(avaliacao_viewset, categoria_viewset, cupom_viewset, dicas_sustentaveis_viewset, doacao_viewset, faleconosco_viewset, item_pedido_viewset, notificacao_viewset, pedido_viewset, produto_viewset, perfil_viewset,
                            receita_viewset
                           )
-
+ 
 router = routers.DefaultRouter()
 router.register(r'Perfil', perfil_viewset.PerfilViewSet)
 router.register(r'receitas', receita_viewset.ReceitaViewSet)
@@ -28,8 +28,8 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls'))
 ]
-
-
+ 
+ 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

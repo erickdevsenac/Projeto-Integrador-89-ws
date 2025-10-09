@@ -1,5 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
+
+.container_final {
+    background: linear-gradient(to right, #aacdb4 100%);
+    justify-content: flex-start; 
+    align-items: flex-start;
+    margin: 20px auto;
+    padding: 20px;
+    width: 90%;
+    box-shadow: 0 6px 12px var(--shadow-medium);
+    border-radius: 10px;
+}
 .body_contato {
     font-family: 'Roboto', sans-serif;
     background: linear-gradient(to right, #aacdb4 100%);
@@ -8,7 +19,7 @@
 
 .body_contato  .container {
     display: flex;
-    justify-content: flex-start; /* Alinhando a imagem à esquerda */
+    justify-content: flex-start; 
     align-items: flex-start;
     margin: 20px auto;
     padding: 20px;

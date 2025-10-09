@@ -24,25 +24,24 @@
                 </thead>
                 <tbody>
                     {% for item in carrinho %}
-                        <tr>
+                        <tr data-produto-id="{{ item.produto.id }}">
                             <td>
-                                {% if item.imagem_url %}
-                                    <img src="{{ item.imagem_url }}" alt="{{ item.nome }}" class="img-fluid rounded" style="max-width: 100px;">
+                                {% if item.produto.imagem_principal %}
+                                    <img src="{{ item.produto.imagem_principal.url }}" alt="{{ item.produto.nome }}" class="img-fluid rounded" style="max-width: 100px;">
                                 {% endif %}
                             </td>
-                            <td>{{ item.nome }}</td>
-                            <td>R$ {{ item.preco|floatformat:2 }}</td>
+                            <td>{{ item.produto.nome }}</td>
+                            <td>R$ {{ item.produto.preco|floatformat:2 }}</td>
                             <td>
-                                <form action="{% url 'core:atualizar_carrinho' %}" method="POST" class="d-flex align-items-center">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="item_id" value="{{ item.id }}">
-                                    <input type="number" name="quantidade" value="{{ item.quantidade }}" min="1" class="form-control form-control-sm me-2" style="width: 70px;">
-                                    <button type="submit" class="btn btn-sm btn-primary">Atualizar</button>
-                                </form>
+                                <input type="number" name="quantidade" value="{{ item.quantidade }}" min="1" max="{{ item.produto.quantidade_estoque }}" 
+                                    class="form-control form-control-sm quantity-input" style="width: 80px;" 
+                                    data-produto-id="{{ item.produto.id }}">
                             </td>
-                            <td>R$ {{ item.subtotal|floatformat:2 }}</td>
+                            <td id="subtotal-{{ item.produto.id }}">R$ {{ item.subtotal|floatformat:2 }}</td>
                             <td>
-                                {% comment %} <a href="{% url 'core:remover_item' item.id %}" class="btn btn-outline-danger btn-sm">Remover</a> {% endcomment %}
+                                <button class="btn btn-outline-danger btn-sm remove-item-btn" data-produto-id="{{ item.produto.id }}" title="Remover item">
+                                    &times;
+                                </button>
                             </td>
                         </tr>
                     {% endfor %}
@@ -55,7 +54,7 @@
                 <div class="card">
                     <div class="card-body text-end">
                         <h4 class="card-title">Total do Carrinho</h4>
-                        <h3 class="card-text">R$ {{ total_carrinho|floatformat:2 }}</h3>
+                        <h3 class="card-text" id="cart-total">R$ {{ total_carrinho|floatformat:2 }}</h3>
                         <hr>
                         <a href="{% url "core:checkout" %}" class="btn btn-success w-100">Finalizar Compra</a>
                     </div>
@@ -79,4 +78,6 @@
     </section>
   </main>
 </div>
+
+<script src={% static "core/js/carrinho_ajax.js" %}></script>
 {% endblock content %}

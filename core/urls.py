@@ -55,13 +55,13 @@ urlpatterns = [
     
     path("produto/<int:produto_id>/", marketplace.produto_detalhe, name="produto_detalhe"),
     path("produto/<int:produto_id>/quick-view/", marketplace.produto_quick_view, name="produto_quick_view"),
+    path("produto/cadastrar/", marketplace.cadastrar_produto, name="cadastrar_produto"),
     #TODO:
     # path("categoria/<slug:categoria_slug>/", views.produtos_por_categoria, name="produtos_categoria"),
     
     #TODO:
     # Gestão de produtos (vendedores)
     # path("meus-produtos/", views.meus_produtos, name="meus_produtos"),
-    # path("produto/cadastrar/", views.cadastrar_produto, name="cadastrar_produto"),
     # path("produto/<int:produto_id>/editar/", views.editar_produto, name="editar_produto"),
     # path("produto/<int:produto_id>/excluir/", views.excluir_produto, name="excluir_produto"),
     

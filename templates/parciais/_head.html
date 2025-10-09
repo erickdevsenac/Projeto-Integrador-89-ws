@@ -21,8 +21,8 @@
     <meta property="twitter:image" content="{% block twitter_image %}{% load static %}{% static 'assets/img/logo-og.png' %}{% endblock %}">
     
 
-    {% block head %}{% endblock head %}
      <!-- CSS -->
+    {% block head %}<link rel="stylesheet" href={% static "assets/css/headerstyle.css" %}>{% endblock head %}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href={% static "assets/css/style.css" %}>
@@ -41,5 +41,16 @@
     <link rel="stylesheet" href={% static "assets/css/headerstyle.css" %}>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+
+
+    <script src="https://cdn.tiny.cloud/1/lvb2m7y0elpfu0scg5tgpw2rkra8p4tisswxvi0b8o9btyi7/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+    tinymce.init({
+        selector: 'textarea.richtext', 
+        plugins: 'code lists link image table',
+        toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table'
+    });
+    </script>
 </head>
   

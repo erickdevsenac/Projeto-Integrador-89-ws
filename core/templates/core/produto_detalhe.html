@@ -51,7 +51,7 @@
                 {% endif %}
             </div>
 
-            <p class="lead">{{ produto.descricao }}</p>
+            <p class="lead">{{ produto.descricao|safe }}</p>
 
             <div class="my-4">
                 <p><strong>Vendido por:</strong> <a href="#">{{ produto.vendedor.nome_negocio|default:produto.vendedor.usuario.username }}</a></p>

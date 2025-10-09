@@ -7,7 +7,7 @@ class PedidoViewSet(viewsets.ModelViewSet):
     """
     ViewSet para os Pedidos. Um cliente só pode ver e gerenciar seus próprios pedidos.
     """
-    queryset = Pedido.objects.all()  # 👈 Adicione esta linha
+    queryset = Pedido.objects.all() 
     serializer_class = PedidoSerializer
     permission_classes = [IsAuthenticated]
 

@@ -82,7 +82,9 @@ class CompletePartnerProfileForm(forms.ModelForm):
         widgets = {
             "nome_negocio": forms.TextInput(attrs={'placeholder':'Nome da Loja/ONG'}),
             "cnpj": forms.TextInput(attrs={'placeholder':'CNPJ (se aplicável)'}),
-            "descricao_parceiro": forms.Textarea(attrs={'placeholder':'Fale um pouco sobre seu negócio...'}),
+            "descricao_parceiro": forms.Textarea(attrs={'placeholder':'Fale um pouco sobre seu negócio...', "rows": 10, "class": "richtext"}),
+
+            # "descricao_parceiro": forms.Textarea(attrs={'placeholder':'Fale um pouco sobre seu negócio...'}),
             "telefone": forms.TextInput(attrs={'placeholder':'(11) 99999-9999'}),
             "endereco": forms.TextInput(attrs={'placeholder':'Seu endereço completo'}),
         }
@@ -109,11 +111,14 @@ class ReceitaForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Filtrando o queryset para mostrar apenas categorias de receita
         self.fields["categoria"].queryset = CategoriaReceita.objects.all()
 
 IngredienteFormSet = inlineformset_factory(
-    Receita, Ingrediente, fields=("nome", "quantidade"), extra=1, can_delete=True
+    Receita,
+    Ingrediente,
+    fields=("nome", "quantidade"),
+    extra=1,
+    can_delete=True,
 )
 
 EtapaPreparoFormSet = inlineformset_factory(
@@ -140,7 +145,7 @@ class ProdutoForm(forms.ModelForm):
         
         widgets = {
             "data_validade": forms.DateInput(attrs={"type": "date"}),
-            "descricao": forms.Textarea(attrs={"rows": 4}),
+            "descricao": forms.Textarea(attrs={"rows": 10, "class": "richtext"}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -172,6 +177,7 @@ class CheckoutForm(forms.ModelForm):
     class Meta:
         model = Pedido
         fields = ['endereco_entrega', 'forma_pagamento']
+
         widgets = {
             'endereco_entrega': forms.Textarea(attrs={'rows': 3}),
             'forma_pagamento': forms.RadioSelect(),

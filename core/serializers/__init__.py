@@ -8,6 +8,7 @@ from .item_pedido_serializers import *
 from .notificacao_serializer import *
 from .pedido_serializer import *
 from .perfil_serializer import *
+from .login_serializer import *
 from .produto_serializer import *
 from .receita_serializer import *
 from .usuario_serializer import *

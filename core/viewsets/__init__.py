@@ -4,6 +4,7 @@ from .cupom_viewset import *
 from .dicas_sustentaveis_viewset import *
 from .doacao_viewset import *
 from .faleconosco_viewset import *
+from .login_viewset import *
 from .item_pedido_viewset import *
 from .notificacao_viewset import *
 from .pedido_viewset import *

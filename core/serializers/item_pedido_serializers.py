@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import ItemPedido
+from core.models import ItemPedido
 from .produto_serializer import ProdutoListSerializer
 
 class ItemPedidoSerializer(serializers.ModelSerializer):
