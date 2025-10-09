@@ -95,3 +95,32 @@ function quickView(produtoId) {
             modalContent.innerHTML = '<p class="text-danger">Não foi possível carregar os detalhes do produto.</p>';
         });
 }
+
+// --- TOGGLE DE VISUALIZAÇÃO (GRID / LIST) ---
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleButtons = document.querySelectorAll('.view-toggle button');
+    const productListContainer = document.getElementById('product-list-container');
+
+    if (!toggleButtons || !productListContainer) return;
+
+    function applyView(view) {
+        productListContainer.classList.remove('view-grid', 'view-list');
+        productListContainer.classList.add(`view-${view}`);
+
+        toggleButtons.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.view === view);
+        });
+
+        localStorage.setItem('productView', view);
+    }
+
+    const savedView = localStorage.getItem('productView') || 'grid';
+    applyView(savedView);
+
+    toggleButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const selectedView = this.dataset.view;
+            applyView(selectedView);
+        });
+    });
+});

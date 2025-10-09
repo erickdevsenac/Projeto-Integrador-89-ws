@@ -1,0 +1,109 @@
+{% extends 'global/base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+
+{% block head %}
+  <title>{{ produto.nome }} - Aproveite+</title>
+  <style>
+    .produto-imagem-principal {
+      max-height: 500px;
+      width: 100%;
+      object-fit: cover;
+      border-radius: .5rem;
+    }
+    .preco-atual {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--bs-success);
+    }
+    .preco-original {
+      text-decoration: line-through;
+      color: #6c757d;
+      margin-left: .5rem;
+    }
+    .card-relacionado img {
+        height: 150px;
+        object-fit: cover;
+    }
+  </style>
+{% endblock head %}
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            {% if produto.imagem_principal %}
+                <img src="{{ produto.imagem_principal }}" alt="{{ produto.nome }}" class="img-fluid shadow-sm produto-imagem-principal">
+            {% else %}
+                <img src="{% static 'assets/img/placeholder_produto.png' %}" alt="Sem imagem" class="img-fluid shadow-sm produto-imagem-principal">
+            {% endif %}
+        </div>
+
+        <div class="col-lg-6">
+            <h1 class="display-5">{{ produto.nome }}</h1>
+            
+            <div class="d-flex align-items-center my-3">
+                <span class="preco-atual">R$ {{ produto.preco|floatformat:2 }}</span>
+                {% if produto.preco_original %}
+                    <span class="preco-original">R$ {{ produto.preco_original|floatformat:2 }}</span>
+                {% endif %}
+            </div>
+
+            <p class="lead">{{ produto.descricao }}</p>
+
+            <div class="my-4">
+                <p><strong>Vendido por:</strong> <a href="#">{{ produto.vendedor.nome_negocio|default:produto.vendedor.usuario.username }}</a></p>
+                {% if produto.categoria %}
+                    <p><strong>Categoria:</strong> <span class="badge bg-secondary">{{ produto.categoria.nome }}</span></p>
+                {% endif %}
+                <p><strong>Estoque:</strong> 
+                    {% if produto.quantidade_estoque > 0 %}
+                        {{ produto.quantidade_estoque }} unidades disponíveis
+                    {% else %}
+                        Indisponível
+                    {% endif %}
+                </p>
+            </div>
+
+            {% if produto.disponivel_para_venda %}
+                <form method="POST" action="{% url 'core:adicionar_carrinho' produto.id %}">
+                    {% csrf_token %}
+                    <div class="input-group input-group-lg">
+                        <input type="number" name="quantidade" value="1" min="1" max="{{ produto.quantidade_estoque }}" class="form-control" style="max-width: 100px;">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-cart-plus-fill me-2"></i> Adicionar ao Carrinho
+                        </button>
+                    </div>
+                </form>
+            {% else %}
+                <button class="btn btn-secondary btn-lg" disabled>Produto Indisponível</button>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if produtos_relacionados %}
+        <hr class="my-5">
+        <h2 class="mb-4">Produtos Relacionados</h2>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            {% for relacionado in produtos_relacionados %}
+                <div class="col">
+                    <div class="card h-100 shadow-sm card-relacionado">
+                        <a href="{% url 'core:produto_detalhe' relacionado.id %}">
+                            <img src="{{ relacionado.imagem_principal }}" class="card-img-top" alt="{{ relacionado.nome }}">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="{% url 'core:produto_detalhe' relacionado.id %}" class="text-decoration-none">{{ relacionado.nome }}</a>
+                            </h5>
+                            <p class="card-text fw-bold">R$ {{ relacionado.preco|floatformat:2 }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+</div>
+{% endblock content %}

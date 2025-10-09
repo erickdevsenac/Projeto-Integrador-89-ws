@@ -8,15 +8,7 @@
 {% endblock head %}
 <div class="container mt-5 mb-5">
     <h2 class="text-center mb-4">Seu Carrinho de Compras 🛒</h2>
-    {% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-        {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    {% endfor %}
-    {% endif %}
- 
+     
     {% if carrinho %}
         <div class="table-responsive">
             <table class="table align-middle">

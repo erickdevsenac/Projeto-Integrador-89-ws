@@ -1,155 +1,83 @@
-{% load pagination_tags %} 
+{% load static %}
 
-<div class="produtos-grid" id="produtos-grid">
-    {% if page_obj %}
+{% comment %}
+O único conteúdo aqui deve ser o que é atualizado pelo AJAX.
+A tag `load pagination_tags` foi removida daqui, pois o `_pagination.html` a carregará se necessário.
+{% endcomment %}
+
+{% if page_obj %}
+    <div class="row g-4"> 
+
         {% for produto in page_obj %}
-                
-                
+        <div class="col-md-4 col-sm-6">
+            <div class="produto-card" data-produto-id="{{ produto.id }}">
+                <div class="card h-100">
+                    {% if produto.motivo_desconto == 'VALIDADE' %}
+                    <div class="produto-badge badge-warning">
+                        <i class="fas fa-clock"></i> Vence em breve
+                    </div>
+                    {% endif %}
+                    {% if produto.estoque_baixo %}
+                    <div class="produto-badge badge-danger">
+                        <i class="fas fa-exclamation"></i> Últimas unidades
+                    </div>
+                    {% endif %}
 
-<div class="produto-card" data-produto-id="{{ produto.id }}">
-                                    <div class="card h-100">
-                                        <!-- Badge de Status -->
-                                        {% if produto.vencimento_proximo %}
-                                        <div class="produto-badge badge-warning">
-                                            <i class="fas fa-clock"></i> Vence em breve
-                                        </div>
-                                        {% endif %}
-                                        {% if produto.estoque_baixo %}
-                                        <div class="produto-badge badge-danger">
-                                            <i class="fas fa-exclamation"></i> Últimas unidades
-                                        </div>
-                                        {% endif %}
+                    <div class="produto-image">
+                        <a href="{% url 'core:produto_detalhe' produto.id %}">
+                            {% if produto.imagem_principal %}
+                            <img src="{{ produto.imagem_principal.url }}" alt="{{ produto.nome }}" class="card-img-top" loading="lazy">
+                            {% else %}
+                            <img src="{% static 'assets/img/placeholder_produto.png' %}" alt="Sem imagem" class="card-img-top" loading="lazy">
+                            {% endif %}
+                        </a>
+                        <div class="produto-actions">
+                            <button class="btn btn-sm btn-outline-light" title="Visualização rápida" onclick="quickView({{ produto.id }})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
 
-                                        <!-- Imagem -->
-                                        <div class="produto-image">
-                                            <a href="{% url 'core:produto_detalhe' produto.id %}">
-                                                {% if produto.imagem %}
-                                                    <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}" class="card-img-top" loading="lazy">
-                                                {% else %}
-                                                    <img src="{% static 'assets/img/placeholder_produto.png' %}" alt="Sem imagem" class="card-img-top" loading="lazy">
-                                                {% endif %}
-                                            </a>
-                                            <div class="produto-actions">
-                                                <button class="btn btn-sm btn-outline-light" title="Favoritar" onclick="toggleFavorito({{ produto.id }})">
-                                                    <i class="far fa-heart"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-outline-light" title="Visualização rápida" onclick="quickView({{ produto.id }})">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
-                                            </div>
-                                        </div>
+                    <div class="card-body">
+                        <small class="text-muted">{{ produto.vendedor.nome_negocio }}</small>
+                        <h5 class="card-title">
+                            <a href="{% url 'core:produto_detalhe' produto.id %}" class="text-decoration-none">{{ produto.nome }}</a>
+                        </h5>
+                        <div class="produto-preco">
+                            <span class="preco-atual">R$ {{ produto.preco|floatformat:2 }}</span>
+                            {% if produto.preco_original %}
+                            <span class="preco-original">R$ {{ produto.preco_original|floatformat:2 }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
 
-                                        <!-- Corpo -->
-                                        <div class="card-body">
-                                            <div class="produto-vendedor">
-                                                <small class="text-muted">
-                                                    <i class="fas fa-store me-1"></i>
-                                                    {{ produto.vendedor.nome_negocio|default:produto.vendedor.usuario.username }}
-                                                </small>
-                                            </div>
-
-                                            <h5 class="card-title">
-                                                <a href="{% url 'core:produto_detalhe' produto.id %}" class="text-decoration-none">
-                                                    {{ produto.nome }}
-                                                </a>
-                                            </h5>
-
-                                            {% if produto.categoria %}
-                                            <div class="produto-categoria mb-2">
-                                                <span class="badge bg-light text-dark">
-                                                    {{ produto.categoria.nome }}
-                                                </span>
-                                            </div>
-                                            {% endif %}
-
-                                            <div class="produto-preco">
-                                                <span class="preco-atual">R$ {{ produto.preco|floatformat:2 }}</span>
-                                                {% if produto.preco_original %}
-                                                <span class="preco-original">R$ {{ produto.preco_original|floatformat:2 }}</span>
-                                                <span class="desconto">-{{ produto.percentual_desconto }}%</span>
-                                                {% endif %}
-                                            </div>
-
-                                            <div class="produto-estoque">
-                                                <small class="text-muted">
-                                                    {% if produto.quantidade_estoque > 10 %}
-                                                        <i class="fas fa-check-circle text-success"></i> Em estoque
-                                                    {% elif produto.quantidade_estoque > 0 %}
-                                                        <i class="fas fa-exclamation-circle text-warning"></i>
-                                                        Restam {{ produto.quantidade_estoque }} unidades
-                                                    {% else %}
-                                                        <i class="fas fa-times-circle text-danger"></i> Fora de estoque
-                                                    {% endif %}
-                                                </small>
-                                            </div>
-                                        </div>
-
-                                        <!-- Rodapé -->
-                                        <div class="card-footer">
-                                            {% if produto.disponivel_para_venda %}
-                                            <form method="POST" action="{% url 'core:adicionar_carrinho' produto.id %}" class="add-to-cart-form">
-                                                {% csrf_token %}
-                                                <div class="row align-items-center">
-                                                    <div class="col-4">
-                                                        <input type="number" name="quantidade" value="1" min="1" max="{{ produto.quantidade_estoque }}" class="form-control form-control-sm">
-                                                    </div>
-                                                    <div class="col-8">
-                                                        <button type="submit" class="btn btn-success btn-sm w-100">
-                                                            <i class="fas fa-cart-plus me-1"></i> Adicionar
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                            {% else %}
-                                            <button class="btn btn-secondary btn-sm w-100" disabled>
-                                                <i class="fas fa-times me-1"></i> Indisponível
-                                            </button>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-{% endfor %}
-{% include 'core/_pagination.html' %}
-    
-    {% endif %}
-</div>
-
-{% if page_obj.has_other_pages %}
-<nav aria-label="Navegação de páginas" class="mt-4">
-    <ul class="pagination justify-content-center">
-        {% if page_obj.has_previous %}
-            <li class="page-item">
-                <a class="page-link" href="?{% query_transform request page=1 %}">
-                    <i class="fas fa-angle-double-left"></i>
-                </a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="?{% query_transform request page=page_obj.previous_page_number %}">
-                    <i class="fas fa-angle-left"></i>
-                </a>
-            </li>
-        {% endif %}
-
-        {% for num in page_obj.paginator.page_range %}
-            {% if page_obj.number == num %}
-                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
-            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                <li class="page-item"><a class="page-link" href="?{% query_transform request page=num %}">{{ num }}</a></li>
-            {% endif %}
+                    <div class="card-footer">
+                        {% if produto.disponivel_para_venda %}
+                        <form method="POST" action="{% url 'core:adicionar_carrinho' produto.id %}" class="add-to-cart-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantidade" value="1">
+                            <button type="submit" class="btn btn-success btn-sm w-100">
+                                <i class="fas fa-cart-plus me-1"></i> Adicionar
+                            </button>
+                        </form>
+                        {% else %}
+                        <button class="btn btn-secondary btn-sm w-100" disabled>Indisponível</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
         {% endfor %}
 
-        {% if page_obj.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="?{% query_transform request page=page_obj.next_page_number %}">
-                    <i class="fas fa-angle-right"></i>
-                </a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="?{% query_transform request page=page_obj.paginator.num_pages %}">
-                    <i class="fas fa-angle-double-right"></i>
-                </a>
-            </li>
-        {% endif %}
-    </ul>
-</nav>
+    </div> <div class="mt-4">
+        {% include 'core/_pagination.html' %}
+    </div>
+
+{% else %}
+    <div class="empty-state text-center py-5">
+        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+        <h4>Nenhum produto encontrado</h4>
+        <p class="text-muted">Tente ajustar os filtros ou buscar por outros termos.</p>
+        <a href="{% url 'core:produtos' %}" class="btn btn-success">Ver todos os produtos</a>
+    </div>
 {% endif %}
