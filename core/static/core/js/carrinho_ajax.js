@@ -51,6 +51,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function removeItem(buttonElement) {
+        console.log('excluir')
+
         const produtoId = buttonElement.dataset.produtoId;
 
         fetch(`/carrinho/remover/${produtoId}/`, {

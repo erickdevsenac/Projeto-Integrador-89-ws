@@ -8,6 +8,8 @@
 {% endblock head %}
 <div class="container mt-5 mb-5">
     <h2 class="text-center mb-4">Seu Carrinho de Compras 🛒</h2>
+
+    {% csrf_token %}
      
     {% if carrinho %}
         <div class="table-responsive">

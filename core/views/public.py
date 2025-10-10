@@ -25,5 +25,21 @@ def videos(request):
 def notificacao(request):
     return render(request,"core/notificacoes.html")
 
-def vendedor(request):
-    return render(request,"core/vendedor.html")
+def vendedor(request, usuario_id):
+    """
+    Exibe a página de perfil público de um vendedor específico.
+    """
+    vendedor_perfil = get_object_or_404(
+        Perfil, 
+        usuario_id=usuario_id, 
+        tipo=Perfil.TipoUsuario.VENDEDOR
+    )
+
+    produtos_vendedor = vendedor_perfil.produtos.filter(ativo=True)
+
+    context = {
+        'vendedor': vendedor_perfil,
+        'produtos': produtos_vendedor,
+    }
+    
+    return render(request, "core/vendedor.html", context)

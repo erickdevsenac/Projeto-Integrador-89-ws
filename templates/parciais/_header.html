@@ -102,9 +102,9 @@
               {% if user.perfil.tipo == 'VENDEDOR' %}
 
               <li>
-                <a class="dropdown-item" href="{% url "core:Vendedorperfil" %}"
-                  ><i class="bi bi-box-seam"></i> Minha loja</a
-                >
+                <a class="dropdown-item" href="{% url "core:vendedor_perfil" user.id %}">
+                 <i class="bi bi-shop"></i> Minha Loja
+                </a>
               </li>
               {% endif %}
 
@@ -132,10 +132,8 @@
           </div>
 
           {% else %}
-          <a href="{% url 'core:telalogin' %}" class="btn btn-outline-light me-2"
-            >Login</a
-          >
-          <a href="{% url 'core:cadastro' %}" class="btn btn-outline-light me-2">Cadastre-se</a>
+            <a href="{% url 'core:telalogin' %}" class="btn btn-outline-light me-2">Login</a>
+            <a href="{% url 'core:cadastro' %}" class="btn btn-success">Cadastre-se</a>
           {% endif %}
         </div>
       </div>

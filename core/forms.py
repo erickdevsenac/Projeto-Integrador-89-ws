@@ -68,8 +68,9 @@ class CadastroStep1Form(forms.ModelForm):
 class CompleteClientProfileForm(forms.ModelForm):
     class Meta:
         model = Perfil
-        fields = ["nome_completo", "telefone", "endereco"]
+        fields = ["foto_perfil", "nome_completo", "telefone", "endereco"]
         widgets = {
+            "foto_perfil": forms.FileInput(),
             "nome_completo": forms.TextInput(attrs={'placeholder':'Seu nome completo'}),
             "telefone": forms.TextInput(attrs={'placeholder':'(11) 99999-9999'}),
             "endereco": forms.TextInput(attrs={'placeholder':'Seu endereço completo'}),
@@ -78,8 +79,9 @@ class CompleteClientProfileForm(forms.ModelForm):
 class CompletePartnerProfileForm(forms.ModelForm):
     class Meta:
         model = Perfil
-        fields = ["nome_negocio", "cnpj", "descricao_parceiro", "telefone", "endereco"]
+        fields = ["foto_perfil", "nome_negocio", "cnpj", "descricao_parceiro", "telefone", "endereco"]
         widgets = {
+            "foto_perfil": forms.FileInput(),
             "nome_negocio": forms.TextInput(attrs={'placeholder':'Nome da Loja/ONG'}),
             "cnpj": forms.TextInput(attrs={'placeholder':'CNPJ (se aplicável)'}),
             "descricao_parceiro": forms.Textarea(attrs={'placeholder':'Fale um pouco sobre seu negócio...', "rows": 10, "class": "richtext"}),

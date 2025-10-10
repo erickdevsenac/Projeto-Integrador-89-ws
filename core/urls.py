@@ -42,7 +42,9 @@ urlpatterns = [
     path("alterar-senha/", auth.alterarsenha, name="alterar_senha"),  
     path("recuperar-senha/", auth.recuperarsenha, name="recuperar-senha"),
     
-    path("vendedor/", public.vendedor, name="Vendedorperfil"),
+    # path("vendedor/", public.vendedor, name="Vendedorperfil"),
+    path("vendedor/<int:usuario_id>/", public.vendedor, name="vendedor_perfil"),
+
     path('avaliacao/', avaliacao, name='avaliacao'), 
     path('nova_avaliacao/', nova_avaliacao, name='nova_avaliacao'), 
 
