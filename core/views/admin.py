@@ -8,7 +8,7 @@ from core.forms import CupomForm
 def is_admin(user):
     return user.is_staff
 
-@user_passes_test(is_admin, login_url="/login/")
+# @user_passes_test(is_admin, login_url="/login/")
 def criar_cupom(request):
     form = CupomForm(request.POST or None)
     if form.is_valid():
