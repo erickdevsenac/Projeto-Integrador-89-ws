@@ -60,8 +60,10 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "storages",
     "django_extensions",
-    "debug_toolbar",
 ]
+
+if DEBUG:
+    THIRD_PARTY_APPS += ["debug_toolbar"]
 
 LOCAL_APPS = ["core"]
 
@@ -76,6 +78,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -271,6 +274,9 @@ CORS_ALLOWED_ORIGINS = env.list(
     ],
 )
 CORS_ALLOW_CREDENTIALS = True
+
+# ou para desenvolvimento
+# CORS_ALLOW_ALL_ORIGINS = env.bool("CORS_ALLOW_ALL_ORIGINS", default=False)
 
 
 # ==============================================================================
