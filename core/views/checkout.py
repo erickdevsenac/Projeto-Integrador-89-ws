@@ -1,19 +1,87 @@
+# core/views/checkout.py
+
+import json
 from decimal import Decimal
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.db import transaction
 from django.db.models import Prefetch
 from django.core.paginator import Paginator
+from django.views.decorators.http import require_POST
 
-# Importe o formulário e os modelos necessários
 from core.forms import CheckoutForm
-from core.models import Perfil, Pedido, PedidoVendedor, ItemPedido, Produto
+from core.models import Perfil, Pedido, PedidoVendedor, ItemPedido, Produto, Cupom
+
+@login_required(login_url="/login/")
+def checkout_page(request):
+    """
+    Renderiza a página de checkout, calculando totais e aplicando cupons da sessão.
+    """
+    carrinho_session = request.session.get('carrinho', {})
+    if not carrinho_session:
+        messages.warning(request, 'Seu carrinho está vazio para iniciar o checkout.')
+        return redirect('core:produtos')
+
+    produto_ids = [int(pid) for pid in carrinho_session.keys()]
+    produtos = {str(p.id): p for p in Produto.objects.filter(id__in=produto_ids)}
+    
+    carrinho_detalhado = []
+    total_carrinho = Decimal('0.00')
+
+    for produto_id, item_data in carrinho_session.items():
+        produto = produtos.get(produto_id)
+        if produto:
+            quantidade = int(item_data.get('quantidade', 0))
+            subtotal = produto.preco * quantidade
+            total_carrinho += subtotal
+            carrinho_detalhado.append({
+                'produto_id': produto.id,
+                'nome': produto.nome,
+                'quantidade': quantidade,
+                'preco': produto.preco,
+                'subtotal': subtotal,
+            })
+
+    cupom_id = request.session.get("cupom_id")
+    cupom = None
+    valor_desconto = Decimal('0.00')
+
+    if cupom_id:
+        try:
+            cupom = Cupom.objects.get(id=cupom_id)
+            if cupom.esta_valido:
+                valor_desconto = cupom.calcular_desconto(total_carrinho)
+            else:
+                # Remove cupom inválido da sessão
+                del request.session["cupom_id"]
+        except Cupom.DoesNotExist:
+            del request.session["cupom_id"]
+
+    total_final = total_carrinho - valor_desconto
+    form = CheckoutForm(initial={'endereco_entrega': request.user.perfil.endereco})
+
+    context = {
+        'form': form,
+        "carrinho": carrinho_detalhado,
+        "total_carrinho": total_carrinho,
+        "total_final": total_final,
+        "valor_desconto": valor_desconto,
+        "cupom": cupom,
+    }
+    return render(request, "core/checkout.html", context)
 
 
 @login_required(login_url="/login/")
 @transaction.atomic
 def finalizar_pedido(request):
+    """
+    Processa o formulário de checkout e finaliza o pedido.
+    """
+    if request.method != "POST":
+        return redirect('core:checkout_page')
+
     carrinho_session = request.session.get('carrinho', {})
     if not carrinho_session:
         messages.error(request, 'Seu carrinho está vazio.')
@@ -25,37 +93,23 @@ def finalizar_pedido(request):
         messages.error(request, 'Perfil de cliente não encontrado.')
         return redirect('core:perfil')
 
-    # --- 1. PREPARAÇÃO DOS DADOS (Válido para GET e POST) ---
     produto_ids = [int(pid) for pid in carrinho_session.keys()]
     produtos = {str(p.id): p for p in Produto.objects.select_for_update().filter(id__in=produto_ids)}
     
-    carrinho_detalhado = []
     total_pedido = Decimal('0.00')
     pedidos_por_vendedor = {}
 
-    # Loop único para processar o carrinho
     for produto_id, item_data in carrinho_session.items():
         produto = produtos.get(produto_id)
         quantidade = item_data['quantidade']
 
-        # Validação de estoque feita no início
         if not produto or quantidade > produto.quantidade_estoque:
             messages.error(request, f"Estoque insuficiente para '{produto.nome if produto else 'item desconhecido'}'.")
             return redirect('core:ver_carrinho')
 
         subtotal = produto.preco * quantidade
         total_pedido += subtotal
-
-        # Cria a lista de itens para o resumo no template
-        carrinho_detalhado.append({
-            'produto': produto,
-            'quantidade': quantidade,
-            'preco': produto.preco,
-            'subtotal': subtotal,
-            'nome': produto.nome,
-        })
         
-        # Agrupa itens por vendedor para a criação do pedido no POST
         vendedor = produto.vendedor
         if vendedor not in pedidos_por_vendedor:
             pedidos_por_vendedor[vendedor] = {'itens': [], 'subtotal': Decimal('0.00')}
@@ -67,56 +121,147 @@ def finalizar_pedido(request):
         })
         pedidos_por_vendedor[vendedor]['subtotal'] += subtotal
 
-    # --- 2. LÓGICA DE PROCESSAMENTO (POST vs GET) ---
-    if request.method == "POST":
-        form = CheckoutForm(request.POST)
-        if form.is_valid():
-            # Cria o pedido principal
-            pedido_principal = Pedido.objects.create(
-                cliente=cliente_perfil,
-                valor_produtos=total_pedido, # Usando o valor total dos produtos
-                endereco_entrega=form.cleaned_data['endereco_entrega'],
-                forma_pagamento=form.cleaned_data['forma_pagamento']
-            )
-            
-            # Cria os sub-pedidos para cada vendedor
-            for vendedor, dados in pedidos_por_vendedor.items():
-                sub_pedido = PedidoVendedor.objects.create(
-                    pedido_principal=pedido_principal,
-                    vendedor=vendedor,
-                    valor_subtotal=dados['subtotal']
-                )
-                # Adiciona os itens a cada sub-pedido e abate o estoque
-                for item in dados['itens']:
-                    produto_obj = item['produto']
-                    ItemPedido.objects.create(
-                        sub_pedido=sub_pedido,
-                        produto=produto_obj,
-                        quantidade=item['quantidade'],
-                        preco_unitario=item['preco_unitario']
-                    )
-                    produto_obj.quantidade_estoque -= item['quantidade']
-                    produto_obj.save()
-            
-            del request.session['carrinho']
-            messages.success(request, f"Pedido #{pedido_principal.numero_pedido} finalizado com sucesso!")
-            return redirect('core:meus_pedidos')
-    else:
-        # Para requisições GET, apenas cria o formulário com o endereço inicial
-        form = CheckoutForm(initial={'endereco_entrega': cliente_perfil.endereco})
+    # Validação e cálculo do cupom
+    cupom_id = request.session.get('cupom_id')
+    cupom = None
+    valor_desconto = Decimal('0.00')
 
-    # --- 3. CONTEXTO FINAL PARA O TEMPLATE ---
-    context = {
-        'form': form,
-        'carrinho': carrinho_detalhado,
-        'total_carrinho': total_pedido
-    }
+    if cupom_id:
+        try:
+            cupom = Cupom.objects.get(id=cupom_id)
+            if cupom.esta_valido:
+                valor_desconto = cupom.calcular_desconto(total_pedido)
+            else:
+                messages.error(request, "O cupom em sua sessão expirou ou não é mais válido.")
+                del request.session['cupom_id']
+                return redirect('core:checkout_page')
+        except Cupom.DoesNotExist:
+            del request.session['cupom_id']
     
-    return render(request, 'core/checkout.html', context)
+    form = CheckoutForm(request.POST)
+    if form.is_valid():
+        pedido_principal = Pedido.objects.create(
+            cliente=cliente_perfil,
+            valor_produtos=total_pedido,
+            endereco_entrega=form.cleaned_data['endereco_entrega'],
+            forma_pagamento=form.cleaned_data['forma_pagamento'],
+            cupom_aplicado=cupom,
+            valor_desconto=valor_desconto
+            # O valor_total é calculado automaticamente pelo método save() do modelo Pedido
+        )
+        
+        if cupom:
+            cupom.usar_cupom() # Incrementa o contador de uso do cupom
+
+        for vendedor, dados in pedidos_por_vendedor.items():
+            sub_pedido = PedidoVendedor.objects.create(
+                pedido_principal=pedido_principal,
+                vendedor=vendedor,
+                valor_subtotal=dados['subtotal']
+            )
+            for item in dados['itens']:
+                produto_obj = item['produto']
+                ItemPedido.objects.create(
+                    sub_pedido=sub_pedido,
+                    produto=produto_obj,
+                    quantidade=item['quantidade'],
+                    preco_unitario=item['preco_unitario']
+                )
+                produto_obj.quantidade_estoque -= item['quantidade']
+                produto_obj.save()
+        
+        # Limpa a sessão
+        del request.session['carrinho']
+        if 'cupom_id' in request.session:
+            del request.session['cupom_id']
+            
+        messages.success(request, f"Pedido #{pedido_principal.numero_pedido} finalizado com sucesso!")
+        return redirect('core:meus_pedidos')
+    else:
+        # Se o formulário for inválido, renderiza a página novamente com os erros
+        # Recarregando o contexto para exibir os erros do formulário
+        return render(request, 'core/checkout.html', {'form': form, 'carrinho': carrinho_session, 'total_carrinho': total_pedido})
+
+
+@require_POST
+def api_aplicar_cupom(request):
+    """
+    Endpoint da API para aplicar um cupom de desconto via AJAX.
+    """
+    try:
+        data = json.loads(request.body)
+        codigo = data.get("codigo", "").strip()
+        
+        carrinho_session = request.session.get("carrinho", {})
+        if not carrinho_session:
+            return JsonResponse({"success": False, "mensagem": "Seu carrinho está vazio."}, status=400)
+
+        produto_ids = [int(pid) for pid in carrinho_session.keys()]
+        produtos_map = {str(p.id): p for p in Produto.objects.filter(id__in=produto_ids)}
+        total_carrinho = sum(
+            produtos_map[pid].preco * item_data['quantidade']
+            for pid, item_data in carrinho_session.items() if pid in produtos_map
+        )
+        total_carrinho = Decimal(total_carrinho)
+
+        cupom = Cupom.objects.get(codigo__iexact=codigo)
+        
+        if not cupom.esta_valido:
+            return JsonResponse({"success": False, "mensagem": "Este cupom não é mais válido."}, status=400)
+        
+        valor_desconto = cupom.calcular_desconto(total_carrinho)
+        
+        if valor_desconto <= 0:
+            msg = f"O valor mínimo da compra para este cupom é de R$ {cupom.valor_minimo_compra:.2f}."
+            return JsonResponse({"success": False, "mensagem": msg}, status=400)
+            
+        total_final = total_carrinho - valor_desconto
+        request.session["cupom_id"] = cupom.id
+        
+        return JsonResponse({
+            "success": True,
+            "mensagem": f"Cupom '{cupom.codigo}' aplicado!",
+            "cupom": {
+                "codigo": cupom.codigo,
+                "desconto": str(cupom) # Usa o __str__ do modelo
+            },
+            "valores": {
+                "valor_desconto_str": f"− R$ {valor_desconto:.2f}".replace('.',','),
+                "total_final_str": f"R$ {total_final:.2f}".replace('.',',')
+            }
+        })
+
+    except Cupom.DoesNotExist:
+        request.session.pop("cupom_id", None)
+        return JsonResponse({"success": False, "mensagem": "Cupom inválido."}, status=404)
+    except Exception:
+        return JsonResponse({"success": False, "mensagem": "Ocorreu um erro inesperado."}, status=500)
+
+
+def aplicar_cupom(request):
+    """
+    Aplica cupom com recarregamento da página (fallback).
+    """
+    if request.method == "POST":
+        codigo = request.POST.get("codigo", "").strip()
+        try:
+            cupom = Cupom.objects.get(codigo__iexact=codigo)
+            if cupom.esta_valido:
+                request.session["cupom_id"] = cupom.id
+                messages.success(request, f"Cupom '{cupom.codigo}' aplicado com sucesso!")
+            else:
+                messages.error(request, "Cupom inválido ou expirado.")
+        except Cupom.DoesNotExist:
+            request.session.pop("cupom_id", None)
+            messages.error(request, "Cupom inválido ou expirado.")
+    return redirect("core:checkout_page")
 
 
 @login_required(login_url="/login/")
 def meus_pedidos(request):
+    """
+    Exibe a lista de pedidos do cliente ou do vendedor.
+    """
     try:
         perfil_usuario = request.user.perfil
     except Perfil.DoesNotExist:
@@ -124,13 +269,11 @@ def meus_pedidos(request):
         return redirect("core:index")
 
     if perfil_usuario.tipo == Perfil.TipoUsuario.CLIENTE:
-        # CORREÇÃO: O campo de data é 'data_criacao', não 'data_pedido'
         pedidos_qs = Pedido.objects.filter(cliente=perfil_usuario).prefetch_related(
             Prefetch('sub_pedidos', queryset=PedidoVendedor.objects.select_related('vendedor')),
             Prefetch('sub_pedidos__itens', queryset=ItemPedido.objects.select_related('produto'))
         ).order_by('-data_criacao')
     elif perfil_usuario.tipo == Perfil.TipoUsuario.VENDEDOR:
-        # CORREÇÃO: O campo de data é 'data_criacao', não 'data_pedido'
         pedidos_qs = PedidoVendedor.objects.filter(vendedor=perfil_usuario).select_related(
             'pedido_principal__cliente'
         ).prefetch_related(

@@ -79,7 +79,9 @@ urlpatterns = [
     # path("carrinho/limpar/", views.limpar_carrinho, name="limpar_carrinho"),
     
     # Checkout
-    path("checkout/", checkout.finalizar_pedido, name="checkout"),
+    path("checkout/", checkout.checkout_page, name="checkout_page"),
+    path("finalizar-pedido/", checkout.finalizar_pedido, name="checkout"),
+    path("aplicar-cupom/", checkout.aplicar_cupom, name="aplicar_cupom"),
     #TODO:
     # path("checkout/confirmar/", views.confirmar_pedido, name="confirmar_pedido"),
     # path("pedido/<int:pedido_id>/sucesso/", views.pedido_sucesso, name="pedido_sucesso"),

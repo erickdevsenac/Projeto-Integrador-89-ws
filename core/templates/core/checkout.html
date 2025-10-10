@@ -21,7 +21,6 @@
     <h2 class="text-center mb-4">Finalizar Compra</h2>
 
     <div class="row g-5">
-        <!-- Coluna de Resumo do Pedido -->
         <div class="col-md-5 col-lg-4 order-md-last">
             <h4 class="d-flex justify-content-between align-items-center mb-3">
                 <span class="text-primary">Seu Carrinho</span>
@@ -37,28 +36,52 @@
                         <span class="text-muted">R$ {{ item.preco|floatformat:2 }}</span>
                     </li>
                 {% endfor %}
+
+                 {% if valor_desconto %}
+
+                <li id="cupom-desconto-li" class="list-group-item d-flex justify-content-between bg-light" style="display: none;">
+                    <div class="text-success">
+                        <h6 class="my-0">Cupom aplicado</h6>
+                        <small id="cupom-codigo-small">{{ cupom.codigo }} (-{{ valor_desconto }}%)</small>
+                    </div>
+                    <span class="text-success">− R$ {{ valor_desconto|floatformat:2 }}</span>
+                </li>
+                
                 <li class="list-group-item d-flex justify-content-between">
                     <span>Total (BRL)</span>
-                    <strong>R$ {{ total_carrinho|floatformat:2 }}</strong>
+                    <strong id="total-carrinho-strong">R$ {{ total_final|default:total_carrinho|floatformat:2 }}</strong>
                 </li>
+                {% endif %}
             </ul>
+
+            <form method="post" action="{% url 'core:aplicar_cupom' %}">
+                {% csrf_token %}
+                <h6 class="text-primary">Aplicar cupom:</h6>
+                <div class="input-group mb-3">
+                    <input type="text" name="codigo" class="form-control" placeholder="Ex: 2025-aproveite" required>
+                    <button class="btn btn-outline-success" type="submit">Aplicar</button>
+                </div>
+            </form>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} mt-2">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
         </div>
 
-        <!-- Coluna de Confirmação e Formulário -->
         <div class="col-md-7 col-lg-8">
             <h4 class="mb-3">Detalhes da Compra</h4>
             
             <form method="post" action="{% url 'core:checkout' %}" novalidate>
                 {% csrf_token %}
                 
-                <!-- Exibe erros gerais do formulário -->
                 {% if form.non_field_errors %}
                     <div class="alert alert-danger">
                         {% for error in form.non_field_errors %}{{ error }}{% endfor %}
                     </div>
                 {% endif %}
 
-                <!-- Campo Endereço de Entrega -->
                 <div class="mb-3">
                     <label for="{{ form.endereco_entrega.id_for_label }}" class="form-label">{{ form.endereco_entrega.label }}</label>
                     {{ form.endereco_entrega }}
@@ -69,7 +92,6 @@
                 
                 <hr class="my-4">
 
-                <!-- Campo Forma de Pagamento -->
                 <h5 class="mb-3">{{ form.forma_pagamento.label }}</h5>
                 <div class="payment-options">
                     {{ form.forma_pagamento }}
