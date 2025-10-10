@@ -2,7 +2,8 @@
 <html lang="pt-br">
     {% include 'parciais/_head.html' %}
 
-<body  class="{% block body_class %}{% endblock %}">
+<body class="{% if request.session.tema == 'escuro' %}tema-escuro{% endif %} {% if request.session.fonte == 'grande' %}fonte-grande{% elif request.session.fonte == 'extra_grande' %}fonte-extra-grande{% endif %}">
+
     <!-- Loading Spinner -->
     {% comment %} <div id="loading-spinner" class="loading-spinner">
         <div class="spinner-border text-success" role="status">

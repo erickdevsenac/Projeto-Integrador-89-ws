@@ -107,18 +107,25 @@ def perfil(request):
     
     return render(request, "core/perfil.html", context)
 
+# Em core/views/auth.py
+
 @login_required
 def configuracoes(request):
     if request.method == "POST":
         if "excluir_conta" in request.POST:
             request.user.delete()
-            messages.success(request, "Conta excluída com sucesso.")
+            messages.success(request, "Sua conta foi excluída com sucesso.")
             return redirect("core:index")
-        for campo in ["tema", "fonte", "acessibilidade", "notificacoes"]:
-            valor = request.POST.get(campo)
-            if valor:
-                request.session[campo] = valor
-        messages.success(request, "Configurações atualizadas.")
+        
+        elif "salvar_configuracoes" in request.POST:
+            for campo in ["tema", "fonte", "acessibilidade", "notificacoes"]:
+                valor = request.POST.get(campo)
+                if valor is not None: 
+                    request.session[campo] = valor
+            
+            messages.success(request, "Suas configurações foram salvas.")
+            return redirect("core:configuracoes")
+
     return render(request, "core/configuracoes.html")
 
 def recuperarsenha(request):
