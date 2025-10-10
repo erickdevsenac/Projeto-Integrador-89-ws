@@ -2,7 +2,6 @@
 {% load static %}
 
 
-
 {% block content %}
 
 {% block head %}
@@ -35,7 +34,7 @@
     <div class="row">
         <div class="col-lg-6 mb-4">
             {% if produto.imagem_principal %}
-                <img src="{{ produto.imagem_principal }}" alt="{{ produto.nome }}" class="img-fluid shadow-sm produto-imagem-principal">
+                <img src="{{ produto.imagem_principal.url }}" alt="{{ produto.nome }}" class="img-fluid shadow-sm produto-imagem-principal">
             {% else %}
                 <img src="{% static 'assets/img/placeholder_produto.png' %}" alt="Sem imagem" class="img-fluid shadow-sm produto-imagem-principal">
             {% endif %}

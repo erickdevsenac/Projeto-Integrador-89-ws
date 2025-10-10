@@ -1,12 +1,13 @@
 {% extends 'global/base.html' %}
 {% load static %}
 
+
+{% block content %}
 {% block head %}
   <title>Perfil do Vendedor - {{ loja.nome }}</title>
   <link rel="stylesheet" href="{% static 'core/css/style_vendedor.css' %}">
 {% endblock head %}
 
-{% block content %}
 <div class="loja-container">
   <header class="loja-header">
     <img src="{{ loja.imagem.url }}" alt="Imagem da loja {{ loja.nome }}" class="loja-imagem" />

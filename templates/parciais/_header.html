@@ -99,6 +99,15 @@
                   ><i class="bi bi-box-seam"></i> Meus Pedidos</a
                 >
               </li>
+              {% if user.perfil.tipo == 'VENDEDOR' %}
+
+              <li>
+                <a class="dropdown-item" href="{% url "core:Vendedorperfil" %}"
+                  ><i class="bi bi-box-seam"></i> Minha loja</a
+                >
+              </li>
+              {% endif %}
+
               <li>
                 <a class="dropdown-item" href="{% url 'core:configuracoes' %}"
                   ><i class="bi bi-box-seam"></i> Configurações</a
