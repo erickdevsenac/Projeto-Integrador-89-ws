@@ -1,7 +1,38 @@
-from rest_framework import viewsets
-from core.serializers.login_serializer import LoginSerializer
-from django.contrib.auth.models import User
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
-class LoginViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+from core.serializers.registro_serializer import LoginSerializer, RegistroSerializer
+
+
+class AuthViewSet(viewsets.GenericViewSet):
+    queryset = None  # Não há queryset base para este viewset
     serializer_class = LoginSerializer
+
+    @action(detail=False, methods=["post"], serializer_class=RegistroSerializer)
+    def register(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user_data = serializer.save()
+        return Response(
+            {
+                "user": user_data["user"].username,
+                "access": user_data["access"],
+                "refresh": user_data["refresh"],
+            },
+            status=status.HTTP_201_CREATED,
+        )
+
+    @action(detail=False, methods=["post"])
+    def login(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data["user"]
+        return Response(
+            {
+                "user": user.username,
+                "access": serializer.validated_data["access"],
+                "refresh": serializer.validated_data["refresh"],
+            },
+            status=status.HTTP_200_OK,
+        )

@@ -1,5 +1,4 @@
 from .admin import *
-from .auth import *
 from .avaliacao import *
 from .carrinho import *
 from .checkout import *

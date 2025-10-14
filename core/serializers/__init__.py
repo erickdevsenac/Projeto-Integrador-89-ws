@@ -5,10 +5,11 @@ from .dicas_sustentaveis_serializer import *
 from .doacao_serializer import *
 from .faleconosco_serializer import *
 from .item_pedido_serializers import *
+from .login_serializer import *
 from .notificacao_serializer import *
+from .pacote_surpresa_serializer import *
 from .pedido_serializer import *
 from .perfil_serializer import *
-from .login_serializer import *
 from .produto_serializer import *
 from .receita_serializer import *
 from .usuario_serializer import *
