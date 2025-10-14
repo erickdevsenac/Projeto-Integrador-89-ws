@@ -5,7 +5,9 @@
 {% block content %}
 {% block head %}
     <title>Carrinho de Compras</title>
+    <link rel="stylesheet" href="{% static 'core/css/style_carrinho.css' %}">
 {% endblock head %}
+<div id="cart-alerts-container"></div>
 <div class="container mt-5 mb-5">
     <h2 class="text-center mb-4">Seu Carrinho de Compras 🛒</h2>
 
@@ -26,22 +28,26 @@
                 </thead>
                 <tbody>
                     {% for item in carrinho %}
-                        <tr data-produto-id="{{ item.produto.id }}">
+                        <tr data-item-id="{{ item.item_key }}">
                             <td>
-                                {% if item.produto.imagem_principal %}
-                                    <img src="{{ item.produto.imagem_principal.url }}" alt="{{ item.produto.nome }}" class="img-fluid rounded" style="max-width: 100px;">
+                               {% if item.item_obj.imagem_principal %}
+                                    <img src="{{ item.item_obj.imagem_principal.url }}" alt="{{ item.item_obj.nome }}" class="img-fluid rounded" style="max-width: 100px;">
+                                {% elif item.item_obj.imagem %}
+                                    <img src="{{ item.item_obj.imagem.url }}" alt="{{ item.item_obj.nome }}" class="img-fluid rounded" style="max-width: 100px;">
+                                {% else %}
+                                    <img src="{% static 'assets/img/placeholder_produto.png' %}" alt="Sem imagem" class="img-fluid rounded" style="max-width: 100px;">
                                 {% endif %}
                             </td>
-                            <td>{{ item.produto.nome }}</td>
-                            <td>R$ {{ item.produto.preco|floatformat:2 }}</td>
+                            <td>{{ item.item_obj.nome }}</td>
+                            <td>R$ {{ item.item_obj.preco|floatformat:2 }}</td>
                             <td>
-                                <input type="number" name="quantidade" value="{{ item.quantidade }}" min="1" max="{{ item.produto.quantidade_estoque }}" 
+                                <input type="number" name="quantidade" value="{{ item.quantidade }}" min="1" max="{{ item.item_obj.quantidade_estoque }}" 
                                     class="form-control form-control-sm quantity-input" style="width: 80px;" 
-                                    data-produto-id="{{ item.produto.id }}">
+                                    data-item-key="{{ item.item_key }}">
                             </td>
-                            <td id="subtotal-{{ item.produto.id }}">R$ {{ item.subtotal|floatformat:2 }}</td>
+                            <td id="subtotal-{{ item.item_key }}">R$ {{ item.subtotal|floatformat:2 }}</td>
                             <td>
-                                <button class="btn btn-outline-danger btn-sm remove-item-btn" data-produto-id="{{ item.produto.id }}" title="Remover item">
+                                <button class="btn btn-outline-danger btn-sm remove-item-btn" data-item-key="{{ item.item_key }}" title="Remover item">
                                     &times;
                                 </button>
                             </td>

@@ -52,3 +52,14 @@ def vendedor(request, usuario_id):
     }
 
     return render(request, "core/vendedor.html", context)
+
+
+def pacote_detalhe(request, pacote_id):
+    """
+    Exibe a página de detalhes para um Pacote Surpresa específico.
+    """
+    pacote = get_object_or_404(
+        PacoteSurpresa.objects.select_related("vendedor"), id=pacote_id, ativo=True
+    )
+    context = {"pacote": pacote}
+    return render(request, "core/pacote_detalhe.html", context)

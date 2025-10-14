@@ -66,11 +66,40 @@
       <div class="mt-5">
           <h2>Avaliações da Receita</h2>
           <div id="avaliacoes-receita">
-              <!-- As avaliações serão carregadas aqui via JavaScript ou renderizadas pelo backend -->
-              <p>Nenhuma avaliação ainda. Seja o primeiro a avaliar!</p>
+              {% if avaliacoes %}
+            {% for avaliacao in avaliacoes %}
+                <div class="card my-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">{{ avaliacao.autor.username|default:"Anônimo" }}</h5>
+                            <small class="text-muted">{{ avaliacao.data_criacao|date:"d/m/Y" }}</small>
+                        </div>
+                        <h6 class="card-subtitle mb-2 text-warning">
+                            {# Loop para mostrar as estrelas da nota #}
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= avaliacao.nota %}
+                                    <i class="bi bi-star-fill"></i>
+                                {% else %}
+                                    <i class="bi bi-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </h6>
+                        <p class="card-text">{{ avaliacao.texto|default:"(Sem comentário)" }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Nenhuma avaliação ainda. Seja o primeiro a avaliar!</p>
+        {% endif %}
           </div>
           {% if user.is_authenticated %}
-          <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#modalAvaliacaoReceita">Deixar uma Avaliação</button>
+          <button class="btn btn-primary mt-3" 
+                  data-bs-toggle="modal" 
+                  data-bs-target="#modalAvaliacaoReceita"
+                  data-content-type="{{ content_type_id }}"
+                  data-object-id="{{ receita.id }}">
+              Deixar uma Avaliação
+          </button>
           {% else %}
           <p class="mt-3">Faça <a href="{% url 'core:telalogin' %}">login</a> para deixar uma avaliação.</p>
           {% endif %}

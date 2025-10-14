@@ -58,6 +58,7 @@ urlpatterns = [
         name="produto_quick_view",
     ),
     path("produto/cadastrar/", marketplace.cadastrar_produto, name="cadastrar_produto"),
+    path("pacote/<int:pacote_id>/", public.pacote_detalhe, name="pacote_detalhe"),
     # TODO:
     # path("categoria/<slug:categoria_slug>/", views.produtos_por_categoria, name="produtos_categoria"),
     # TODO:
@@ -74,11 +75,20 @@ urlpatterns = [
         carrinho.adicionar_carrinho,
         name="adicionar_carrinho",
     ),
-    path("carrinho/atualizar/", carrinho.atualizar_carrinho, name="atualizar_carrinho"),
     path(
-        "carrinho/remover/<int:produto_id>/",
+        "carrinho/atualizar/",
+        carrinho.atualizar_carrinho,
+        name="atualizar_carrinho_ajax",
+    ),
+    path(
+        "carrinho/remover/",
         carrinho.remover_item_carrinho,
-        name="remover_item_carrinho",
+        name="remover_carrinho_ajax",
+    ),
+    path(
+        "carrinho/adicionar_pacote/<int:pacote_id>/",
+        carrinho.adicionar_pacote_carrinho,
+        name="adicionar_pacote_carrinho",
     ),
     # TODO:
     # path("carrinho/limpar/", views.limpar_carrinho, name="limpar_carrinho"),
