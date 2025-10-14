@@ -1,13 +1,15 @@
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from core.serializers.registro_serializer import LoginSerializer, RegistroSerializer
 
 
 class AuthViewSet(viewsets.GenericViewSet):
-    queryset = None  # Não há queryset base para este viewset
+    queryset = None
     serializer_class = LoginSerializer
+    permission_classes = [AllowAny]
 
     @action(detail=False, methods=["post"], serializer_class=RegistroSerializer)
     def register(self, request):

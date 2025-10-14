@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from ..models import Perfil
+from .avaliacao_serialiazer import AvaliacaoSerializer
 from .usuario_serializer import UserSerializer
 
 
@@ -9,6 +10,8 @@ class PerfilSerializer(serializers.ModelSerializer):
 
     usuario = UserSerializer(read_only=True)
     tipo_display = serializers.CharField(source="get_tipo_display", read_only=True)
+
+    avaliacoes = AvaliacaoSerializer(many=True, read_only=True)
 
     class Meta:
         model = Perfil
@@ -28,4 +31,3 @@ class PerfilSerializer(serializers.ModelSerializer):
             "verificado",
             "avaliacoes",
         ]
-        read_only_fields = ("avaliacoes",)

@@ -5,7 +5,8 @@ from decimal import Decimal
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 from django.db import transaction
-from django.utils import timezone
+
+# from django.utils import timezone
 from django.utils.text import slugify
 from faker import Faker
 
@@ -261,7 +262,7 @@ class Command(BaseCommand):
                     PacoteSurpresa(
                         vendedor=vendedor_selecionado,
                         nome=f"Pacote Surpresa {tier_nome}",
-                        descricao=f"Uma seleção incrível de produtos da nossa loja. Pague menos e ajude a combater o desperdício!",
+                        descricao="Uma seleção incrível de produtos da nossa loja. Pague menos e ajude a combater o desperdício!",
                         preco=preco_pacote,
                         quantidade_estoque=random.randint(3, 15),
                         ativo=True,

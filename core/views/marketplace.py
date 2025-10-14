@@ -8,8 +8,8 @@ from django.db.models import Count, Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
-from django.views.decorators.cache import cache_page
 
+# from django.views.decorators.cache import cache_page
 from core.forms import ProdutoForm
 from core.models import CategoriaProduto, Perfil, Produto
 

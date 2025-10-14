@@ -1,4 +1,5 @@
 from .avaliacao_viewset import *
+from .carrinho_viewset import *
 from .categoria_viewset import *
 from .cupom_viewset import *
 from .dicas_sustentaveis_viewset import *
@@ -12,4 +13,3 @@ from .pedido_viewset import *
 from .perfil_viewset import *
 from .produto_viewset import *
 from .receita_viewset import *
-from .usuario_viewset import *

@@ -10,6 +10,7 @@ from rest_framework_simplejwt.views import (
 
 from core.viewsets import (
     avaliacao_viewset,
+    carrinho_viewset,
     categoria_viewset,
     cupom_viewset,
     dicas_sustentaveis_viewset,
@@ -45,6 +46,7 @@ router.register(
 router.register(r"avaliacoes", avaliacao_viewset.AvaliacaoViewSet)
 router.register(r"pacotes-surpresa", pacote_surpresa_viewset.PacoteSurpresaViewSet)
 router.register(r"auth", login_viewset.AuthViewSet, basename="auth")
+router.register(r"carrinho", carrinho_viewset.CarrinhoViewSet, basename="carrinho")
 
 
 urlpatterns = [
