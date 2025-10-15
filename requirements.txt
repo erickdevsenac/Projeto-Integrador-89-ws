@@ -11,12 +11,14 @@ django-redis==6.0.0
 django-rest-authtoken==2.1.4
 django-storages==1.14.6
 djangorestframework==3.16.1
+djangorestframework_simplejwt==5.5.1
 Faker==37.8.0
 faker-commerce==1.0.4
 jmespath==1.0.1
 Markdown==3.9
 mysqlclient==2.2.7
 pillow==11.3.0
+PyJWT==2.10.1
 python-dateutil==2.9.0.post0
 redis==6.4.0
 s3transfer==0.14.0
