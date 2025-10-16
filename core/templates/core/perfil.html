@@ -1,99 +1,124 @@
 {% extends 'global/base.html' %}
+{% load static %}
 
-{% load static %}  <!-- Carrega o tag static -->
 
-{% block head %}
-<title>Meu Perfil</title>
-<link rel="stylesheet" href="{% static 'core/css/style_perfil.css' %}">
-{% endblock head %}
 
 {% block content %}
-<div class="perfil-container">
-  <h2>Olá, {{ user.username }}!</h2>
+{% block head %}
+<title>Meu Perfil - {{ user.username }}</title>
+<link rel="stylesheet" href="{% static 'core/css/style_perfil.css' %}">
+{% endblock head %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                  {% if perfil.foto_perfil %}
+                      <img src="{{ perfil.foto_perfil.url }}" alt="Foto do Perfil" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
+                  {% else %}
+                      <img src="{% static 'assets/img/placeholder_user.png' %}" alt="Foto do Perfil" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
+                  {% endif %}                    
+                  <h5 class="my-3">{{ perfil.nome_completo|default:perfil.nome_negocio|default:user.username }}</h5>
+                    <p class="text-muted mb-1">{{ perfil.get_tipo_display }}</p>
+                    <p class="text-muted mb-4">{{ perfil.endereco|default:"Endereço não informado" }}</p>
+                    <div class="d-flex justify-content-center mb-2">
+                        <button type="button" class="btn btn-primary" id="edit-profile-btn">Editar Perfil</button>
+                        <a href="{% url 'core:logout' %}" class="btn btn-outline-danger ms-1">Sair</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                 <div class="card-body">
+                    <h5 class="card-title">Ações Rápidas</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><a href="{% url 'core:meus_pedidos' %}">📦 Meus Pedidos</a></li>
+                        <li class="list-group-item"><a href="{% url 'core:configuracoes' %}">⚙️ Configurações</a></li>
+                        <li class="list-group-item"><a href="{% url 'core:alterar_senha' %}">🔑 Alterar Senha</a></li>
+                    </ul>
+                 </div>
+            </div>
+        </div>
 
-  {% if user.perfil.foto_perfil %}
-    <img src="{{ user.perfil.foto_perfil.url }}" alt="Foto do Perfil" class="foto-perfil">
-  {% else %}
-    
-  {% endif %}
+        <div class="col-lg-8">
+            <div id="view-mode">
+                {% if perfil.tipo == 'VENDEDOR' %}
+                    <h4 class="mb-4">Dashboard do Vendedor</h4>
+                    <div class="card mb-4">
+                        <div class="card-header">Produtos com Baixo Estoque</div>
+                        <div class="card-body">
+                            {% for produto in dashboard.baixo_estoque %}
+                                <p>{{ produto.nome }} - <strong>Restam apenas {{ produto.quantidade_estoque }} unidades.</strong></p>
+                            {% empty %}
+                                <p class="text-muted">Nenhum produto com baixo estoque.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
 
-  <h3>Informações do Perfil</h3>
-  
-  <form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="mb-3">
-      <label for="foto_perfil">Foto do Perfil</label>
-      <input type="file" name="foto_perfil" class="form-control">
-      {% if perfil.foto_perfil %}
-        <img src="{{ perfil.foto_perfil.url }}" alt="Foto de Perfil Atual" width="100" class="mt-2">
-      {% endif %}
+                <div class="card">
+                    <div class="card-header">Últimos Pedidos</div>
+                    <div class="card-body">
+                         {% for pedido in dashboard.ultimos_pedidos %}
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span>Pedido #{{ pedido.numero_pedido|default:pedido.pedido_principal.numero_pedido }}</span>
+                                <span class="badge bg-info">{{ pedido.get_status_display|default:pedido.get_status_pagamento_display }}</span>
+                                <span>R$ {{ pedido.valor_total|default:pedido.valor_subtotal|floatformat:2 }}</span>
+                            </div>
+                         {% empty %}
+                            <p class="text-muted">Nenhum pedido recente.</p>
+                         {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5">
+                <h2>Avaliações Recebidas</h2>
+                <div id="avaliacoes-perfil">
+                    <!-- As avaliações serão carregadas aqui via JavaScript ou renderizadas pelo backend -->
+                    <p>Nenhuma avaliação ainda. Seja o primeiro a avaliar!</p>
+                </div>
+                {% if user.is_authenticated and user.perfil != perfil %}
+                <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#modalAvaliacaoPerfil">Deixar uma Avaliação</button>
+                {% elif not user.is_authenticated %}
+                <p class="mt-3">Faça <a href="{% url 'core:telalogin' %}">login</a> para deixar uma avaliação.</p>
+                {% endif %}
+            </div>
+
+            <div id="edit-mode" style="display: none;">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="mb-4">Editar Informações do Perfil</h4>
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <hr>
+                            <button type="submit" class="btn btn-success">Salvar Alterações</button>
+                            <button type="button" class="btn btn-secondary" id="cancel-edit-btn">Cancelar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="mb-3">
-      <label for="nome_negocio">Nome do Negócio</label>
-      <input type="text" name="nome_negocio" class="form-control" value="{{ perfil.nome_negocio }}">
-    </div>
-
-    <div class="mb-3">
-      <label for="telefone">Telefone</label>
-      <input type="text" name="telefone" class="form-control" value="{{ perfil.telefone }}">
-    </div>
-
-    <div class="mb-3">
-      <label for="endereco">Endereço</label>
-      <input type="text" name="endereco" class="form-control" value="{{ perfil.endereco }}">
-    </div>
-
-    <div class="mb-3">
-      <label for="descricao_parceiro">Descrição do Negócio/ONG</label>
-      <textarea name="descricao_parceiro" class="form-control">{{ perfil.descricao_parceiro }}</textarea>
-    </div>
-
-    <div class="mb-3">
-      <label for="cnpj">CNPJ</label>
-      <input type="text" name="cnpj" class="form-control" value="{{ perfil.cnpj }}">
-    </div>
-    <div class="mb-3">
-        <p>Para sua segurança, recomendamos mudar sua senha regularmente.</p>
-        <a href="{% url 'core:alterar_senha' %}" class="btn btn-primary">Alterar senha</a>
-    </div>
-    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-  </form>
-
-  <hr>
-
-  {% if perfil.tipo == 'VENDEDOR' %}
-    <h3>Seus Produtos Cadastrados</h3>
-    <ul>
-      {% for produto in produtos_do_usuario %}
-        <li>{{ produto.nome }} - R$ {{ produto.preco }}</li>
-      {% empty %}
-        <li>Nenhum produto cadastrado.</li>
-      {% endfor %}
-    </ul>
-  {% elif perfil.tipo == 'CLIENTE' %}
-    <h3>Suas Doações</h3>
-    <ul>
-      {% for doacao in doacoes %}
-        <li>R$ {{ doacao.valor }} para {{ doacao.ong.nome }} em {{ doacao.data }}</li>
-      {% empty %}
-        <li>Você ainda não fez nenhuma doação.</li>
-      {% endfor %}
-    </ul>
-  {% elif perfil.tipo == 'ONG' %}
-    <h3>Doações Recebidas</h3>
-    <ul>
-      {% for doacao in doacoes_recebidas %}
-        <li>R$ {{ doacao.valor }} de {{ doacao.usuario.user.username }} em {{ doacao.data }}</li>
-      {% empty %}
-        <li>Ainda não recebeu doações.</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-
-  <div class="acoes">
-    <a href="{% url 'core:configuracoes' %}" class="btn btn-outline-secondary">⚙️ Configurações</a>
-    <a href="#" class="btn btn-outline-primary">📦 Meus Pedidos</a>
-  </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const viewMode = document.getElementById('view-mode');
+        const editMode = document.getElementById('edit-mode');
+        const editButton = document.getElementById('edit-profile-btn');
+        const cancelButton = document.getElementById('cancel-edit-btn');
+
+        editButton.addEventListener('click', () => {
+            viewMode.style.display = 'none';
+            editMode.style.display = 'block';
+        });
+
+        cancelButton.addEventListener('click', () => {
+            editMode.style.display = 'none';
+            viewMode.style.display = 'block';
+        });
+    });
+</script>
+{% include 'parciais/_avaliacao_modal_perfil.html' %}
 {% endblock %}

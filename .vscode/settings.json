@@ -2,5 +2,10 @@
     "python-envs.pythonProjects": [],
     "files.exclude": {
         "**/__pycache__": true
-    }   
+    },
+    "cSpell.words": [
+        "CONFIGURAÇÕES",
+        "SEGURANÇA"
+    ],
+    "cSpell.diagnosticLevel": "Hint",
 }

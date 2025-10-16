@@ -1,53 +1,55 @@
 {% extends 'global/base.html' %}
 {% load static %}
 
+{% block content %}
 {% block head %}
-  <title>Perfil do Vendedor - {{ loja.nome }}</title>
+  <title>Perfil do Vendedor - {{ vendedor.nome_negocio }}</title>
   <link rel="stylesheet" href="{% static 'core/css/style_vendedor.css' %}">
 {% endblock head %}
 
-{% block content %}
 <div class="loja-container">
   <header class="loja-header">
-    <img src="{{ loja.imagem.url }}" alt="Imagem da loja {{ loja.nome }}" class="loja-imagem" />
-    <h1 class="loja-nome">{{ loja.nome }}</h1>
-    <p class="loja-localizacao">{{ loja.localizacao }}</p>
+    {% if vendedor.foto_perfil %}
+        <img src="{{ endedor.foto_perfil.url }}" alt="Logo da loja {{ vendedor.nome_negocio }}" class="loja-imagem" />
+    {% else %}
+        <img src="{% static 'assets/img/placeholder_store.png' %}" alt="Logo da loja {{ vendedor.nome_negocio }}" class="loja-imagem" />
+    {% endif %}
+    <h1 class="loja-nome">{{ vendedor.nome_negocio }}</h1>
+    <p class="loja-localizacao">{{ vendedor.cidade }}, {{ vendedor.estado }}</p>
   </header>
 
   <section class="perfil-vendedor">
-    <h2>Perfil do Vendedor</h2>
-    <p><strong>Usuário:</strong> {{ loja.user.username }}</p>
-    <p><strong>Email:</strong> {{ loja.user.email }}</p>
-  </section>
-
-  <section class="estatisticas-vendas">
-    <h2>Estatísticas de Vendas</h2>
-    <p><strong>Total de Vendas:</strong> {{ loja.estatisticas.total_vendas }}</p>
-    <p><strong>Receita Total:</strong> R$ {{ loja.estatisticas.receita_total }}</p>
+    <h2>Sobre o Vendedor</h2>
+    <p>{{ vendedor.descricao_parceiro|default:"Este vendedor ainda não adicionou uma descrição." }}</p>
+    <p><strong>Email de contato:</strong> {{ vendedor.usuario.email }}</p>
   </section>
 
   <section class="produtos-cadastrados">
     <h2>Produtos Cadastrados</h2>
     <ul class="lista-produtos">
-      {% for produto in loja.produtos.all %}
+      {% for produto in produtos %}
       <li class="produto-item">
-        <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}" class="produto-imagem" />
+        {% if produto.imagem_principal %}
+            <img src="{{ produto.imagem_principal.url }}" alt="{{ produto.nome }}" class="produto-imagem" />
+        {% else %}
+            <img src="{% static 'assets/img/placeholder_produto.png' %}" alt="{{ produto.nome }}" class="produto-imagem" />
+        {% endif %}
         <div class="produto-info">
           <h3>{{ produto.nome }}</h3>
-          <p>{{ produto.descricao }}</p>
+          <p>{{ produto.descricao|truncatewords:20|safe }}</p>
           <p class="produto-preco">Preço: R$ {{ produto.preco }}</p>
         </div>
       </li>
       {% empty %}
-        <li>Sem produtos cadastrados.</li>
+        <li>Este vendedor ainda não possui produtos cadastrados.</li>
       {% endfor %}
     </ul>
   </section>
 
   <section class="gerenciamento-loja">
     <h2>Gerenciamento</h2>
-    <a href="{% url 'core:cadastroproduto.html' %}" class="btn btn-primary">Adicionar Produto</a>
-    
+    <a href="{% url 'core:cadastrar_produto' %}" class="btn btn-primary">Adicionar Produto</a>
+    <a href="{% url 'core:criar_cupom' %}" class="btn btn-primary">Adicionar Cupom</a>
   </section>
 </div>
 {% endblock content %}

@@ -5,18 +5,14 @@
 {% block content %}
 {% block head %}
     <title>Carrinho de Compras</title>
+    <link rel="stylesheet" href="{% static 'core/css/style_carrinho.css' %}">
 {% endblock head %}
+<div id="cart-alerts-container"></div>
 <div class="container mt-5 mb-5">
     <h2 class="text-center mb-4">Seu Carrinho de Compras 🛒</h2>
-    {% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-        {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    {% endfor %}
-    {% endif %}
- 
+
+    {% csrf_token %}
+     
     {% if carrinho %}
         <div class="table-responsive">
             <table class="table align-middle">
@@ -32,25 +28,28 @@
                 </thead>
                 <tbody>
                     {% for item in carrinho %}
-                        <tr>
+                        <tr data-item-id="{{ item.item_key }}">
                             <td>
-                                {% if item.imagem_url %}
-                                    <img src="{{ item.imagem_url }}" alt="{{ item.nome }}" class="img-fluid rounded" style="max-width: 100px;">
+                               {% if item.item_obj.imagem_principal %}
+                                    <img src="{{ item.item_obj.imagem_principal.url }}" alt="{{ item.item_obj.nome }}" class="img-fluid rounded" style="max-width: 100px;">
+                                {% elif item.item_obj.imagem %}
+                                    <img src="{{ item.item_obj.imagem.url }}" alt="{{ item.item_obj.nome }}" class="img-fluid rounded" style="max-width: 100px;">
+                                {% else %}
+                                    <img src="{% static 'assets/img/placeholder_produto.png' %}" alt="Sem imagem" class="img-fluid rounded" style="max-width: 100px;">
                                 {% endif %}
                             </td>
-                            <td>{{ item.nome }}</td>
-                            <td>R$ {{ item.preco|floatformat:2 }}</td>
+                            <td>{{ item.item_obj.nome }}</td>
+                            <td>R$ {{ item.item_obj.preco|floatformat:2 }}</td>
                             <td>
-                                <form action="{% url 'core:atualizar_carrinho' %}" method="POST" class="d-flex align-items-center">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="item_id" value="{{ item.id }}">
-                                    <input type="number" name="quantidade" value="{{ item.quantidade }}" min="1" class="form-control form-control-sm me-2" style="width: 70px;">
-                                    <button type="submit" class="btn btn-sm btn-primary">Atualizar</button>
-                                </form>
+                                <input type="number" name="quantidade" value="{{ item.quantidade }}" min="1" max="{{ item.item_obj.quantidade_estoque }}" 
+                                    class="form-control form-control-sm quantity-input" style="width: 80px;" 
+                                    data-item-key="{{ item.item_key }}">
                             </td>
-                            <td>R$ {{ item.subtotal|floatformat:2 }}</td>
+                            <td id="subtotal-{{ item.item_key }}">R$ {{ item.subtotal|floatformat:2 }}</td>
                             <td>
-                                {% comment %} <a href="{% url 'core:remover_item' item.id %}" class="btn btn-outline-danger btn-sm">Remover</a> {% endcomment %}
+                                <button class="btn btn-outline-danger btn-sm remove-item-btn" data-item-key="{{ item.item_key }}" title="Remover item">
+                                    &times;
+                                </button>
                             </td>
                         </tr>
                     {% endfor %}
@@ -63,9 +62,9 @@
                 <div class="card">
                     <div class="card-body text-end">
                         <h4 class="card-title">Total do Carrinho</h4>
-                        <h3 class="card-text">R$ {{ total_carrinho|floatformat:2 }}</h3>
+                        <h3 class="card-text" id="cart-total">R$ {{ total_carrinho|floatformat:2 }}</h3>
                         <hr>
-                        <a href="{% url "core:finalizar_pedido" %}" class="btn btn-success w-100">Finalizar Compra</a>
+                        <a href="{% url "core:checkout" %}" class="btn btn-success w-100">Finalizar Compra</a>
                     </div>
                 </div>
               </div>
@@ -87,4 +86,6 @@
     </section>
   </main>
 </div>
+
+<script src={% static "core/js/carrinho_ajax.js" %}></script>
 {% endblock content %}

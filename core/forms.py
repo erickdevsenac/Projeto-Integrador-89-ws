@@ -1,11 +1,9 @@
-from turtle import width
 from django import forms
 from django.contrib.auth.models import User
 from django.forms import inlineformset_factory
-from core.models.vendedor_model import ProdutoVendedor  
 
 from .models import (
-    Categoria,
+    Avaliacao,
     Cupom,
     EtapaPreparo,
     Ingrediente,
@@ -13,35 +11,33 @@ from .models import (
     Produto,
     Receita,
     Pedido,
-    Avaliacao,
-
+    CategoriaProduto,
+    CategoriaReceita,
 )
 
-class CadastroForm(forms.ModelForm):
-    email = forms.EmailField(label="Email",  widget=forms.EmailInput(attrs={'placeholder': 'Digite seu email'}),)
-    senha = forms.CharField(label="Senha", widget=forms.PasswordInput(attrs={'placeholder': 'Senha'}))
+
+# ==============================================================================
+# FORMULÁRIOS DE AUTENTICAÇÃO E PERFIL
+# ==============================================================================
+
+class CadastroStep1Form(forms.ModelForm):
+    email = forms.EmailField(
+        label="Email",
+        widget=forms.EmailInput(attrs={'placeholder': 'Digite seu email'}),
+    )
+    senha = forms.CharField(
+        label="Senha", 
+        widget=forms.PasswordInput(attrs={'placeholder': 'Crie uma senha forte'})
+    )
     confirmar_senha = forms.CharField(
-        label="Confirmar Senha", widget=forms.PasswordInput(attrs={'placeholder': 'Senha'},)
+        label="Confirmar Senha", 
+        widget=forms.PasswordInput(attrs={'placeholder': 'Confirme sua senha'}),
     )
     
     class Meta:
         model = Perfil
-        fields = [ 
-            "tipo",
-            "nome_negocio",
-            "telefone", 
-            "endereco",
-            "cnpj",
-            "descricao_parceiro",
-            
-        ]
-        widgets = {
-        "nome_negocio":forms.TextInput(attrs={'placeholder':'Nome do Negócio'}) ,
-        "telefone":forms.TextInput(attrs={'placeholder':'Digite seu Telefone'}) ,
-        "cnpj":forms.TextInput(attrs={'placeholder':'Digite seu CNPJ'}) ,
-        "descricao_parceiro":forms.Textarea(attrs={'placeholder':'Descrição...'}) ,
-        "endereco":forms.TextInput(attrs={'placeholder':'Seu Endereço'}) ,
-    }
+        fields = ["tipo"]
+        
 
     def clean_confirmar_senha(self):
         senha = self.cleaned_data.get("senha")
@@ -55,15 +51,11 @@ class CadastroForm(forms.ModelForm):
         if len(senha) < 6:
             raise forms.ValidationError("A senha deve ter pelo menos 6 caracteres.")
         if not any(char.isupper() for char in senha):
-            raise forms.ValidationError(
-                "A senha deve conter pelo menos uma letra maiúscula."
-            )
+            raise forms.ValidationError("A senha deve conter pelo menos uma letra maiúscula.")
         if not any(char.islower() for char in senha):
-            raise forms.ValidationError(
-                "A senha deve conter pelo menos uma letra minúscula."
-            )
+            raise forms.ValidationError("A senha deve conter pelo menos uma letra minúscula.")
         if not any(char.isdigit() for char in senha):
-            raise forms.ValidationError("A senha deve conter pelo menos um número")
+            raise forms.ValidationError("A senha deve conter pelo menos um número.")
         return senha
 
     def clean_email(self):
@@ -72,6 +64,37 @@ class CadastroForm(forms.ModelForm):
             raise forms.ValidationError("Este e-mail já está cadastrado!")
         return email
 
+
+class CompleteClientProfileForm(forms.ModelForm):
+    class Meta:
+        model = Perfil
+        fields = ["foto_perfil", "nome_completo", "telefone", "endereco"]
+        widgets = {
+            "foto_perfil": forms.FileInput(),
+            "nome_completo": forms.TextInput(attrs={'placeholder':'Seu nome completo'}),
+            "telefone": forms.TextInput(attrs={'placeholder':'(11) 99999-9999'}),
+            "endereco": forms.TextInput(attrs={'placeholder':'Seu endereço completo'}),
+        }
+        
+class CompletePartnerProfileForm(forms.ModelForm):
+    class Meta:
+        model = Perfil
+        fields = ["foto_perfil", "nome_negocio", "cnpj", "descricao_parceiro", "telefone", "endereco"]
+        widgets = {
+            "foto_perfil": forms.FileInput(),
+            "nome_negocio": forms.TextInput(attrs={'placeholder':'Nome da Loja/ONG'}),
+            "cnpj": forms.TextInput(attrs={'placeholder':'CNPJ (se aplicável)'}),
+            "descricao_parceiro": forms.Textarea(attrs={'placeholder':'Fale um pouco sobre seu negócio...', "rows": 10, "class": "richtext"}),
+
+            # "descricao_parceiro": forms.Textarea(attrs={'placeholder':'Fale um pouco sobre seu negócio...'}),
+            "telefone": forms.TextInput(attrs={'placeholder':'(11) 99999-9999'}),
+            "endereco": forms.TextInput(attrs={'placeholder':'Seu endereço completo'}),
+        }
+
+
+# ==============================================================================
+# FORMULÁRIOS DE CONTEÚDO (RECEITAS, DICAS, ETC.)
+# ==============================================================================
 
 class ReceitaForm(forms.ModelForm):
     class Meta:
@@ -84,6 +107,13 @@ class ReceitaForm(forms.ModelForm):
             "categoria",
             "imagem",
         ]
+        labels = {
+            'categoria': 'Categoria da Receita'
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["categoria"].queryset = CategoriaReceita.objects.all()
 
 IngredienteFormSet = inlineformset_factory(
     Receita,
@@ -97,48 +127,9 @@ EtapaPreparoFormSet = inlineformset_factory(
     Receita, EtapaPreparo, fields=("ordem", "descricao"), extra=1, can_delete=True
 )
 
-
-class PerfilForm(forms.ModelForm):
-    class Meta:
-        model = Perfil
-        fields = [
-            "nome_negocio",
-            "telefone",
-            "endereco",
-            "foto_perfil",
-            "descricao_parceiro",
-            "cnpj",
-        ]
-
-
-class ConfiguracaoForm(forms.Form):
-    tema_choices = [
-        ("claro", "Claro"),
-        ("escuro", "Escuro"),
-    ]
-    fonte_choices = [
-        ("normal", "Normal"),
-        ("grande", "Grande"),
-        ("extra_grande", "Extra Grande"),
-    ]
-    acessibilidade_choices = [
-        ("nenhuma", "Nenhuma"),
-        ("alto_contraste", "Alto Contraste"),
-        ("leitura_facilitada", "Leitura Facilitada"),
-    ]
-    notificacoes_choices = [
-        ("sim", "Sim"),
-        ("nao", "Não"),
-    ]
-
-    tema = forms.ChoiceField(choices=tema_choices, required=False)
-    fonte = forms.ChoiceField(choices=fonte_choices, required=False)
-    acessibilidade = forms.ChoiceField(choices=acessibilidade_choices, required=False)
-    notificacoes = forms.ChoiceField(choices=notificacoes_choices, required=False)
-
-    class Media:
-        js = ("core/js/configuracao.js",)
-
+# ==============================================================================
+# FORMULÁRIOS DE E-COMMERCE (PRODUTO, CUPOM, CHECKOUT)
+# ==============================================================================
 
 class ProdutoForm(forms.ModelForm):
     class Meta:
@@ -148,30 +139,23 @@ class ProdutoForm(forms.ModelForm):
             "categoria",
             "preco",
             "quantidade_estoque",
-            "imagem",
+            "imagem_principal",
             "descricao",
             "codigo_produto",
-            "data_fabricacao",
             "data_validade",
         ]
-
+        
         widgets = {
-            "data_fabricacao": forms.DateInput(attrs={"type": "date"}),
             "data_validade": forms.DateInput(attrs={"type": "date"}),
-            "descricao": forms.Textarea(attrs={"rows": 4}),
+            "descricao": forms.Textarea(attrs={"rows": 10, "class": "richtext"}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["categoria"].queryset = Categoria.objects.all()
+        self.fields["categoria"].queryset = CategoriaProduto.objects.all()
         self.fields["categoria"].label_from_instance = lambda obj: obj.nome
 
-
 class CupomForm(forms.ModelForm):
-    """
-    Formulário para criar e editar objetos do modelo Cupom.
-    """
-
     class Meta:
         model = Cupom
         fields = [
@@ -183,65 +167,41 @@ class CupomForm(forms.ModelForm):
             "valor_minimo_compra",
             "ativo",
         ]
-
         widgets = {
-            "data_validade": forms.DateInput(attrs={"type": "date"}),
+            "data_validade": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
         }
 
     def clean_codigo(self):
         codigo = self.cleaned_data.get("codigo")
-        if codigo:
-            return codigo.upper()
-        return codigo
-
-        
-        
+        return codigo.upper() if codigo else codigo
 
 class CheckoutForm(forms.ModelForm):
-    """
-    Formulário para o cliente confirmar os detalhes do pedido.
-    """
     class Meta:
         model = Pedido
         fields = ['endereco_entrega', 'forma_pagamento']
 
         widgets = {
-            'endereco_entrega': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
-            'forma_pagamento': forms.RadioSelect(attrs={'class': 'form-check-input'}),
+            'endereco_entrega': forms.Textarea(attrs={'rows': 3}),
+            'forma_pagamento': forms.RadioSelect(),
         }
-        
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['endereco_entrega'].label = "Endereço de Entrega"
-        self.fields['forma_pagamento'].label = "Escolha a Forma de Pagamento"
-
-
-
-class ProdutovendedorForm(forms.ModelForm):
-    class Meta:
-        model = ProdutoVendedor
-        fields = [
-            'nome',
-            'preco',
-            'imagem',
-            'codigo_produto',
-            'data_fabricacao',
-            'data_validade',
-            'quantidade_estoque',
-            'descricao',  
-        ]
-
-        widgets = {
-            "data_fabricacao": forms.DateInput(attrs={"type": "date"}),
-            "data_validade": forms.DateInput(attrs={"type": "date"}),
-            "descricao": forms.Textarea(attrs={"rows": 4}),
+        labels = {
+            'endereco_entrega': "Confirme ou altere o Endereço de Entrega",
+            'forma_pagamento': "Escolha a Forma de Pagamento",
         }
 
+# ==============================================================================
+# OUTROS FORMULÁRIOS (AVALIAÇÃO, CONFIGURAÇÃO)
+# ==============================================================================
 
 class AvaliacaoForm(forms.ModelForm):
     class Meta:
         model = Avaliacao
-        fields = ['titulo', 'descricao', 'nota']
+        fields = ['nota', 'texto']
         widgets = {
-            'nota': forms.RadioSelect()
+            'nota': forms.RadioSelect(choices=[(i, f'{i} Estrelas') for i in range(1, 6)]),
+            'texto': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Deixe seu comentário (opcional)...'}),
+        }
+        labels = {
+            'nota': 'Sua Nota',
+            'texto': 'Comentário'
         }

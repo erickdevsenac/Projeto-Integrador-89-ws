@@ -2,67 +2,81 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-4">
-    {% for pedido in pedidos %}
-    <h2>Detalhes do Pedido #{{ pedido.id }}</h2>
+<div class="container my-5">
+    <h2 class="mb-4">Meus Pedidos</h2>
 
+    {% if not page_obj %}
+        <div class="alert alert-info">Você ainda não fez nenhum pedido.</div>
+    {% endif %}
+
+    {% for pedido in page_obj %}
     <div class="card mb-4">
-        <div class="card-header">
-            <h5>Informações do Pedido</h5>
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Pedido #{{ pedido.numero_pedido }}</h5>
+            <span>Feito em: {{ pedido.data_criacao|date:"d/m/Y" }}</span>
         </div>
         <div class="card-body">
-            <p><strong>Data:</strong> {{ pedido.data_pedido|date:"d/m/Y H:i" }}</p>
-            <p><strong>Status:</strong>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <strong>Status do Pagamento:</strong>
                     <span class="badge 
-                        {% if pedido.status_pagamento == 'CANCELADO' %}bg-warning
-                        {% elif pedido.status_pagamento == 'AGUARDANDO' %}bg-info
-                        {% elif pedido.status_pagamento == 'PAGO' %}bg-success
+                        {% if pedido.status_pagamento == 'PAGO' %}bg-success
+                        {% elif pedido.status_pagamento == 'AGUARDANDO' %}bg-warning text-dark
                         {% else %}bg-danger
                         {% endif %}">
-                        {{ pedido.status_pagamento }}
+                        {{ pedido.get_status_pagamento_display }}
                     </span>
-                </p>
-            <p><strong>Total:</strong> R$ {{ pedido.valor_total }}</p>
-        </div>
-    </div>
-    
-    <div class="card">
-        <div class="card-header">
-            <h5>Itens do Pedido</h5>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Produto</th>
-                            <th>Quantidade</th>
-                            <th>Preço Unitário</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in pedido.itens.all %}
-                        <tr>
-                            <td>{{ item.produto.nome }}</td>
-                            <td>{{ item.quantidade }}</td>
-                            <td>R$ {{ item.preco }}</td>
-                            <td>R$ {{ item.get_total_item }}</td>
-                        </tr>
-                        {% endfor %}
-                        <tr class="table-active">
-                            <td colspan="3"><strong>Total do Pedido</strong></td>
-                            <td><strong>R$ {{ pedido.total }}</strong></td>
-                        </tr>
-                    </tbody>
-                </table>
+                </div>
+                <div class="col-md-4">
+                    <strong>Forma de Pagamento:</strong> {{ pedido.get_forma_pagamento_display }}
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <strong>Total do Pedido: R$ {{ pedido.valor_total|floatformat:2 }}</strong>
+                </div>
             </div>
+
+            {% for sub_pedido in pedido.sub_pedidos.all %}
+                <div class="sub-pedido-group border-top pt-3 mt-3">
+                    <h6>Itens do vendedor: <strong>{{ sub_pedido.vendedor.nome_negocio }}</strong></h6>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Produto</th>
+                                <th class="text-center">Quantidade</th>
+                                <th class="text-end">Preço Unitário</th>
+                                <th class="text-end">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in sub_pedido.itens.all %}
+                            <tr>
+                                <td>{{ item.produto.nome }}</td>
+                                <td class="text-center">{{ item.quantidade }}</td>
+                                <td class="text-end">R$ {{ item.preco_unitario|floatformat:2 }}</td>
+                                <td class="text-end">R$ {{ item.subtotal|floatformat:2 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
         </div>
     </div>
     {% endfor %}
-    
-    {% comment %} <a href="{% url 'pedidos:lista_pedidos' %}" class="btn btn-secondary mt-3">
-        Voltar para Lista de Pedidos
-    </a> {% endcomment %}
+
+    {% if page_obj.has_other_pages %}
+        <nav aria-label="Navegação de Pedidos">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a></li>
+                {% endif %}
+                <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Próxima</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+
 </div>
 {% endblock %}

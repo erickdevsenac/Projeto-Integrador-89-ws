@@ -2,8 +2,39 @@
 <html lang="pt-br">
     {% include 'parciais/_head.html' %}
 
-<body>
-    {% include 'parciais/_header.html' %} 
+<body class="{% if request.session.tema == 'escuro' %}tema-escuro{% endif %} {% if request.session.fonte == 'grande' %}fonte-grande{% elif request.session.fonte == 'extra_grande' %}fonte-extra-grande{% endif %}">
+
+    <!-- Loading Spinner -->
+    {% comment %} <div id="loading-spinner" class="loading-spinner">
+        <div class="spinner-border text-success" role="status">
+            <span class="visually-hidden">Carregando...</span>
+        </div>
+    </div> {% endcomment %}
+
+     <!-- Skip to main content (acessibilidade) -->
+    {% comment %} <a class="skip-link" href="#main-content">Pular para o conteúdo principal</a> {% endcomment %}
+
+    <!-- Header -->
+    <header class="header-main" role="banner">
+        {% include 'parciais/_header.html' %} 
+    </header>
+
+     <!-- Breadcrumb -->
+    {% block breadcrumb %}{% endblock %}
+
+
+    <!-- Messages/Alerts -->
+    {% if messages %}
+        <div class="alerts-container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+                    <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% elif message.tags == 'warning' %}exclamation-circle{% else %}info-circle{% endif %} me-2"></i>
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
     <main class="container mt-4">
         {% block alterarsenha %}{% endblock alterarsenha %}
@@ -27,7 +58,51 @@
         {% block ong_pagina %}{% endblock ong_pagina %}
     </main>
 
-    {% include 'parciais/_footer.html' %}
+    <footer class="footer-main" role="contentinfo">
+        {% include 'parciais/_footer.html' %}
+    </footer>
+
+ 
+
+    <!-- Cookie Consent -->
+    <div id="cookie-consent" class="cookie-consent" style="display: none;">
+        <div class="cookie-content">
+            <p>Este site usa cookies para melhorar sua experiência. Ao continuar navegando, você concorda com nossa política de cookies.</p>
+            <div class="cookie-actions">
+                <button id="accept-cookies" class="btn btn-success btn-sm">Aceitar</button>
+                <button id="decline-cookies" class="btn btn-outline-secondary btn-sm">Recusar</button>
+                {% comment %} <a href="{% url 'core:privacidade' %}" class="btn btn-link btn-sm">Saiba mais</a> {% endcomment %}
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Analytics (apenas em produção) -->
+    {% if not debug %}
+        <!-- Google Analytics ou similar -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'GA_MEASUREMENT_ID');
+        </script>
+    {% endif %}
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(function(registrationError) {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
 
 </body>
 </html>

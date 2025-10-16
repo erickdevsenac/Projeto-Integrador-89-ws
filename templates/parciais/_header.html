@@ -54,7 +54,7 @@
             class="d-flex me-3"
             role="search"
             method="get"
-            action="{% url 'core:buscar_produtos' %}"
+            action="{% url 'core:produtos' %}"
           >
             <input
               class="form-control me-2"
@@ -68,11 +68,11 @@
           </form>
 
           {% if user.is_authenticated %}
-          <a
-            href="{% url 'core:ver_carrinho' %}"
-            class="btn btn-light position-relative me-3"
-          >
-            <i class="bi bi-cart"></i>
+          <a href="{% url 'core:ver_carrinho' %}" class="btn btn-light position-relative me-3">
+              <i class="bi bi-cart"></i>
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cart-item-count">
+                  {{ total_itens|default:0 }}
+              </span>
           </a>
 
           <div class="dropdown">
@@ -99,6 +99,15 @@
                   ><i class="bi bi-box-seam"></i> Meus Pedidos</a
                 >
               </li>
+              {% if user.perfil.tipo == 'VENDEDOR' %}
+
+              <li>
+                <a class="dropdown-item" href="{% url "core:vendedor_perfil" user.id %}">
+                 <i class="bi bi-shop"></i> Minha Loja
+                </a>
+              </li>
+              {% endif %}
+
               <li>
                 <a class="dropdown-item" href="{% url 'core:configuracoes' %}"
                   ><i class="bi bi-box-seam"></i> Configurações</a
@@ -123,10 +132,8 @@
           </div>
 
           {% else %}
-          <a href="{% url 'core:telalogin' %}" class="btn btn-outline-light me-2"
-            >Login</a
-          >
-          <a href="{% url 'core:cadastro' %}" class="btn btn-outline-light me-2">Cadastre-se</a>
+            <a href="{% url 'core:telalogin' %}" class="btn btn-outline-light me-2">Login</a>
+            <a href="{% url 'core:cadastro' %}" class="btn btn-success">Cadastre-se</a>
           {% endif %}
         </div>
       </div>
