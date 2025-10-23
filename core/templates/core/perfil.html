@@ -120,5 +120,57 @@
         });
     });
 </script>
+
+<script src="https://unpkg.com/imask"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const viewMode = document.getElementById('view-mode');
+        const editMode = document.getElementById('edit-mode');
+        const editButton = document.getElementById('edit-profile-btn');
+        const cancelButton = document.getElementById('cancel-edit-btn');
+
+        if(editButton) { 
+            editButton.addEventListener('click', () => {
+                viewMode.style.display = 'none';
+                editMode.style.display = 'block';
+            });
+        }
+
+        if(cancelButton) {
+            cancelButton.addEventListener('click', () => {
+                editMode.style.display = 'none';
+                viewMode.style.display = 'block';
+            });
+        }
+     
+
+        const telefoneInput = document.getElementById('id_telefone');
+        const cnpjInput = document.getElementById('id_cnpj');
+        
+        if (telefoneInput) {
+            IMask(telefoneInput, {
+                mask: [
+                    { mask: '(00) 0000-0000' },  
+                    { mask: '(00) 00000-0000' } 
+                ]
+            });
+        }
+        
+        if (cnpjInput) {
+            IMask(cnpjInput, {
+                mask: '00.000.000/0000-00'
+            });
+        }
+
+        const cepInput = document.getElementById('id_cep');
+        if (cepInput) {
+            IMask(cepInput, {
+                mask: '00000-000'
+            });
+        }
+
+    });
+</script>
 {% include 'parciais/_avaliacao_modal_perfil.html' %}
 {% endblock %}

@@ -68,12 +68,13 @@ class CadastroStep1Form(forms.ModelForm):
 class CompleteClientProfileForm(forms.ModelForm):
     class Meta:
         model = Perfil
-        fields = ["foto_perfil", "nome_completo", "telefone", "endereco"]
+        fields = ["foto_perfil", "nome_completo", "telefone", "endereco", "cidade", "estado", "cep",]
         widgets = {
             "foto_perfil": forms.FileInput(),
             "nome_completo": forms.TextInput(attrs={'placeholder':'Seu nome completo'}),
-            "telefone": forms.TextInput(attrs={'placeholder':'(11) 99999-9999'}),
-            "endereco": forms.TextInput(attrs={'placeholder':'Seu endereço completo'}),
+            "telefone": forms.TextInput(attrs={'placeholder':'(11) 99999-9999', 'id': 'id_telefone'}),
+            "cep": forms.TextInput(attrs={'id': 'id_cep'}),
+            "endereco": forms.TextInput(attrs={'placeholder':'Rua, nº'}),
         }
         
 class CompletePartnerProfileForm(forms.ModelForm):
@@ -83,11 +84,13 @@ class CompletePartnerProfileForm(forms.ModelForm):
         widgets = {
             "foto_perfil": forms.FileInput(),
             "nome_negocio": forms.TextInput(attrs={'placeholder':'Nome da Loja/ONG'}),
-            "cnpj": forms.TextInput(attrs={'placeholder':'CNPJ (se aplicável)'}),
+            "cnpj": forms.TextInput(attrs={'placeholder':'CNPJ (se aplicável)', 'id': 'id_cnpj'}),
             "descricao_parceiro": forms.Textarea(attrs={'placeholder':'Fale um pouco sobre seu negócio...', "rows": 10, "class": "richtext"}),
 
             # "descricao_parceiro": forms.Textarea(attrs={'placeholder':'Fale um pouco sobre seu negócio...'}),
-            "telefone": forms.TextInput(attrs={'placeholder':'(11) 99999-9999'}),
+            "telefone": forms.TextInput(attrs={'placeholder':'(11) 99999-9999', 'id': 'id_telefone'}),
+            "cep": forms.TextInput(attrs={'id': 'id_cep'}),
+            "telefone": forms.TextInput(attrs={'placeholder':'(11) 99999-9999', 'id': 'id_telefone'}),
             "endereco": forms.TextInput(attrs={'placeholder':'Seu endereço completo'}),
         }
 
