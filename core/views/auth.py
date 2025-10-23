@@ -25,6 +25,7 @@ def cadastro(request):
                 password=data["senha"]
             )
             Perfil.objects.create(usuario=user, tipo=data["tipo"])
+            user.is_active = False
             
             login(request, user)
             
@@ -107,8 +108,6 @@ def perfil(request):
     
     return render(request, "core/perfil.html", context)
 
-# Em core/views/auth.py
-
 @login_required
 def configuracoes(request):
     if request.method == "POST":
@@ -149,3 +148,4 @@ def recuperarsenha(request):
 
 def alterarsenha(request):
     return render(request, "core/alterarsenha.html")
+

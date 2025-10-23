@@ -7,6 +7,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from django.views.generic import TemplateView
 
 from core.viewsets import (
     avaliacao_viewset,
@@ -56,6 +57,13 @@ urlpatterns = [
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api-auth/", include("rest_framework.urls")),
+]
+
+urlpatterns += [
+    path('sw.js', TemplateView.as_view(
+        template_name='sw.js',
+        content_type='application/javascript'
+    )),
 ]
 
 
