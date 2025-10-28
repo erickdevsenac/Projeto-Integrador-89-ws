@@ -34,6 +34,9 @@ def receita_detalhe(request, receita_id):
 def dicas(request):
     lista_dicas = Dica.objects.filter(publicada=True).order_by("-data_publicacao")
     return render(request, "core/dicas.html", {"dicas": lista_dicas})
+def detalhes_dica(request, id):
+    dica = get_object_or_404(Dica, id=id)
+    return render(request, 'core/dicas_detalhes.html', {'dica': dica})
 
 
 @login_required

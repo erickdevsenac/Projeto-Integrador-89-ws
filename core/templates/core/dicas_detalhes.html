@@ -1,0 +1,75 @@
+{% extends 'global/base.html' %}
+{% load static %}
+
+{% block head %}
+<title>{{ dica.titulo }} - Dicas Sustentáveis</title>
+<link rel="stylesheet" href="{% static 'core/style_dicas.css' %}">
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    h1, h2 {
+        color: #2e7d32;
+        font-weight: bold;
+    }
+
+    .dica-detalhes {
+        background-color: #f8f9fa;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .imagem-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+    .dica-imagem {
+        width: 150px;       /* largura fixa menor */
+        height: auto;       /* mantém proporção */
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .badge {
+        font-size: 0.85rem;
+    }
+
+    .btn-voltar {
+        margin-top: 1.5rem;
+    }
+</style>
+{% endblock head %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="dica-detalhes">
+        <h2 class="mb-3">{{ dica.titulo }}</h2>
+
+        <div class="imagem-container">
+            {% if dica.imagem %}
+                <img src="{{ dica.imagem.url }}" class="dica-imagem" alt="Imagem da dica">
+            {% else %}
+                <img src="{% static 'core/img/placeholder.png' %}" class="dica-imagem" alt="Imagem padrão">
+            {% endif %}
+        </div>
+
+        {% if dica.categoria %}
+            <span class="badge bg-success mb-3">{{ dica.categoria }}</span>
+        {% endif %}
+
+        <h5 class="text-muted">Resumo</h5>
+        <p>{{ dica.resumo }}</p>
+
+        <h5 class="text-muted mt-4">Conteúdo</h5>
+        <p>{{ dica.conteudo|linebreaks }}</p>
+
+        <div class="text-center btn-voltar">
+            <a href="{% url 'core:dicas' %}" class="btn btn-outline-secondary">Voltar às Dicas</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

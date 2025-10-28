@@ -129,6 +129,7 @@ urlpatterns = [
     # path("receita/<int:receita_id>/editar/", views.editar_receita, name="editar_receita"),
     # Conteúdo educativo
     path("dicas/", conteudo.dicas, name="dicas"),
+    path('dicas-detalhes/<int:id>/', conteudo.detalhes_dica, name='dicas_detalhes'),
     path("videos/", public.videos, name="videos"),
     # ==============================================================================
     # ROTAS DE ONGs E DOAÇÕES
