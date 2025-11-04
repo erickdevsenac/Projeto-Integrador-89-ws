@@ -13,7 +13,7 @@ from .models import (
     Pedido,
     CategoriaProduto,
     CategoriaReceita,
-    UF_CHOICES,
+    # UF_CHOICES,
 )
 
 
@@ -76,7 +76,7 @@ class CompleteClientProfileForm(forms.ModelForm):
             "telefone": forms.TextInput(attrs={'placeholder':'(11) 99999-9999', 'id': 'id_telefone'}),
             "cep": forms.TextInput(attrs={'id': 'id_cep'}),
             "endereco": forms.TextInput(attrs={'placeholder':'Rua, nº'}),
-            "estado": forms.ChoiceField(choices=UF_CHOICES)
+            # "estado": forms.ChoiceField(choices=UF_CHOICES)
         }
         
 class CompletePartnerProfileForm(forms.ModelForm):
