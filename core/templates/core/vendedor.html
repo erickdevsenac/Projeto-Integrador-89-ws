@@ -10,7 +10,7 @@
 <div class="loja-container">
   <header class="loja-header">
     {% if vendedor.foto_perfil %}
-        <img src="{{ endedor.foto_perfil.url }}" alt="Logo da loja {{ vendedor.nome_negocio }}" class="loja-imagem" />
+        <img src="{{ vendedor.foto_perfil.url }}" alt="Logo da loja {{ vendedor.nome_negocio }}" class="loja-imagem" />
     {% else %}
         <img src="{% static 'assets/img/placeholder_store.png' %}" alt="Logo da loja {{ vendedor.nome_negocio }}" class="loja-imagem" />
     {% endif %}
