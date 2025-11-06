@@ -5,7 +5,6 @@ from rest_framework.response import Response
 
 from core.serializers.registro_serializer import LoginSerializer, RegistroSerializer
 
-
 class AuthViewSet(viewsets.GenericViewSet):
     queryset = None
     serializer_class = LoginSerializer
@@ -15,13 +14,10 @@ class AuthViewSet(viewsets.GenericViewSet):
     def register(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        
         user_data = serializer.save()
         return Response(
-            {
-                "user": user_data["user"].username,
-                "access": user_data["access"],
-                "refresh": user_data["refresh"],
-            },
+            {"detail": "Cadastro realizado com sucesso. Verifique seu e-mail para ativar a conta."},
             status=status.HTTP_201_CREATED,
         )
 
@@ -30,6 +26,13 @@ class AuthViewSet(viewsets.GenericViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data["user"]
+        
+        if not user.is_active:
+            return Response(
+                {"detail": "Conta não ativada. Verifique seu e-mail."},
+                status=status.HTTP_403_FORBIDDEN, 
+            )
+            
         return Response(
             {
                 "user": user.username,
@@ -38,3 +41,4 @@ class AuthViewSet(viewsets.GenericViewSet):
             },
             status=status.HTTP_200_OK,
         )
+        
