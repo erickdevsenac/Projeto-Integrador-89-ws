@@ -48,6 +48,7 @@ h1, h2 {
         <div class="row">
             {% for dica in dicas %}
                 <div class="col-md-4 mb-4">
+                    <a href="{% url 'core:dicas_detalhes' dica.id %}">
                     <div class="card dica-card shadow-sm">
                         {% if dica.imagem %}
                             <img src="{{ dica.imagem.url }}" class="card-img-top" alt="Imagem da dica">
@@ -62,6 +63,7 @@ h1, h2 {
                             {% endif %}
                         </div>
                     </div>
+                    </a>
                 </div>
             {% empty %}
                 <p>Nenhuma dica cadastrada ainda.</p>
