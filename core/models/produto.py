@@ -57,6 +57,11 @@ class Produto(TimeStampedModel):
         DEFEITO_ESTETICO = "ESTETICA", "Defeito Estético"
         EXCESSO_ESTOQUE = "EXCESSO", "Excesso de Estoque"
 
+    class TipoPesagem(models.TextChoices):
+        quilo = "PESA", "Kg"
+        litro = "MEDE", "Lt"
+        unidade = "QUANTIA", "Unidade"
+
     vendedor = models.ForeignKey(
         "core.Perfil",
         on_delete=models.CASCADE,
@@ -101,6 +106,12 @@ class Produto(TimeStampedModel):
     estoque_minimo = models.PositiveIntegerField(
         default=1, help_text="Quantidade mínima para alerta de estoque baixo"
     )
+    tipo_quantidade = models.CharField(
+        choices= TipoPesagem.choices,
+        null=True,
+        blank=True
+    )
+
     codigo_produto = models.CharField(
         "Código (SKU)",
         max_length=50,
