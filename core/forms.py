@@ -87,7 +87,7 @@ class CompletePartnerProfileForm(forms.ModelForm):
             "foto_perfil": forms.FileInput(),
             "nome_negocio": forms.TextInput(attrs={'placeholder':'Nome da Loja/ONG'}),
             "cnpj": forms.TextInput(attrs={'placeholder':'CNPJ (se aplicável)', 'id': 'id_cnpj'}),
-            "descricao_parceiro": forms.Textarea(attrs={'placeholder':'Fale um pouco sobre seu negócio...', "rows": 10, "class": "richtext"}),
+            "descricao_parceiro": forms.Textarea(attrs={'placeholder':'Fale um pouco sobre seu negócio...', "rows": 10,}),
 
             # "descricao_parceiro": forms.Textarea(attrs={'placeholder':'Fale um pouco sobre seu negócio...'}),
             "telefone": forms.TextInput(attrs={'placeholder':'(11) 99999-9999', 'id': 'id_telefone'}),
@@ -144,6 +144,7 @@ class ProdutoForm(forms.ModelForm):
             "categoria",
             "preco",
             "quantidade_estoque",
+            "tipo_quantidade",
             "imagem_principal",
             "descricao",
             "codigo_produto",

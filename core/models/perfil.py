@@ -13,19 +13,19 @@ class PerfilManager(models.Manager):
     def vendedores_ativos(self):
         """Retorna apenas perfis de Vendedores ativos"""
         return self.filter(
-            tipo=self.model.TipoUsuario.VENDEDOR, ativo=True, usuario__is_active=True
+            tipo=self.model.TipoUsuario.VENDEDOR, ativo=True, usuario__is_active=False
         )
 
     def ongs_ativas(self):
         """Retorna apenas perfis de ONGs ativas"""
         return self.filter(
-            tipo=self.model.TipoUsuario.ONG, ativo=True, usuario__is_active=True
+            tipo=self.model.TipoUsuario.ONG, ativo=True, usuario__is_active=False
         )
 
     def clientes_ativos(self):
         """Retorna apenas perfis de Clientes ativos"""
         return self.filter(
-            tipo=self.model.TipoUsuario.CLIENTE, ativo=True, usuario__is_active=True
+            tipo=self.model.TipoUsuario.CLIENTE, ativo=True, usuario__is_active=False
         )
 
 
