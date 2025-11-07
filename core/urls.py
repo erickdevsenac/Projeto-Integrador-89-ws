@@ -40,9 +40,16 @@ urlpatterns = [
     path("login/", auth.login_view, name="telalogin"),
     path("cadastro/", auth.cadastro, name="cadastro"),
     path("cadastro/completar/", auth.completar_cadastro, name="completar_cadastro"),
+    path("ativar-conta/<uidb64>/<token>/", auth.ativar_conta, name="ativar_conta"),
+
     # Recuperação de senha
     path("alterar-senha/", auth.alterarsenha, name="alterar_senha"),
     path("recuperar-senha/", auth.recuperarsenha, name="recuperar-senha"),
+    path(
+        "redefinir-senha/<uidb64>/<token>/", 
+        auth.redefinir_senha_confirmar, 
+        name="password_reset_confirm" # Nome padrão do Django
+    ),
     # TODO:
     # path("reset-senha/<uidb64>/<token>/", views.reset_senha, name="reset_senha"),
     # ==============================================================================

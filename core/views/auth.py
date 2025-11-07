@@ -3,12 +3,15 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
-from django.utils.http import urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.db.models import F
+from django.conf import settings
+from django.contrib.auth.forms import SetPasswordForm
+from django.urls import reverse
 
 from core.forms import CadastroStep1Form, CompleteClientProfileForm, CompletePartnerProfileForm
 
@@ -26,10 +29,29 @@ def cadastro(request):
             )
             Perfil.objects.create(usuario=user, tipo=data["tipo"])
             user.is_active = False
+            user.save()
             
-            login(request, user)
+            # --- Início da Lógica de Envio de E-mail ---
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+            activation_link = f"http://{request.get_host()}/ativar-conta/{uid}/{token}/"
             
-            return redirect('core:completar_cadastro') 
+            subject = "Ative sua conta"
+            
+            body = render_to_string('core/ativacao_conta.html', {
+                'user': user,
+                'activation_link': activation_link
+            }) 
+            
+            try:
+                send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [user.email])
+                messages.success(request, "Cadastro realizado! Um link de ativação foi enviado para o seu e-mail.")
+            except Exception as e:
+                messages.error(request, "Houve um problema ao enviar o e-mail de ativação. Contate o suporte")
+                user.delete()
+                return render(request, "core/cadastro_step1.html", {"form": form})
+            
+            return redirect('core:telalogin') 
     else:
         form = CadastroStep1Form()
     return render(request, "core/cadastro_step1.html", {"form": form})
@@ -60,10 +82,17 @@ def login_view(request):
         email = request.POST.get("email")
         senha = request.POST.get("password")
         user = authenticate(request, username=email, password=senha)
-        if user:
-            login(request, user)
-            return redirect("core:index")
-        mensagem = "Email ou senha incorretos."
+        
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return redirect("core:index")
+            else:
+                # Usuário existe, mas NÃO está ativo
+                mensagem = "Sua conta foi criada, mas ainda não foi ativada. Por favor, verifique seu e-mail."
+        else:
+            # Usuário não existe ou senha está incorreta
+            mensagem = "Email ou senha incorretos."
     return render(request, "core/telalogin.html", {"mensagem": mensagem})
 
 def logout_view(request):
@@ -138,8 +167,9 @@ def recuperarsenha(request):
 
         uid = urlsafe_base64_encode(force_bytes(usuario.pk))
         token = default_token_generator.make_token(usuario)
-        link = f"http://{request.get_host()}/redefinir-senha/{uid}/{token}/"
-        corpo = render_to_string('email/senha_reset.html', {'usuario': usuario, 'link_de_reset': link})
+        link_path = reverse('core:password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+        link = f"http://{request.get_host()}{link_path}"
+        corpo = render_to_string('/senha_reset.html', {'usuario': usuario, 'link_de_reset': link})
 
         send_mail('Redefinição de senha', corpo, 'no-reply@site.com', [usuario.email])
         messages.success(request, 'E-mail enviado com instruções.')
@@ -149,3 +179,44 @@ def recuperarsenha(request):
 def alterarsenha(request):
     return render(request, "core/alterarsenha.html")
 
+def ativar_conta(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+        
+    if user and default_token_generator.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user) 
+        messages.success(request, "Conta ativada com sucesso! Por favor, complete seu perfil.")
+ 
+        return redirect('core:completar_cadastro') 
+    else:
+        messages.error(request, "Link de ativação inválido ou expirado.")
+        return redirect('core:telalogin') 
+    
+def redefinir_senha_confirmar(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is None or not default_token_generator.check_token(user, token):
+        messages.error(request, "Link de redefinição de senha inválido ou expirado.")
+        return redirect('core:telalogin')
+
+    if request.method == 'POST':
+        form = SetPasswordForm(user, request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Sua senha foi redefinida com sucesso! Você já pode fazer login.')
+            return redirect('core:telalogin')
+        else:
+            messages.error(request, 'Houve um erro no formulário. Tente novamente.')
+    else:
+        form = SetPasswordForm(user)
+
+    return render(request, 'core/redefinir_senha_confirmar.html', {'form': form})
