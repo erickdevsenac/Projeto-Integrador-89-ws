@@ -71,7 +71,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Adiciona o listener nos dois campos para validar em tempo real
   if (passwordInput && confirmPasswordInput) {
       passwordInput.addEventListener('input', validatePasswordConfirmation);
       confirmPasswordInput.addEventListener('input', validatePasswordConfirmation);
@@ -82,14 +81,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
   passwordToggles.forEach(toggle => {
     toggle.addEventListener('click', function() {
-      const targetId = this.dataset.target; // Pega o ID do input alvo do atributo data-target
+      const targetId = this.dataset.target;
       const targetInput = document.getElementById(targetId);
 
       if (targetInput) {
-        // Alterna o tipo do input entre 'password' e 'text'
         if (targetInput.type === 'password') {
           targetInput.type = 'text';
-          this.innerHTML = '&#128064;'; // Ícone de olho aberto
+          // this.innerHTML = '&#128064;'; // Ícone de olho aberto
           // this.classList.add('hidden'); // Se estiver usando Font Awesome
         } else {
           targetInput.type = 'password';
@@ -99,5 +97,59 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
+
+  const cepInput = document.getElementById("id_cep");
+  const getCepButton = document.getElementById("getCep");
+  const enderecoInput = document.getElementById("id_endereco");
+  const cidadeInput = document.getElementById("id_cidade");
+  const estadoInput = document.getElementById("id_estado");
+
+  if(getCepButton && cepInput){
+    getCep.addEventListener("click", () => {
+      const cepValue = cepInput.value;
+      if (cepValue) {
+        viaCep(cepValue);
+      }
+    }) 
+  }
+
+  if (cepInput) {
+    cepInput.addEventListener("blur", () => {
+        const cepValue = cepInput.value.replace(/\D/g, '');
+        if (cepValue.length === 8) {
+            viaCep(cepValue);
+        }
+    });
+  }
+  
+ async function viaCep(cep) {
+    const cepLimpo = cep.replace(/\D/g, '');
+
+    if (!enderecoInput || !cidadeInput || !estadoInput) {
+        console.error("Campos de endereço (endereco, cidade, estado) não encontrados no DOM.");
+        return;
+    }
+
+    try {
+      let dados = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
+      let dadosjson = await dados.json();
+
+      if (dadosjson.erro) {
+        alert("CEP não encontrado. Verifique o valor digitado.");
+        enderecoInput.value = "";
+        cidadeInput.value = "";
+        estadoInput.value = "";
+      } else {
+        enderecoInput.value = dadosjson.logradouro;
+        cidadeInput.value = dadosjson.localidade;
+        estadoInput.value = dadosjson.uf;
+        
+        enderecoInput.focus();
+      }
+    } catch (error) {
+      console.error("Erro ao buscar CEP:", error);
+      alert("Não foi possível buscar o CEP. Tente novamente.");
+    }
+  }
 
 });
