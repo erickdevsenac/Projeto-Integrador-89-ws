@@ -13,6 +13,7 @@ from .models import (
     Pedido,
     CategoriaProduto,
     CategoriaReceita,
+    PacoteSurpresa,
     # UF_CHOICES,
 )
 
@@ -20,6 +21,29 @@ from .models import (
 # ==============================================================================
 # FORMULÁRIOS DE AUTENTICAÇÃO E PERFIL
 # ==============================================================================
+
+class CadastroPacoteSurpresa(forms.Modelform):
+    model = PacoteSurpresa
+    fields = ["nome", "descricao", "tipo_conteudo", "data_disponibilidade_inicio", "data_disponibilidade_fim", "instrucoes_especiais"]
+    widgets = {
+            "nome": forms.FileInput(attrs={'placeholder':'Digite o nome do Produto'}),
+            "descricao": forms.TextInput(attrs={'placeholder':'Faça uma descrição do Produto'}),
+            "tipo_conteudo": forms.TextInput(attrs={'placeholder':'Qual seu tipo de produto?'}),
+           "data_fabricacao": forms.DateInput(
+                attrs={
+                    'placeholder': 'AAAA-MM-DD',
+                    'type': 'date'
+                }
+            ),
+            "data_validade": forms.DateInput(
+                attrs={
+                    'placeholder': 'AAAA-MM-DD',
+                    'type': 'date'
+                }
+            ),
+            "instrucoes_especiais": forms.TextInput(attrs={'placeholder':'Descreva instruçoes necessarias'})
+        }
+    
 
 class CadastroStep1Form(forms.ModelForm):
     email = forms.EmailField(
