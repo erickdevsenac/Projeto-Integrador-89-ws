@@ -9,8 +9,27 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 
-from core.forms import ProdutoForm
+# from django.views.decorators.cache import cache_page
+from core.forms import ProdutoForm,CadastroPacoteSurpresa
 from core.models import CategoriaProduto, Perfil, Produto, PacoteSurpresa
+
+def pacote(request):
+    queryset = PacoteSurpresa.objects.all().filter(
+        ativo=True, quantidade_estoque__gt=0
+    )
+    if request.method == "POST":
+        form = CadastroPacoteSurpresa(request.POST, request.FILES)
+        if form.is_valid():
+            pacote = form.save(commit=False)
+            pacote.vendedor = request.user.perfil
+            pacote.save()
+            messages.success(
+                request, f'Produto "{pacote.nome}" cadastrado com sucesso!'
+            )
+            return redirect("core:index.html")
+    else:
+        form =CadastroPacoteSurpresa()
+    return render(request, "core/pacote.html",context={"form":form})
 
 
 def produtos(request):
