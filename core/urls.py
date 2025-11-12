@@ -66,7 +66,9 @@ urlpatterns = [
         name="produto_quick_view",
     ),
     path("produto/cadastrar/", marketplace.cadastrar_produto, name="cadastrar_produto"),
-    path("pacote/<int:pacote_id>/", public.pacote_detalhe, name="pacote_detalhe"),
+    path("pacote/", public.pacote_detalhe, name="pacote_detalhe"),
+     path("pacote/<int:pacote_id>/", public.pacote_detalhe, name="pacote_detalhe"),
+    
     # TODO:
     # path("categoria/<slug:categoria_slug>/", views.produtos_por_categoria, name="produtos_categoria"),
     # TODO:
