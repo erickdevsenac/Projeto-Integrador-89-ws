@@ -9,16 +9,23 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 
-# from django.views.decorators.cache import cache_page
 from core.forms import ProdutoForm
-from core.models import CategoriaProduto, Perfil, Produto
+from core.models import CategoriaProduto, Perfil, Produto, PacoteSurpresa
 
 
 def produtos(request):
-    """View otimizada para listagem de produtos com filtros avançados"""
+    """View otimizada para listagem de produtos e pacotes surpresa com filtros avançados"""
     queryset = Produto.objects.select_related("vendedor", "categoria").filter(
         ativo=True, quantidade_estoque__gt=0
     )
+
+    pacotesurpresa = PacoteSurpresa.objects.filter(
+        ativo=True, quantidade_estoque__gt=0
+    )
+    
+    
+    itens = list(queryset) + list(pacotesurpresa)
+    print('itens:', itens)
 
     termo = request.GET.get("termo")
     if termo:
@@ -29,6 +36,10 @@ def produtos(request):
             | Q(vendedor__nome_negocio__icontains=termo)
         ).distinct()
 
+        pacotesurpresa = pacotesurpresa.filter(
+            Q(nome__icontains=termo) | Q(descricao__icontains=termo)
+        ).distinct()
+
     categoria_slug = request.GET.get("categoria")
     if categoria_slug:
         queryset = queryset.filter(categoria__slug=categoria_slug)
@@ -37,6 +48,7 @@ def produtos(request):
     if preco_min:
         try:
             queryset = queryset.filter(preco__gte=Decimal(preco_min))
+            pacotesurpresa = pacotesurpresa.filter(preco__gte=Decimal(preco_min))
         except (ValueError, TypeError):
             pass
 
@@ -44,6 +56,7 @@ def produtos(request):
     if preco_max:
         try:
             queryset = queryset.filter(preco__lte=Decimal(preco_max))
+            pacotesurpresa = pacotesurpresa.filter(preco__lte=Decimal(preco_max))
         except (ValueError, TypeError):
             pass
 
@@ -51,11 +64,17 @@ def produtos(request):
     ordenacoes_validas = ["-data_criacao", "preco", "-preco", "nome"]
     if ordenacao in ordenacoes_validas:
         queryset = queryset.order_by(ordenacao)
+        pacotesurpresa = pacotesurpresa.order_by(ordenacao)
 
-    paginator = Paginator(queryset, 12)
+    # ✅ junta as duas querysets em uma lista
+    itens = list(queryset) + list(pacotesurpresa)
+
+    # paginação
+    paginator = Paginator(itens, 12)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
+    # AJAX
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
         html = render_to_string(
             "core/_lista_produtos.html", {"page_obj": page_obj, "request": request}
@@ -71,6 +90,7 @@ def produtos(request):
 
     context = {
         "page_obj": page_obj,
+        # "pacotes_produtos": query_mesclada,
         "categorias": categorias,
         "categoria_atual": categoria_slug,
         "filtros": {
@@ -79,7 +99,9 @@ def produtos(request):
             "ordenacao": ordenacao,
         },
     }
+
     return render(request, "core/produtos.html", context)
+
 
 
 def buscar_produtos(request):

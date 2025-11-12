@@ -5,7 +5,7 @@ O único conteúdo aqui deve ser o que é atualizado pelo AJAX.
 A tag `load pagination_tags` foi removida daqui, pois o `_pagination.html` a carregará se necessário.
 {% endcomment %}
 
-{% if page_obj %}
+{% if page_obj%}
     <div class="row g-4"> 
 
         {% for produto in page_obj %}
@@ -63,6 +63,7 @@ A tag `load pagination_tags` foi removida daqui, pois o `_pagination.html` a car
                         {% else %}
                         <button class="btn btn-secondary btn-sm w-100" disabled>Indisponível</button>
                         {% endif %}
+
                     </div>
                 </div>
             </div>
