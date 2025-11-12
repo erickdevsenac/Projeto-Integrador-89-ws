@@ -32,7 +32,7 @@ A tag `load pagination_tags` foi removida daqui, pois o `_pagination.html` a car
                             {% endif %}
                         </a>
                         <div class="produto-actions">
-                            <button class="btn btn-sm btn-outline-light" title="Visualização rápida" onclick="quickView({{ produto.id }}">
+                            <button class="btn btn-sm btn-outline-light" title="Visualização rápida" onclick="quickView({{ produto.id }})">
                                 <i class="fas fa-eye"></i>
                             </button>
                         </div>
@@ -73,7 +73,7 @@ A tag `load pagination_tags` foi removida daqui, pois o `_pagination.html` a car
         {% include 'core/_pagination.html' %}
     </div>
 
-{% else %}
+ {% else %}
     <div class="empty-state text-center py-5">
         <i class="fas fa-search fa-3x text-muted mb-3"></i>
         <h4>Nenhum produto encontrado</h4>

@@ -36,3 +36,5 @@ def categorias_context(request):
     """
     categorias = CategoriaProduto.objects.all()
     return {"categorias": categorias}
+
+
