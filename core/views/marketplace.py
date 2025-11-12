@@ -11,7 +11,14 @@ from django.template.loader import render_to_string
 
 # from django.views.decorators.cache import cache_page
 from core.forms import ProdutoForm
-from core.models import CategoriaProduto, Perfil, Produto
+from core.models import CategoriaProduto, Perfil, Produto, PacoteSurpresa
+
+def pacote(request):
+    queryset = PacoteSurpresa.objects.all().filter(
+        ativo=True, quantidade_estoque__gt=0
+    )
+    print(queryset)
+    return render(request, "core/pacote.html")
 
 
 def produtos(request):
