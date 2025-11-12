@@ -23,6 +23,7 @@ urlpatterns = [
     path("", public.index, name="index"),
     path("produtos/", marketplace.produtos, name="produtos"),
     path("contato/", public.contato, name="contato"),
+    path("pacote/", marketplace.pacote, name="pacote"),
     # TODO:
     # path("sobre/", views.sobre, name="sobre"),
     # path("termos/", views.termos_uso, name="termos"),
