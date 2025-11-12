@@ -59,7 +59,7 @@ class Produto(TimeStampedModel):
 
     class TipoPesagem(models.TextChoices):
         quilo = "PESA", "Kg"
-        litro = "MEDE", "Lt"
+        litro = "MEDE", "Litros"
         unidade = "QUANTIA", "Unidade"
 
     vendedor = models.ForeignKey(
