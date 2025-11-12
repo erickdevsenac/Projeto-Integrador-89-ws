@@ -27,7 +27,7 @@
   <section class="produtos-cadastrados">
     <h2>Produtos Cadastrados</h2>
     <ul class="lista-produtos">
-      {% for produto in produtos %}
+      {% for produto in produto %}
       <li class="produto-item">
         {% if produto.imagem_principal %}
             <img src="{{ produto.imagem_principal.url }}" alt="{{ produto.nome }}" class="produto-imagem" />
@@ -46,10 +46,33 @@
     </ul>
   </section>
 
+   <section class="pacote_detalhe-cadastrados">
+    <h2>Pacote Surpresa</h2>
+    <ul class="lista-produtos">
+      {% for pacote in pacotes %}
+      <li class="produto-item">
+        {% if produto.imagem_principal %}
+            <img src="{{ produto.imagem_principal.url }}" alt="{{ produto.nome }}" class="produto-imagem" />
+        {% else %}
+            <img src="{% static 'assets/img/placeholder_produto.png' %}" alt="{{ produto.nome }}" class="produto-imagem" />
+        {% endif %}
+        <div class="produto-info">
+          <h3>{{ produto.nome }}</h3>
+          <p>{{ produto.descricao|truncatewords:20|safe }}</p>
+          <p class="produto-preco">Preço: R$ {{ produto.preco }}</p>
+        </div>
+      </li>
+      {% empty %}
+        <li>Este vendedor ainda não possui pacotes surpresa cadastrados.</li>
+      {% endfor %}
+    </ul>
+  </section>
+
   <section class="gerenciamento-loja">
     <h2>Gerenciamento</h2>
     <a href="{% url 'core:cadastrar_produto' %}" class="btn btn-primary">Adicionar Produto</a>
     <a href="{% url 'core:criar_cupom' %}" class="btn btn-primary">Adicionar Cupom</a>
+    <a href="{% url 'core:pacote_detalhe' %}" class="btn btn-primary">Adicionar Pacote Surpresa</a>
   </section>
 </div>
 {% endblock content %}
