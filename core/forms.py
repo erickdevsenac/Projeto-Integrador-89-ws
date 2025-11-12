@@ -22,7 +22,7 @@ from .models import (
 # FORMULÁRIOS DE AUTENTICAÇÃO E PERFIL
 # ==============================================================================
 
-class CadastroPacoteSurpresa(forms.Modelform):
+class CadastroPacoteSurpresa(forms.ModelForm):
     model = PacoteSurpresa
     fields = ["nome", "descricao", "tipo_conteudo", "data_disponibilidade_inicio", "data_disponibilidade_fim", "instrucoes_especiais"]
     widgets = {
