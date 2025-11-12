@@ -26,9 +26,6 @@ class CadastroPacoteSurpresa(forms.Modelform):
     model = PacoteSurpresa
     fields = ["nome", "descricao", "tipo_conteudo", "data_disponibilidade_inicio", "data_disponibilidade_fim", "instrucoes_especiais"]
     widgets = {
-            "nome": forms.FileInput(attrs={'placeholder':'Digite o nome do Produto'}),
-            "descricao": forms.TextInput(attrs={'placeholder':'Faça uma descrição do Produto'}),
-            "tipo_conteudo": forms.TextInput(attrs={'placeholder':'Qual seu tipo de produto?'}),
            "data_fabricacao": forms.DateInput(
                 attrs={
                     'placeholder': 'AAAA-MM-DD',
