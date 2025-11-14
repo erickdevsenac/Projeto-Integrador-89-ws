@@ -46,7 +46,7 @@
                 {% for form in ingrediente_formset %}
                     <div class="formset-item">
                         {{ form.as_p }}
-                        <button type="button" class="remove-formset-row">Remover</button>
+                        <button type="button" class="remove-formset-row" onclick=>Remover</button>
                     </div>
                 {% endfor %}
             </div>
@@ -72,7 +72,7 @@
                 {% for form in etapa_formset %}
                     <div class="formset-item">
                         {{ form.as_p }}
-                        <button type="button" class="remove-formset-row">Remover</button>
+                        <button type="button" class="remove-formset-row" id="ingremove">Remover</button>
                     </div>
                 {% endfor %}
             </div>
@@ -101,6 +101,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         const imageInput = document.getElementById('{{ form.imagem.id_for_label }}');
         const imagePreview = document.getElementById('recipe-image-preview');
+        const removeing = document.getElementById('{{}}')
 
         imageInput.addEventListener('change', function(event) {
             const file = event.target.files[0];
