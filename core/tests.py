@@ -1,6 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
 
+from core.views.marketplace import cadastrar_produto
+
 class test_geral(TestCase):
     def test_primeiro(self):
         assert 1 == 1
@@ -16,3 +18,7 @@ class test_geral(TestCase):
         def test_produtos_carrega_corretamente(self):
             home = reverse("core:produtos")
             self.assertEqual(home, '/produtos/')      
+
+
+        def test_nome(self):
+            cadastr

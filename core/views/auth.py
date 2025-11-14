@@ -12,6 +12,7 @@ from django.db.models import F
 from django.conf import settings
 from django.contrib.auth.forms import SetPasswordForm
 from django.urls import reverse
+from django.utils.html import strip_tags
 
 from core.forms import CadastroStep1Form, CompleteClientProfileForm, CompletePartnerProfileForm
 
@@ -38,13 +39,15 @@ def cadastro(request):
             
             subject = "Ative sua conta"
             
-            body = render_to_string('core/ativacao_conta.html', {
+            html_body = render_to_string('core/ativacao_conta.html', {
                 'user': user,
                 'activation_link': activation_link
             }) 
             
+            plain_body = strip_tags(html_body)
+            
             try:
-                send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [user.email])
+                send_mail(subject, plain_body, settings.DEFAULT_FROM_EMAIL, [user.email],html_message=html_body)
                 messages.success(request, "Cadastro realizado! Um link de ativação foi enviado para o seu e-mail.")
             except Exception as e:
                 messages.error(request, "Houve um problema ao enviar o e-mail de ativação. Contate o suporte")
