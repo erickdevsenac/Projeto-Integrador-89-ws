@@ -27,6 +27,12 @@
       <div class="form-group">
         <label for="{{ field.id_for_label }}">{{ field.label }}</label>
         {{ field }}
+
+         {% if field.name == 'imagem_principal' %}
+          <img id="image-preview" src="#" alt="Pré-visualização da imagem" 
+               style="max-width: 200px; margin-top: 10px; display: none;"/>
+        {% endif %}
+
         {% if field.errors %}
           <div class="form-errors">
             {{ field.errors }}
@@ -43,4 +49,23 @@
     </div>
   </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const imageInput = document.getElementById('{{ form.imagem_principal.id_for_label }}');
+        const imagePreview = document.getElementById('image-preview');
+
+        imageInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+</script>
 {% endblock content %}

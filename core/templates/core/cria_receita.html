@@ -19,7 +19,20 @@
         <!-- Formulário Principal da Receita -->
         <fieldset class="mb-4">
             <legend>Informações da Receita</legend>
-            {{ form.as_p }}
+        
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <p>
+                {{ field.label_tag }}<br>
+                {{ field }}
+                {% if field.name == 'imagem' %}
+                    <img id="recipe-image-preview" src="#" alt="Pré-visualização da imagem" 
+                         style="max-width: 200px; margin-top: 10px; display: none;"/>
+                {% endif %}
+                {% if field.help_text %}<small class="form-text text-muted">{{ field.help_text }}</small>{% endif %}
+                {{ field.errors }}
+            </p>
+        {% endfor %}
         </fieldset>
         
         <hr>
@@ -33,7 +46,7 @@
                 {% for form in ingrediente_formset %}
                     <div class="formset-item">
                         {{ form.as_p }}
-                        <button type="button" class="remove-formset-row">Remover</button>
+                        <button type="button" class="remove-formset-row" onclick=>Remover</button>
                     </div>
                 {% endfor %}
             </div>
@@ -59,7 +72,7 @@
                 {% for form in etapa_formset %}
                     <div class="formset-item">
                         {{ form.as_p }}
-                        <button type="button" class="remove-formset-row">Remover</button>
+                        <button type="button" class="remove-formset-row" id="ingremove">Remover</button>
                     </div>
                 {% endfor %}
             </div>
@@ -83,7 +96,24 @@
     </form>
 </div>
 
-<!-- Script para lidar com os formsets dinamicamente -->
 <script src="{% static 'core/js/criareceita.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const imageInput = document.getElementById('{{ form.imagem.id_for_label }}');
+        const imagePreview = document.getElementById('recipe-image-preview');
+        const removeing = document.getElementById('{{}}')
 
+        imageInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+</script>
 {% endblock %}

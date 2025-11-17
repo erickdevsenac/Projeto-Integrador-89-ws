@@ -1,0 +1,49 @@
+{% load pagination_tags %}
+
+{% if page_obj.has_other_pages %}
+<nav aria-label="Paginação de produtos">
+    <ul class="pagination justify-content-center">
+
+        {# Botão "Anterior" #}
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?{% query_transform request page=page_obj.previous_page_number %}" aria-label="Anterior">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <span class="page-link">&laquo;</span>
+        </li>
+        {% endif %}
+
+        {# Números das páginas #}
+        {% for num in page_obj.paginator.page_range %}
+            {% if num == page_obj.number %}
+                <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                </li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item">
+                    <a class="page-link" href="?{% query_transform request page=num %}">{{ num }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        {# Botão "Próxima" #}
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?{% query_transform request page=page_obj.next_page_number %}" aria-label="Próxima">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <span class="page-link">&raquo;</span>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+{% comment %} <a href="?{% query_transform request page=page_obj.next_page_number %}"> {% endcomment %}

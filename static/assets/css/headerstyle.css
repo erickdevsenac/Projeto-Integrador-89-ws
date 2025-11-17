@@ -1,5 +1,5 @@
 header {
-  background: linear-gradient(to right, #70e0ff, #0072ff);
+  background: linear-gradient(to right, #69dd96, #0e9725);
   color: white;
   padding: 5px;
   border-radius: 15px;
@@ -8,8 +8,8 @@ header {
 
 
 header .logo {
-  height: 65px;
-  padding-left: 10px;
+  height: 100px;
+  padding-left: 5px;
 }
 
 header .divlogo{

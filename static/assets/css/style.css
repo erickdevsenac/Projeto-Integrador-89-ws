@@ -1,6 +1,6 @@
 :root {
     --primary-color: #5c8b6c;
-    --secondary-color: #407254;
+    --secondary-color: #030303;
     --text-color-dark: #333;
     --text-color-light: #fff;
     --bg-light: #f4f4f4;
@@ -13,4 +13,47 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+/* --- TEMA ESCURO --- */
+body.tema-escuro {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+body.tema-escuro .card,
+body.tema-escuro .navbar,
+body.tema-escuro .modal-content,
+body.tema-escuro .list-group-item {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    border-color: #333;
+}
+
+body.tema-escuro h1,
+body.tema-escuro h2,
+body.tema-escuro h3,
+body.tema-escuro h4,
+body.tema-escuro h5 {
+    color: #ffffff;
+}
+
+body.tema-escuro a {
+    color: #bb86fc;
+}
+
+body.tema-escuro .form-control,
+body.tema-escuro .form-select {
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+/* --- TAMANHO DA FONTE --- */
+body.fonte-grande {
+    font-size: 1.1rem; /* Aumenta o tamanho base da fonte em 10% */
+}
+
+body.fonte-extra-grande {
+    font-size: 1.25rem; /* Aumenta o tamanho base da fonte em 25% */
 }

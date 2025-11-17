@@ -18,8 +18,10 @@
             {% endfor %}
         </ul>
     {% endif %}
-
-    <a href="{% url 'core:nova_avaliacao' %}" class="btn-nova-avaliacao">Nova Avaliação</a>
+    
+    <a href="{% url 'core:nova_avaliacao' object_pk=produto.pk model_name='produto' %}">
+      Avaliar este Produto
+    </a>
     
     <ul>
       {% for avaliacao in page_obj.object_list %}

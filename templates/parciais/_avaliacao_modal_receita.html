@@ -1,0 +1,81 @@
+<div class="modal fade" id="modalAvaliacaoReceita" tabindex="-1" aria-labelledby="modalAvaliacaoReceitaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAvaliacaoReceitaLabel">Deixar sua Avaliação para a Receita</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formAvaliacaoReceita">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="notaReceita" class="form-label">Nota (1-5 estrelas)</label>
+                        <input type="number" class="form-control" id="notaReceita" name="nota" min="1" max="5" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="comentarioReceita" class="form-label">Comentário (opcional)</label>
+                        <textarea class="form-control" id="comentarioReceita" name="texto" rows="3"></textarea>
+                    </div>
+                    <input type="hidden" id="content_type_id_receita" name="content_type">
+                    <input type="hidden" id="object_id_receita" name="object_id">
+                    <button type="submit" class="btn btn-primary">Enviar Avaliação</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const formAvaliacaoReceita = document.getElementById("formAvaliacaoReceita");
+        const modalAvaliacaoReceita = document.getElementById("modalAvaliacaoReceita");
+
+        if (formAvaliacaoReceita) {
+            modalAvaliacaoReceita.addEventListener("show.bs.modal", function (event) {
+                const button = event.relatedTarget; 
+                const contentType = button.getAttribute("data-content-type");
+                const objectId = button.getAttribute("data-object-id");
+
+                document.getElementById("content_type_id_receita").value = contentType;
+                document.getElementById("object_id_receita").value = objectId;
+            });
+
+            formAvaliacaoReceita.addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                const formData = new FormData(formAvaliacaoReceita);
+                const data = {
+                    nota: parseInt(formData.get("nota")),
+                    texto: formData.get("texto"),
+                    content_type: parseInt(formData.get("content_type")),
+                    object_id: parseInt(formData.get("object_id")),
+                };
+
+                fetch("/api/avaliacoes/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": formData.get("csrfmiddlewaretoken"),
+                        // "Authorization": "Bearer " + localStorage.getItem("access_token"),
+                    },
+                    body: JSON.stringify(data),
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.id) {
+                        alert("Avaliação de receita enviada com sucesso!");
+                        const modal = bootstrap.Modal.getInstance(modalAvaliacaoReceita);
+                        modal.hide();
+                        // TODO: Recarregar a seção de avaliações ou adicionar a nova avaliação dinamicamente
+                    } else {
+                        alert("Erro ao enviar avaliação de receita: " + JSON.stringify(result));
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro:", error);
+                    alert("Erro ao enviar avaliação de receita.");
+                });
+            });
+        }
+    });
+</script>

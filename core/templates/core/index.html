@@ -1,4 +1,7 @@
-{% extends 'global/base.html' %} {% load static %} {% block content %}
+{% extends 'global/base.html' %} 
+{% load static %} 
+
+{% block content %}
 <div class="body">
   {% block head %} <link rel="stylesheet" href="{% static "core/css/style.css"%}">
   <title>Bem-Vindo ao Aproveite +</title>
@@ -11,15 +14,13 @@
         class="inline-logo"
         src="{% static 'assets/img/logo.png' %}"
         alt="Logo Aproveite +"
-      />
+      /> 
     </div>
 
     <section id="sobre" class="about">
-      <h2 class="section-title">O que é o Desperdício Zero?</h2>
+      <h2 class="section-title">O que é Aproveite +?</h2>
       <p>
-        O Desperdício Zero é um aplicativo que conecta pessoas que têm alimentos
-        sobrando com aqueles que precisam, contribuindo para um mundo mais
-        sustentável.
+        O Aproveite+ é uma plataforma inovadora que facilita a conexão entre pessoas com alimentos excedentes e aquelas em situação de necessidade, promovendo a redução do desperdício e incentivando práticas sustentáveis para um futuro mais consciente.
       </p>
 
       <h2 class="section-title">Benefícios de Participar</h2>
@@ -48,6 +49,33 @@
             uma vida mais sustentável.
           </p>
         </div>
+      </div>
+    </section>
+
+    <section id="pacotes-surpresa" class="surprise-packages">
+      <h2 class="section-title">Pacotes Surpresa Disponíveis</h2>
+      <div class="row">
+        {% for pacote in pacotes_surpresa %}
+        <div class="col-md-4 mb-4">
+          <div class="card h-100 shadow-sm">
+            {% if pacote.imagem %}
+              <img src="{{ pacote.imagem.url }}" class="card-img-top" alt="{{ pacote.nome }}">
+            {% else %}
+                <img src="{% static 'assets/img/placeholder_produto.png' %}" class="card-img-top" alt="Imagem não disponível">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ pacote.nome }}</h5>
+              <p class="card-text">{{ pacote.descricao|truncatechars:100 }}</p>
+              <p class="card-text"><strong>Tipo de Conteúdo:</strong> {{ pacote.tipo_conteudo }}</p>
+              <p class="card-text"><strong>Preço:</strong> R$ {{ pacote.preco|floatformat:2 }}</p>
+              <a href="{% url 'core:pacote_detalhe' pacote.id %}" class="btn btn-primary">Ver Detalhes</a>
+
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <p class="text-center">Nenhum pacote surpresa disponível no momento.</p>
+        {% endfor %}
       </div>
     </section>
 
