@@ -151,7 +151,7 @@ IngredienteFormSet = inlineformset_factory(
 )
 
 EtapaPreparoFormSet = inlineformset_factory(
-    Receita, EtapaPreparo, fields=("ordem", "descricao"), extra=1, can_delete=True
+    Receita, EtapaPreparo, fields=("ordem", "descricao"), extra=1, can_delete=False
 )
 
 # ==============================================================================
