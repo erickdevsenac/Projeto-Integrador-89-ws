@@ -64,6 +64,7 @@ h1, h2, h3 {
     object-fit: cover;
     border-radius: 60px; 
     box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    margin-right: 40px;
     flex-shrink: 0;
 
 }
