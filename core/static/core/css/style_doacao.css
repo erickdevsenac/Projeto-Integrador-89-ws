@@ -1,54 +1,122 @@
-.doacao p{
-  font-family: "Noto Sans", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: weight;
-  font-style: normal;
-  font-variation-settings: "wdth" 100;
-  font-size: 20px;
+.doacao p {
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
+    font-size: 18px;
+    line-height: 1.6;
+    color: #2e2e2e;
 }
 
-h1{
+h1, h2, h3 {
+    font-family: "Noto Sans", sans-serif;
+    font-weight: 700;
     text-align: center;
+    color: #1f392e;
 }
-.doacao .ongs{
-    max-width: 700px;
-    background-color: #daf7dd;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border-radius: 20px;
-    padding: 15px 30px;
-    margin: 20px;
-}
-.container-doacao{
+
+.container-doacao {
     background-color: white;
     border-radius: 15px;
-    margin-bottom: 10px;
-    box-shadow: 0 6px 12px var(--shadow-medium);
-}
-.doacao .inf_ongs{
-    background-color: rgb(242, 255, 240);
-    max-width: 700px;
-    border-radius: 15px;
-    padding: 15px;
-    margin-bottom: 15px;
-}
-h2{
+    margin-bottom: 20px;
     padding: 20px;
-    text-align: center;
-}
-.doacao .ong_img{
-    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 
-.doacao .caixa {
+.doacao .inf_ongs {
+    background-color: rgb(242, 255, 240);
+    max-width: 850px;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 0 auto 20px auto;
+}
+
+.doacao .ongs {
+    max-width: 900px;
+    margin: 0 auto;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.doacao .caixa .ongs .card-ong {
+    display: flex;
+    align-items: flex-start;
+    background-color: #00a010;
+    padding: 20px;
+    border-radius: 20px;
+    gap: 20px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.doacao .caixa .ongs .card-ong:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 18px rgba(0,0,0,0.25);
+}
+
+
+.doacao .ong_img,
+.doacao .caixa .ongs img {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 60px; 
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    flex-shrink: 0;
+
+}
+
+.doacao .info {
+    flex: 1;
+    display: flex;
     flex-direction: column;
 }
-h3{
-    padding: 20px;
+
+.doacao h3 {
+    padding: 10px 0;
+    font-size: 24px;
+    text-align: left;
+    margin: 0;
 }
-.doacao .col-auto{
-    padding-bottom: 20px;
+
+.doacao p {
+    font-size: 16px;
+    text-align: justify;
+}
+
+
+.doacao .col-auto {
+    padding: 20px 0 0 0;
+}
+
+.doacao .col-auto button {
+    width: 180px;
+}
+.texto {
+    display: flex;
+    flex-direction:row;
+}
+
+
+@media (max-width: 600px) {
+
+    .doacao .caixa .ongs .card-ong {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
+
+    .doacao h3 {
+        text-align: center;
+    }
+
+    .doacao p {
+        text-align: center;
+    }
+
+    .doacao .col-auto button {
+        width: 100%;
+    }
 }

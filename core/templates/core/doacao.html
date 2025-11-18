@@ -23,15 +23,19 @@
             e instituições de caridade ou de ajuda humanitaria.</p>
       </div>
       <div class="ongs doacao">
-         {% for ong in instituicoes %}
-          
-          {% if ong.logo_ong %}
-            <img src="{{ ong.logo_ong.url }}" alt="{{ ong.nome_negocio }}">
-            {% else %}
-              <img src="{% static 'assets/img/placeholder_re.png' %}" alt="Imagem não disponível">
-            {% endif %}
-            <h3>{{ong.nome_negocio}}</h3>
-            <p>{{ong.descricao_parceiro}}</p>
+        {% for ong in instituicoes %}
+        
+        <div class="texto">
+        {% if ong.logo_ong %}
+        <img src="{{ ong.logo_ong.url }}" alt="{{ ong.nome_negocio }}">
+        {% else %}
+        <img src="{% static 'assets/img/placeholder_re.png' %}" alt="Imagem não disponível">
+        {% endif %}
+        <div>
+          <h3>{{ong.nome_negocio}}</h3>
+          <p>{{ong.descricao_parceiro}}</p>
+        </div>
+        </div>
           <div class="col-auto">
             <a href="{% url 'core:ong_pagina' ong.usuario_id %}">
             <button type="submit" class="btn btn-primary mb-3">Saiba +</button>
