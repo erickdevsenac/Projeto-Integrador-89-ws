@@ -1,50 +1,13 @@
 {% extends 'global/base.html' %}
 {% load static %}
-
 {% block head %}
+<link rel="stylesheet" href="{% static 'core/css/style_detalhes_dicas.css' %}">
+
 <title>{{ dica.titulo }} - Dicas Sustentáveis</title>
-<link rel="stylesheet" href="{% static 'core/style_dicas.css' %}">
-<style>
-    body {
-        font-family: Arial, sans-serif;
-    }
+ {% endblock %}
 
-    h1, h2 {
-        color: #2e7d32;
-        font-weight: bold;
-    }
 
-    .dica-detalhes {
-        background-color: #f8f9fa;
-        border-radius: 12px;
-        padding: 2rem;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-
-    .imagem-container {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 1rem;
-    }
-
-    .dica-imagem {
-        width: 150px;       /* largura fixa menor */
-        height: auto;       /* mantém proporção */
-        object-fit: cover;
-        border-radius: 10px;
-    }
-
-    .badge {
-        font-size: 0.85rem;
-    }
-
-    .btn-voltar {
-        margin-top: 1.5rem;
-    }
-</style>
-{% endblock head %}
-
-{% block content %}
+{% block dicadetalhes %}
 <div class="container mt-5">
     <div class="dica-detalhes">
         <h2 class="mb-3">{{ dica.titulo }}</h2>
@@ -72,4 +35,4 @@
         </div>
     </div>
 </div>
-{% endblock content %}
+{% endblock dicadetalhes %}
