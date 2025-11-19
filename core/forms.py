@@ -143,15 +143,16 @@ class ReceitaForm(forms.ModelForm):
         self.fields["categoria"].queryset = CategoriaReceita.objects.all()
 
 IngredienteFormSet = inlineformset_factory(
+
     Receita,
     Ingrediente,
     fields=("nome", "quantidade"),
     extra=1,
-    can_delete=False,
+    can_delete=True,
 )
 
 EtapaPreparoFormSet = inlineformset_factory(
-    Receita, EtapaPreparo, fields=("ordem", "descricao"), extra=1, can_delete=False
+    Receita, EtapaPreparo, fields=("ordem", "descricao"), extra=1, can_delete=True
 )
 
 # ==============================================================================

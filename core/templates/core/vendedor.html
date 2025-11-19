@@ -27,7 +27,7 @@
   <section class="produtos-cadastrados">
     <h2>Produtos Cadastrados</h2>
     <ul class="lista-produtos">
-      {% for produto in produto %}
+      {% for produto in produtos %}
       <li class="produto-item">
         {% if produto.imagem_principal %}
             <img src="{{ produto.imagem_principal.url }}" alt="{{ produto.nome }}" class="produto-imagem" />
