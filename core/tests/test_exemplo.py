@@ -12,7 +12,7 @@ class TestProdutoModel:
         produto = Produto.objects.create(
             vendedor=vendedor_fake,
             nome="Notebook Gamer",
-            preco=5000.00,
+            preco=-1.00,
             quantidade_estoque=10,
             ativo=True
         )

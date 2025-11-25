@@ -15,3 +15,16 @@ def vendedor_fake():
         nome_negocio = "Loja Global do Pytest"
     )
     return perfil
+
+@pytest.fixture
+def cliente_fake():
+    user = User.objects.create_user(
+        username="cliente_global", 
+        password="123"
+        )
+    
+    perfil = Perfil.objects.create(
+        usuario = user,
+        tipo = Perfil.TipoUsuario.CLIENTE,
+    )
+    return perfil
