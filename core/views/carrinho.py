@@ -5,10 +5,11 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 
 from core.models import PacoteSurpresa, Produto
 
-
+@login_required
 def ver_carrinho(request):
     """View otimizada para visualização do carrinho com limpeza automática de itens inválidos."""
     carrinho_session = request.session.get("carrinho", {})
