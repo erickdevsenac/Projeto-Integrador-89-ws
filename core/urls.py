@@ -67,8 +67,10 @@ urlpatterns = [
     ),
     path("produto/cadastrar/", marketplace.cadastrar_produto, name="cadastrar_produto"),
     path("pacote/", public.pacote_detalhe, name="pacote_detalhe"),
-     path("pacote/<int:pacote_id>/", public.pacote_detalhe, name="pacote_detalhe"),
-    
+    path("pacote/<int:pacote_id>/", public.pacote_detalhe, name="pacote_detalhe"),
+    path('editar_produto/<int:produto_id>/', marketplace.editar_produto, name='editar_produto'),
+    path('excluir_produto/<int:produto_id>/', marketplace.excluir_produto, name='excluir_produto'),
+    path('editar_produto', marketplace.editar_produto, name='editar_produto'),
     # TODO:
     # path("categoria/<slug:categoria_slug>/", views.produtos_por_categoria, name="produtos_categoria"),
     # TODO:

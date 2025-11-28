@@ -3,76 +3,100 @@
 
 {% block content %}
 {% block head %}
-  <title>Perfil do Vendedor - {{ vendedor.nome_negocio }}</title>
-  <link rel="stylesheet" href="{% static 'core/css/style_vendedor.css' %}">
+    <title>Perfil do Vendedor - {{ vendedor.nome_negocio }}</title>
+    <link rel="stylesheet" href="{% static 'core/css/style_vendedor.css' %}">
 {% endblock head %}
 
 <div class="loja-container">
-  <header class="loja-header">
-    {% if vendedor.foto_perfil %}
-        <img src="{{ vendedor.foto_perfil.url }}" alt="Logo da loja {{ vendedor.nome_negocio }}" class="loja-imagem" />
-    {% else %}
-        <img src="{% static 'assets/img/placeholder_store.png' %}" alt="Logo da loja {{ vendedor.nome_negocio }}" class="loja-imagem" />
-    {% endif %}
-    <h1 class="loja-nome">{{ vendedor.nome_negocio }}</h1>
-    <p class="loja-localizacao">{{ vendedor.cidade }}, {{ vendedor.estado }}</p>
-  </header>
-
-  <section class="perfil-vendedor">
-    <h2>Sobre o Vendedor</h2>
-    <p>{{ vendedor.descricao_parceiro|default:"Este vendedor ainda não adicionou uma descrição." }}</p>
-    <p><strong>Email de contato:</strong> {{ vendedor.usuario.email }}</p>
-  </section>
-
-  <section class="produtos-cadastrados">
-    <h2>Produtos Cadastrados</h2>
-    <ul class="lista-produtos">
-      {% for produto in produtos %}
-      <li class="produto-item">
-        {% if produto.imagem_principal %}
-            <img src="{{ produto.imagem_principal.url }}" alt="{{ produto.nome }}" class="produto-imagem" />
+    <header class="loja-header">
+        {% if vendedor.foto_perfil %}
+            <img src="{{ vendedor.foto_perfil.url }}" alt="Logo da loja {{ vendedor.nome_negocio }}" class="loja-imagem" />
         {% else %}
-            <img src="{% static 'assets/img/placeholder_produto.png' %}" alt="{{ produto.nome }}" class="produto-imagem" />
+            <img src="{% static 'assets/img/placeholder_store.png' %}" alt="Logo da loja {{ vendedor.nome_negocio }}" class="loja-imagem" />
         {% endif %}
-        <div class="produto-info">
-          <h3>{{ produto.nome }}</h3>
-          <p>{{ produto.descricao|truncatewords:20|safe }}</p>
-          <p class="produto-preco">Preço: R$ {{ produto.preco }}</p>
-        </div>
-      </li>
-      {% empty %}
-        <li>Este vendedor ainda não possui produtos cadastrados.</li>
-      {% endfor %}
-    </ul>
-  </section>
+        <h1 class="loja-nome">{{ vendedor.nome_negocio }}</h1>
+        <p class="loja-localizacao">{{ vendedor.cidade }}, {{ vendedor.estado }}</p>
+    </header>
 
-   <section class="pacote_detalhe-cadastrados">
-    <h2>Pacote Surpresa</h2>
-    <ul class="lista-produtos">
-      {% for pacote in pacotes %}
-      <li class="produto-item">
-        {% if produto.imagem_principal %}
-            <img src="{{ produto.imagem_principal.url }}" alt="{{ produto.nome }}" class="produto-imagem" />
-        {% else %}
-            <img src="{% static 'assets/img/placeholder_produto.png' %}" alt="{{ produto.nome }}" class="produto-imagem" />
-        {% endif %}
-        <div class="produto-info">
-          <h3>{{ produto.nome }}</h3>
-          <p>{{ produto.descricao|truncatewords:20|safe }}</p>
-          <p class="produto-preco">Preço: R$ {{ produto.preco }}</p>
-        </div>
-      </li>
-      {% empty %}
-        <li>Este vendedor ainda não possui pacotes surpresa cadastrados.</li>
-      {% endfor %}
-    </ul>
-  </section>
+    <section class="perfil-vendedor">
+        <h2>Sobre o Vendedor</h2>
+        <p>{{ vendedor.descricao_parceiro|default:"Este vendedor ainda não adicionou uma descrição." }}</p>
+        <p><strong>Email de contato:</strong> {{ vendedor.usuario.email }}</p>
+    </section>
 
-  <section class="gerenciamento-loja">
-    <h2>Gerenciamento</h2>
-    <a href="{% url 'core:cadastrar_produto' %}" class="btn btn-primary">Adicionar Produto</a>
-    <a href="{% url 'core:criar_cupom' %}" class="btn btn-primary">Adicionar Cupom</a>
-    <a href="{% url 'core:pacote_detalhe' %}" class="btn btn-primary">Adicionar Pacote Surpresa</a>
-  </section>
+    <section class="produtos-cadastrados">
+        <h2>Produtos Cadastrados</h2>
+        <ul class="lista-produtos">
+            {% for produto in produtos %}
+            <li class="produto-item" id="produto-{{ produto.id }}">
+                {% if produto.imagem_principal %}
+                    <img src="{{ produto.imagem_principal.url }}" alt="{{ produto.nome }}" class="produto-imagem" />
+                {% else %}
+                    <img src="{% static 'assets/img/placeholder_produto.png' %}" alt="{{ produto.nome }}" class="produto-imagem" />
+                {% endif %}
+                <div class="produto-info">
+                    <h3>{{ produto.nome }}</h3>
+                    <p>{{ produto.descricao|truncatewords:20|safe }}</p>
+                    <p class="produto-preco">Preço: R$ {{ produto.preco }}</p>
+                    {% if request.user.perfil == produto.vendedor %}
+                        {# CORREÇÃO 1: Usar <a> para Edição #}
+                        <a href="{% url 'core:editar_produto' produto.id %}" class="btn btn-warning">Editar</a>
+                        
+                      
+                        <form action="{% url 'core:excluir_produto' produto.id %}" 
+                          method="post" 
+                          style="display:inline;"
+                          onsubmit="return confirm('Tem certeza que deseja excluir este produto? Esta ação não pode ser desfeita.');">
+                        
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Excluir</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </li>
+            {% empty %}
+                <li>Este vendedor ainda não possui produtos cadastrados.</li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section class="pacote_detalhe-cadastrados">
+        <h2>Pacote Surpresa</h2>
+        <ul class="lista-produtos">
+            {% for pacote in pacotes %}
+            <li class="produto-item" id="produto-{{ pacote.id }}">
+                {% if pacote.imagem_principal %}
+                    <img src="{{ pacote.imagem_principal.url }}" alt="{{ pacote.nome }}" class="produto-imagem" />
+                {% else %}
+                    <img src="{% static 'assets/img/placeholder_produto.png' %}" alt="{{ pacote.nome }}" class="produto-imagem" />
+                {% endif %}
+                <div class="produto-info">
+                    <h3>{{ pacote.nome }}</h3>
+                    <p>{{ pacote.descricao|truncatewords:20|safe }}</p>
+                    <p class="produto-preco">Preço: R$ {{ pacote.preco }}</p>
+                    {% if request.user.perfil == pacote.vendedor %}
+      
+                        <a href="{% url 'core:editar_produto' pacote.id %}" class="btn btn-warning">Editar</a>
+                        
+                
+                        <form action="{% url 'core:excluir_produto' pacote.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Excluir</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </li>
+            {% empty %}
+                <li>Este vendedor ainda não possui pacotes surpresa cadastrados.</li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section class="gerenciamento-loja">
+        <h2>Gerenciamento</h2>
+        <a href="{% url 'core:cadastrar_produto' %}" class="btn btn-primary">Adicionar Produto</a>
+        <a href="{% url 'core:criar_cupom' %}" class="btn btn-primary">Adicionar Cupom</a>
+        <a href="{% url 'core:pacote_detalhe' %}" class="btn btn-primary">Adicionar Pacote Surpresa</a>
+    </section>
 </div>
 {% endblock content %}

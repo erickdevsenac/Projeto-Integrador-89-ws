@@ -2,6 +2,7 @@ from decimal import Decimal
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.contenttypes.models import ContentType
 from django.core.paginator import Paginator
 from django.db.models import Count, Q
@@ -208,3 +209,49 @@ def cadastrar_produto(request):
         form = ProdutoForm()
 
     return render(request, "core/cadastroproduto.html", {"form": form})
+
+@login_required
+def editar_produto(request, produto_id):
+    produto = get_object_or_404(Produto, id=produto_id)
+
+    if produto.vendedor != request.user.perfil:
+        messages.error(request, "Você não tem permissão para editar este produto.")
+        return redirect("core:vendedor_perfil", usuario_id=request.user.id) 
+
+    if request.method == "POST":
+        form = ProdutoForm(request.POST, request.FILES, instance=produto)
+        
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Produto "{produto.nome}" atualizado com sucesso!')
+            
+            return redirect("core:vendedor_perfil", usuario_id=produto.vendedor.usuario.id)
+        
+    else:
+        
+        form = ProdutoForm(instance=produto)
+
+    
+    return render(request, "core/editar_produto.html", {"form": form, "produto": produto})
+@login_required
+def excluir_produto(request, produto_id):
+    produto = get_object_or_404(Produto, id=produto_id)
+
+    try:
+        vendedor_id = produto.vendedor.usuario.id
+    except AttributeError:
+        vendedor_id = request.user.id
+
+    if produto.vendedor != request.user.perfil:
+        messages.error(request, "Você não tem permissão para excluir este produto.")
+        return redirect("core:vendedor_perfil", usuario_id=request.user.id) 
+
+    if request.method == "POST":
+
+        produto.delete()
+        messages.success(request, f"Produto '{produto.nome}' excluído com sucesso!")
+    
+        return redirect("core:vendedor_perfil", usuario_id=vendedor_id)
+    
+    return redirect("core:vendedor_perfil", usuario_id=vendedor_id)
+
