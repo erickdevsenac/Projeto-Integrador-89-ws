@@ -31,6 +31,11 @@ ALLOWED_HOSTS = env.list(
     "ALLOWED_HOSTS", default=["localhost", "127.0.0.1", "10.0.2.2", "192.168.100.22"]
 )
 
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://192.168.22.10:8000',
+]
+
 if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
