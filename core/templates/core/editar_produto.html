@@ -29,6 +29,7 @@
             {% endfor %}
         </div>
     {% endif %}
+    
     <div class="form-group">{{ form.nome.label_tag }}{{ form.nome }}
         {% for error in form.nome.errors %}<p class="error-message">{{ error }}</p>{% endfor %}</div>
     <div class="form-group">{{ form.preco.label_tag }}{{ form.preco }}

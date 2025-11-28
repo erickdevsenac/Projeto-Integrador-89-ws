@@ -247,6 +247,7 @@ def excluir_produto(request, produto_id):
         return redirect("core:vendedor_perfil", usuario_id=request.user.id) 
 
     if request.method == "POST":
+        
 
         produto.delete()
         messages.success(request, f"Produto '{produto.nome}' excluído com sucesso!")

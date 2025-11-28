@@ -38,6 +38,7 @@ urlpatterns = [
     path("nova_avaliacao/", nova_avaliacao, name="nova_avaliacao"),
     path("configuracoes/", auth.configuracoes, name="configuracoes"),
     path("logout/", auth.logout_view, name="logout"),
+    
     path("login/", auth.login_view, name="telalogin"),
     path("cadastro/", auth.cadastro, name="cadastro"),
     path("cadastro/completar/", auth.completar_cadastro, name="completar_cadastro"),
