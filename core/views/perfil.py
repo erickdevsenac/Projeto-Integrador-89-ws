@@ -3,24 +3,21 @@ from django.shortcuts import render, redirect
 from core.models import Perfil
 from core.forms import CompleteClientProfileForm, CompletePartnerProfileForm
 
+
 @login_required
 def perfil_detail(request):
     """
     Exibe a página de perfil do usuário logado e permite a edição.
     """
-    try:
-        perfil = request.user.perfil
-    except (Perfil.DoesNotExist, AttributeError):
-        perfil = None
-        return render(request, "core/perfil.html", {"perfil": None, "form": None})
+    perfil, created = Perfil.objects.get_or_create(user=request.user)
 
-    
-    FormClass = None
-    if perfil.tipo == 'CLIENTE': 
+    if perfil.tipo == 'CLIENTE':
         FormClass = CompleteClientProfileForm
-    elif perfil.tipo == 'VENDEDOR':  
+    elif perfil.tipo == 'VENDEDOR':
         FormClass = CompletePartnerProfileForm
-    
+    else:
+        FormClass = None
+
     form = None
 
     if FormClass:
@@ -32,11 +29,16 @@ def perfil_detail(request):
         else:
             form = FormClass(instance=perfil)
 
-    dashboard_data = {"baixo_estoque": [], "ultimos_pedidos": []}
+    dashboard_data = {
+        "baixo_estoque": [],
+        "ultimos_pedidos": []
+    }
 
     context = {
         "perfil": perfil,
         "dashboard": dashboard_data,
-        "form": form,  
+        "form": form,
+        "user": request.user,  
     }
+
     return render(request, "core/perfil.html", context)
