@@ -46,7 +46,8 @@
                 {% for form in ingrediente_formset %}
                     <div class="formset-item">
                         {{ form.as_p }}
-                        <button type="button" class="remove-formset-row">Remover</button>
+                        {{ form.DELETE.as_hidden }}
+                        <button type="button" class="remove-formset-row" onclick=>Remover</button>
                     </div>
                 {% endfor %}
             </div>
@@ -54,6 +55,7 @@
             <div id="empty-ingredientes-form" class="d-none">
                 <div class="formset-item">
                     {{ ingrediente_formset.empty_form.as_p }}
+                    {{ form.DELETE.as_hidden }}
                     <button type="button" class="remove-formset-row">Remover</button>
                 </div>
             </div>
@@ -70,9 +72,10 @@
 
             <div id="etapas-form-list">
                 {% for form in etapa_formset %}
-                    <div class="formset-item">
+                    <div class="formset-item" >
                         {{ form.as_p }}
-                        <button type="button" class="remove-formset-row">Remover</button>
+                        {{ form.DELETE.as_hidden }}
+                        <button type="button" class="remove-formset-row" >Remover</button>
                     </div>
                 {% endfor %}
             </div>
@@ -80,6 +83,7 @@
             <div id="empty-etapas-form" class="d-none">
                 <div class="formset-item">
                     {{ etapa_formset.empty_form.as_p }}
+                    {{ form.DELETE.as_hidden }}
                     <button type="button" class="remove-formset-row">Remover</button>
                 </div>
             </div>
@@ -101,6 +105,9 @@
     document.addEventListener('DOMContentLoaded', function() {
         const imageInput = document.getElementById('{{ form.imagem.id_for_label }}');
         const imagePreview = document.getElementById('recipe-image-preview');
+        const removeing = document.getElementById('ingremove');
+        console.log(removeing)
+        
 
         imageInput.addEventListener('change', function(event) {
             const file = event.target.files[0];
@@ -113,6 +120,35 @@
                 reader.readAsDataURL(file);
             }
         });
+        document.getElementById('etapas-form-list').addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-formset-row')) {
+            const item = e.target.closest('.formset-item');
+
+            // marca o checkbox DELETE
+            const deleteInput = item.querySelector('input[type="checkbox"][name$="-DELETE"]');
+            if (deleteInput) {
+                deleteInput.checked = true; 
+            }
+
+            // esconde visualmente
+            item.style.display = "none";
+        }
     });
+    document.getElementById('ingredientes-form-list').addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-formset-row')) {
+            const item = e.target.closest('.formset-item');
+
+            // marca o checkbox DELETE
+            const deleteInput = item.querySelector('input[type="checkbox"][name$="-DELETE"]');
+            if (deleteInput) {
+                deleteInput.checked = true; 
+            }
+
+            // esconde visualmente
+            item.style.display = "none";
+        }
+    });
+}
+    );
 </script>
 {% endblock %}

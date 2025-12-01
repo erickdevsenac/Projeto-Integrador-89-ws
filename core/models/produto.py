@@ -59,7 +59,7 @@ class Produto(TimeStampedModel):
 
     class TipoPesagem(models.TextChoices):
         quilo = "PESA", "Kg"
-        litro = "MEDE", "Lt"
+        litro = "MEDE", "Litros"
         unidade = "QUANTIA", "Unidade"
 
     vendedor = models.ForeignKey(
@@ -161,6 +161,14 @@ class Produto(TimeStampedModel):
     @property
     def imagem(self):
         return self.imagem_principal
+    
+    @property
+    def verifica_vendedor(self):
+        return self.vendedor == "core.Perfil.VENDEDOR"
+    
+    @property
+    def valor_negativo(self):
+        return (self.preco > 0.01 )
 
     @property
     def disponivel_para_venda(self):

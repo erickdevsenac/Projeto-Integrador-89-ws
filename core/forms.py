@@ -23,23 +23,24 @@ from .models import (
 # ==============================================================================
 
 class CadastroPacoteSurpresa(forms.ModelForm):
-    model = PacoteSurpresa
-    fields = ["nome", "descricao", "tipo_conteudo", "data_disponibilidade_inicio", "data_disponibilidade_fim", "instrucoes_especiais"]
-    widgets = {
-           "data_fabricacao": forms.DateInput(
-                attrs={
-                    'placeholder': 'AAAA-MM-DD',
-                    'type': 'date'
-                }
-            ),
-            "data_validade": forms.DateInput(
-                attrs={
-                    'placeholder': 'AAAA-MM-DD',
-                    'type': 'date'
-                }
-            ),
-            "instrucoes_especiais": forms.TextInput(attrs={'placeholder':'Descreva instruçoes necessarias'})
-        }
+    class Meta:
+     model = PacoteSurpresa
+     fields = ["nome", "descricao", "tipo_conteudo", "data_disponibilidade_inicio", "data_disponibilidade_fim", "instrucoes_especiais"]
+     widgets = {
+            "data_fabricacao": forms.DateInput(
+                 attrs={
+                     'placeholder': 'AAAA-MM-DD',
+                     'type': 'date'
+                 }
+             ),
+             "data_validade": forms.DateInput(
+                 attrs={
+                     'placeholder': 'AAAA-MM-DD',
+                     'type': 'date'
+                 }
+             ),
+             "instrucoes_especiais": forms.TextInput(attrs={'placeholder':'Descreva instruçoes necessarias'})
+         }
     
 
 class CadastroStep1Form(forms.ModelForm):
@@ -142,6 +143,7 @@ class ReceitaForm(forms.ModelForm):
         self.fields["categoria"].queryset = CategoriaReceita.objects.all()
 
 IngredienteFormSet = inlineformset_factory(
+
     Receita,
     Ingrediente,
     fields=("nome", "quantidade"),

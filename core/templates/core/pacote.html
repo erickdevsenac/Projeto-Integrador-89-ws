@@ -1,0 +1,74 @@
+{% extends 'global/base.html' %}
+{% load static %}
+
+{% block content %}
+{% block head %}
+  <link rel="stylesheet" href="{% static 'core/css/style_cadastroproduto.css' %}" />
+  <title>Cadastro de Pacote Surpresa</title>
+{% endblock %}
+
+<div class="main">
+  <!-- Header -->
+  <div class="main-header">
+    <h1 class="main-title">Cadastro de Pacote Surpresa</h1>
+    <img class="inline-logo" src="{% static 'assets/img/logo.png' %}" alt="Logo Aproveite +" />
+  </div>
+  
+  <!-- Descrição -->
+  <section class="about">
+    <p>Preencha o formulário abaixo para cadastrar um novo Pacote Surpresa no sistema.</p>
+  </section>
+
+  <!-- Formulário -->
+  <form method="post" enctype="multipart/form-data" class="product-form">
+    {% csrf_token %}
+    
+    {% for field in form %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+
+        {% if field.name == 'imagem_principal' %}
+          <img id="image-preview" src="#" alt="Pré-visualização da imagem"
+               style="max-width: 200px; margin-top: 10px; display: none;" />
+        {% endif %}
+
+        {% if field.errors %}
+          <div class="form-errors">
+            {{ field.errors }}
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    <!-- Botão -->
+    <div class="actions">
+      <div class="action-button">
+        <button type="submit" class="cta-button">Cadastrar Pacote Surpresa</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const imageInput = document.getElementById('{{ form.imagem_principal.id_for_label }}');
+    const imagePreview = document.getElementById('image-preview');
+
+    if (imageInput) {
+      imageInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            imagePreview.src = e.target.result;
+            imagePreview.style.display = 'block';
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+  });
+</script>
+
+{% endblock content %}

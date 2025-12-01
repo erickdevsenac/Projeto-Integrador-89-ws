@@ -2,6 +2,7 @@ from decimal import Decimal
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.contenttypes.models import ContentType
 from django.core.paginator import Paginator
 from django.db.models import Count, Q
@@ -10,22 +11,41 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 
 # from django.views.decorators.cache import cache_page
-from core.forms import ProdutoForm
+from core.forms import ProdutoForm,CadastroPacoteSurpresa
 from core.models import CategoriaProduto, Perfil, Produto, PacoteSurpresa
 
 def pacote(request):
     queryset = PacoteSurpresa.objects.all().filter(
         ativo=True, quantidade_estoque__gt=0
     )
-    print(queryset)
-    return render(request, "core/pacote.html")
+    if request.method == "POST":
+        form = CadastroPacoteSurpresa(request.POST, request.FILES)
+        if form.is_valid():
+            pacote = form.save(commit=False)
+            pacote.vendedor = request.user.perfil
+            pacote.save()
+            messages.success(
+                request, f'Produto "{pacote.nome}" cadastrado com sucesso!'
+            )
+            return redirect("core:index.html")
+    else:
+        form =CadastroPacoteSurpresa()
+    return render(request, "core/pacote.html",context={"form":form})
 
 
 def produtos(request):
-    """View otimizada para listagem de produtos com filtros avançados"""
+    """View otimizada para listagem de produtos e pacotes surpresa com filtros avançados"""
     queryset = Produto.objects.select_related("vendedor", "categoria").filter(
         ativo=True, quantidade_estoque__gt=0
     )
+
+    pacotesurpresa = PacoteSurpresa.objects.filter(
+        ativo=True, quantidade_estoque__gt=0
+    )
+    
+    
+    itens = list(queryset) + list(pacotesurpresa)
+    print('itens:', itens)
 
     termo = request.GET.get("termo")
     if termo:
@@ -36,6 +56,10 @@ def produtos(request):
             | Q(vendedor__nome_negocio__icontains=termo)
         ).distinct()
 
+        pacotesurpresa = pacotesurpresa.filter(
+            Q(nome__icontains=termo) | Q(descricao__icontains=termo)
+        ).distinct()
+
     categoria_slug = request.GET.get("categoria")
     if categoria_slug:
         queryset = queryset.filter(categoria__slug=categoria_slug)
@@ -44,6 +68,7 @@ def produtos(request):
     if preco_min:
         try:
             queryset = queryset.filter(preco__gte=Decimal(preco_min))
+            pacotesurpresa = pacotesurpresa.filter(preco__gte=Decimal(preco_min))
         except (ValueError, TypeError):
             pass
 
@@ -51,6 +76,7 @@ def produtos(request):
     if preco_max:
         try:
             queryset = queryset.filter(preco__lte=Decimal(preco_max))
+            pacotesurpresa = pacotesurpresa.filter(preco__lte=Decimal(preco_max))
         except (ValueError, TypeError):
             pass
 
@@ -58,11 +84,17 @@ def produtos(request):
     ordenacoes_validas = ["-data_criacao", "preco", "-preco", "nome"]
     if ordenacao in ordenacoes_validas:
         queryset = queryset.order_by(ordenacao)
+        pacotesurpresa = pacotesurpresa.order_by(ordenacao)
 
-    paginator = Paginator(queryset, 12)
+    # ✅ junta as duas querysets em uma lista
+    itens = list(queryset) + list(pacotesurpresa)
+
+    # paginação
+    paginator = Paginator(itens, 12)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
+    # AJAX
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
         html = render_to_string(
             "core/_lista_produtos.html", {"page_obj": page_obj, "request": request}
@@ -78,6 +110,7 @@ def produtos(request):
 
     context = {
         "page_obj": page_obj,
+        # "pacotes_produtos": query_mesclada,
         "categorias": categorias,
         "categoria_atual": categoria_slug,
         "filtros": {
@@ -86,7 +119,9 @@ def produtos(request):
             "ordenacao": ordenacao,
         },
     }
+
     return render(request, "core/produtos.html", context)
+
 
 
 def buscar_produtos(request):
@@ -174,3 +209,50 @@ def cadastrar_produto(request):
         form = ProdutoForm()
 
     return render(request, "core/cadastroproduto.html", {"form": form})
+
+@login_required
+def editar_produto(request, produto_id):
+    produto = get_object_or_404(Produto, id=produto_id)
+
+    if produto.vendedor != request.user.perfil:
+        messages.error(request, "Você não tem permissão para editar este produto.")
+        return redirect("core:vendedor_perfil", usuario_id=request.user.id) 
+
+    if request.method == "POST":
+        form = ProdutoForm(request.POST, request.FILES, instance=produto)
+        
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Produto "{produto.nome}" atualizado com sucesso!')
+            
+            return redirect("core:vendedor_perfil", usuario_id=produto.vendedor.usuario.id)
+        
+    else:
+        
+        form = ProdutoForm(instance=produto)
+
+    
+    return render(request, "core/editar_produto.html", {"form": form, "produto": produto})
+@login_required
+def excluir_produto(request, produto_id):
+    produto = get_object_or_404(Produto, id=produto_id)
+
+    try:
+        vendedor_id = produto.vendedor.usuario.id
+    except AttributeError:
+        vendedor_id = request.user.id
+
+    if produto.vendedor != request.user.perfil:
+        messages.error(request, "Você não tem permissão para excluir este produto.")
+        return redirect("core:vendedor_perfil", usuario_id=request.user.id) 
+
+    if request.method == "POST":
+        
+
+        produto.delete()
+        messages.success(request, f"Produto '{produto.nome}' excluído com sucesso!")
+    
+        return redirect("core:vendedor_perfil", usuario_id=vendedor_id)
+    
+    return redirect("core:vendedor_perfil", usuario_id=vendedor_id)
+

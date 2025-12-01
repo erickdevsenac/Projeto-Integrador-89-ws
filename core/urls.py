@@ -38,6 +38,7 @@ urlpatterns = [
     path("nova_avaliacao/", nova_avaliacao, name="nova_avaliacao"),
     path("configuracoes/", auth.configuracoes, name="configuracoes"),
     path("logout/", auth.logout_view, name="logout"),
+    
     path("login/", auth.login_view, name="telalogin"),
     path("cadastro/", auth.cadastro, name="cadastro"),
     path("cadastro/completar/", auth.completar_cadastro, name="completar_cadastro"),
@@ -66,7 +67,11 @@ urlpatterns = [
         name="produto_quick_view",
     ),
     path("produto/cadastrar/", marketplace.cadastrar_produto, name="cadastrar_produto"),
+    path("pacote/", public.pacote_detalhe, name="pacote_detalhe"),
     path("pacote/<int:pacote_id>/", public.pacote_detalhe, name="pacote_detalhe"),
+    path('editar_produto/<int:produto_id>/', marketplace.editar_produto, name='editar_produto'),
+    path('excluir_produto/<int:produto_id>/', marketplace.excluir_produto, name='excluir_produto'),
+    path('editar_produto', marketplace.editar_produto, name='editar_produto'),
     # TODO:
     # path("categoria/<slug:categoria_slug>/", views.produtos_por_categoria, name="produtos_categoria"),
     # TODO:
