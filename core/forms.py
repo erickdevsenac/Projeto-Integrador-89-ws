@@ -24,23 +24,42 @@ from .models import (
 
 class CadastroPacoteSurpresa(forms.ModelForm):
     class Meta:
-     model = PacoteSurpresa
-     fields = ["nome", "descricao", "tipo_conteudo", "data_disponibilidade_inicio", "data_disponibilidade_fim", "instrucoes_especiais"]
-     widgets = {
-            "data_fabricacao": forms.DateInput(
-                 attrs={
-                     'placeholder': 'AAAA-MM-DD',
-                     'type': 'date'
-                 }
-             ),
-             "data_validade": forms.DateInput(
-                 attrs={
-                     'placeholder': 'AAAA-MM-DD',
-                     'type': 'date'
-                 }
-             ),
-             "instrucoes_especiais": forms.TextInput(attrs={'placeholder':'Descreva instruçoes necessarias'})
-         }
+        model = PacoteSurpresa
+        fields = [
+            "nome", 
+            "descricao", 
+            "tipo_conteudo", 
+            "data_disponibilidade_inicio", 
+            "data_disponibilidade_fim", 
+            "instrucoes_especiais", 
+            "preco", 
+            "imagem", 
+            "quantidade_estoque", 
+            "produtos_possiveis",
+            "ativo"
+        ]
+        widgets = {
+            "data_disponibilidade_inicio": forms.DateInput(
+                attrs={
+                    'placeholder': 'AAAA-MM-DD',
+                    'type': 'date'
+                }
+            ),
+            "data_disponibilidade_fim": forms.DateInput(
+                attrs={
+                    'placeholder': 'AAAA-MM-DD',
+                    'type': 'date'
+                }
+            ),
+            "instrucoes_especiais": forms.Textarea(attrs={'placeholder': 'Descreva instruções necessárias', 'rows': 4}),
+            "imagem": forms.ClearableFileInput(attrs={'accept': 'image/*'}),
+            "produtos_possiveis": forms.SelectMultiple(attrs={'class': 'form-control'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Caso precise de opções personalizadas para os produtos possíveis
+        self.fields['produtos_possiveis'].queryset = Produto.objects.all()
     
 
 class CadastroStep1Form(forms.ModelForm):

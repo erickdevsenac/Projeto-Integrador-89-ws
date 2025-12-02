@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render,redirect
 
 from core.models import EquipeDev, PacoteSurpresa, Perfil
 
@@ -67,3 +67,14 @@ def pacote_detalhe(request, pacote_id):
     )
     context = {"pacote": pacote}
     return render(request, "core/pacote_detalhe.html", context)
+def pacote_novo(request):
+ 
+    if request.method == 'POST':
+        pacote = PacoteSurpresa.objects.create(
+            nome="Novo Pacote",
+            descricao="Descrição do pacote",
+            preco=10.00,  # Preço de exemplo
+            vendedor=request.user,  # Exemplo de vendedor
+        )
+        return redirect('core:pacote_detalhe', pacote_id=pacote.id)  
+    return render(request, "core/pacote.html")
