@@ -1,0 +1,39 @@
+{% extends "global/base.html" %}
+{% load static %}
+
+{% block editar_pacote %}
+
+<div class="container mt-4">
+    <h2>Editar Pacote Surpresa: {{ pacote.nome }}</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        {% for field in form %}
+            <div class="mb-3">
+                <label class="form-label">{{ field.label }}:</label>
+                {{ field }}
+
+                {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                {% endif %}
+
+                {% if field.errors %}
+                    <div class="text-danger">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        {% if pacote.imagem %}
+            <p>Imagem atual:</p>
+            <img src="{{ pacote.imagem.url }}" width="200" class="img-thumbnail mb-3">
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+        <a href="{% url 'core:vendedor_perfil' usuario_id=request.user.id %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+{% endblock editar_pacote %}
