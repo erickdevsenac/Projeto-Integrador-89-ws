@@ -45,7 +45,6 @@ def produtos(request):
     
     
     itens = list(queryset) + list(pacotesurpresa)
-    print('itens:', itens)
 
     termo = request.GET.get("termo")
     if termo:

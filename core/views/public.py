@@ -46,7 +46,6 @@ def vendedor(request, usuario_id):
 
     produtos_vendedor = vendedor_perfil.produtos.filter(ativo=True)
     pacote_detalhe = PacoteSurpresa.objects.all()
-    print(pacote_detalhe)
 
     context = {
         "vendedor": vendedor_perfil,
