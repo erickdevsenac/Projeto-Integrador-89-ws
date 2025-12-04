@@ -51,9 +51,9 @@ body.tema-escuro .form-select {
 
 /* --- TAMANHO DA FONTE --- */
 body.fonte-grande {
-    font-size: 1.1rem; /* Aumenta o tamanho base da fonte em 10% */
+    font-size: 30px; /* Aumenta o tamanho base da fonte em 10% */
 }
 
 body.fonte-extra-grande {
-    font-size: 1.25rem; /* Aumenta o tamanho base da fonte em 25% */
+    font-size: 50px; /* Aumenta o tamanho base da fonte em 25% */
 }

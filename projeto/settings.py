@@ -70,6 +70,7 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "storages",
     "django_extensions",
+    "django_cypress",
 ]
 
 if DEBUG:
@@ -78,6 +79,9 @@ if DEBUG:
 LOCAL_APPS = ["core"]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
+CYPRESS_BARE_URL = 'http://localhost:9000'
+CYPRESS_FIXTURE_PATH = 'projeto/cypress/tests/cypress_fixtures'
 
 
 # ==============================================================================
