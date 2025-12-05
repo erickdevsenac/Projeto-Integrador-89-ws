@@ -1,5 +1,3 @@
-# core/views/checkout.py
-
 import json
 from decimal import Decimal
 
@@ -104,6 +102,7 @@ def finalizar_pedido(request):
         return redirect("core:checkout_page")
 
     carrinho_session = request.session.get("carrinho", {})
+    print(carrinho_session)
     if not carrinho_session:
         messages.error(request, "Seu carrinho está vazio.")
         return redirect("core:produtos")
@@ -115,16 +114,18 @@ def finalizar_pedido(request):
         return redirect("core:perfil")
 
     produto_ids = [
-        int(k.split("_")[1]) for k in carrinho_session if k.startswith("produto_")
+        int(item.split("_")[1]) for item in carrinho_session if item.startswith("produto_")
     ]
+    
     pacote_ids = [
-        int(k.split("_")[1]) for k in carrinho_session if k.startswith("pacote_")
+        int(item.split("_")[1]) for item in carrinho_session if item.startswith("pacote_")
     ]
 
     produtos_db = {
         f"produto_{p.id}": p
         for p in Produto.objects.select_for_update().filter(id__in=produto_ids)
     }
+    
     pacotes_db = {
         f"pacote_{p.id}": p
         for p in PacoteSurpresa.objects.select_for_update().filter(id__in=pacote_ids)
