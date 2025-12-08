@@ -14,10 +14,10 @@
     
         <form id="login-form" method="post" action="{% url 'core:telalogin' %}">
             {% csrf_token %}
-            <label for="id_email" class="form-label">E-mail</label>
+            <label id="id_username" for="id_email" class="form-label">E-mail</label>
             <input type="email" name="email" id="id_email" class="text-input" required>
     
-            <label for="id_password" class="form-label">Senha</label>
+            <label id="id_password"  for="id_password" class="form-label">Senha</label>
             <input type="password" name="password" id="id_password" class="password-input" required>
     
             <button type="submit" class="submit-btn">Entrar</button>

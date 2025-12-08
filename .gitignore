@@ -139,5 +139,6 @@ GitHub.sublime-settings
 
 #AWS
 staticfiles
+
 node_modules
-package_lock.json
+package-lock.json
