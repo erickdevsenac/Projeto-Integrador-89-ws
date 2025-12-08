@@ -13,7 +13,6 @@
             <div class="card mb-4">
                 <div class="card-body text-center">
 
-                    {# FOTO DO PERFIL #}
                     {% if perfil and perfil.foto_perfil %}
                         <img src="{{ perfil.foto_perfil.url }}" alt="Foto do Perfil"
                              class="rounded-circle img-fluid"
@@ -24,7 +23,6 @@
                              style="width: 150px; height: 150px; object-fit: cover;">
                     {% endif %}
 
-                    {# NOME DO PERFIL - CORRIGIDO #}
                     {% if perfil %}
                         <h5 class="my-3">
                             {{ perfil.nome_completo|default:perfil.nome_negocio|default:user.username }}
@@ -33,7 +31,6 @@
                         <h5 class="my-3">{{ user.username }}</h5>
                     {% endif %}
 
-                    {# TIPO DO PERFIL #}
                     <p class="text-muted mb-1">
                         {% if perfil %}{{ perfil.get_tipo_display }}{% endif %}
                     </p>
