@@ -1,6 +1,6 @@
 describe('testar acesso de rota de /login', ()=> {
     it('Acessa rota e recebe 200',()=> {
-        cy.visit('http://localhost:9000/login')
+        cy.visit('http://localhost:8000/login')
 
         cy.get('.login-title').contains("Entrar")
 
