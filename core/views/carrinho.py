@@ -83,7 +83,6 @@ def ver_carrinho(request):
 
 @require_POST
 def adicionar_carrinho(request, produto_id):
-    """View para adicionar produtos ao carrinho"""
     produto = get_object_or_404(Produto, id=produto_id, ativo=True)
     carrinho = request.session.get("carrinho", {})
 
@@ -113,12 +112,12 @@ def adicionar_carrinho(request, produto_id):
 
     request.session["carrinho"] = carrinho
     messages.success(request, f"{produto.nome} adicionado ao carrinho.")
-    return redirect("core:ver_carrinho")
+ 
+    return redirect(request.META.get("HTTP_REFERER", "core:produtos"))
 
 
 @require_POST
 def adicionar_pacote_carrinho(request, pacote_id):
-    """View para adicionar Pacotes Surpresa ao carrinho"""
     pacote = get_object_or_404(PacoteSurpresa, id=pacote_id, ativo=True)
     carrinho = request.session.get("carrinho", {})
 
@@ -130,7 +129,6 @@ def adicionar_pacote_carrinho(request, pacote_id):
         messages.error(request, "Quantidade inválida.")
         return redirect(request.META.get("HTTP_REFERER", "core:index"))
 
-    # Lógica central: usar o prefixo 'pacote_'
     pacote_id_str = f"pacote_{pacote.id}"
     quantidade_existente = carrinho.get(pacote_id_str, {}).get("quantidade", 0)
 
@@ -149,15 +147,12 @@ def adicionar_pacote_carrinho(request, pacote_id):
 
     request.session["carrinho"] = carrinho
     messages.success(request, f"{pacote.nome} adicionado ao carrinho.")
-    return redirect("core:ver_carrinho")
+
+    return redirect(request.META.get("HTTP_REFERER", "core:index"))
 
 
 @require_POST
 def atualizar_carrinho(request):
-    """
-    Atualiza a quantidade de um item no carrinho (produtos ou pacotes).
-    Responde a requisições AJAX com JSON.
-    """
     try:
         data = json.loads(request.body)
         item_key = str(data.get("item_key"))
@@ -209,7 +204,6 @@ def atualizar_carrinho(request):
                 }
             )
         elif quantidade > item_obj.quantidade_estoque:
-            # Se a quantidade for maior que o estoque, ajusta para o máximo disponível
             carrinho[item_key]["quantidade"] = item_obj.quantidade_estoque
             request.session["carrinho"] = carrinho
             return JsonResponse(
@@ -250,13 +244,8 @@ def atualizar_carrinho(request):
 
 @require_POST
 def remover_item_carrinho(request):
-    """
-    Remove um item do carrinho (produtos ou pacotes).
-    Responde a requisições AJAX com JSON.
-    """
     try:
         data = json.loads(request.body)
-        # CORREÇÃO: Ler 'item_key'
         item_key = str(data.get("item_key"))
     except json.JSONDecodeError:
         return JsonResponse(
@@ -269,7 +258,6 @@ def remover_item_carrinho(request):
         del carrinho[item_key]
         request.session["carrinho"] = carrinho
 
-        # Recalcula totais para retornar na resposta
         total_carrinho = sum(
             Decimal(item["preco"]) * item["quantidade"] for item in carrinho.values()
         )
