@@ -45,8 +45,7 @@ def vendedor(request, usuario_id):
     )
 
     produtos_vendedor = vendedor_perfil.produtos.filter(ativo=True)
-    pacote_detalhe = PacoteSurpresa.objects.all()
-    print(pacote_detalhe)
+    pacote_detalhe = vendedor_perfil.pacote.filter(ativo=True)
 
     context = {
         "vendedor": vendedor_perfil,
@@ -63,7 +62,7 @@ def pacote_detalhe(request, pacote_id):
     Exibe a página de detalhes para um Pacote Surpresa específico.
     """
     pacote = get_object_or_404(
-        PacoteSurpresa.objects.select_related("vendedor"), id=pacote_id, ativo=True
+        PacoteSurpresa.objects.select_related("vendedor_id"), id=pacote_id, ativo=True
     )
     context = {"pacote": pacote}
     return render(request, "core/pacote_detalhe.html", context)

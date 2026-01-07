@@ -209,7 +209,7 @@ class PacoteSurpresa(TimeStampedModel):
     )
 
     vendedor = models.ForeignKey(
-        "core.Perfil", on_delete=models.CASCADE, limit_choices_to={"tipo": "VENDEDOR"}
+        "core.Perfil", on_delete=models.CASCADE, related_name="pacote", limit_choices_to={"tipo": "VENDEDOR"}
     )
     nome = models.CharField(max_length=100, default="Pacote Surpresa do Dia")
     descricao = models.TextField(
