@@ -25,7 +25,7 @@ from .models import (
 class CadastroPacoteSurpresa(forms.ModelForm):
     class Meta:
      model = PacoteSurpresa
-     fields = ["nome", "descricao", "tipo_conteudo", "data_disponibilidade_inicio", "data_disponibilidade_fim", "instrucoes_especiais"]
+     fields = ["nome", "descricao", "tipo_conteudo", "data_disponibilidade_inicio", "data_disponibilidade_fim", "instrucoes_especiais", "vendedor", "preco", "quantidade_estoque"]
      widgets = {
             "data_fabricacao": forms.DateInput(
                  attrs={

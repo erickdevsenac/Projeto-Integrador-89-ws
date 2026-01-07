@@ -27,7 +27,7 @@ def pacote(request):
             messages.success(
                 request, f'Produto "{pacote.nome}" cadastrado com sucesso!'
             )
-            return redirect("core:index.html")
+            return redirect("core:index")
     else:
         form =CadastroPacoteSurpresa()
     return render(request, "core/pacote.html",context={"form":form})

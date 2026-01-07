@@ -1,5 +1,4 @@
 describe('testar se produtos com menos de 3 dias de validade conseguem desconto de mais de 25%', ()=> {
-    const fakeDate = new Date(2025, 12, 11);
     it('Testa se realmente da para fazer',()=> {
         cy.visit('/login')
 
@@ -29,7 +28,7 @@ describe('testar se produtos com menos de 3 dias de validade conseguem desconto 
         
         cy.get('select[id = "id_tipo_quantidade"]').select(1)
         
-        cy.get('input[name="codigo_produto"]').type(10123234523912)
+        cy.get('input[name="codigo_produto"]').type(10123234523912121121)
 
         cy.get('input[id="id_data_validade"]').type("2025-12-11")
 
