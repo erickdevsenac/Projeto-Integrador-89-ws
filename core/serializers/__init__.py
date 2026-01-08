@@ -12,6 +12,5 @@ from .pedido_serializer import *
 from .perfil_serializer import *
 from .produto_serializer import *
 from .receita_serializer import *
-from .registro_serializer import *
 from .usuario_serializer import *
 from .vendedor_serializer import *
