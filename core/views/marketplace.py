@@ -39,7 +39,7 @@ def produtos(request):
         ativo=True, quantidade_estoque__gt=0
     )
 
-    pacotesurpresa = PacoteSurpresa.objects.select_related("vendedor", "categoria").filter(
+    pacotesurpresa = PacoteSurpresa.objects.select_related("vendedor").filter(
         ativo=False, quantidade_estoque__gt=0
     )
     
