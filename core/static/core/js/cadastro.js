@@ -4,6 +4,71 @@ document.addEventListener('DOMContentLoaded', function() {
   const tipoSelect = document.getElementById('id_tipo');
   const camposParceiro = document.getElementById('campos-parceiro'); // Presumindo que você tem esses divs no HTML
   const camposCliente = document.getElementById('campos-cliente');   // Presumindo que você tem esses divs no HTML
+  
+const inputCNPJ = document.getElementById('id_cnpj');
+const botaoEnviar = document.getElementById('btn_enviar');
+
+const logMsg = document.createElement('div');
+logMsg.id = 'log-cnpj';
+logMsg.style.fontSize = '13px';
+logMsg.style.marginTop = '4px';
+logMsg.style.fontFamily = 'sans-serif';
+
+if (inputCNPJ) {
+    inputCNPJ.parentNode.insertBefore(logMsg, inputCNPJ.nextSibling);
+    if (botaoEnviar) botaoEnviar.disabled = true;
+}
+
+function atualizarInterface(texto, cor, podeProsseguir = false) {
+    logMsg.innerText = texto;
+    logMsg.style.color = cor;
+    
+    if (botaoEnviar) {
+        botaoEnviar.disabled = !podeProsseguir;
+        botaoEnviar.style.opacity = podeProsseguir ? "1" : "0.5";
+        botaoEnviar.style.cursor = podeProsseguir ? "pointer" : "not-allowed";
+    }
+}
+
+async function tratarDigitacao(event) {
+    const valor = event.target.value;
+    const cnpjLimpo = valor.replace(/\D/g, '');
+    
+    event.target.value = cnpjLimpo; 
+
+    if (cnpjLimpo.length === 0) {
+        atualizarInterface("", "black", false);
+    } else if (cnpjLimpo.length < 14) {
+        atualizarInterface(`Aguardando... (${cnpjLimpo.length}/14)`, "orange", false);
+    } else if (cnpjLimpo.length === 14) {
+        await consultarCNPJ(cnpjLimpo);
+    } else {
+        atualizarInterface("Erro: CNPJ longo demais.", "red", false);
+    }
+}
+
+async function consultarCNPJ(cnpj) {
+    try {
+        atualizarInterface("Validando CNPJ...", "blue", false);
+        
+       const response = await fetch(`https://brasilapi.com.br/api/cnpj/v1/${cnpj}`);
+        
+        if (!response.ok) {
+            throw new Error("Este CNPJ não consta na base ativa.");
+        }
+
+        const dados = await response.json();
+        atualizarInterface(`✔ Válido: ${dados.razao_social}`, "green", true);
+
+    } catch (erro) {
+        atualizarInterface(`✖ ${erro.message}`, "red", false);
+    }
+}
+
+if (inputCNPJ) {
+    inputCNPJ.addEventListener('input', tratarDigitacao);
+}
+
 
   function toggleCampos() {
     if (!tipoSelect) return;
