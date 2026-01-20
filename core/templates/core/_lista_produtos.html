@@ -88,8 +88,8 @@ A tag `load pagination_tags` foi removida daqui, pois o `_pagination.html` a car
 
                 <div class="produto-image">
                     <a href="{% url 'core:pacote_detalhe' pacote.id %}">
-                        {% if pacote.imagem_principal %}
-                        <img src="{{ pacote.imagem_principal.url }}"
+                        {% if pacote.imagem %}
+                        <img src="{{ pacote.imagem.url }}"
                              class="card-img-top"
                              alt="{{ pacote.nome }}">
                         {% else %}
