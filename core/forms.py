@@ -24,24 +24,33 @@ from .models import (
 
 class CadastroPacoteSurpresa(forms.ModelForm):
     class Meta:
-     model = PacoteSurpresa
-     fields = ["nome", "descricao", "tipo_conteudo", "data_disponibilidade_inicio", "data_disponibilidade_fim", "instrucoes_especiais"]
-     widgets = {
-            "data_fabricacao": forms.DateInput(
-                 attrs={
-                     'placeholder': 'AAAA-MM-DD',
-                     'type': 'date'
-                 }
-             ),
-             "data_validade": forms.DateInput(
-                 attrs={
-                     'placeholder': 'AAAA-MM-DD',
-                     'type': 'date'
-                 }
-             ),
-             "instrucoes_especiais": forms.TextInput(attrs={'placeholder':'Descreva instruçoes necessarias'})
-         }
-    
+        model = PacoteSurpresa
+        fields = [
+            "nome",
+            "descricao",
+            "tipo_conteudo",
+            "data_disponibilidade_inicio",
+            "data_disponibilidade_fim",
+            "instrucoes_especiais",
+            "preco", 
+        ]
+        widgets = {
+            "data_disponibilidade_inicio": forms.DateInput(
+                attrs={'type': 'date'}
+            ),
+            "data_disponibilidade_fim": forms.DateInput(
+                attrs={'type': 'date'}
+            ),
+            "instrucoes_especiais": forms.Textarea(
+                attrs={'placeholder': 'Descreva instruções necessárias'}
+            ),
+            "preco": forms.NumberInput(
+                attrs={
+                    'placeholder': 'Ex: 29.90',
+                    'step': '0.01'
+                }
+            ),
+        }
 
 class CadastroStep1Form(forms.ModelForm):
     email = forms.EmailField(
