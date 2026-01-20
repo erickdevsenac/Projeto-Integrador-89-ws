@@ -130,7 +130,7 @@ def perfil(request):
         ).order_by('quantidade_estoque')
     
     elif perfil.tipo == Perfil.TipoUsuario.CLIENTE:
-        dashboard_context['ultimos_pedidos'] = Pedido.objects.order_by('-data_criacao')[:5]
+        dashboard_context['ultimos_pedidos'] = Pedido.objects.filter(cliente=perfil).order_by('-data_criacao')[:5]
 
     context = {
         'form': form,
