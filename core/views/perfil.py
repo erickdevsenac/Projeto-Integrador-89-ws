@@ -9,7 +9,7 @@ def perfil_detail(request):
     """
     Exibe a página de perfil do usuário logado e permite a edição.
     """
-    perfil, created = Perfil.objects.get_or_create(user=request.user)
+    perfil, created = Perfil.objects.get_or_create(usuario=request.user)
 
     if perfil.tipo == 'CLIENTE':
         FormClass = CompleteClientProfileForm
