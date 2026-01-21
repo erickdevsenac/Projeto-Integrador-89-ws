@@ -9,9 +9,7 @@ from django.db.models import Count, Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
-
-# from django.views.decorators.cache import cache_page
-from core.forms import ProdutoForm,CadastroPacoteSurpresa
+from core.forms import ProdutoForm,CadastroPacoteSurpresa,PacoteSurpresaForm
 from core.models import CategoriaProduto, Perfil, Produto, PacoteSurpresa
 
 def pacote(request):
@@ -34,73 +32,80 @@ def pacote(request):
 
 
 def produtos(request):
-    """View otimizada para listagem de produtos e pacotes surpresa com filtros avançados"""
-    queryset = Produto.objects.select_related("vendedor", "categoria").filter(
-        ativo=True, quantidade_estoque__gt=0
+  
+    produtos = Produto.objects.select_related(
+        "vendedor", "categoria"
+    ).filter(
+        ativo=True,
+        quantidade_estoque__gt=0
     )
 
-    pacotesurpresa = PacoteSurpresa.objects.select_related("vendedor").filter(
-        ativo=False, quantidade_estoque__gt=0
+    pacotes = PacoteSurpresa.objects.filter(
+        ativo=True,
+        quantidade_estoque__gt=0
     )
-    
-    
-    itens = list(queryset) + list(pacotesurpresa)
-    print('itens:', itens)
 
     termo = request.GET.get("termo")
     if termo:
-        queryset = queryset.filter(
+        produtos = produtos.filter(
             Q(nome__icontains=termo)
             | Q(descricao__icontains=termo)
             | Q(categoria__nome__icontains=termo)
             | Q(vendedor__nome_negocio__icontains=termo)
         ).distinct()
 
-        pacotesurpresa = pacotesurpresa.filter(
-            Q(nome__icontains=termo) | Q(descricao__icontains=termo)
+        pacotes = pacotes.filter(
+            Q(nome__icontains=termo)
+            | Q(descricao__icontains=termo)
         ).distinct()
 
+   
     categoria_slug = request.GET.get("categoria")
     if categoria_slug:
-        queryset = queryset.filter(categoria__slug=categoria_slug)
+        produtos = produtos.filter(categoria__slug=categoria_slug)
 
+  
     preco_min = request.GET.get("preco_min")
     if preco_min:
         try:
-            queryset = queryset.filter(preco__gte=Decimal(preco_min))
-            pacotesurpresa = pacotesurpresa.filter(preco__gte=Decimal(preco_min))
-        except (ValueError, TypeError):
+            preco_min = Decimal(preco_min)
+            produtos = produtos.filter(preco__gte=preco_min)
+            pacotes = pacotes.filter(preco__gte=preco_min)
+        except:
             pass
 
     preco_max = request.GET.get("preco_max")
     if preco_max:
         try:
-            queryset = queryset.filter(preco__lte=Decimal(preco_max))
-            pacotesurpresa = pacotesurpresa.filter(preco__lte=Decimal(preco_max))
-        except (ValueError, TypeError):
+            preco_max = Decimal(preco_max)
+            produtos = produtos.filter(preco__lte=preco_max)
+            pacotes = pacotes.filter(preco__lte=preco_max)
+        except:
             pass
-
     ordenacao = request.GET.get("ordenacao", "-data_criacao")
     ordenacoes_validas = ["-data_criacao", "preco", "-preco", "nome"]
     if ordenacao in ordenacoes_validas:
-        queryset = queryset.order_by(ordenacao)
-        pacotesurpresa = pacotesurpresa.order_by(ordenacao)
+        produtos = produtos.order_by(ordenacao)
+        pacotes = pacotes.order_by(ordenacao)
 
-    # ✅ junta as duas querysets em uma lista
-    itens = list(queryset) + list(pacotesurpresa)
-
-    # paginação
-    paginator = Paginator(itens, 12)
+ 
+    paginator = Paginator(produtos, 12)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    # AJAX
+ 
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
         html = render_to_string(
-            "core/_lista_produtos.html", {"page_obj": page_obj, "request": request}
+            "core/_lista_produtos.html",
+            {
+                "page_obj": page_obj,
+                "pacotes": pacotes,
+                "request": request,
+            },
         )
         return JsonResponse({"html": html})
 
+   
     categorias = CategoriaProduto.objects.annotate(
         produtos_count=Count(
             "produtos",
@@ -110,7 +115,7 @@ def produtos(request):
 
     context = {
         "page_obj": page_obj,
-        # "pacotes_produtos": query_mesclada,
+        "pacotes": pacotes,
         "categorias": categorias,
         "categoria_atual": categoria_slug,
         "filtros": {
