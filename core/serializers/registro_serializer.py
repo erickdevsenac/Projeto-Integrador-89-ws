@@ -11,7 +11,7 @@ class RegistroSerializer(serializers.ModelSerializer):
     tipo_usuario = serializers.ChoiceField(
         choices=Perfil.TipoUsuario.choices, write_only=True
     )
-
+ 
     class Meta:
         model = User
         fields = (

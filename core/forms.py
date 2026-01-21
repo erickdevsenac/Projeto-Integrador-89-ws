@@ -192,36 +192,7 @@ class ProdutoForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["categoria"].queryset = CategoriaProduto.objects.all()
         self.fields["categoria"].label_from_instance = lambda obj: obj.nome
-class PacoteSurpresaForm(forms.ModelForm):
-    class Meta:
-        model = PacoteSurpresa
-        fields = [
-            "nome",
-            "descricao",
-            "preco",
-            "imagem",
-            "quantidade_estoque",
-            "tipo_conteudo",
-            "instrucoes_especiais",
-            "data_disponibilidade_inicio",
-            "data_disponibilidade_fim",
-            "produtos_possiveis",
-            "ativo",
-        ]
 
-        widgets = {
-            "nome": forms.TextInput(attrs={"class": "form-control"}),
-            "descricao": forms.Textarea(attrs={"class": "form-control", "rows": 4}),
-            "preco": forms.NumberInput(attrs={"class": "form-control", "step": "0.01"}),
-            "imagem": forms.FileInput(attrs={"class": "form-control"}),
-            "quantidade_estoque": forms.NumberInput(attrs={"class": "form-control", "min": 0}),
-            "tipo_conteudo": forms.TextInput(attrs={"class": "form-control"}),
-            "instrucoes_especiais": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
-            "data_disponibilidade_inicio": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
-            "data_disponibilidade_fim": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
-            "produtos_possiveis": forms.SelectMultiple(attrs={"class": "form-control"}),
-            "ativo": forms.CheckboxInput(attrs={"class": "form-check-input"}),
-        }
 class CupomForm(forms.ModelForm):
     class Meta:
         model = Cupom

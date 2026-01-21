@@ -139,7 +139,6 @@ GitHub.sublime-settings
 
 #AWS
 staticfiles
-
 node_modules
 package-lock.json
 .vscode/launch.json

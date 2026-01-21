@@ -25,7 +25,7 @@ def pacote(request):
             messages.success(
                 request, f'Produto "{pacote.nome}" cadastrado com sucesso!'
             )
-            return redirect("core:index.html")
+            return redirect("core:index")
     else:
         form =CadastroPacoteSurpresa()
     return render(request, "core/pacote.html",context={"form":form})
@@ -260,39 +260,4 @@ def excluir_produto(request, produto_id):
         return redirect("core:vendedor_perfil", usuario_id=vendedor_id)
     
     return redirect("core:vendedor_perfil", usuario_id=vendedor_id)
-@login_required
-def editar_pacote(request, pacote_id):
-    pacote = get_object_or_404(PacoteSurpresa, id=pacote_id)
 
-    if pacote.vendedor != request.user.perfil:
-        messages.error(request, "Você não tem permissão para editar este pacote.")
-        return redirect("core:vendedor_perfil", usuario_id=request.user.id)
-
-    if request.method == "POST":
-        form = PacoteSurpresaForm(request.POST, request.FILES, instance=pacote)
-        
-        if form.is_valid():
-            form.save()
-            messages.success(request, f'Pacote "{pacote.nome}" atualizado com sucesso!')
-            return redirect("core:vendedor_perfil", usuario_id=pacote.vendedor.usuario.id)
-
-    else:
-        form = PacoteSurpresaForm(instance=pacote)
-
-    return render(request, "core/editar_pacote.html", {"form": form, "pacote": pacote})
-@login_required
-def excluir_pacote(request, pacote_id):
-    pacote = get_object_or_404(PacoteSurpresa, id=pacote_id)
-
-    vendedor_id = pacote.vendedor.usuario.id
-
-    if pacote.vendedor != request.user.perfil:
-        messages.error(request, "Você não tem permissão para excluir este pacote.")
-        return redirect("core:vendedor_perfil", usuario_id=request.user.id)
-
-    if request.method == "POST":
-        pacote.delete()
-        messages.success(request, f'Pacote "{pacote.nome}" excluído com sucesso!')
-        return redirect("core:vendedor_perfil", usuario_id=vendedor_id)
-
-    return redirect("core:vendedor_perfil", usuario_id=vendedor_id)

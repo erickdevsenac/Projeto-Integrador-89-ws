@@ -20,9 +20,7 @@
         <div class="caixa card shadow-lg">
           <div class="card-body p-4 p-md-5">
             <h2 class="card-title text-center mb-4">Só mais um passo!</h2>
-            <p class="text-center text-muted mb-4">
-              Olá, {{ user.username }}! Complete seu perfil para aproveitar ao máximo nossa plataforma.
-            </p>
+            <p class="text-center text-muted mb-4">Olá, {{ user.username }}! Complete seu perfil para aproveitar ao máximo nossa plataforma.</p>
             {% if messages %}
           <ul class="messages">
               {% for message in messages %}
@@ -56,7 +54,7 @@
               {% endfor %}
 
               <div class="d-grid mt-4">
-                <button type="submit" class="btn btn-success btn-lg">Finalizar Cadastro</button>
+                <button type="submit" id="btn_enviar" class="btn btn-success btn-lg">Finalizar Cadastro</button>
               </div>
             </form>
             <div class="text-center mt-3">
