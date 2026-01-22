@@ -14,6 +14,7 @@ from django.contrib.auth.forms import SetPasswordForm
 from django.urls import reverse
 from django.utils.html import strip_tags
 
+from django.views.decorators.http import require_http_methods
 from core.forms import CadastroStep1Form, CompleteClientProfileForm, CompletePartnerProfileForm
 
 from core.models import Perfil, Pedido, PedidoVendedor, Produto
@@ -79,24 +80,50 @@ def completar_cadastro(request):
         
     return render(request, "core/cadastro_step2.html", {"form": form})
 
+
+@require_http_methods(["GET", "POST"])
 def login_view(request):
     mensagem = ""
+    status_code = 200
+
     if request.method == "POST":
         email = request.POST.get("email")
         senha = request.POST.get("password")
-        user = authenticate(request, username=email, password=senha)
-        
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                return redirect("core:index")
-            else:
-                # Usuário existe, mas NÃO está ativo
-                mensagem = "Sua conta foi criada, mas ainda não foi ativada. Por favor, verifique seu e-mail."
+
+        if not email or not senha:
+            mensagem = "E-mail e senha são obrigatórios."
+            status_code = 400
+
         else:
-            # Usuário não existe ou senha está incorreta
-            mensagem = "Email ou senha incorretos."
-    return render(request, "core/telalogin.html", {"mensagem": mensagem})
+            try:
+                user = authenticate(request, username=email, password=senha)
+
+                if user is None:
+
+                    mensagem = "Email ou senha incorretos."
+                    status_code = 401
+
+                elif not user.is_active:
+                    mensagem = (
+                        "Sua conta foi criada, mas ainda não foi ativada. "
+                        "Por favor, verifique seu e-mail."
+                    )
+                    status_code = 403
+
+                else:
+                    login(request, user)
+                    return redirect("core:index")
+
+            except Exception:
+                mensagem = "Erro interno. Tente novamente mais tarde."
+                status_code = 500
+
+    return render(
+        request,
+        "core/telalogin.html",
+        {"mensagem": mensagem},
+        status=status_code
+    )
 
 def logout_view(request):
     logout(request)
