@@ -2,14 +2,13 @@ from decimal import Decimal
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.contenttypes.models import ContentType
 from django.core.paginator import Paginator
 from django.db.models import Count, Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
-from core.forms import ProdutoForm,CadastroPacoteSurpresa,PacoteSurpresaForm
+from core.forms import ProdutoForm,CadastroPacoteSurpresa
 from core.models import CategoriaProduto, Perfil, Produto, PacoteSurpresa
 
 def pacote(request):
