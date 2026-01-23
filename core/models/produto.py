@@ -108,8 +108,6 @@ class Produto(TimeStampedModel):
     )
     tipo_quantidade = models.CharField(
         choices= TipoPesagem.choices,
-        null=True,
-        blank=True,
         max_length=50
     )
 
