@@ -126,6 +126,19 @@ class CompletePartnerProfileForm(forms.ModelForm):
             "telefone": forms.TextInput(attrs={'placeholder':'(11) 99999-9999', 'id': 'id_telefone'}),
             "endereco": forms.TextInput(attrs={'placeholder':'Seu endereço completo'}),
         }
+class CompleteONGProfileForm(forms.ModelForm):
+    class Meta:
+        model = Perfil
+        fields = ["foto_perfil", "nome_negocio", "cnpj", "descricao_parceiro", "telefone", "endereco"]
+
+        widgets = {
+            "foto_perfil": forms.FileInput(),
+            "nome_negocio": forms.TextInput(attrs={ "placeholder": "Nome da ONG"}),
+            "cnpj": forms.TextInput(attrs={ "placeholder": "CNPJ da ONG","id": "id_cnpj"}),
+            "descricao_parceiro": forms.Textarea(attrs={ "placeholder": "Descreva a missão e as causas da ONG","rows": 10}),
+            "telefone": forms.TextInput(attrs={ "placeholder": "(11) 99999-9999", "id": "id_telefone"}),
+            "endereco": forms.TextInput(attrs={"placeholder": "Endereço completo da ONG" }),
+        }
 
 
 # ==============================================================================
