@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from core.models import Perfil
-from core.forms import CompleteClientProfileForm, CompletePartnerProfileForm
+from core.forms import CompleteClientProfileForm, CompletePartnerProfileForm, CompleteONGProfileForm
 
 
 @login_required
@@ -15,6 +15,8 @@ def perfil_detail(request):
         FormClass = CompleteClientProfileForm
     elif perfil.tipo == 'VENDEDOR':
         FormClass = CompletePartnerProfileForm
+    elif perfil.tipo == 'ONG':
+        FormClass = CompleteONGProfileForm
     else:
         FormClass = None
 
