@@ -1,32 +1,55 @@
 {% extends 'global/base.html' %}
 {% load static %}
 
-
-
 {% block content %}
 {% block head %}
 <title>Meu Perfil - {{ user.username }}</title>
 <link rel="stylesheet" href="{% static 'core/css/style_perfil.css' %}">
 {% endblock head %}
+
 <div class="container my-5">
     <div class="row">
         <div class="col-lg-4">
             <div class="card mb-4">
                 <div class="card-body text-center">
-                  {% if perfil.foto_perfil %}
-                      <img src="{{ perfil.foto_perfil.url }}" alt="Foto do Perfil" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
-                  {% else %}
-                      <img src="{% static 'assets/img/placeholder_user.png' %}" alt="Foto do Perfil" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
-                  {% endif %}                    
-                  <h5 class="my-3">{{ perfil.nome_completo|default:perfil.nome_negocio|default:user.username }}</h5>
-                    <p class="text-muted mb-1">{{ perfil.get_tipo_display }}</p>
-                    <p class="text-muted mb-4">{{ perfil.endereco|default:"Endereço não informado" }}</p>
+
+                    {% if perfil and perfil.foto_perfil %}
+                        <img src="{{ perfil.foto_perfil.url }}" alt="Foto do Perfil"
+                             class="rounded-circle img-fluid"
+                             style="width: 150px; height: 150px; object-fit: cover;">
+                    {% else %}
+                        <img src="{% static 'assets/img/placeholder_user.png' %}" alt="Foto do Perfil"
+                             class="rounded-circle img-fluid"
+                             style="width: 150px; height: 150px; object-fit: cover;">
+                    {% endif %}
+
+                    {% if perfil %}
+                        <h5 class="my-3">
+                            {{ perfil.nome_completo|default:perfil.nome_negocio|default:user.username }}
+                        </h5>
+                    {% else %}
+                        <h5 class="my-3">{{ user.username }}</h5>
+                    {% endif %}
+
+                    <p class="text-muted mb-1">
+                        {% if perfil %}{{ perfil.get_tipo_display }}{% endif %}
+                    </p>
+
+                    <p class="text-muted mb-4">
+                        {% if perfil and perfil.endereco %}
+                            {{ perfil.endereco }}
+                        {% else %}
+                            Endereço não informado
+                        {% endif %}
+                    </p>
+
                     <div class="d-flex justify-content-center mb-2">
                         <button type="button" class="btn btn-primary" id="edit-profile-btn">Editar Perfil</button>
                         <a href="{% url 'core:logout' %}" class="btn btn-outline-danger ms-1">Sair</a>
                     </div>
                 </div>
             </div>
+
             <div class="card">
                  <div class="card-body">
                     <h5 class="card-title">Ações Rápidas</h5>
@@ -40,9 +63,12 @@
         </div>
 
         <div class="col-lg-8">
+
             <div id="view-mode">
-                {% if perfil.tipo == 'VENDEDOR' %}
+
+                {% if perfil and perfil.tipo == 'VENDEDOR' %}
                     <h4 class="mb-4">Dashboard do Vendedor</h4>
+
                     <div class="card mb-4">
                         <div class="card-header">Produtos com Baixo Estoque</div>
                         <div class="card-body">
@@ -74,13 +100,15 @@
             <div class="mt-5">
                 <h2>Avaliações Recebidas</h2>
                 <div id="avaliacoes-perfil">
-                    <!-- As avaliações serão carregadas aqui via JavaScript ou renderizadas pelo backend -->
                     <p>Nenhuma avaliação ainda. Seja o primeiro a avaliar!</p>
                 </div>
-                {% if user.is_authenticated and user.perfil != perfil %}
-                <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#modalAvaliacaoPerfil">Deixar uma Avaliação</button>
+
+                {% if user.is_authenticated and perfil and user.perfil != perfil %}
+                    <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#modalAvaliacaoPerfil">
+                        Deixar uma Avaliação
+                    </button>
                 {% elif not user.is_authenticated %}
-                <p class="mt-3">Faça <a href="{% url 'core:telalogin' %}">login</a> para deixar uma avaliação.</p>
+                    <p class="mt-3">Faça <a href="{% url 'core:telalogin' %}">login</a> para deixar uma avaliação.</p>
                 {% endif %}
             </div>
 
@@ -88,6 +116,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="mb-4">Editar Informações do Perfil</h4>
+
                         <form method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             {{ form.as_p }}
@@ -98,6 +127,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
@@ -109,68 +139,21 @@
         const editButton = document.getElementById('edit-profile-btn');
         const cancelButton = document.getElementById('cancel-edit-btn');
 
-        editButton.addEventListener('click', () => {
-            viewMode.style.display = 'none';
-            editMode.style.display = 'block';
-        });
-
-        cancelButton.addEventListener('click', () => {
-            editMode.style.display = 'none';
-            viewMode.style.display = 'block';
-        });
-    });
-</script>
-
-<script src="https://unpkg.com/imask"></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const viewMode = document.getElementById('view-mode');
-        const editMode = document.getElementById('edit-mode');
-        const editButton = document.getElementById('edit-profile-btn');
-        const cancelButton = document.getElementById('cancel-edit-btn');
-
-        if(editButton) { 
+        if (editButton) {
             editButton.addEventListener('click', () => {
                 viewMode.style.display = 'none';
                 editMode.style.display = 'block';
             });
         }
 
-        if(cancelButton) {
+        if (cancelButton) {
             cancelButton.addEventListener('click', () => {
                 editMode.style.display = 'none';
                 viewMode.style.display = 'block';
             });
         }
-     
-
-        const telefoneInput = document.getElementById('id_telefone');
-        const cnpjInput = document.getElementById('id_cnpj');
-        
-        if (telefoneInput) {
-            IMask(telefoneInput, {
-                mask: [
-                    { mask: '(00) 0000-0000' },  
-                    { mask: '(00) 00000-0000' } 
-                ]
-            });
-        }
-        
-        if (cnpjInput) {
-            IMask(cnpjInput, {
-                mask: '00.000.000/0000-00'
-            });
-        }
-
-        const cepInput = document.getElementById('id_cep');
-        if (cepInput) {
-            IMask(cepInput, {
-                mask: '00000-000'
-            });
-        }
-
     });
 </script>
+
 {% include 'parciais/_avaliacao_modal_perfil.html' %}
 {% endblock %}

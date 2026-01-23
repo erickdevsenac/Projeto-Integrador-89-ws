@@ -136,3 +136,9 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+
+#AWS
+staticfiles
+node_modules
+package-lock.json
+.vscode/launch.json

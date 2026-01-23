@@ -161,6 +161,14 @@ class Produto(TimeStampedModel):
     @property
     def imagem(self):
         return self.imagem_principal
+    
+    @property
+    def verifica_vendedor(self):
+        return self.vendedor == "core.Perfil.VENDEDOR"
+    
+    @property
+    def valor_negativo(self):
+        return (self.preco > 0.01 )
 
     @property
     def disponivel_para_venda(self):
@@ -201,7 +209,7 @@ class PacoteSurpresa(TimeStampedModel):
     )
 
     vendedor = models.ForeignKey(
-        "core.Perfil", on_delete=models.CASCADE, limit_choices_to={"tipo": "VENDEDOR"}
+        "core.Perfil", on_delete=models.CASCADE, related_name="pacote", limit_choices_to={"tipo": "VENDEDOR"}
     )
     nome = models.CharField(max_length=100, default="Pacote Surpresa do Dia")
     descricao = models.TextField(

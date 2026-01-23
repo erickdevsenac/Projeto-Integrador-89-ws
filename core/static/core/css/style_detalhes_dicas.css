@@ -1,0 +1,38 @@
+
+body {
+        font-family: Arial, sans-serif;
+    }
+
+h1, h2 {
+        color: #2e7d32;
+        font-weight: bold;
+    }
+
+.dica-detalhes {
+        background-color: rgb(34, 235, 8);
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+.imagem-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+.dica-imagem {
+        width: 150px;      
+        height: auto;       
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+.badge {
+        font-size: 0.85rem;
+    }
+
+.btn-voltar {
+        background-color:green;
+        margin-top: 1.5rem;
+    }

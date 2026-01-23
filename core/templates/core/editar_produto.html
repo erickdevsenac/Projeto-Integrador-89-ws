@@ -1,0 +1,63 @@
+{% extends 'global/base.html' %}
+{% load static %}
+
+{% block editar_produto %}
+{% block head %}
+    <title>Editar Produto - {{ produto.nome }}</title>
+    <link rel="stylesheet" href="{% static 'core/css/style_vendedor.css' %}">
+{% endblock head %}
+
+<div class="editar-produto-container">
+    <h2>Editar Produto: {{ produto.nome }}</h2>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form action="{% url 'core:editar_produto' produto.id %}" method="post" enctype="multipart/form-data" class="form-editar-produto">
+    {% csrf_token %}
+    
+    {% if form.non_field_errors %}
+        <div class="messages error">
+            <p>Ocorreram erros no formulário. Por favor, verifique os campos abaixo.</p>
+            {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    <div class="form-group">{{ form.nome.label_tag }}{{ form.nome }}
+        {% for error in form.nome.errors %}<p class="error-message">{{ error }}</p>{% endfor %}</div>
+    <div class="form-group">{{ form.preco.label_tag }}{{ form.preco }}
+        {% for error in form.preco.errors %}<p class="error-message">{{ error }}</p>{% endfor %}</div>
+    <div class="form-group">{{ form.categoria.label_tag }}{{ form.categoria }}
+        {% for error in form.categoria.errors %}<p class="error-message">{{ error }}</p>{% endfor %}</div>
+    <div class="form-group">{{ form.quantidade_estoque.label_tag }}{{ form.quantidade_estoque }}
+        {% for error in form.quantidade_estoque.errors %}<p class="error-message">{{ error }}</p>{% endfor %}</div>
+    <div class="form-group">{{ form.tipo_quantidade.label_tag }}{{ form.tipo_quantidade }}
+        {% for error in form.tipo_quantidade.errors %}<p class="error-message">{{ error }}</p>{% endfor %}</div>
+    <div class="form-group">{{ form.codigo_produto.label_tag }}{{ form.codigo_produto }}
+        {% for error in form.codigo_produto.errors %}<p class="error-message">{{ error }}</p>{% endfor %}</div>
+    <div class="form-group">{{ form.data_validade.label_tag }}{{ form.data_validade }}
+        {% for error in form.data_validade.errors %}<p class="error-message">{{ error }}</p>{% endfor %}</div>  
+    <div class="form-group">{{ form.descricao.label_tag }}{{ form.descricao }}
+        {% for error in form.descricao.errors %}<p class="error-message">{{ error }}</p>{% endfor %}</div>   
+    <div class="form-group">
+        {{ form.imagem_principal.label_tag }}
+        {{ form.imagem_principal }}
+        {% if produto.imagem_principal %}
+            <p>Imagem atual: <img src="{{ produto.imagem_principal.url }}" alt="{{ produto.nome }}" style="max-width:150px;"></p>
+        {% endif %}
+        {% for error in form.imagem_principal.errors %}<p class="error-message">{{ error }}</p>{% endfor %}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+    <a href="{% url 'core:vendedor_perfil' produto.vendedor.usuario.id %}" class="btn btn-secondary">Cancelar</a>
+</form>
+</div>
+
+{% endblock editar_produto %}

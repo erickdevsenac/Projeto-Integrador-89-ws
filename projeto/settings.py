@@ -31,6 +31,11 @@ ALLOWED_HOSTS = env.list(
     "ALLOWED_HOSTS", default=["localhost", "127.0.0.1", "10.0.2.2", "192.168.100.22"]
 )
 
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://192.168.22.10:8000',
+]
+
 if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
@@ -38,8 +43,8 @@ if not DEBUG:
     SECURE_HSTS_PRELOAD = True
     SECURE_HSTS_SECONDS = 31536000
     SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=False)
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = False #TROCAR QUANDO FOR HTTPS
+    CSRF_COOKIE_SECURE = False #TROCAR QUANDO FOR HTTPS
     X_FRAME_OPTIONS = "DENY"
 
 
@@ -65,6 +70,7 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "storages",
     "django_extensions",
+    "django_cypress",
 ]
 
 if DEBUG:
@@ -73,6 +79,9 @@ if DEBUG:
 LOCAL_APPS = ["core"]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+CYPRESS_BASE_URL= 'http://localhost:9000'
+CYPRESS_FIXTURE_PATH="projeto/cypress/tests/cypress_fixtures"
+
 
 
 # ==============================================================================
