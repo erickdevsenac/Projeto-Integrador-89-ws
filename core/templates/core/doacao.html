@@ -26,8 +26,8 @@
         {% for ong in instituicoes %}
         
         <div class="texto">
-        {% if ong.logo_ong %}
-        <img src="{{ ong.logo_ong.url }}" alt="{{ ong.nome_negocio }}">
+        {% if ong.foto_perfil %}
+        <img src="{{ ong.foto_perfil.url }}" alt="{{ ong.nome_negocio }}">
         {% else %}
         <img src="{% static 'assets/img/placeholder_re.png' %}" alt="Imagem não disponível">
         {% endif %}
