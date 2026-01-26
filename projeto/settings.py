@@ -28,24 +28,28 @@ environ.Env.read_env(str(BASE_DIR / ".env"))
 SECRET_KEY = env("SECRET_KEY")
 DEBUG = env.bool("DEBUG", default=False)
 ALLOWED_HOSTS = env.list(
-    "ALLOWED_HOSTS", default=["localhost", "127.0.0.1", "10.0.2.2", "192.168.100.22"]
+    "ALLOWED_HOSTS", 
+    default=["localhost", "127.0.0.1", "10.0.2.2"]
 )
 
+CSRF_TRUSTED_ORIGINS = env.list(
+    "CSRF_TRUSTED_ORIGINS", 
+    default=["http://192.168.22.10:8000", "https://aproveitemais.shop"]
+)
 
-CSRF_TRUSTED_ORIGINS = [
-    'http://192.168.22.10:8000',
-]
+SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=False)
 
-if not DEBUG:
+if not DEBUG and SECURE_SSL_REDIRECT:
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
     SECURE_HSTS_SECONDS = 31536000
     SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=False)
-    SESSION_COOKIE_SECURE = False #TROCAR QUANDO FOR HTTPS
-    CSRF_COOKIE_SECURE = False #TROCAR QUANDO FOR HTTPS
+    SESSION_COOKIE_SECURE = True  #TROCAR QUANDO FOR HTTPS
+    CSRF_COOKIE_SECURE = True #TROCAR QUANDO FOR HTTPS
     X_FRAME_OPTIONS = "DENY"
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # ==============================================================================
