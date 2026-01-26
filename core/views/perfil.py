@@ -17,11 +17,11 @@ def perfil_detail(request):
     perfil, created = Perfil.objects.get_or_create(usuario=request.user)
 
     if perfil.tipo == 'CLIENTE':
-        FormClass = CompleteClientProfileForm
-    elif perfil.tipo == 'VENDEDOR':
-        FormClass = CompletePartnerProfileForm
+            FormClass = CompleteClientProfileForm
+    elif perfil.tipo in ['VENDEDOR', 'ONG']:
+            FormClass = CompletePartnerProfileForm  
     else:
-        FormClass = None
+            FormClass = None
 
     form = None
 

@@ -10,7 +10,7 @@
 <div class="container my-5">
     <div class="row">
 
-      
+        <!-- Coluna do perfil -->
         <div class="col-lg-4">
             <div class="card mb-4">
                 <div class="card-body text-center">
@@ -24,20 +24,14 @@
                              style="width: 150px; height: 150px; object-fit: cover;">
                     {% endif %}
 
-                    {% if perfil %}
-                        <h5 class="my-3">
-                            {{ perfil.nome_completo|default:perfil.nome_negocio|default:user.username }}
-                        </h5>
-                    {% else %}
-                        <h5 class="my-3">{{ user.username }}</h5>
-                    {% endif %}
+                    <h5 class="my-3">
+                        {{ perfil.nome_completo|default:perfil.nome_negocio|default:user.username }}
+                    </h5>
 
-                    <p class="text-muted mb-1">
-                        {% if perfil %}{{ perfil.get_tipo_display }}{% endif %}
-                    </p>
+                    <p class="text-muted mb-1">{{ perfil.get_tipo_display }}</p>
 
                     <p class="text-muted mb-4">
-                        {% if perfil and perfil.endereco %}
+                        {% if perfil.endereco %}
                             {{ perfil.endereco }}
                         {% else %}
                             Endereço não informado
@@ -52,96 +46,116 @@
             </div>
 
             <div class="card">
-                 <div class="card-body">
+                <div class="card-body">
                     <h5 class="card-title">Ações Rápidas</h5>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item"><a href="{% url 'core:meus_pedidos' %}">📦 Meus Pedidos</a></li>
                         <li class="list-group-item"><a href="{% url 'core:configuracoes' %}">⚙️ Configurações</a></li>
                         <li class="list-group-item"><a href="{% url 'core:alterar_senha' %}">🔑 Alterar Senha</a></li>
                     </ul>
-                 </div>
+                </div>
             </div>
         </div>
 
-      
+        <!-- Coluna de conteúdo -->
         <div class="col-lg-8">
 
+            <!-- Modo de visualização -->
             <div id="view-mode">
 
-                {% if perfil and perfil.tipo == 'VENDEDOR' %}
-                   
-                    <h4 class="mb-4">Dashboard do Vendedor</h4>
+                {% if perfil %}
+                    {% if perfil.tipo == 'VENDEDOR' %}
+                        <h4 class="mb-4">Dashboard do Vendedor</h4>
 
-                    <div class="card mb-4">
-                        <div class="card-header">Produtos com Baixo Estoque</div>
-                        <div class="card-body">
-                            {% for produto in dashboard.baixo_estoque %}
-                                <p>{{ produto.nome }} - <strong>Restam apenas {{ produto.quantidade_estoque }} unidades.</strong></p>
-                            {% empty %}
-                                <p class="text-muted">Nenhum produto com baixo estoque.</p>
-                            {% endfor %}
+                        <!-- Produtos com baixo estoque -->
+                        <div class="card mb-4">
+                            <div class="card-header">Produtos com Baixo Estoque</div>
+                            <div class="card-body">
+                                {% for produto in dashboard.baixo_estoque %}
+                                    <p>{{ produto.nome }} - <strong>Restam apenas {{ produto.quantidade_estoque }} unidades.</strong></p>
+                                {% empty %}
+                                    <p class="text-muted">Nenhum produto com baixo estoque.</p>
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="card mb-4">
-                        <div class="card-header">Últimos Pedidos</div>
-                        <div class="card-body">
-                            {% for pedido in dashboard.ultimos_pedidos %}
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span>Pedido #{{ pedido.numero_pedido|default:pedido.pedido_principal.numero_pedido }}</span>
-                                    <span class="badge bg-info">{{ pedido.get_status_display|default:pedido.get_status_pagamento_display }}</span>
-                                    <span>R$ {{ pedido.valor_total|default:pedido.valor_subtotal|floatformat:2 }}</span>
-                                </div>
-                            {% empty %}
-                                <p class="text-muted">Nenhum pedido recente.</p>
-                            {% endfor %}
+                        <!-- Últimos pedidos -->
+                        <div class="card mb-4">
+                            <div class="card-header">Últimos Pedidos</div>
+                            <div class="card-body">
+                                {% for pedido in dashboard.ultimos_pedidos %}
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>Pedido #{{ pedido.numero_pedido|default:pedido.pedido_principal.numero_pedido }}</span>
+                                        <span class="badge bg-info">{{ pedido.get_status_display|default:pedido.get_status_pagamento_display }}</span>
+                                        <span>R$ {{ pedido.valor_total|default:pedido.valor_subtotal|floatformat:2 }}</span>
+                                    </div>
+                                {% empty %}
+                                    <p class="text-muted">Nenhum pedido recente.</p>
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
 
-                    <h2>Avaliações Recebidas</h2>
-                    <p>Média: {{ media_avaliacoes|floatformat:1 }} / 5 ({{ total_avaliacoes }} avaliações)</p>
+                        <!-- Avaliações -->
+                        <h2>Avaliações Recebidas</h2>
+                        <p>Média: {{ media_avaliacoes|floatformat:1 }} / 5 ({{ total_avaliacoes }} avaliações)</p>
 
-                    <div class="row">
-                        {% for avaliacao in avaliacoes_produtos %}
-                            <div class="col-12 mb-3">
-                                <div class="card shadow-sm">
-                                    <div class="card-body">
-                                        <h6 class="mb-1">{{ avaliacao.autor.username }}</h6>
-                                        <p class="mb-1 text-muted">{{ avaliacao.texto|default:"Sem comentário" }}</p>
-
-                                        {% if avaliacao.produto %}
-                                            <p class="mb-1"><strong>Produto:</strong> {{ avaliacao.produto.nome }}</p>
-                                        {% endif %}
-
-                                        <p class="mb-0 text-warning">
-                                            {% for i in "12345" %}
-                                                {% if forloop.counter <= avaliacao.nota %}
-                                                    &#9733;
-                                                {% else %}
-                                                    &#9734;
-                                                {% endif %}
-                                            {% endfor %}
-                                        </p>
+                        <div class="row">
+                            {% for avaliacao in avaliacoes_produtos %}
+                                <div class="col-12 mb-3">
+                                    <div class="card shadow-sm">
+                                        <div class="card-body">
+                                            <h6 class="mb-1">{{ avaliacao.autor.username }}</h6>
+                                            <p class="mb-1 text-muted">{{ avaliacao.texto|default:"Sem comentário" }}</p>
+                                            {% if avaliacao.produto %}
+                                                <p class="mb-1"><strong>Produto:</strong> {{ avaliacao.produto.nome }}</p>
+                                            {% endif %}
+                                            <p class="mb-0 text-warning">
+                                                {% for i in "12345" %}
+                                                    {% if forloop.counter <= avaliacao.nota %}
+                                                        &#9733;
+                                                    {% else %}
+                                                        &#9734;
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        {% empty %}
-                            <p class="text-muted">Nenhuma avaliação de produto ainda.</p>
-                        {% endfor %}
-                    </div>
+                            {% empty %}
+                                <p class="text-muted">Nenhuma avaliação de produto ainda.</p>
+                            {% endfor %}
+                        </div>
 
-                    {% if user.is_authenticated and perfil and user.perfil != perfil %}
-                        <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#modalAvaliacaoPerfil">
-                            Deixar uma Avaliação
-                        </button>
-                    {% elif not user.is_authenticated %}
-                        <p class="mt-3">Faça <a href="{% url 'core:telalogin' %}">login</a> para deixar uma avaliação.</p>
+                        {% if user.is_authenticated and perfil and user.perfil != perfil %}
+                            <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#modalAvaliacaoPerfil">
+                                Deixar uma Avaliação
+                            </button>
+                        {% elif not user.is_authenticated %}
+                            <p class="mt-3">Faça <a href="{% url 'core:telalogin' %}">login</a> para deixar uma avaliação.</p>
+                        {% endif %}
+
+                    {% elif perfil.tipo in 'ONG CLIENTE' %}
+                        <h4 class="mb-4">Últimos Pedidos</h4>
+                        <div class="card mb-4">
+                            <div class="card-header">Pedidos Recentes</div>
+                            <div class="card-body">
+                                {% for pedido in dashboard.ultimos_pedidos %}
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>Pedido #{{ pedido.numero_pedido|default:pedido.pedido_principal.numero_pedido }}</span>
+                                        <span class="badge bg-info">{{ pedido.get_status_display|default:pedido.get_status_pagamento_display }}</span>
+                                        <span>R$ {{ pedido.valor_total|default:pedido.valor_subtotal|floatformat:2 }}</span>
+                                    </div>
+                                {% empty %}
+                                    <p class="text-muted">Nenhum pedido recente.</p>
+                                {% endfor %}
+                            </div>
+                        </div>
                     {% endif %}
                 {% endif %}
 
             </div>
 
-          
+            <!-- Modo de edição -->
             <div id="edit-mode" style="display: none;">
                 <div class="card">
                     <div class="card-body">
@@ -149,6 +163,7 @@
 
                         <form method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
+                            <input type="hidden" name="editar_perfil" value="1">
                             {{ form.as_p }}
                             <hr>
                             <button type="submit" class="btn btn-success">Salvar Alterações</button>
@@ -163,26 +178,26 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const viewMode = document.getElementById('view-mode');
-        const editMode = document.getElementById('edit-mode');
-        const editButton = document.getElementById('edit-profile-btn');
-        const cancelButton = document.getElementById('cancel-edit-btn');
+document.addEventListener('DOMContentLoaded', function() {
+    const viewMode = document.getElementById('view-mode');
+    const editMode = document.getElementById('edit-mode');
+    const editButton = document.getElementById('edit-profile-btn');
+    const cancelButton = document.getElementById('cancel-edit-btn');
 
-        if (editButton) {
-            editButton.addEventListener('click', () => {
-                viewMode.style.display = 'none';
-                editMode.style.display = 'block';
-            });
-        }
+    if (editButton) {
+        editButton.addEventListener('click', () => {
+            viewMode.style.display = 'none';
+            editMode.style.display = 'block';
+        });
+    }
 
-        if (cancelButton) {
-            cancelButton.addEventListener('click', () => {
-                editMode.style.display = 'none';
-                viewMode.style.display = 'block';
-            });
-        }
-    });
+    if (cancelButton) {
+        cancelButton.addEventListener('click', () => {
+            editMode.style.display = 'none';
+            viewMode.style.display = 'block';
+        });
+    }
+});
 </script>
 
 {% include 'parciais/_avaliacao_modal_perfil.html' %}
