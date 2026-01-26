@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db.models import Prefetch
 
-from core.models import Perfil, Produto, Avaliacao
+from core.models import Perfil, Produto, Avaliacao, Pedido, PedidoVendedor, ItemPedido
 from core.forms import CompleteClientProfileForm, CompletePartnerProfileForm
 
 @login_required
@@ -15,16 +15,17 @@ def perfil_detail(request):
     """
 
     perfil, created = Perfil.objects.get_or_create(usuario=request.user)
+    perfil_usuario = request.user.perfil
 
+   
     if perfil.tipo == 'CLIENTE':
-            FormClass = CompleteClientProfileForm
+        FormClass = CompleteClientProfileForm
     elif perfil.tipo in ['VENDEDOR', 'ONG']:
-            FormClass = CompletePartnerProfileForm  
+        FormClass = CompletePartnerProfileForm  
     else:
-            FormClass = None
+        FormClass = None
 
     form = None
-
     if FormClass:
         if request.method == 'POST' and 'editar_perfil' in request.POST:
             form = FormClass(request.POST, request.FILES, instance=perfil)
@@ -35,20 +36,60 @@ def perfil_detail(request):
         else:
             form = FormClass(instance=perfil)
 
-    
+    ultimos_pedidos = []
+
+  
+    if perfil_usuario.tipo in [Perfil.TipoUsuario.CLIENTE, 'ONG']:
+        pedidos_qs = (
+            Pedido.objects.filter(cliente=perfil_usuario)
+            .prefetch_related(
+                Prefetch(
+                    "sub_pedidos",
+                    queryset=PedidoVendedor.objects.select_related("vendedor"),
+                ),
+                Prefetch(
+                    "sub_pedidos__itens",
+                    queryset=ItemPedido.objects.select_related("produto"),
+                ),
+            )
+            .order_by("-data_criacao")
+        )
+        ultimos_pedidos = pedidos_qs[:5]
+
+    elif perfil_usuario.tipo == Perfil.TipoUsuario.VENDEDOR:
+        produtos_vendedor = Produto.objects.filter(vendedor=perfil).values_list("id", flat=True)
+
+        pedidos_qs = (
+            Pedido.objects.filter(sub_pedidos__itens__produto_id__in=produtos_vendedor)
+            .distinct()
+            .prefetch_related(
+                Prefetch(
+                    "sub_pedidos",
+                    queryset=PedidoVendedor.objects.prefetch_related(
+                        Prefetch(
+                            "itens",
+                            queryset=ItemPedido.objects.filter(produto_id__in=produtos_vendedor).select_related("produto")
+                        )
+                    ).select_related("vendedor")
+                )
+            )
+            .select_related("cliente")
+            .order_by("-data_criacao")
+        )
+        ultimos_pedidos = pedidos_qs[:5]
+
+ 
     dashboard_data = {
-        "baixo_estoque": [],
-        "ultimos_pedidos": []
+        "baixo_estoque": [], 
+        "ultimos_pedidos": ultimos_pedidos
     }
 
+ 
     avaliacoes_produtos = Avaliacao.objects.none()
-
     if perfil.tipo == 'VENDEDOR':
         produtos = Produto.objects.filter(vendedor=perfil)
-
         if produtos.exists():
             produto_content_type = ContentType.objects.get_for_model(Produto)
-
             avaliacoes_produtos = Avaliacao.objects.filter(
                 content_type=produto_content_type,
                 object_id__in=produtos.values_list('id', flat=True)
