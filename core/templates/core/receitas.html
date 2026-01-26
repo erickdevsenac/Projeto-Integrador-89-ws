@@ -28,9 +28,13 @@
   <div class="text-center mb-5">
     <h2 class="display-5">Nossas Receitas</h2>
     <p class="lead text-muted">Inspire-se com pratos deliciosos e sustentáveis.</p>
-    {% if user.is_authenticated %}
-    <a href="{% url 'core:criar_receita' %}" class="btn btn-primary">Cadastrar uma receita</a>
-    {% endif %}
+{% if request.user.is_authenticated %}
+  {% if request.user.is_staff or request.user.perfil.tipo == "VENDEDOR" %}
+    <a href="{% url 'core:criar_receita' %}" class="btn btn-primary">
+      Cadastrar uma receita
+    </a>
+  {% endif %}
+{% endif %}
   </div>
 
   <div class="row">
