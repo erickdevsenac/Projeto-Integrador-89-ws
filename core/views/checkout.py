@@ -337,16 +337,12 @@ def aplicar_cupom(request):
 
 @login_required(login_url="/login/")
 def meus_pedidos(request):
-    """
-    Exibe a lista de pedidos do cliente ou do vendedor.
-    """
-    try:
-        perfil_usuario = request.user.perfil
-    except Perfil.DoesNotExist:
-        messages.error(request, "Seu perfil não foi encontrado.")
-        return redirect("core:index")
+    perfil_usuario = request.user.perfil
 
-    if perfil_usuario.tipo == Perfil.TipoUsuario.CLIENTE:
+    ultimos_pedidos = Pedido.objects.none()
+    pedidos_qs = Pedido.objects.none()
+
+    if perfil_usuario.tipo in [Perfil.TipoUsuario.CLIENTE, 'ONG']:
         pedidos_qs = (
             Pedido.objects.filter(cliente=perfil_usuario)
             .prefetch_related(
@@ -361,17 +357,35 @@ def meus_pedidos(request):
             )
             .order_by("-data_criacao")
         )
+        ultimos_pedidos = pedidos_qs[:5]
+
     elif perfil_usuario.tipo == Perfil.TipoUsuario.VENDEDOR:
+       
+        produtos_vendedor = perfil_usuario.produtos.values_list('id', flat=True)
+
+       
         pedidos_qs = (
-            PedidoVendedor.objects.filter(vendedor=perfil_usuario)
-            .select_related("pedido_principal__cliente")
-            .prefetch_related(
-                Prefetch("itens", queryset=ItemPedido.objects.select_related("produto"))
+            Pedido.objects.filter(
+                sub_pedidos__itens__produto_id__in=produtos_vendedor
             )
-            .order_by("-pedido_principal__data_criacao")
+            .distinct()
+            .prefetch_related(
+                Prefetch(
+                    "sub_pedidos",
+                    queryset=PedidoVendedor.objects.prefetch_related(
+                        Prefetch(
+                            "itens",
+                            queryset=ItemPedido.objects.filter(
+                                produto_id__in=produtos_vendedor
+                            ).select_related("produto")
+                        )
+                    ).select_related("vendedor")
+                )
+            )
+            .select_related("cliente")
+            .order_by("-data_criacao")
         )
-    else:
-        pedidos_qs = []
+        ultimos_pedidos = pedidos_qs[:5]
 
     paginator = Paginator(pedidos_qs, 10)
     page_number = request.GET.get("page")
@@ -379,6 +393,7 @@ def meus_pedidos(request):
 
     context = {
         "page_obj": page_obj,
+        "ultimos_pedidos": ultimos_pedidos,
         "tipo_usuario": perfil_usuario.tipo,
     }
     return render(request, "core/meus_pedidos.html", context)
