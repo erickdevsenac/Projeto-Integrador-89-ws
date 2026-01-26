@@ -7,21 +7,27 @@
   <link rel="stylesheet" href="{% static 'core/css/style_timedev.css' %}">
 {% endblock head %}
 
-<a href="https://ww3.ms.senac.br/"><img class="logosenac" src="{% static 'core/img/logosenac.png' %}" alt=""></a>
+<div class="logo-container">
+    <a href="https://ww3.ms.senac.br/">
+        <img class="logosenac" src="{% static 'core/img/logosenac.png' %}" alt="Logo Senac">
+    </a>
+</div>
+
 <section class="container-fluid">
     <div>
-     <h1>Time de Desenvolvimento</h1>
+        <h1>Time de Desenvolvimento</h1>
     </div>
 
     <div class="caixa container-fluid">
         {% for pessoa in equipe %}
         <div class="aluno1">
-            <a href="{{pessoa.link_git}}.png"><img class="fotos-alunos" src="{{pessoa.link_git}}.png" alt=""></a>
+            <a href="{{pessoa.link_git}}.png">
+                <img class="fotos-alunos" src="{{pessoa.link_git}}.png" alt="">
+            </a>
             <h3>{{pessoa.nome}}</h3>
-            <p><a href="{{ pessoa.link_git}}">Saiba mais sobre-mim</a></p>
+            <p><a href="{{ pessoa.link_git }}">Saiba mais sobre mim</a></p>
         </div>
         {% endfor %}
     </div>
-    </section>
-
-    {% endblock %}
+</section>
+{% endblock %}
