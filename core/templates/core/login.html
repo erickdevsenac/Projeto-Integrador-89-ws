@@ -12,7 +12,7 @@
     <div class="login-box">
         <h2 class="login-title">Entrar</h2>
     
-        <form id="login-form" method="post" action="{% url 'core:telalogin' %}">
+        <form id="login-form" method="post" action="{% url 'core:login' %}">
             {% csrf_token %}
             <label for="id_email" class="form-label">E-mail</label>
             <input type="email" name="email" id="id_email" class="text-input" required>

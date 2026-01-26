@@ -39,7 +39,7 @@ urlpatterns = [
     path("configuracoes/", auth.configuracoes, name="configuracoes"),
     path("logout/", auth.logout_view, name="logout"),
     
-    path("login/", auth.login_view, name="telalogin"),
+    path("login/", auth.login_view, name="login"),
     path("cadastro/", auth.cadastro, name="cadastro"),
     path("cadastro/completar/", auth.completar_cadastro, name="completar_cadastro"),
     path("ativar-conta/<uidb64>/<token>/", auth.ativar_conta, name="ativar_conta"),

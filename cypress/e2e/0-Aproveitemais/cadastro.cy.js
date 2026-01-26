@@ -21,7 +21,7 @@ describe('Funcionalidade de Cadastro de Usuário no Aproveite+', () => {
         cy.get('.btn-success').contains('Cadastrar').click(); 
         
         // ASSERT (Verificar)
-        cy.url().should('include', '/telalogin');
+        cy.url().should('include', '/login');
         
         cy.get('.alert-success').should('be.visible').and('contain', 'Conta criada com sucesso');
     });

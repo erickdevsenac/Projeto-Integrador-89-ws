@@ -55,7 +55,7 @@ def cadastro(request):
                 user.delete()
                 return render(request, "core/cadastro_step1.html", {"form": form})
             
-            return redirect('core:telalogin') 
+            return redirect('core:login') 
     else:
         form = CadastroStep1Form()
     return render(request, "core/cadastro_step1.html", {"form": form})
@@ -120,7 +120,7 @@ def login_view(request):
 
     return render(
         request,
-        "core/telalogin.html",
+        "core/login.html",
         {"mensagem": mensagem},
         status=status_code
     )
@@ -225,7 +225,7 @@ def ativar_conta(request, uidb64, token):
         return redirect('core:completar_cadastro') 
     else:
         messages.error(request, "Link de ativação inválido ou expirado.")
-        return redirect('core:telalogin') 
+        return redirect('core:login') 
     
 def redefinir_senha_confirmar(request, uidb64, token):
     try:
@@ -236,14 +236,14 @@ def redefinir_senha_confirmar(request, uidb64, token):
 
     if user is None or not default_token_generator.check_token(user, token):
         messages.error(request, "Link de redefinição de senha inválido ou expirado.")
-        return redirect('core:telalogin')
+        return redirect('core:login')
 
     if request.method == 'POST':
         form = SetPasswordForm(user, request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, 'Sua senha foi redefinida com sucesso! Você já pode fazer login.')
-            return redirect('core:telalogin')
+            return redirect('core:login')
         else:
             messages.error(request, 'Houve um erro no formulário. Tente novamente.')
     else:
