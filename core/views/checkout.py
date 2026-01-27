@@ -2,7 +2,7 @@
 
 import json
 from decimal import Decimal
-
+from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -11,7 +11,6 @@ from django.db.models import Prefetch
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
-
 from core.forms import CheckoutForm
 from core.models import (
     Cupom,
@@ -21,7 +20,8 @@ from core.models import (
     PedidoVendedor,
     Perfil,
     Produto,
-)
+    
+    )
 
 
 @login_required(login_url="/login/")
@@ -360,32 +360,14 @@ def meus_pedidos(request):
         ultimos_pedidos = pedidos_qs[:5]
 
     elif perfil_usuario.tipo == Perfil.TipoUsuario.VENDEDOR:
-       
-        produtos_vendedor = perfil_usuario.produtos.values_list('id', flat=True)
-
-       
-        pedidos_qs = (
-            Pedido.objects.filter(
-                sub_pedidos__itens__produto_id__in=produtos_vendedor
+            pedidos_qs = (
+                PedidoVendedor.objects
+                .filter(vendedor=perfil_usuario)
+                .select_related('pedido_principal', 'vendedor')
+                .prefetch_related('itens__produto')
+                .order_by('-pedido_principal__data_criacao')
             )
-            .distinct()
-            .prefetch_related(
-                Prefetch(
-                    "sub_pedidos",
-                    queryset=PedidoVendedor.objects.prefetch_related(
-                        Prefetch(
-                            "itens",
-                            queryset=ItemPedido.objects.filter(
-                                produto_id__in=produtos_vendedor
-                            ).select_related("produto")
-                        )
-                    ).select_related("vendedor")
-                )
-            )
-            .select_related("cliente")
-            .order_by("-data_criacao")
-        )
-        ultimos_pedidos = pedidos_qs[:5]
+    ultimos_pedidos = pedidos_qs[:5]
 
     paginator = Paginator(pedidos_qs, 10)
     page_number = request.GET.get("page")
@@ -397,3 +379,40 @@ def meus_pedidos(request):
         "tipo_usuario": perfil_usuario.tipo,
     }
     return render(request, "core/meus_pedidos.html", context)
+
+
+
+
+@login_required
+def painel_pedidos_vendedor(request):
+    vendedor = request.user.perfil
+
+    if vendedor.tipo != Perfil.TipoUsuario.VENDEDOR:
+        return redirect('core:perfil')
+
+    hoje = timezone.now().date()
+
+    pedidos_hoje = (
+        PedidoVendedor.objects
+        .filter(
+            vendedor=vendedor,
+            pedido_principal__data_criacao__date=hoje
+        )
+        .select_related('pedido_principal', 'vendedor')
+        .prefetch_related('itens__produto', 'itens__pacote_surpresa')
+    )
+
+    pedidos_anteriores = (
+        PedidoVendedor.objects
+        .filter(vendedor=vendedor)
+        .exclude(pedido_principal__data_criacao__date=hoje)
+        .select_related('pedido_principal', 'vendedor')
+        .prefetch_related('itens__produto', 'itens__pacote_surpresa')
+    )
+
+    context = {
+        'pedidos_hoje': pedidos_hoje,
+        'pedidos_anteriores': pedidos_anteriores,
+    }
+
+    return render(request, 'core/painel_pedidos_vendedor.html', context)
