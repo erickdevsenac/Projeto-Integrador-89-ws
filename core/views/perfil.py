@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db.models import Prefetch
-
+from django.db.models import F
 from core.models import Perfil, Produto, Avaliacao, Pedido, PedidoVendedor, ItemPedido
 from core.forms import CompleteClientProfileForm, CompletePartnerProfileForm
 
@@ -57,33 +57,38 @@ def perfil_detail(request):
         ultimos_pedidos = pedidos_qs[:5]
 
     elif perfil_usuario.tipo == Perfil.TipoUsuario.VENDEDOR:
-        produtos_vendedor = Produto.objects.filter(vendedor=perfil).values_list("id", flat=True)
+        produtos_vendedor = Produto.objects.filter(vendedor=perfil)
 
-        pedidos_qs = (
-            Pedido.objects.filter(sub_pedidos__itens__produto_id__in=produtos_vendedor)
-            .distinct()
-            .prefetch_related(
-                Prefetch(
-                    "sub_pedidos",
-                    queryset=PedidoVendedor.objects.prefetch_related(
-                        Prefetch(
-                            "itens",
-                            queryset=ItemPedido.objects.filter(produto_id__in=produtos_vendedor).select_related("produto")
-                        )
-                    ).select_related("vendedor")
-                )
+    baixo_estoque = produtos_vendedor.filter(
+        quantidade_estoque__gt=0,
+        quantidade_estoque__lte=F('estoque_minimo'),
+        ativo=True
+    )
+
+    produtos_ids = produtos_vendedor.values_list("id", flat=True)
+    pedidos_qs = (
+        Pedido.objects.filter(sub_pedidos__itens__produto_id__in=produtos_ids)
+        .distinct()
+        .prefetch_related(
+            Prefetch(
+                "sub_pedidos",
+                queryset=PedidoVendedor.objects.prefetch_related(
+                    Prefetch(
+                        "itens",
+                        queryset=ItemPedido.objects.filter(produto_id__in=produtos_ids).select_related("produto")
+                    )
+                ).select_related("vendedor")
             )
-            .select_related("cliente")
-            .order_by("-data_criacao")
         )
-        ultimos_pedidos = pedidos_qs[:5]
+        .select_related("cliente")
+        .order_by("-data_criacao")
+    )
+    ultimos_pedidos = pedidos_qs[:5]
 
- 
     dashboard_data = {
-        "baixo_estoque": [], 
+        "baixo_estoque": baixo_estoque,  
         "ultimos_pedidos": ultimos_pedidos
     }
-
  
     avaliacoes_produtos = Avaliacao.objects.none()
     if perfil.tipo == 'VENDEDOR':
