@@ -1,48 +1,35 @@
 header {
   background: linear-gradient(to right, #69dd96, #0e9725);
   color: white;
-  padding: 5px;
+  padding: 1px;
   border-radius: 15px;
-  margin: 20px;
+  margin: 20px; 
 }
 
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
 
 header .logo {
-  height: 100px;
-  padding-left: 5px;
-}
-
-header .divlogo{
-  margin-right: 20px;
+  height: 40px; 
 }
 
 header a h1 {
-  font-size: 30px;
+  font-size: 24px;
   font-family: 'Playfair Display', serif;
   color: #ffffff;
-  font-weight: 700px;
-  text-shadow: 5px 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 header .nav-link {
-  color: white;
-  font-weight: 400px;
+  color: white !important;
   transition: 0.3s ease;
 }
 
-header .nav-link i {
-  margin-right: 10px;
-  
+header .nav-link:hover {
+  opacity: 0.8;
 }
-
-header .search-login-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding-left: 100px;
-} 
-
-header .form {
-    display: flex;
-} 
-

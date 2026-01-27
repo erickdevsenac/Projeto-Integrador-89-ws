@@ -1,11 +1,8 @@
 {% load static %} 
 <header>
   <nav class="navbar navbar-expand-lg navbar-light">
-    <div class="container-fluid">
-      <a
-        class="navbar-brand d-flex align-items-center"
-        href="{% url 'core:index' %}"
-      >
+    <div class="container"> 
+      <a class="navbar-brand d-flex align-items-center" href="{% url 'core:index' %}">
         <img
           src="{% static 'assets/img/logo.png' %}"
           alt="logo"
@@ -30,19 +27,13 @@
       <div class="collapse navbar-collapse" id="menuPrincipal">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'core:receitas' %}"
-              ><i class="bi bi-egg-fried"></i> Receitas</a
-            >
+            <a class="nav-link" href="{% url 'core:receitas' %}"><i class="bi bi-egg-fried"></i> Receitas</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'core:videos' %}"
-              ><i class="bi bi-collection-play"></i> Vídeos</a
-            >
+            <a class="nav-link" href="{% url 'core:videos' %}"><i class="bi bi-collection-play"></i> Vídeos</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'core:produtos' %}"
-              ><i class="bi bi-shop-window"></i> Produtos</a
-            >
+            <a class="nav-link" href="{% url 'core:produtos' %}"><i class="bi bi-shop-window"></i> Produtos</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'core:dicas' %}"><i class="bi bi-recycle"></i> Dicas</a>
@@ -53,18 +44,8 @@
         </ul>
 
         <div class="d-flex align-items-center">
-          <form
-            class="d-flex me-3"
-            role="search"
-            method="get"
-            action="{% url 'core:produtos' %}"
-          >
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Pesquisar..."
-              name="termo"
-            />
+          <form class="d-flex me-3" role="search" method="get" action="{% url 'core:produtos' %}">
+            <input class="form-control me-2" type="search" placeholder="Pesquisar..." name="termo" />
             <button class="btn btn-outline-light" type="submit">
               <i class="bi bi-search"></i>
             </button>
@@ -73,64 +54,19 @@
           {% if user.is_authenticated %}
           <a href="{% url 'core:ver_carrinho' %}" class="btn btn-light position-relative me-3">
               <i class="bi bi-cart"></i>
-              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cart-item-count">
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                   {{ total_itens|default:0 }}
               </span>
           </a>
 
           <div class="dropdown">
-            <button
-              class="btn btn-secondary dropdown-toggle"
-              type="button"
-              id="dropdownMenuButton"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
               Olá, {{ user.username|truncatechars:15 }}
             </button>
-            <ul
-              class="dropdown-menu dropdown-menu-end"
-              aria-labelledby="dropdownMenuButton"
-            >
-              <li>
-                <a class="dropdown-item" href="{% url 'core:perfil' %}"
-                  ><i class="bi bi-person-circle"></i> Meu Perfil</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url "core:meus_pedidos" %}"
-                  ><i class="bi bi-box-seam"></i> Meus Pedidos</a
-                >
-              </li>
-              {% if user.perfil.tipo == 'VENDEDOR' %}
-
-              <li>
-                <a class="dropdown-item" href="{% url "core:vendedor_perfil" user.id %}">
-                 <i class="bi bi-shop"></i> Minha Loja
-                </a>
-              </li>
-              {% endif %}
-
-              <li>
-                <a class="dropdown-item" href="{% url 'core:configuracoes' %}"
-                  ><i class="bi bi-box-seam"></i> Configurações</a
-                >
-              </li>
-              {% if user.is_staff %}
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+              <li><a class="dropdown-item" href="{% url 'core:perfil' %}">Meu Perfil</a></li>
               <li><hr class="dropdown-divider" /></li>
-              <li>
-                <a class="dropdown-item" href="{% url 'admin:index' %}"
-                  ><i class="bi bi-gear"></i> Administração</a
-                >
-              </li>
-              {% endif %}
-
-              <li><hr class="dropdown-divider" /></li>
-              <li>
-                <a class="dropdown-item text-danger" href="{% url 'core:logout' %}"
-                  ><i class="bi bi-box-arrow-right"></i> Sair</a
-                >
-              </li>
+              <li><a class="dropdown-item text-danger" href="{% url 'core:logout' %}">Sair</a></li>
             </ul>
           </div>
 
