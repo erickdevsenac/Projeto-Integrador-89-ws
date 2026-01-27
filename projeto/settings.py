@@ -65,6 +65,7 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "storages",
     "django_extensions",
+    'django_cypress',
 ]
 
 if DEBUG:
@@ -73,6 +74,9 @@ if DEBUG:
 LOCAL_APPS = ["core"]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
+CELERY_BROKER_URL = 'html://localhost:9000'
+CYPRESS_FIXTURE_PATH = 'projeto/cypress/test'
 
 
 # ==============================================================================
