@@ -1,8 +1,16 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
 .footer-custom {
-    background: linear-gradient(to right, #01d472, #16b4fd);
+    background: linear-gradient(to right, #69dd96, #0e9725);
     color: #ffffff; 
     font-family: 'Segoe UI', system-ui, sans-serif;
     position: relative;
+    flex-shrink: 0;
+    margin-top: 50px; 
+    padding-top: 40px; 
 }
 
 .footer-logo {
@@ -60,6 +68,7 @@
 @media (max-width: 767px) {
     .footer-custom {
         text-align: center;
+        margin-top: 30px;
     }
     .footer-links a:hover {
         padding-left: 0;

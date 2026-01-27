@@ -116,6 +116,7 @@ urlpatterns = [
     # ROTAS DE PEDIDOS
     # ==============================================================================
     path("meus-pedidos/", checkout.meus_pedidos, name="meus_pedidos"),
+    path('vendedor/pedidos/',checkout.painel_pedidos_vendedor,name='painel_pedidos_vendedor'),
     # TODO:
     # path("pedido/<int:pedido_id>/", views.pedido_detalhe, name="pedido_detalhe"),
     # path("pedido/<int:pedido_id>/cancelar/", views.cancelar_pedido, name="cancelar_pedido"),

@@ -42,7 +42,19 @@
                 <div class="card-body">
                     <h5 class="card-title">Ações Rápidas</h5>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><a href="{% url 'core:meus_pedidos' %}">📦 Meus Pedidos</a></li>
+                        {% if perfil.tipo == 'VENDEDOR' %}
+                            <li class="list-group-item">
+                                <a href="{% url 'core:painel_pedidos_vendedor' %}">
+                                    📊 Painel de Pedidos
+                                </a>
+                            </li>
+                            {% else %}
+                            <li class="list-group-item">
+                                <a href="{% url 'core:meus_pedidos' %}">
+                                    📦 Meus Pedidos
+                                </a>
+                            </li>
+                            {% endif %}
                         <li class="list-group-item"><a href="{% url 'core:configuracoes' %}">⚙️ Configurações</a></li>
                         <li class="list-group-item"><a href="{% url 'core:alterar_senha' %}">🔑 Alterar Senha</a></li>
                     </ul>
@@ -81,19 +93,7 @@
                                 {% if dashboard.ultimos_pedidos %}
                                     {% for pedido in dashboard.ultimos_pedidos %}
                                         <div class="mb-3 p-3 border rounded bg-white">
-                                            <strong>Pedido #{{ pedido.numero_pedido }}</strong> - Cliente: {{ pedido.cliente.username }}<br>
-                                            Status: <span class="badge bg-secondary">{{ pedido.get_status_pagamento_display }}</span><br>
-                                            Valor total: <strong>R$ {{ pedido.valor_total|floatformat:2 }}</strong>
-
-                                            <ul class="mt-2">
-                                                {% for sub in pedido.sub_pedidos.all %}
-                                                    {% if sub.vendedor == perfil %}
-                                                        {% for item in sub.itens.all %}
-                                                            <li>{{ item.produto.nome }} - Quantidade: {{ item.quantidade }} - Preço: R$ {{ item.preco_unitario|floatformat:2 }}</li>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </ul>
+                                            <strong>Pedido #{{ pedido.numero_pedido }}</strong> | <strong>Cliente:</strong> {{ pedido.cliente }} | <strong>Data: </strong> {{ pedido.data_criacao|date:"d/m/Y H:i" }}
                                         </div>
                                     {% endfor %}
                                 {% else %}
