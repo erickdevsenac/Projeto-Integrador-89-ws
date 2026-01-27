@@ -1,0 +1,53 @@
+{% extends 'global/base.html' %}
+{% block content %}
+
+<div class="container my-5">
+    <h2>📊 Painel de Pedidos</h2>
+
+    <h4 class="mt-4">Pedidos de Hoje</h4>
+
+    {% if pedidos_hoje %}
+        {% for sub in pedidos_hoje %}
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body">
+                    <strong>
+                        Pedido #{{ sub.pedido_principal.numero_pedido }}
+                    </strong><br>
+
+                    Cliente:
+                    {{ sub.pedido_principal.cliente }}<br>
+
+                    Data:
+                    {{ sub.pedido_principal.data_criacao|date:"d/m/Y H:i" }}<br>
+
+                    Status:
+                    <span class="badge bg-secondary">
+                        {{ sub.get_status_display }}
+                    </span><br>
+
+                    Total do vendedor:
+                    <strong>
+                        R$ {{ sub.valor_subtotal|floatformat:2 }}
+                    </strong>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">Nenhum pedido hoje.</p>
+    {% endif %}
+
+    <h4 class="mt-5">Pedidos Anteriores</h4>
+
+    {% if pedidos_anteriores %}
+        {% for sub in pedidos_anteriores %}
+            <div class="border rounded p-3 mb-2">
+                Pedido #{{ sub.pedido_principal.numero_pedido }} –
+                {{ sub.pedido_principal.data_criacao|date:"d/m/Y" }}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">Nenhum pedido anterior.</p>
+    {% endif %}
+</div>
+
+{% endblock %}
