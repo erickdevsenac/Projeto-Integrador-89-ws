@@ -171,7 +171,9 @@ def perfil(request):
 def configuracoes(request):
     if request.method == "POST":
         if "excluir_conta" in request.POST:
-            request.user.delete()
+            print(request.user.is_active)
+            request.user.is_active = 0
+            request.user.save()
             messages.success(request, "Sua conta foi excluída com sucesso.")
             return redirect("core:index")
         
