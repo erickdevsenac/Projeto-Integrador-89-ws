@@ -1,35 +1,90 @@
-header {
-  background: linear-gradient(to right, #69dd96, #0e9725);
-  color: white;
-  padding: 1px;
-  border-radius: 15px;
-  margin: 20px; 
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
 }
 
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
+header {
+    background: linear-gradient(to right, #69dd96, #0e9725);
+    color: white;
+    padding: 1px 0; 
+    border-radius: 15px;
+    margin: 20px;
+}
+
+header .navbar-brand {
+    display: flex;
+    align-items: center;
 }
 
 header .logo {
-  height: 40px; 
+    height: 40px; 
+    width: auto;
 }
 
-header a h1 {
-  font-size: 24px;
-  font-family: 'Playfair Display', serif;
-  color: #ffffff;
-  font-weight: 700;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+header h1 {
+    font-size: 28px;
+    font-family: 'Playfair Display', serif;
+    color: #ffffff;
+    font-weight: 700;
+    margin-bottom: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 header .nav-link {
-  color: white !important;
-  transition: 0.3s ease;
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 500;
+    display: flex;
+    align-items: center; 
+    transition: 0.3s ease;
+    padding: 0.5rem 1rem;
 }
 
 header .nav-link:hover {
-  opacity: 0.8;
+    color: #fff !important;
+    transform: translateY(-1px);
+}
+
+header .nav-link i {
+    font-size: 1.1rem;
+    line-height: 0;
+}
+
+header .search-login-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+header .btn-outline-light {
+    border: 1px solid rgba(255, 255, 255, 0.6) !important; 
+    border-radius: 8px !important;
+    padding: 6px 12px !important; 
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+header .btn-success {
+    background-color: #157347;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 8px;
+}
+
+header .dropdown-toggle {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 8px;
+}
+
+header .dropdown-toggle:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 768px) {
+    header {
+        margin: 10px;
+    }
 }
