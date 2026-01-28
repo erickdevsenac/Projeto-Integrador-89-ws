@@ -38,6 +38,8 @@ def perfil_detail(request):
 
     ultimos_pedidos = []
 
+    if Perfil.objects.filter(cnpj=request.POST.get('cnpj')).exists():
+        return render(request, 'core:cadastro', {'erro': 'CNPJ já cadastrado'})
   
     if perfil_usuario.tipo in [Perfil.TipoUsuario.CLIENTE, 'ONG']:
         pedidos_qs = (
