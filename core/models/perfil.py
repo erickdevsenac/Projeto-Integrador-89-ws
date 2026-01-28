@@ -51,22 +51,21 @@ class Perfil(TimeStampedModel):
         help_text="Foto do perfil ou logo da empresa/ONG.",
     )
     telefone = models.CharField(
-        max_length=20, help_text="Telefone com DDD, ex: (11) 99999-9999"
+        max_length=20, blank=True, help_text="Telefone com DDD, ex: (11) 99999-9999"
     )
     endereco = models.CharField(max_length=255)
     cep = models.CharField(
-        max_length=10, blank=True, help_text="CEP no formato 00000-000"
+        max_length=10, help_text="CEP no formato 00000-000"
     )
-    cidade = models.CharField(max_length=100, blank=True)
+    cidade = models.CharField(max_length=100)
     estado = models.CharField(
-        max_length=2, blank=True, help_text="Sigla do estado, ex: SP"
+        max_length=2, help_text="Sigla do estado, ex: SP"
     )
 
     # --- CAMPO ESPECÍFICO PARA CLIENTES ---
     nome_completo = models.CharField(
         "Nome Completo",
         max_length=255,
-        blank=True,
         help_text="Nome completo do cliente.",
     )
 
@@ -74,28 +73,24 @@ class Perfil(TimeStampedModel):
     nome_negocio = models.CharField(
         "Nome da Loja/ONG",
         max_length=255,
-        blank=True,
         help_text="O nome comercial do vendedor ou da ONG.",
     )
     cnpj = models.CharField(
         "CNPJ",
         max_length=18,
-        unique=True,
-        null=True,
-        blank=True,
+        unique= True,
         help_text="Obrigatório para Vendedores e ONGs.",
     )
     descricao_parceiro = models.TextField(
         "Descrição da Empresa/ONG",
-        blank=True,
         help_text="Uma breve descrição sobre o parceiro.",
     )
 
     # --- CAMPOS ESPECÍFICOS APENAS PARA ONGS ---
-    imagem_carrossel1 = models.ImageField(upload_to="carrossel/", blank=True, null=True)
-    imagem_carrossel2 = models.ImageField(upload_to="carrossel/", blank=True, null=True)
-    imagem_carrossel3 = models.ImageField(upload_to="carrossel/", blank=True, null=True)
-    objetivo = models.TextField("Objetivos da ONG", blank=True)
+    imagem_carrossel1 = models.ImageField(upload_to="carrossel/")
+    imagem_carrossel2 = models.ImageField(upload_to="carrossel/")
+    imagem_carrossel3 = models.ImageField(upload_to="carrossel/")
+    objetivo = models.TextField("Objetivos da ONG")
 
     # --- AVALIAÇÕES (APENAS PARA VENDEDORES) ---
     avaliacao_media = models.DecimalField(
