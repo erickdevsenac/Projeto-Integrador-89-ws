@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-br">
     {% include 'parciais/_head.html' %}
+    {% block head %}{% endblock head %}
+</head>
 
 <body class="d-flex flex-column min-vh-100 {% if request.session.tema == 'escuro' %}tema-escuro{% endif %} {% if request.session.fonte == 'grande' %}fonte-grande{% elif request.session.fonte == 'extra_grande' %}fonte-extra-grande{% endif %}">
 

@@ -5,7 +5,7 @@
 {% block head %}
 <title>Dicas Sustentáveis</title>
 <link rel="stylesheet" href="{% static 'core/style_dicas.css' %}">
-<style>
+{% comment %} <style>
 body {
     font-family: Arial, sans-serif;
 }
@@ -37,10 +37,9 @@ h1, h2 {
 .btn-primary:hover {
     background-color: #2e7d32;
 }
- </style>
+ </style> {% endcomment %}
 {% endblock head %}
 
- 
 <body class="bg-light">
  
     <div class="container mt-5">

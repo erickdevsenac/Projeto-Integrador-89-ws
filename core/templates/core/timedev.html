@@ -1,12 +1,12 @@
 {% extends 'global/base.html' %}
 {% load static %}
 
-{% block content %}
 {% block head %}
-  <title>Time Desenvolvedores</title>
-  <link rel="stylesheet" href="{% static 'core/css/style_timedev.css' %}">
+    <title>Time Desenvolvedores</title>
+    <link rel="stylesheet" href="{% static 'core/css/style_timedev.css' %}">
 {% endblock head %}
 
+{% block content %}
 <div class="logo-container">
     <a href="https://ww3.ms.senac.br/">
         <img class="logosenac" src="{% static 'core/img/logosenac.png' %}" alt="Logo Senac">
@@ -30,4 +30,4 @@
         {% endfor %}
     </div>
 </section>
-{% endblock %}
+{% endblock content%}
