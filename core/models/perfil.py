@@ -80,6 +80,9 @@ class Perfil(TimeStampedModel):
         max_length=18,
         unique= True,
         help_text="Obrigatório para Vendedores e ONGs.",
+        blank=True, 
+        null=True,      # Permite valor Nulo no banco
+        default=None
     )
     descricao_parceiro = models.TextField(
         "Descrição da Empresa/ONG",

@@ -2,26 +2,19 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.db.models import Prefetch
-from django.db.models import F
+from django.db.models import Prefetch, F
 from core.models import Perfil, Produto, Avaliacao, Pedido, PedidoVendedor, ItemPedido
 from core.forms import CompleteClientProfileForm, CompletePartnerProfileForm
 
 @login_required
 def perfil_detail(request):
-    """
-    Exibe a página de perfil do usuário logado ou de outro usuário,
-    mostrando dados do perfil, dashboard e avaliações dos produtos.
-    """
-
     perfil, created = Perfil.objects.get_or_create(usuario=request.user)
     perfil_usuario = request.user.perfil
 
-   
     if perfil.tipo == 'CLIENTE':
         FormClass = CompleteClientProfileForm
     elif perfil.tipo in ['VENDEDOR', 'ONG']:
-        FormClass = CompletePartnerProfileForm  
+        FormClass = CompletePartnerProfileForm
     else:
         FormClass = None
 
@@ -36,11 +29,12 @@ def perfil_detail(request):
         else:
             form = FormClass(instance=perfil)
 
-    ultimos_pedidos = []
-
-    if Perfil.objects.filter(cnpj=request.POST.get('cnpj')).exists():
+    if request.method == 'POST' and Perfil.objects.filter(cnpj=request.POST.get('cnpj')).exclude(id=perfil.id).exists():
         return render(request, 'core:cadastro', {'erro': 'CNPJ já cadastrado'})
-  
+
+    ultimos_pedidos = []
+    baixo_estoque = []
+
     if perfil_usuario.tipo in [Perfil.TipoUsuario.CLIENTE, 'ONG']:
         pedidos_qs = (
             Pedido.objects.filter(cliente=perfil_usuario)
@@ -61,38 +55,41 @@ def perfil_detail(request):
     elif perfil_usuario.tipo == Perfil.TipoUsuario.VENDEDOR:
         produtos_vendedor = Produto.objects.filter(vendedor=perfil)
 
-    baixo_estoque = produtos_vendedor.filter(
-        quantidade_estoque__gt=0,
-        quantidade_estoque__lte=F('estoque_minimo'),
-        ativo=True
-    )
-
-    produtos_ids = produtos_vendedor.values_list("id", flat=True)
-    pedidos_qs = (
-        Pedido.objects.filter(sub_pedidos__itens__produto_id__in=produtos_ids)
-        .distinct()
-        .prefetch_related(
-            Prefetch(
-                "sub_pedidos",
-                queryset=PedidoVendedor.objects.prefetch_related(
-                    Prefetch(
-                        "itens",
-                        queryset=ItemPedido.objects.filter(produto_id__in=produtos_ids).select_related("produto")
-                    )
-                ).select_related("vendedor")
-            )
+        baixo_estoque = produtos_vendedor.filter(
+            quantidade_estoque__gt=0,
+            quantidade_estoque__lte=F('estoque_minimo'),
+            ativo=True
         )
-        .select_related("cliente")
-        .order_by("-data_criacao")
-    )
-    ultimos_pedidos = pedidos_qs[:5]
+
+        produtos_ids = produtos_vendedor.values_list("id", flat=True)
+        pedidos_qs = (
+            Pedido.objects.filter(sub_pedidos__itens__produto_id__in=produtos_ids)
+            .distinct()
+            .prefetch_related(
+                Prefetch(
+                    "sub_pedidos",
+                    queryset=PedidoVendedor.objects.prefetch_related(
+                        Prefetch(
+                            "itens",
+                            queryset=ItemPedido.objects.filter(produto_id__in=produtos_ids).select_related("produto")
+                        )
+                    ).select_related("vendedor")
+                )
+            )
+            .select_related("cliente")
+            .order_by("-data_criacao")
+        )
+        ultimos_pedidos = pedidos_qs[:5]
 
     dashboard_data = {
-        "baixo_estoque": baixo_estoque,  
+        "baixo_estoque": baixo_estoque,
         "ultimos_pedidos": ultimos_pedidos
     }
- 
+
     avaliacoes_produtos = Avaliacao.objects.none()
+    total_avaliacoes = 0
+    media_avaliacoes = 0
+
     if perfil.tipo == 'VENDEDOR':
         produtos = Produto.objects.filter(vendedor=perfil)
         if produtos.exists():
@@ -106,11 +103,11 @@ def perfil_detail(request):
             for avaliacao in avaliacoes_produtos:
                 avaliacao.produto = produtos_dict.get(avaliacao.object_id)
 
-    total_avaliacoes = avaliacoes_produtos.count()
-    media_avaliacoes = (
-        sum(a.nota for a in avaliacoes_produtos) / total_avaliacoes
-        if total_avaliacoes > 0 else 0
-    )
+            total_avaliacoes = avaliacoes_produtos.count()
+            media_avaliacoes = (
+                sum(a.nota for a in avaliacoes_produtos) / total_avaliacoes
+                if total_avaliacoes > 0 else 0
+            )
 
     context = {
         "perfil": perfil,
