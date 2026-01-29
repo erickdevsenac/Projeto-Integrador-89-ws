@@ -72,6 +72,8 @@ urlpatterns = [
     path('editar_produto/<int:produto_id>/', marketplace.editar_produto, name='editar_produto'),
     path('excluir_produto/<int:produto_id>/', marketplace.excluir_produto, name='excluir_produto'),
     path('editar_produto', marketplace.editar_produto, name='editar_produto'),
+    path("pacote/editar/<int:pacote_id>/", marketplace.editar_pacote, name="editar_pacote"),
+    path("pacote/excluir/<int:pacote_id>/", marketplace.excluir_pacote, name="excluir_pacote"),
     # TODO:
     # path("categoria/<slug:categoria_slug>/", views.produtos_por_categoria, name="produtos_categoria"),
     # TODO:
