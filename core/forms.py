@@ -32,7 +32,9 @@ class CadastroPacoteSurpresa(forms.ModelForm):
             "data_disponibilidade_inicio",
             "data_disponibilidade_fim",
             "instrucoes_especiais",
-            "preco", 
+            "preco",
+            "imagem",
+            "quantidade_estoque"
         ]
         widgets = {
             "data_disponibilidade_inicio": forms.DateInput(
