@@ -17,6 +17,7 @@ from .models import (
     Perfil,
     Produto,
     Receita,
+    CategoriaReceita,
 )
 
 
@@ -132,3 +133,4 @@ admin.site.register(FaleConosco)
 admin.site.register(Dica)
 admin.site.register(CategoriaDica)
 admin.site.register(PacoteSurpresa)
+admin.site.register(CategoriaReceita)
