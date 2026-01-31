@@ -32,7 +32,9 @@ class CadastroPacoteSurpresa(forms.ModelForm):
             "data_disponibilidade_inicio",
             "data_disponibilidade_fim",
             "instrucoes_especiais",
-            "preco", 
+            "preco",
+            "imagem",
+            "quantidade_estoque"
         ]
         widgets = {
             "data_disponibilidade_inicio": forms.DateInput(
@@ -226,7 +228,42 @@ class CheckoutForm(forms.ModelForm):
             'endereco_entrega': "Confirme ou altere o Endereço de Entrega",
             'forma_pagamento': "Escolha a Forma de Pagamento",
         }
+class PacoteSurpresaForm(forms.ModelForm):
+    class Meta:
+        model = PacoteSurpresa
+        fields = [
+            "nome",
+            "descricao",
+            "preco",
+            "imagem",
+            "quantidade_estoque",
+            "ativo",
+            "tipo_conteudo",
+            "instrucoes_especiais",
+            "data_disponibilidade_inicio",
+            "data_disponibilidade_fim",
+            "produtos_possiveis",
+        ]
+        widgets = {
+            "nome": forms.TextInput(attrs={"class": "form-control", "placeholder": "Nome do pacote"}),
+            "descricao": forms.Textarea(attrs={"class": "form-control", "rows": 3, "placeholder": "Descrição do pacote"}),
+            "preco": forms.NumberInput(attrs={"class": "form-control", "step": "0.01"}),
+            "quantidade_estoque": forms.NumberInput(attrs={"class": "form-control"}),
+            "ativo": forms.CheckboxInput(attrs={"class": "form-check-input"}),
+            "tipo_conteudo": forms.TextInput(attrs={"class": "form-control", "placeholder": "Ex: Frutas e Vegetais"}),
+            "instrucoes_especiais": forms.Textarea(attrs={"class": "form-control", "rows": 2}),
+            "data_disponibilidade_inicio": forms.DateInput(attrs={"class": "form-control", "type": "date"}),
+            "data_disponibilidade_fim": forms.DateInput(attrs={"class": "form-control", "type": "date"}),
+            "produtos_possiveis": forms.SelectMultiple(attrs={"class": "form-control"}),
+        }
 
+    def clean(self):
+        cleaned_data = super().clean()
+        inicio = cleaned_data.get("data_disponibilidade_inicio")
+        fim = cleaned_data.get("data_disponibilidade_fim")
+
+        if inicio and fim and fim < inicio:
+            self.add_error("data_disponibilidade_fim", "A data de fim não pode ser anterior à data de início.")
 # ==============================================================================
 # OUTROS FORMULÁRIOS (AVALIAÇÃO, CONFIGURAÇÃO)
 # ==============================================================================

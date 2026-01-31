@@ -22,7 +22,6 @@ gunicorn==23.0.0
 iniconfig==2.3.0
 jmespath==1.0.1
 Markdown==3.9
-mysqlclient==2.2.7
 packaging==25.0
 pillow==11.3.0
 pluggy==1.6.0
@@ -42,3 +41,4 @@ urllib3==2.5.0
 waitress==3.0.2
 watchdog==6.0.0
 whitenoise==6.11.0
+

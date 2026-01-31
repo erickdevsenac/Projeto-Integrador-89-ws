@@ -45,13 +45,13 @@ def vendedor(request, usuario_id):
     )
 
     produtos_vendedor = vendedor_perfil.produtos.filter(ativo=True)
-    pacote_detalhe = vendedor_perfil.pacote.filter(ativo=True)
+
+    pacotes = vendedor_perfil.pacote.filter(ativo=True)
 
     context = {
         "vendedor": vendedor_perfil,
         "produtos": produtos_vendedor,
-        "pacotes": pacote_detalhe,
-
+        "pacotes": pacotes,
     }
 
     return render(request, "core/vendedor.html", context)

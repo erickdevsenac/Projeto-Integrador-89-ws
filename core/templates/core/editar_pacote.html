@@ -1,0 +1,66 @@
+{% extends 'global/base.html' %}
+{% load static %}
+
+{% block head %}
+    <title>Editar Pacote Surpresa - {{ pacote.nome }}</title>
+    <link rel="stylesheet" href="{% static 'core/css/style_vendedor.css' %}">
+{% endblock head %}
+
+{% block content %}
+<div class="loja-container editar-produto-container">
+    <h2>Editar Pacote Surpresa: {{ pacote.nome }}</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data" class="form-editar-produto">
+        {% csrf_token %}
+
+        {# Campos principais: nome, descrição e preço #}
+        <div class="form-group">
+            {{ form.nome.label_tag }}
+            {{ form.nome }}
+            {% if form.nome.errors %}
+                <div class="text-danger">{{ form.nome.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.descricao.label_tag }}
+            {{ form.descricao }}
+            {% if form.descricao.errors %}
+                <div class="text-danger">{{ form.descricao.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.preco.label_tag }}
+            {{ form.preco }}
+            {% if form.preco.errors %}
+                <div class="text-danger">{{ form.preco.errors }}</div>
+            {% endif %}
+        </div>
+
+        {# Outros campos do formulário, como imagem, instruções especiais etc. #}
+        {% for field in form %}
+            {% if field.name not in "nome descricao preco" %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="text-danger">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        <button type="submit" class="btn btn-success mt-3">Salvar Alterações</button>
+        <a href="{% url 'core:vendedor_perfil' usuario_id=pacote.vendedor.usuario.id %}" class="btn btn-secondary mt-3">Cancelar</a>
+    </form>
+</div>
+{% endblock content %}
