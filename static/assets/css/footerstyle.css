@@ -1,36 +1,31 @@
-html, body {
-    height: 100%;
-    margin: 0;
-}
-
 .footer-custom {
     background: linear-gradient(to right, #69dd96, #0e9725);
-    color: #ffffff; 
+    color: #ffffff;
     font-family: 'Segoe UI', system-ui, sans-serif;
-    position: relative;
-    flex-shrink: 0;
-    margin-top: 50px; 
-    padding-top: 40px; 
+    padding-top: 10px;
 }
 
 .footer-logo {
-    max-width: 130px;
+    max-width: 100px;
     height: auto;
+    margin: 0 auto;
+    display: block;
 }
 
 .brand-text {
-    font-weight: 600;
-    font-size: 1.1rem;
-    margin-bottom: 0; 
+    font-size: 1rem;
+    line-height: 1.6;
+    opacity: 0.95;
+    max-width: 380px;
+    margin: 0 auto;
 }
 
 .footer-title {
     font-size: 1.1rem;
     font-weight: 700;
-    margin-bottom: 20px;
     text-transform: uppercase;
+    margin-bottom: 25px;
     letter-spacing: 1px;
-    color: rgba(255, 255, 255, 0.9);
 }
 
 .footer-links {
@@ -39,41 +34,41 @@ html, body {
 }
 
 .footer-links li {
-    margin-bottom: 12px;
+    margin-bottom: 15px;
 }
 
 .footer-links a {
-    color: rgba(255, 255, 255, 0.85);
+    color: #ffffff;
     text-decoration: none;
-    transition: all 0.3s ease;
-    font-size: 0.95rem;
+    opacity: 0.8;
+    transition: 0.3s ease;
 }
 
 .footer-links a:hover {
-    color: #ffffff;
-    padding-left: 8px; 
-    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    opacity: 1;
+    padding-left: 5px;
 }
 
-.footer-bottom {
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 20px 0;
+.footer-divider {
+    border: 0;
+    border-top: 1px solid #ffffff; 
+    margin: 20px auto;
+    width: 100%;
+    opacity: 1 !important;
+}
+
+.senac-logo-footer {
+    max-width: 170px;
+    filter: brightness(0) invert(1);
 }
 
 .copyright {
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.7);
+    opacity: 0.7;
+    padding-bottom: 20px;
 }
 
-@media (max-width: 767px) {
-    .footer-custom {
-        text-align: center;
-        margin-top: 30px;
-    }
-    .footer-links a:hover {
-        padding-left: 0;
-    }
-    .footer-title {
-        margin-top: 20px;
-    }
+@media (max-width: 991px) {
+    .footer-custom { text-align: center; }
+    .brand-text { margin-bottom: 30px; }
 }

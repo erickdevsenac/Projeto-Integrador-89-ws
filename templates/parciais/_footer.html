@@ -1,19 +1,21 @@
 {% load static %}
- 
+
 {% block head %}
 <link rel="stylesheet" href="{% static 'assets/css/footerstyle.css' %}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 {% endblock head %}
- 
+
 <footer class="footer-custom mt-auto">
     <div class="container">
-        <div class="row py-5">
-            <div class="col-12 col-md-4 mb-4 mb-md-0 text-center text-md-start">
-                <img src="{% static 'assets/img/logo.png' %}" alt="Logo Sustentabilidade" class="footer-logo mb-3">
-                <p class="brand-text">Sustentabilidade Alimentar</p>
+        <div class="row py-5 justify-content-between align-items-start">
+            
+            <div class="col-12 col-lg-4 mb-4 mb-lg-0 text-center">
+                <img src="{% static 'assets/img/logo.png' %}" alt="Logo Aproveite Mais" class="footer-logo mb-3">
+                <p class="brand-text">
+                    Transformamos o desperdício em oportunidade para que você aproveite mais cada recurso, nutrindo o planeta e fortalecendo o consumo consciente em cada escolha.
+                </p>
             </div>
- 
-            <div class="col-6 col-md-4 mb-4 mb-md-0">
+
+            <div class="col-6 col-lg-2 mb-4 mb-lg-0">
                 <h5 class="footer-title">Institucional</h5>
                 <ul class="footer-links">
                     <li><a href="{% url 'core:contato' %}">Fale conosco</a></li>
@@ -21,8 +23,8 @@
                     <li><a href="{% url 'core:timedev' %}">Equipe de Desenvolvimento</a></li>
                 </ul>
             </div>
- 
-            <div class="col-6 col-md-4 mb-4 mb-md-0">
+
+            <div class="col-6 col-lg-3 mb-4 mb-lg-0">
                 <h5 class="footer-title">Plataforma</h5>
                 <ul class="footer-links">
                     <li><a href="{% url 'core:produtos' %}">Loja Sustentável</a></li>
@@ -31,13 +33,13 @@
                 </ul>
             </div>
         </div>
- 
-        <div class="footer-bottom">
-            <div class="row align-items-center">
-                <div class="col-md-12 text-center">
-                    <p class="copyright mb-0">© 2025 Sustentabilidade Alimentar. Todos os direitos reservados.</p>
-                </div>
+
+        <div class="footer-bottom text-center">
+            <div class="senac-container mb-3">
+                <img src="{% static 'assets/img/senac.png' %}" alt="Logo Senac MS" class="senac-logo-footer">
             </div>
+            <hr class="footer-divider">
+            <p class="copyright mb-0">© 2025 Senac-MS Ponta Porã. Todos os direitos reservados.</p>
         </div>
     </div>
 </footer>
