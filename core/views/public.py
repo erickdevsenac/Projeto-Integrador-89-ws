@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 
 from core.models import EquipeDev, PacoteSurpresa, Perfil
-
+from django.contrib.staticfiles.storage import staticfiles_storage
 
 def index(request):
     context = PacoteSurpresa.objects.filter(ativo=True).order_by("-id")[:8]
@@ -66,3 +66,16 @@ def pacote_detalhe(request, pacote_id):
     )
     context = {"pacote": pacote}
     return render(request, "core/pacote_detalhe.html", context)
+
+
+
+def ativar_conta_view(request):
+    logo_relative_url = staticfiles_storage.url('assets/img/logo.png')
+    logo_url = request.build_absolute_uri(logo_relative_url) 
+    
+    context = {
+        'logo_url': logo_url,
+        'user': user,
+        'activation_link': activation_link,
+}
+    return render(request, 'core/ativacao_conta.html', context)

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -85,12 +86,7 @@
                     
                     <tr>
                         <td class="header" style="background-color: #5c8b6c; color: #ffffff; padding: 30px 40px; text-align: center;">
-                            <img
-                                src="../../../static/assets/img/logo.png"
-                                alt="logo"
-                                class="logo.main"
-                                style="display: block; margin: 0 auto 15px auto; height: 80px; border: 0;"
-                                />
+                            <img src="{% static 'assets/img/logo.png' %}" alt="logo" class="logo.main" style="display: block; margin: 0 auto 15px auto; height: 80px; border: 0;" />
                             <h1 style="margin: 0; font-size: 24px;">Bem-vindo!</h1>
                         </td>
                     </tr>
