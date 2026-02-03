@@ -1,0 +1,111 @@
+/* Estilos para a página de detalhes de dicas */
+
+.dica-container {
+    max-width: 900px;
+}
+
+.dica-titulo {
+    color: #2e7d32;
+    font-weight: 700;
+    line-height: 1.2;
+    font-size: 2.5rem;
+}
+
+.categoria-badge {
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+.dica-imagem {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.dica-imagem:hover {
+    transform: scale(1.01);
+}
+
+.placeholder-imagem {
+    background: linear-gradient(135deg, #f5f5f5 0%, #e8f5e9 100%);
+}
+
+.resumo-container {
+    border-left: 4px solid #4caf50;
+    background: linear-gradient(to right, rgba(76, 175, 80, 0.05), transparent);
+}
+
+.conteudo-texto {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #333;
+}
+
+.conteudo-texto p {
+    margin-bottom: 1.5rem;
+}
+
+.conteudo-texto ul, .conteudo-texto ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.conteudo-texto li {
+    margin-bottom: 0.5rem;
+}
+
+.conteudo-texto strong {
+    color: #2e7d32;
+    font-weight: 600;
+}
+
+.dicas-adicionais {
+    border-left: 4px solid #ff9800;
+}
+
+.impacto-ambiental {
+    border-left: 4px solid #4caf50;
+}
+
+.share-buttons .btn {
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .dica-titulo {
+        font-size: 1.8rem;
+    }
+    
+    .dica-header, .dica-conteudo {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+    
+    .dica-detalhes .card-body {
+        padding: 1.5rem;
+    }
+}
+
+/* Melhorias de impressão */
+@media print {
+    .dica-acoes, .share-buttons, .breadcrumb {
+        display: none !important;
+    }
+    
+    .dica-container {
+        margin-top: 0;
+        padding-top: 0;
+    }
+    
+    .dica-titulo {
+        color: #000 !important;
+        font-size: 1.8rem;
+    }
+}
