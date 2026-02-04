@@ -7,84 +7,113 @@
 
 header {
     background: linear-gradient(to right, #69dd96, #0e9725);
-    color: white;
-    padding: 1px 0; 
     border-radius: 15px;
-    margin: 20px;
-}
-
-header .navbar-brand {
-    display: flex;
-    align-items: center;
-}
-
-header .logo {
-    height: 40px; 
-    width: auto;
+    margin: 15px; 
+    padding: 8px 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 header h1 {
-    font-size: 28px;
+    font-size: 1.3rem; 
     font-family: 'Playfair Display', serif;
-    color: #ffffff;
+    color: #ffffff !important;
     font-weight: 700;
     margin-bottom: 0;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+}
+
+header .logo {
+    height: 35px; 
+    width: auto;
 }
 
 header .nav-link {
     color: rgba(255, 255, 255, 0.9) !important;
     font-weight: 500;
-    display: flex;
-    align-items: center; 
-    transition: 0.3s ease;
-    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+    padding: 0.8rem 1rem; 
 }
 
 header .nav-link:hover {
     color: #fff !important;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
 }
 
-header .nav-link i {
-    font-size: 1.1rem;
-    line-height: 0;
-}
-
-header .search-login-group {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+header .search-form {
+    width: 100%; 
+    max-width: 300px; 
 }
 
 header .btn-outline-light {
-    border: 1px solid rgba(255, 255, 255, 0.6) !important; 
-    border-radius: 8px !important;
-    padding: 6px 12px !important; 
-    display: flex !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+header .btn-success, 
+header .btn-outline-light,
+header .btn-light {
+    white-space: nowrap;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
 }
 
-header .btn-success {
-    background-color: #157347;
-    border: none;
-    padding: 8px 20px;
-    border-radius: 8px;
-}
 
 header .dropdown-toggle {
     background: rgba(255, 255, 255, 0.2);
     border: none;
+    color: white;
+    padding: 8px 15px;
     border-radius: 8px;
 }
 
-header .dropdown-toggle:hover {
-    background: rgba(255, 255, 255, 0.3);
+@media (min-width: 992px) {
+    header .search-form {
+        margin-left: 20px;
+    }
+    
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    header .logo {
+        height: 40px;
+    }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 991.98px) {
     header {
-        margin: 10px;
+        margin: 10px 5px; 
+    }
+    
+    .navbar-collapse {
+        background: rgba(255, 255, 255, 0.1); 
+        backdrop-filter: blur(5px);
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 10px;
+    }
+
+    .d-flex.align-items-center.gap-2 {
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    header h1 {
+        font-size: 1.1rem;
+    }
+
+    header .search-form {
+        max-width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 350px) {
+    header h1 {
+        display: none; 
     }
 }
