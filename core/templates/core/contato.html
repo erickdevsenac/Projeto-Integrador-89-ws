@@ -8,41 +8,63 @@
         <link rel="stylesheet" href="{% static 'core/css/style_contato.css' %}">
     {% endblock head %}
 
-    <div class="container_final">
-    <div class="body_contato">
-
-    <div class="container">
-        <div class="formulario">
+ <main class="container my-5">
+        <div class="row justify-content-center">
             
-            <form action="#" method="post">
-                {% csrf_token %}
-                <fieldset>
-                    <legend>FORMULÁRIO DE CONTATO</legend>
-                    <div>
-                        <label for="name">Nome Completo:</label>
-                        <input type="text" id="name" name="name" required>
+            <div class="col-12 text-center mb-5">
+                <h2 class="section-title">Fale Conosco</h2>
+                <p class="text-muted">Abaixo você pode nos enviar uma mensagem ou nos seguir nas redes.</p>
+            </div>
+
+            <div class="col-md-7 mb-4">
+                <div class="card shadow-sm border-0 h-100 p-4">
+                    <h4 class="card-title text-success mb-4">Formulário de Contato</h4>
+                    <form>
+                        <div class="mb-3">
+                            <label for="nome" class="form-label fw-bold">Nome Completo:</label>
+                            <input type="text" class="form-control" id="nome" placeholder="Seu nome aqui">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label fw-bold">Email:</label>
+                            <input type="email" class="form-control" id="email" placeholder="exemplo@email.com">
+                        </div>
+                        <div class="mb-3">
+                            <label for="mensagem" class="form-label fw-bold">Mensagem:</label>
+                            <textarea class="form-control" id="mensagem" rows="5" placeholder="Como podemos ajudar?"></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">Enviar Mensagem</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm border-0 p-4 bg-green-gradient h-100">
+                    <h4 class="card-title mb-4 text-center">SIGA-NOS</h4>
+                    
+                    <div class="d-grid gap-3 social-buttons">
+                        <a href="#" class="btn btn-custom-black d-flex align-items-center justify-content-center gap-2">
+                            <i class="fab fa-instagram fa-lg"></i> Instagram
+                        </a>
+                        <a href="#" class="btn btn-custom-black d-flex align-items-center justify-content-center gap-2">
+                            <i class="fab fa-facebook fa-lg"></i> Facebook
+                        </a>
+                        <a href="#" class="btn btn-custom-black d-flex align-items-center justify-content-center gap-2">
+                            <i class="fab fa-whatsapp fa-lg"></i> WhatsApp
+                        </a>
                     </div>
-                    <div>
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" required>
+
+                    <div class="mt-auto pt-4 text-center contact-info-black">
+                        <hr class="border-dark opacity-25">
+                        <i class="fas fa-envelope mb-2"></i>
+                        <p class="small mb-0 fw-bold">contato@aproveiteplus.com</p>
                     </div>
-                    <div>
-                        <label for="mensagem">Mensagem:</label>
-                        <textarea id="mensagem" name="mensagem" rows="4" required></textarea>
-                    </div>
-                    <button type="submit">Enviar</button>
-                </fieldset>
-            </form>
+                </div>
+            </div>
+
         </div>
-        <div class="redes">
-            <h2>SIGA-NOS</h2>
-                <ul class="redes-sociais">
-                    <li><a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"> </i>   Instagram</a></li>
-                    <li><a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook"> </i>  Facebook</a></li>
-                    <li><a href="https://www.whatsapp.com/" target="_blank"><i class="fab fa-whatsapp"> </i>  WhatsApp</a></li>
-                </ul>
-        </div>
-    </div>
-</div>
-</div>
+    </main>
+</body>
+</html>
 {% endblock contato %}

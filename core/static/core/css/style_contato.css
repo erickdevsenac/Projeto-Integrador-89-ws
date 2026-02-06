@@ -1,189 +1,64 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-
-
-.container_final {
-    background: linear-gradient(to right, #aacdb4 100%);
-    justify-content: flex-start; 
-    align-items: flex-start;
-    margin: 20px auto;
-    padding: 20px;
-    width: 90%;
-    box-shadow: 0 6px 12px var(--shadow-medium);
-    border-radius: 10px;
-}
-.body_contato {
-    font-family: 'Roboto', sans-serif;
-    background: linear-gradient(to right, #aacdb4 100%);
-    min-height: 80vh;
+/* Variáveis de Cores */
+:root {
+    --primary-green: #4CAF50;
+    --secondary-green: #388E3C;
+    --dark-green: #1b5e20;
 }
 
-.body_contato  .container {
-    display: flex;
-    justify-content: flex-start; 
-    align-items: flex-start;
-    margin: 20px auto;
-    padding: 20px;
-    width: 90%;
-    max-width: 1100px;
-    gap: 30px;
+body {
+    background-color: #f4f7f4;
+    font-family: 'Segoe UI', sans-serif;
 }
 
-.body_contato .imagem-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-}
-
-.body_contato  .imagem-contato {
-    width: 100%;
-    max-width: 250px; /* Tamanho menor para a imagem */
-    height: 200px; /* Esticando a imagem para ser mais alta */
-    object-fit: cover; /* Para a imagem cobrir o espaço sem distorcer */
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.body_contato  .formulario {
-    background: #fff;
-    padding: 40px;
-    flex: 2; /* Aumentando o tamanho do formulário */
-    border-radius: 10px;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
-    max-width: 650px; /* Tornando o formulário maior */
-    margin-left: 30px;
-}
-
-.body_contato  fieldset {
-    border: 2px solid #5c8b6c;
-    padding: 24px;
-    border-radius: 10px;
-}
-
-.body_contato  legend {
-    font-weight: bold;
-    font-size: 22px;
-    color: #5c8b6c;
-    margin-bottom: 16px;
-}
-
-.body_contato label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #333;
-}
-
-.body_contato input,
-textarea {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 15px;
-    font-family: 'Roboto', sans-serif;
-    resize: vertical;
-}
-
-input:focus,
-textarea:focus {
-    border-color: #5c8b6c;
-    outline: none;
-    box-shadow: 0 0 5px #5c8b6c;
-}
-
-.body_contato button {
-    padding: 12px 20px;
-    background-color: #5c8b6c;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-    width: 100%;
-}
-
-.body_contato button:hover {
-    background-color: #407254;
-}
-
-.body_contato .redes {
-    background: #5c8b6c;
-    color: white;
-    padding: 32px;
-    width: 250px;
-    max-width: 100%;
-    border-radius: 10px;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-left: 30px;
-}
-
-.body_contato .redes h2 {
-    margin-bottom: 24px;
-    font-size: 24px;
+.section-title {
+    color: var(--secondary-green);
     font-weight: 700;
+    text-transform: uppercase;
 }
 
-.body_contato .redes-sociais {
-    list-style-type: none;
-    padding: 0;
+/* --- Estilo do Formulário --- */
+.card {
+    border-radius: 12px;
 }
 
-.body_contato .redes-sociais li {
-    margin-bottom: 12px;
+.form-control {
+    border: 1px solid #ddd;
+    background-color: #fff;
 }
 
-.body_contato .redes-sociais a {
-    display: inline-block;
-    width: 100%;
-    padding: 12px;
-    color: #fff;
-    background-color: #407254;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
+.btn-success {
+    background-color: var(--secondary-green);
+    border: none;
 }
 
-.body_contato .redes-sociais .fab {
-    width: 30px;
-    font-size: 20px;
-    margin-right: 8px;
+/* --- Card Siga-nos (Corrigido para Black) --- */
+.bg-green-gradient {
+    /* Mantendo o tom de verde da sua identidade visual */
+    background: linear-gradient(135deg, #a3c9a5 0%, #7da87f 100%);
 }
 
-.redes-sociais a:hover {
-    background-color: #46795a;
-    color: #e0e0e0;
+.bg-green-gradient h4.card-title {
+    color: black !important;
+    font-weight: 800;
 }
 
-@media (max-width: 900px) {
-    .body_contato .container {
-        flex-direction: column;
-        align-items: center;
-    }
+/* Botões com letra PRETA e borda preta suave */
+.btn-custom-black {
+    color: black !important;
+    background-color: rgba(255, 255, 255, 0.4); /* Fundo branco translúcido para ler melhor */
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    font-weight: 600;
+    padding: 10px;
+    transition: all 0.3s;
+}
 
-    .body_contato .imagem-container {
-        margin-bottom: 30px;
-    }
+.btn-custom-black:hover {
+    background-color: black !important;
+    color: white !important;
+}
 
-    .body_contato .formulario,
-    .redes {
-        width: 100%;
-        margin-left: 0;
-    }
-
-    .body_contato .formulario {
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    .body_contato .redes {
-        margin-top: 30px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    }
+/* Ícone e e-mail em preto */
+.contact-info-black i, 
+.contact-info-black p {
+    color: black !important;
 }
