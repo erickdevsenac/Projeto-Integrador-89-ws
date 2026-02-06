@@ -1,38 +1,117 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
-body {
-        font-family: Arial, sans-serif;
-    }
-
-h1, h2 {
-        color: #2e7d32;
-        font-weight: bold;
-    }
+.dica-wrapper {
+    max-width: 900px;
+    margin: 3rem auto;
+    padding: 0 1rem;
+}
 
 .dica-detalhes {
-        background-color: rgb(34, 235, 8);
-        border-radius: 12px;
-        padding: 2rem;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.dica-detalhes:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+.top-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: center;
+    margin-bottom: 2rem;
+}
 
 .imagem-container {
-        display: flex;
-        justify-content: center;
+    flex: 0 0 220px;
+}
+
+.dica-imagem {
+    width: 220px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 2px solid #2e7d32;
+    transition: transform 0.3s;
+}
+
+.dica-imagem:hover {
+    transform: scale(1.05);
+}
+
+.titulo-categoria h2 {
+    font-size: 2rem;
+    color: #2e7d32;
+    margin-bottom: 0.5rem;
+}
+
+.categoria-badge {
+    display: inline-block;
+    background-color: #5c8b6c;
+    color: #fff;
+    padding: 0.35rem 0.8rem;
+    border-radius: 0.25rem;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.categoria-badge:hover {
+    background-color: #467a54;
+}
+
+.resumo-conteudo h5 {
+    margin-top: 1.5rem;
+    color: #2e7d32;
+    font-size: 1.1rem;
+}
+
+.resumo-conteudo p {
+    margin-top: 0.5rem;
+    line-height: 1.6;
+    color: #333;
+}
+
+.btn-voltar {
+    margin-top: 2rem;
+}
+
+.btn {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #2e7d32;
+    color: #fff;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn:hover {
+    background-color: #1b4d24;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .top-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .imagem-container {
         margin-bottom: 1rem;
     }
 
-.dica-imagem {
-        width: 150px;      
-        height: auto;       
-        object-fit: cover;
-        border-radius: 10px;
+    .dica-imagem {
+        width: 100%;
+        height: auto;
     }
-
-.badge {
-        font-size: 0.85rem;
-    }
-
-.btn-voltar {
-        background-color:green;
-        margin-top: 1.5rem;
-    }
+}
