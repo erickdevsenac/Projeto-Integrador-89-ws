@@ -1,38 +1,41 @@
 {% extends 'global/base.html' %}
 {% load static %}
+
 {% block head %}
 <link rel="stylesheet" href="{% static 'core/css/style_detalhes_dicas.css' %}">
-
 <title>{{ dica.titulo }} - Dicas Sustentáveis</title>
- {% endblock %}
-
+{% endblock %}
 
 {% block dicadetalhes %}
-<div class="container mt-5">
+<div class="dica-wrapper">
     <div class="dica-detalhes">
-        <h2 class="mb-3">{{ dica.titulo }}</h2>
-
-        <div class="imagem-container">
-            {% if dica.imagem %}
-                <img src="{{ dica.imagem.url }}" class="dica-imagem" alt="Imagem da dica">
-            {% else %}
-                <img src="{% static 'core/img/placeholder.png' %}" class="dica-imagem" alt="Imagem padrão">
-            {% endif %}
+        <div class="top-section">
+            <div class="imagem-container">
+                {% if dica.imagem %}
+                    <img src="{{ dica.imagem.url }}" class="dica-imagem" alt="Imagem da dica" loading="lazy">
+                {% else %}
+                    <img src="{% static 'core/img/placeholder.png' %}" class="dica-imagem" alt="Imagem padrão" loading="lazy">
+                {% endif %}
+            </div>
+            <div class="titulo-categoria">
+                <h2>{{ dica.titulo }}</h2>
+                {% if dica.categoria %}
+                    <span class="categoria-badge">{{ dica.categoria }}</span>
+                {% endif %}
+            </div>
         </div>
 
-        {% if dica.categoria %}
-            <span class="badge bg-success mb-3">{{ dica.categoria }}</span>
-        {% endif %}
+        <div class="resumo-conteudo">
+            <h5>Resumo</h5>
+            <p>{{ dica.resumo }}</p>
 
-        <h5 class="text-muted">Resumo</h5>
-        <p>{{ dica.resumo }}</p>
+            <h5>Conteúdo</h5>
+            <p>{{ dica.conteudo|linebreaks }}</p>
+        </div>
 
-        <h5 class="text-muted mt-4">Conteúdo</h5>
-        <p>{{ dica.conteudo|linebreaks }}</p>
-
-        <div class="text-center btn-voltar">
-            <a href="{% url 'core:dicas' %}" class="btn btn-outline-secondary">Voltar às Dicas</a>
+        <div class="btn-voltar">
+            <a href="{% url 'core:dicas' %}" class="btn">← Voltar às Dicas</a>
         </div>
     </div>
 </div>
-{% endblock dicadetalhes %}
+{% endblock %}
