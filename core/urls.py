@@ -24,14 +24,9 @@ urlpatterns = [
     path("produtos/", marketplace.produtos, name="produtos"),
     path("contato/", public.contato, name="contato"),
     path("pacote/", marketplace.pacote, name="pacote"),
-    # TODO:
-    # path("sobre/", views.sobre, name="sobre"),
-    # path("termos/", views.termos_uso, name="termos"),
-    # path("privacidade/", views.politica_privacidade, name="privacidade"),
     # ==============================================================================
     # ROTAS DE AUTENTICAÇÃO E PERFIL
     # ==============================================================================
-    # path("vendedor/", public.vendedor, name="Vendedorperfil"),
     path("vendedor/<int:usuario_id>/", public.vendedor, name="vendedor_perfil"),
     path("perfil/", perfil.perfil_detail, name="perfil"),
     path("avaliacao/", avaliacao, name="avaliacao"),
@@ -52,8 +47,7 @@ urlpatterns = [
         auth.redefinir_senha_confirmar, 
         name="password_reset_confirm" # Nome padrão do Django
     ),
-    # TODO:
-    # path("reset-senha/<uidb64>/<token>/", views.reset_senha, name="reset_senha"),
+   
     # ==============================================================================
     # ROTAS DE PRODUTOS E MARKETPLACE
     # ==============================================================================
@@ -74,13 +68,8 @@ urlpatterns = [
     path('editar_produto', marketplace.editar_produto, name='editar_produto'),
     path("pacote/editar/<int:pacote_id>/", marketplace.editar_pacote, name="editar_pacote"),
     path("pacote/excluir/<int:pacote_id>/", marketplace.excluir_pacote, name="excluir_pacote"),
-    # TODO:
-    # path("categoria/<slug:categoria_slug>/", views.produtos_por_categoria, name="produtos_categoria"),
-    # TODO:
-    # Gestão de produtos (vendedores)
-    # path("meus-produtos/", views.meus_produtos, name="meus_produtos"),
-    # path("produto/<int:produto_id>/editar/", views.editar_produto, name="editar_produto"),
-    # path("produto/<int:produto_id>/excluir/", views.excluir_produto, name="excluir_produto"),
+    
+
     # ==============================================================================
     # ROTAS DO CARRINHO E CHECKOUT
     # ==============================================================================
@@ -105,44 +94,30 @@ urlpatterns = [
         carrinho.adicionar_pacote_carrinho,
         name="adicionar_pacote_carrinho",
     ),
-    # TODO:
-    # path("carrinho/limpar/", views.limpar_carrinho, name="limpar_carrinho"),
+ 
     # Checkout
     path("checkout/", checkout.checkout_page, name="checkout_page"),
     path("finalizar-pedido/", checkout.finalizar_pedido, name="checkout"),
     path("aplicar-cupom/", checkout.aplicar_cupom, name="aplicar_cupom"),
-    # TODO:
-    # path("checkout/confirmar/", views.confirmar_pedido, name="confirmar_pedido"),
-    # path("pedido/<int:pedido_id>/sucesso/", views.pedido_sucesso, name="pedido_sucesso"),
+ 
     # ==============================================================================
     # ROTAS DE PEDIDOS
     # ==============================================================================
     path("meus-pedidos/", checkout.meus_pedidos, name="meus_pedidos"),
     path('vendedor/pedidos/',checkout.painel_pedidos_vendedor,name='painel_pedidos_vendedor'),
-    # TODO:
-    # path("pedido/<int:pedido_id>/", views.pedido_detalhe, name="pedido_detalhe"),
-    # path("pedido/<int:pedido_id>/cancelar/", views.cancelar_pedido, name="cancelar_pedido"),
-    # path("pedido/<int:pedido_id>/avaliar/", views.avaliar_pedido, name="avaliar_pedido"),
-    # TODO:
-    # Gestão de pedidos (vendedores)
-    # path("pedidos-recebidos/", views.pedidos_recebidos, name="pedidos_recebidos"),
-    # path("sub-pedido/<int:sub_pedido_id>/", views.sub_pedido_detalhe, name="sub_pedido_detalhe"),
-    # path("sub-pedido/<int:sub_pedido_id>/atualizar-status/", views.atualizar_status_pedido, name="atualizar_status_pedido"),
+    
     # ==============================================================================
     # ROTAS DE CUPONS E PROMOÇÕES
     # ==============================================================================
     path("cupom/criar/", admin.criar_cupom, name="criar_cupom"),
-    # TODO:
-    # path("cupons/", views.meus_cupons, name="meus_cupons"),
-    # path("cupom/<int:cupom_id>/editar/", views.editar_cupom, name="editar_cupom"),
+ 
     # ==============================================================================
     # ROTAS DE RECEITAS E CONTEÚDO
     # ==============================================================================
     path("receitas/", conteudo.receitas, name="receitas"),
     path("receita/<int:receita_id>/", conteudo.receita_detalhe, name="receita_detalhe"),
     path("receita/criar/", conteudo.cria_receita, name="criar_receita"),
-    # TODO:
-    # path("receita/<int:receita_id>/editar/", views.editar_receita, name="editar_receita"),
+   
     # Conteúdo educativo
     path("dicas/", conteudo.dicas, name="dicas"),
     path('dicas-detalhes/<int:id>/', conteudo.detalhes_dica, name='dicas_detalhes'),
@@ -152,36 +127,13 @@ urlpatterns = [
     # ==============================================================================
     path("doacoes/", public.doacao, name="doacoes"),
     path("ong/<int:usuario_id>/", public.ongs_pagina, name="ong_pagina"),
-    # TODO:
-    # path("doar/<int:ong_id>/", views.fazer_doacao, name="fazer_doacao"),
     # ==============================================================================
     # ROTAS ADMINISTRATIVAS E RELATÓRIOS
     # ==============================================================================
-    # TODO:
-    # path("dashboard/", views.dashboard, name="dashboard"),
-    # path("relatorios/", views.relatorios, name="relatorios"),
-    # path("relatorio/vendas/", views.relatorio_vendas, name="relatorio_vendas"),
-    # path("relatorio/produtos/", views.relatorio_produtos, name="relatorio_produtos"),
-    # ==============================================================================
-    # ROTAS DA EQUIPE E INSTITUCIONAL
-    # ==============================================================================
     path("timedev/", public.devs, name="timedev"),
-    # TODO:
-    # path("equipe/", views.equipe, name="equipe"),
-    # path("parceiros/", views.parceiros, name="parceiros"),
-    # ==============================================================================
-    # APIs AJAX E UTILITÁRIOS
-    # ==============================================================================
-    # TODO:
-    # path("api/produtos/autocomplete/", views.api_produtos_autocomplete, name="api_produtos_autocomplete"),
-    # path("api/carrinho/count/", views.api_carrinho_count, name="api_carrinho_count"),
-    # path("api/cupom/aplicar/", views.api_aplicar_cupom, name="api_aplicar_cupom"),
-    # path("api/cep/<str:cep>/", views.api_consultar_cep, name="api_consultar_cep"),
-    # path("api/produto/<int:produto_id>/favoritar/", views.api_favoritar_produto, name="api_favoritar_produto"),
-    # Notificações
-    # TODO:
-    # path("api/notificacoes/", views.api_notificacoes, name="api_notificacoes"),
-    # path("api/notificacao/<int:notificacao_id>/marcar-lida/", views.api_marcar_notificacao_lida, name="api_marcar_notificacao_lida"),
+    
+    
+
 ]
 
 # Adiciona rotas de debug apenas se DEBUG=True

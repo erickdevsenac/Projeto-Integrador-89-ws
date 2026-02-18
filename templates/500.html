@@ -1,0 +1,130 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erro 500 | Algo deu errado</title>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"> 
+
+   <style>
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        background: linear-gradient(135deg, #69dd96, #0e9725);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Segoe UI', sans-serif;
+        color: white;
+    }
+
+    .error-box {
+        text-align: center;
+        background: rgba(0, 0, 0, 0.30);
+        padding: 50px;
+        border-radius: 25px;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        max-width: 520px;
+        width: 90%;
+        position: relative;
+    }
+
+    /* ===== MASCOTE ===== */
+    .mascote {
+        width: 150px;
+        margin-bottom: 20px;
+        animation: flutuar 3s ease-in-out infinite;
+        filter: drop-shadow(0 0 15px rgba(105, 221, 150, 0.6));
+    }
+
+    @keyframes flutuar {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-12px); }
+        100% { transform: translateY(0px); }
+    }
+
+    .error-box h1 {
+        font-size: 95px;
+        margin-bottom: 5px;
+        font-weight: 800;
+        letter-spacing: 3px;
+    }
+
+    .error-box h2 {
+        font-size: 22px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    .error-box p {
+        font-size: 15px;
+        margin-bottom: 30px;
+        opacity: 0.95;
+        line-height: 1.6;
+    }
+
+    /* ===== BOTÕES ===== */
+    .btn-custom {
+        background: white;
+        border: none;
+        padding: 12px 28px;
+        border-radius: 30px;
+        font-weight: 600;
+        color: #0e9725;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        margin: 6px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-custom:hover {
+        transform: translateY(-3px);
+        background: #f3f3f3;
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    @media (max-width: 768px) {
+        .error-box {
+            padding: 30px;
+        }
+
+        .error-box h1 {
+            font-size: 65px;
+        }
+
+        .mascote {
+            width: 120px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+   <div class="error-box">
+    <img src="{% static 'assets/img/guardiaoverde.png' %}" 
+         alt="Guardião Verde" 
+         class="mascote">
+    <h1>500</h1>
+    <h2>Ops! Nosso Guardião Verde encontrou um bug</h2>
+
+    <p>
+        Parece que um pequeno intruso entrou no sistema 🌿<br><br>
+        Nosso time já foi notificado automaticamente 👩‍💻📡<br>
+        Se o problema continuar, avise o desenvolvedor.<br><br>
+        Estamos restaurando tudo rapidinho 💚
+    </p>
+ 
+
+        <a href="/" class="btn-custom">Voltar para a página inicial</a>
+        <a href="" class="btn-custom" onclick="location.reload();">Tentar novamente</a>
+    </div>
+
+</body>
+</html>

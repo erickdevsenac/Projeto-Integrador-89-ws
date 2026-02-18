@@ -79,3 +79,7 @@ def ativar_conta_view(request):
         'activation_link': activation_link,
 }
     return render(request, 'core/ativacao_conta.html', context)
+
+
+def erro_500_teste(request):
+    return render(request, '500.html', status=500)
