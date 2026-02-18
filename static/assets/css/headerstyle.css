@@ -5,115 +5,155 @@
     padding: 0 15px;
 }
 
+/* ===== HEADER ===== */
 header {
     background: linear-gradient(to right, #69dd96, #0e9725);
+    color: white;
+    padding: 10px 0;
     border-radius: 15px;
-    margin: 15px; 
-    padding: 8px 0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 20px;
 }
 
-header h1 {
-    font-size: 1.3rem; 
-    font-family: 'Playfair Display', serif;
-    color: #ffffff !important;
-    font-weight: 700;
-    margin-bottom: 0;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    white-space: nowrap;
+/* ===== LOGO ===== */
+header .navbar-brand {
+    display: flex;
+    align-items: center;
 }
 
 header .logo {
-    height: 35px; 
+    height: 40px;
     width: auto;
 }
 
+header h1 {
+    font-size: 28px;
+    font-family: 'Playfair Display', serif;
+    color: #ffffff;
+    font-weight: 700;
+    margin-bottom: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== LINKS ===== */
 header .nav-link {
-    color: rgba(255, 255, 255, 0.9) !important;
+    color: rgba(255, 255, 255, 0.9);
     font-weight: 500;
-    transition: all 0.3s ease;
-    padding: 0.8rem 1rem; 
+    display: flex;
+    align-items: center;
+    transition: 0.3s ease;
+    padding: 0.5rem 1rem;
 }
 
 header .nav-link:hover {
     color: #fff !important;
-    transform: translateY(-2px);
+    transform: translateY(-1px);
 }
 
+header .nav-link i {
+    font-size: 1.1rem;
+    line-height: 0;
+}
+
+/* ===== GRUPO DIREITA ===== */
+header .search-login-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* ===== FORM PESQUISA ===== */
 header .search-form {
-    width: 100%; 
-    max-width: 300px; 
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* força direita */
 }
 
+/* BOTÃO LUPA */
+header .search-toggle {
+    background: rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #000000;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+/* INPUT ESCONDIDO */
+header .search-input {
+    position: absolute;
+    right: 45px; /* FICA AO LADO DA LUPA */
+    width: 0;
+    opacity: 0;
+    padding: 8px 15px;
+    border-radius: 50px;
+    border: none;
+    outline: none;
+    transition: 0.4s ease;
+}
+
+/* QUANDO ATIVO */
+header .search-form.active .search-input {
+    width: 220px;
+    opacity: 1;
+    background: rgb(255, 255, 255);
+}
+
+/* ===== BOTÕES ===== */
 header .btn-outline-light {
-    border: 1px solid rgba(255, 255, 255, 0.5) !important;
-}
-
-header .btn-success, 
-header .btn-outline-light,
-header .btn-light {
-    white-space: nowrap;
-    display: inline-flex;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+    border-radius: 8px !important;
+    padding: 6px 12px !important;
+    display: flex !important;
     align-items: center;
     justify-content: center;
 }
 
+header .btn-success {
+    background-color: #157347;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 8px;
+}
 
 header .dropdown-toggle {
     background: rgba(255, 255, 255, 0.2);
     border: none;
-    color: white;
-    padding: 8px 15px;
     border-radius: 8px;
 }
 
-@media (min-width: 992px) {
-    header .search-form {
-        margin-left: 20px;
-    }
-    
-    header h1 {
-        font-size: 1.5rem;
-    }
-
-    header .logo {
-        height: 40px;
-    }
+header .dropdown-toggle:hover {
+    background: rgba(255, 255, 255, 0.3);
 }
 
-@media (max-width: 991.98px) {
-    header {
-        margin: 10px 5px; 
-    }
-    
-    .navbar-collapse {
-        background: rgba(255, 255, 255, 0.1); 
-        backdrop-filter: blur(5px);
-        padding: 15px;
-        border-radius: 10px;
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 991px) {
+
+    header .search-login-group {
+        flex-direction: column;
+        align-items: flex-start;  /* força direita */
+        gap: 10px;
         margin-top: 10px;
     }
 
-    .d-flex.align-items-center.gap-2 {
+    header .search-form {
         width: 100%;
-        justify-content: space-between;
+        justify-content: flex-start; /* direita */
+    }
+
+    header .search-input {
+        display: none;
+        position: static;
+        width: 100%;
         margin-top: 10px;
-        padding-top: 10px;
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    header h1 {
-        font-size: 1.1rem;
-    }
-
-    header .search-form {
-        max-width: 100%;
-        margin-bottom: 10px;
-    }
-}
-
-@media (max-width: 350px) {
-    header h1 {
-        display: none; 
+    header .search-form.active .search-input {
+        display: block;
     }
 }
