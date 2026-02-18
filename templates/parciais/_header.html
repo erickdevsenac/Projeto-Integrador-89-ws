@@ -1,14 +1,16 @@
 {% load static %}
 
-<header>
+<header class="main-header">
   <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
       
+
       <a class="navbar-brand d-flex align-items-center" href="{% url 'core:index' %}">
-        <img src="{% static 'assets/img/logo.png' %}" alt="logo" class="logo me-2" style="height: 40px;" />
-        <h1 class="mb-0 fs-4">Aproveite+</h1>
+        <img src="{% static 'assets/img/logo.png' %}" alt="logo" class="me-2" style="height: 40px;" />
+        <span class="fw-bold fs-4">Aproveite+</span>
       </a>
 
+    
       <button
         class="navbar-toggler"
         type="button"
@@ -22,6 +24,8 @@
       </button>
 
       <div class="collapse navbar-collapse" id="menuPrincipal">
+
+       
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
             <a class="nav-link d-flex align-items-center" href="{% url 'core:receitas' %}">
@@ -51,86 +55,105 @@
         </ul>
 
         <div class="d-flex flex-column flex-lg-row align-items-lg-center gap-3">
+
+          <form class="search-form" method="get" action="{% url 'core:produtos' %}">
+  
           
-          <form class="d-flex search-form" role="search" method="get" action="{% url 'core:produtos' %}">
-            <div class="input-group">
-              <input class="form-control" type="search" placeholder="Pesquisar..." name="termo" aria-label="Search" />
-              <button class="btn btn-outline-light" type="submit">
+              <button type="button" class="search-toggle">
                 <i class="bi bi-search"></i>
               </button>
-            </div>
-          </form>
 
+              <input
+                type="search"
+                name="termo"
+                placeholder="Pesquisar..."
+                class="search-input"
+                aria-label="Pesquisar produtos"
+              >
+
+            </form>
+
+       
           <div class="d-flex align-items-center gap-2">
+
             {% if user.is_authenticated %}
-              <a href="{% url 'core:ver_carrinho' %}" class="btn btn-light position-relative me-2">
+
+           
+              <a href="{% url 'core:ver_carrinho' %}" class="btn btn-light position-relative">
                 <i class="bi bi-cart"></i>
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cart-item-count">
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                   {{ total_itens|default:0 }}
                 </span>
               </a>
 
+       
               <div class="dropdown">
                 <button
-              class="btn btn-secondary dropdown-toggle"
-              type="button"
-              id="dropdownMenuButton"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Olá, {{ user.username|truncatechars:15 }}
-            </button>
-            <ul
-              class="dropdown-menu dropdown-menu-end"
-              aria-labelledby="dropdownMenuButton"
-            >
-              <li>
-                <a class="dropdown-item" href="{% url 'core:perfil' %}">
-                  <i class="bi bi-person-circle"></i> Meu Perfil
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url "core:meus_pedidos" %}">
-                  <i class="bi bi-box-seam"></i> Meus Pedidos
-                </a>
-              </li>
-              {% if user.perfil.tipo == 'VENDEDOR' %}
-              <li>
-                <a class="dropdown-item" href="{% url "core:vendedor_perfil" user.id %}">
-                 <i class="bi bi-shop"></i> Minha Loja
-                </a>
-              </li>
-              {% endif %}
-              <li>
-                <a class="dropdown-item" href="{% url 'core:configuracoes' %}">
-                  <i class="bi bi-gear"></i> Configurações
-                </a>
-              </li>
-              {% if user.is_staff %}
-              <li><hr class="dropdown-divider" /></li>
-              <li>
-                <a class="dropdown-item" href="{% url 'admin:index' %}">
-                  <i class="bi bi-shield-lock"></i> Administração
-                </a>
-              </li>
-              {% endif %}
-              <li><hr class="dropdown-divider" /></li>
-              <li>
-                <a class="dropdown-item text-danger" href="{% url 'core:logout' %}">
-                  <i class="bi bi-box-arrow-right"></i> Sair
-                </a>
-              </li>
-            </ul>
-          </div>
+                  class="btn btn-secondary dropdown-toggle"
+                  type="button"
+                  id="dropdownMenuButton"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Olá, {{ user.username|truncatechars:15 }}
+                </button>
 
-          {% else %}
-              <div class="d-flex gap-2">
-                <a href="{% url 'core:login' %}" class="btn btn-outline-light text-nowrap">Login</a>
-                <a href="{% url 'core:cadastro' %}" class="btn btn-success text-nowrap">Cadastre-se</a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item" href="{% url 'core:perfil' %}">
+                      <i class="bi bi-person-circle"></i> Meu Perfil
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="{% url 'core:meus_pedidos' %}">
+                      <i class="bi bi-box-seam"></i> Meus Pedidos
+                    </a>
+                  </li>
+
+                  {% if user.perfil.tipo == 'VENDEDOR' %}
+                  <li>
+                    <a class="dropdown-item" href="{% url 'core:vendedor_perfil' user.id %}">
+                      <i class="bi bi-shop"></i> Minha Loja
+                    </a>
+                  </li>
+                  {% endif %}
+
+                  <li>
+                    <a class="dropdown-item" href="{% url 'core:configuracoes' %}">
+                      <i class="bi bi-gear"></i> Configurações
+                    </a>
+                  </li>
+
+                  {% if user.is_staff %}
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                    <a class="dropdown-item" href="{% url 'admin:index' %}">
+                      <i class="bi bi-shield-lock"></i> Administração
+                    </a>
+                  </li>
+                  {% endif %}
+
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                    <a class="dropdown-item text-danger" href="{% url 'core:logout' %}">
+                      <i class="bi bi-box-arrow-right"></i> Sair
+                    </a>
+                  </li>
+                </ul>
               </div>
+
+            {% else %}
+              <a href="{% url 'core:login' %}" class="btn btn-outline-light">Login</a>
+              <a href="{% url 'core:cadastro' %}" class="btn btn-success">Cadastre-se</a>
             {% endif %}
+
           </div>
         </div>
 
-      </div> </div> </nav>
+      </div>
+    </div>
+  </nav>
 </header>
+
+
+<script src="{% static 'assets/js/header.js' %}"></script>
