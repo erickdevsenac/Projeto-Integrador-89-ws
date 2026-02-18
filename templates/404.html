@@ -1,0 +1,25 @@
+{% extends "global/base.html" %}
+{% load static %}
+{% block content %}
+{% block head %}
+<style>
+    .container_404 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo_404 {
+    width: 400px;
+}
+</style>
+{% endblock head %}
+<div class="container_404">
+<h1>Ops, Pelo visto você explorou algo inexploravel</h1>
+<img
+ class="logo_404"
+        src="{% static 'assets/img/logo.png' %}"
+        alt="Logo Aproveite +"
+      /> 
+</div>
+{% endblock content %}

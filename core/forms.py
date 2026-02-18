@@ -183,12 +183,14 @@ class ProdutoForm(forms.ModelForm):
             "descricao",
             "codigo_produto",
             "data_validade",
+            "motivo_desconto",
         ]
         
         widgets = {
             "data_validade": forms.DateInput(attrs={"type": "date"}),
             "descricao": forms.Textarea(attrs={"rows": 10, "class": "richtext"}),
         }
+        
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

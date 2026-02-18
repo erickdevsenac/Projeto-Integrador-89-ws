@@ -29,11 +29,13 @@
         <ul class="lista-produtos">
             {% for produto in produtos %}
             <li class="produto-item" id="produto-{{ produto.id }}">
+                <a href="{% url 'core:produto_detalhe' produto.id %}">
                 {% if produto.imagem_principal %}
                     <img src="{{ produto.imagem_principal.url }}" alt="{{ produto.nome }}" class="produto-imagem" />
                 {% else %}
                     <img src="{% static 'assets/img/placeholder_produto.png' %}" alt="{{ produto.nome }}" class="produto-imagem" />
                 {% endif %}
+                </a>
                 <div class="produto-info">
                     <h3>{{ produto.nome }}</h3>
                     <p>{{ produto.descricao|truncatewords:20|safe }}</p>
