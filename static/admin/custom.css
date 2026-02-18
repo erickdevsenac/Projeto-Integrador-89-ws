@@ -1,0 +1,176 @@
+/* CORES */
+:root {
+    --verde-escuro: #2e7d32;
+    --verde-claro: #4caf50;
+    --verde-bg: #e8f5e8;
+    --azul: #1976d2;
+    --azul-claro: #e3f2fd;
+    --cinza: #f5f5f5;
+    --branco: #fff;
+    --borda: #ddd;
+    --fundo-pagina: #0e9725;  /* COR DE FUNDO */
+    --preto: #000000;  /* COR PRETA PARA O TÍTULO */
+}
+
+/* FUNDO DA PÁGINA */
+body {
+    background: linear-gradient(to right, #69dd96, #0e9725);
+}
+
+/* CABEÇALHO */
+#header {
+    background: linear-gradient(to right, var(--verde-escuro), var(--verde-claro));
+    color: white;
+    padding: 15px 20px;
+}
+
+#branding h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+#branding h1 a {
+    color: var(--preto) !important;  /* TÍTULO NA COR PRETA */
+    text-decoration: none;
+    font-weight: bold;  /* OPCIONAL: DEIXA O TÍTULO EM NEGRITO */
+}
+
+#branding h1 a:before {
+    content: "✓ ";
+    color: var(--preto);  /* TAMBÉM MUDA O SÍMBOLO PARA PRETO */
+    font-weight: bold;
+}
+
+/* CONTEÚDO PRINCIPAL */
+#content {
+    background-color: transparent;  /* Deixa o fundo da página aparecer */
+    padding: 20px;
+}
+
+/* MÓDULOS - CAIXAS BRANCAS */
+.module {
+    background: var(--branco);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.module h2 {
+    background: var(--verde-bg);
+    margin: 0;
+    padding: 12px 15px;
+    border-bottom: 2px solid var(--azul);
+    border-radius: 8px 8px 0 0;
+    font-size: 16px;
+    color: var(--verde-escuro);
+}
+
+/* LISTAGEM DE MÓDULOS */
+.dashboard .module table {
+    width: 100%;
+}
+
+.dashboard .module th, 
+.dashboard .module td {
+    padding: 10px 15px;
+}
+
+/* LINKS DE ADICIONAR E MODIFICAR */
+.addlink {
+    color: var(--verde-escuro);
+    font-weight: 500;
+}
+
+.addlink:before {
+    content: "+ ";
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.changelink {
+    color: var(--azul);
+}
+
+.changelink:before {
+    content: "✎ ";
+    font-size: 14px;
+}
+
+/* BARRA LATERAL DE FILTROS (se houver) */
+#changelist-filter {
+    background: var(--branco);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+/* BOTÕES */
+.button, input[type=submit] {
+    background: var(--verde-escuro);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background: var(--verde-claro);
+}
+
+.button.default {
+    background: var(--azul);
+}
+
+/* MENSAGENS */
+.success {
+    background: var(--verde-bg);
+    color: var(--verde-escuro);
+    padding: 10px 15px;
+    border-radius: 5px;
+    border-left: 3px solid var(--verde-claro);
+}
+
+.error {
+    background: #ffebee;
+    color: #c62828;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border-left: 3px solid #c62828;
+}
+
+.warning {
+    background: #fff3e0;
+    color: #ef6c00;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border-left: 3px solid #ef6c00;
+}
+
+/* BREADCRUMBS */
+.breadcrumbs {
+    background: var(--branco);
+    padding: 8px 15px;
+    border-radius: 5px;
+    border-left: 3px solid var(--azul);
+    margin-bottom: 20px;
+}
+
+/* LINKS */
+a {
+    color: var(--azul);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--verde-escuro);
+    text-decoration: underline;
+}
+
+/* RESPONSIVO */
+@media (max-width: 767px) {
+    #content {
+        padding: 10px;
+    }
+}
