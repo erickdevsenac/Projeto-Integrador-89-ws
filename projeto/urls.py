@@ -8,7 +8,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from django.views.generic import TemplateView
-
+from core.views import erro_500_teste
 from core.viewsets import (
     avaliacao_viewset,
     carrinho_viewset,
@@ -57,6 +57,7 @@ urlpatterns = [
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api-auth/", include("rest_framework.urls")),
+    path('erro-500/',erro_500_teste, name='erro_500_teste'),
 ]
 
 urlpatterns += [
