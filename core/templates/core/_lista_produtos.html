@@ -14,13 +14,13 @@ A tag `load pagination_tags` foi removida daqui, pois o `_pagination.html` a car
             <div class="card h-100">
 
                 {% if produto.motivo_desconto == 'VALIDADE' %}
-                <div class="produto-badge badge-warning">
+                <div class="produto-badge badge-warning" style="position: absolute; background-color: #d64545; color: #fff;; border-radius: 3px; padding-left: 5px; padding-right: 10px;">
                     <i class="fas fa-clock"></i> Vence em breve
                 </div>
                 {% endif %}
 
                 {% if produto.estoque_baixo %}
-                <div class="produto-badge badge-danger">
+                <div class="produto-badge badge-danger" style="position: absolute; background-color: #f4b400; color: #ffffff; border-radius: 3px; padding-left: 5px; padding-right: 10px;">
                     <i class="fas fa-exclamation"></i> Últimas unidades
                 </div>
                 {% endif %}

@@ -155,6 +155,8 @@ class Produto(TimeStampedModel):
     def save(self, *args, **kwargs):
         if not self.codigo_produto:
             self.codigo_produto = f"PROD-{uuid.uuid4().hex[:8].upper()}"
+        if self.nome:
+            self.nome = self.nome.capitalize()
         super().save(*args, **kwargs)
 
     @property

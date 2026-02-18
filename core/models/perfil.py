@@ -77,7 +77,7 @@ class Perfil(TimeStampedModel):
     )
     cnpj = models.CharField(
         "CNPJ",
-        max_length=18,
+        max_length=14,
         unique= True,
         help_text="Obrigatório para Vendedores e ONGs.",
         blank=True, 

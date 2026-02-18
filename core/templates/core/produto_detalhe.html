@@ -133,7 +133,7 @@
                     <div class="card h-100 shadow-sm card-relacionado">
                         <a href="{% url 'core:produto_detalhe' relacionado.id %}">
                             {% if produto.imagem_principal %}
-                            <img src="{{ relacionado.imagem_principal }}" class="card-img-top" alt="{{ relacionado.nome }}">
+                            <img src="{{ relacionado.imagem_principal.url }}" class="card-img-top" alt="{{ relacionado.nome }}">
                             {% else %}
                             <img src="{% static 'assets/img/placeholder_produto.png' %}" class="card-img-top" alt="{{ relacionado.nome }}">
                             {% endif %}
