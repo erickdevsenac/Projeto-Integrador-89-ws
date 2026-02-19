@@ -4,7 +4,7 @@
 {% block content %}
 {% block head %}
 <title>Dicas Sustentáveis</title>
-<link rel="stylesheet" href="{% static 'core/style_dicas.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/style_dicas.css' %}">
 {% comment %} <style>
 body {
     font-family: Arial, sans-serif;
@@ -47,14 +47,16 @@ h1, h2 {
         <div class="row">
             {% for dica in dicas %}
                 <div class="col-md-4 mb-4">
-                    <a href="{% url 'core:dicas_detalhes' dica.id %}">
+                   
                     <div class="card dica-card shadow-sm">
+                         <a href="{% url 'core:dicas_detalhes' dica.id %}">
                         {% if dica.imagem %}
                             <img src="{{ dica.imagem.url }}" class="card-img-top" alt="Imagem da dica">
                         {% else %}
                             <img src="{% static 'core/img/placeholder.png' %}" class="card-img-top" alt="Imagem padrão">
                         {% endif %}
                         <div class="card-body">
+                            </a>
                             <h5 class="card-title">{{ dica.titulo }}</h5>
                             <p class="card-text">{{ dica.descricao }}</p>
                             {% if dica.categoria %}
@@ -62,7 +64,7 @@ h1, h2 {
                             {% endif %}
                         </div>
                     </div>
-                    </a>
+                    
                 </div>
             {% empty %}
                 <p>Nenhuma dica cadastrada ainda.</p>

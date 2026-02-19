@@ -1,0 +1,9 @@
+.card {
+    width: 300px;
+    height: 350px;
+    background: #28a745;
+}
+.card-title {
+    font-size: 1.3rem;
+    color: #ffffff;
+}
