@@ -3,6 +3,7 @@
 
 {% block head %}
 <title>Finalizar Compra - Aproveite+</title>
+<script src="{% static 'core/static/assets/formsEndereco.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -68,6 +69,11 @@
               </label>
             </div>
 
+            
+          <div id="shippingContainer">
+            <div class="row g-3">
+
+
             <div class="row g-3">
               <div class="col-md-6">
                 <label class="form-label fw-semibold">Nome completo</label>
@@ -119,6 +125,11 @@
                 </select>
               </div>
             </div>
+
+          
+          </div>
+          </div>
+
 
             <h4 class="mb-4 mt-5 border-bottom pb-2">Pagamento</h4>
             <div class="payment-options">

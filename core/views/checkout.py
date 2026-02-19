@@ -20,79 +20,7 @@ from core.models import (
     PedidoVendedor,
     Perfil,
     Produto,
-    
-    )
-
-
-@login_required(login_url="/login/")
-def checkout_page(request):
-    carrinho_session = request.session.get("carrinho", {})
-    if not carrinho_session:
-        messages.warning(request, "Seu carrinho está vazio para iniciar o checkout.")
-        return redirect("core:produtos")
-
-    # Lógica de separação e busca (idêntica a 'ver_carrinho')
-    produto_ids = [
-        int(k.split("_")[1]) for k in carrinho_session if k.startswith("produto_")
-    ]
-    pacote_ids = [
-        int(k.split("_")[1]) for k in carrinho_session if k.startswith("pacote_")
-    ]
-
-    produtos_db = {
-        f"produto_{p.id}": p for p in Produto.objects.filter(id__in=produto_ids)
-    }
-    pacotes_db = {
-        f"pacote_{p.id}": p for p in PacoteSurpresa.objects.filter(id__in=pacote_ids)
-    }
-
-    carrinho_detalhado = []
-    total_carrinho = Decimal("0.00")
-
-    for item_key, item_data in carrinho_session.items():
-        item_obj = produtos_db.get(item_key) or pacotes_db.get(item_key)
-        if item_obj:
-            quantidade = int(item_data.get("quantidade", 0))
-            subtotal = item_obj.preco * quantidade
-            total_carrinho += subtotal
-            carrinho_detalhado.append(
-                {
-                    "item_key": item_key,
-                    "nome": item_obj.nome,
-                    "quantidade": quantidade,
-                    "preco": item_obj.preco,
-                    "subtotal": subtotal,
-                }
-            )
-
-    cupom_id = request.session.get("cupom_id")
-    cupom = None
-    valor_desconto = Decimal("0.00")
-
-    if cupom_id:
-        try:
-            cupom = Cupom.objects.get(id=cupom_id)
-            if cupom.esta_valido:
-                valor_desconto = cupom.calcular_desconto(total_carrinho)
-            else:
-                # Remove cupom inválido da sessão
-                del request.session["cupom_id"]
-        except Cupom.DoesNotExist:
-            del request.session["cupom_id"]
-
-    total_final = total_carrinho - valor_desconto
-    form = CheckoutForm(initial={"endereco_entrega": request.user.perfil.endereco})
-
-    context = {
-        "form": form,
-        "carrinho": carrinho_detalhado,
-        "total_carrinho": total_carrinho,
-        "total_final": total_final,
-        "valor_desconto": valor_desconto,
-        "cupom": cupom,
-    }
-    return render(request, "core/checkout.html", context)
-
+)
 
 @login_required(login_url="/login/")
 @transaction.atomic
@@ -181,6 +109,96 @@ def finalizar_pedido(request):
 
     form = CheckoutForm(request.POST)
     if form.is_valid():
+
+        # ============================================================
+        # NOVO BLOCO: Atualiza o Perfil do cliente com os valores
+        # do formulário de endereço, SOMENTE quando houverem dados
+        # (ou seja, quando o checkbox tiver permitido edição).
+        # ============================================================
+        posted_nome         = request.POST.get("nome", "").strip()
+        posted_telefone     = request.POST.get("telefone", "").strip()
+        posted_cep          = request.POST.get("cep", "").strip()
+        posted_rua          = request.POST.get("rua", "").strip()
+        posted_numero       = request.POST.get("numero", "").strip()
+        posted_complemento  = request.POST.get("complemento", "").strip()
+        posted_bairro       = request.POST.get("bairro", "").strip()
+        posted_cidade       = request.POST.get("cidade", "").strip()
+        posted_estado       = request.POST.get("estado", "").strip()
+
+        tem_dados_endereco = any([
+            posted_nome, posted_telefone, posted_cep, posted_rua, posted_numero,
+            posted_complemento, posted_bairro, posted_cidade, posted_estado
+        ])
+
+        if tem_dados_endereco:
+            campos_atualizados = []
+
+            if posted_nome and hasattr(cliente_perfil, "nome"):
+                cliente_perfil.nome = posted_nome
+                campos_atualizados.append("nome")
+
+            if posted_telefone and hasattr(cliente_perfil, "telefone"):
+                cliente_perfil.telefone = posted_telefone
+                campos_atualizados.append("telefone")
+
+            if posted_cep and hasattr(cliente_perfil, "cep"):
+                cliente_perfil.cep = posted_cep
+                campos_atualizados.append("cep")
+
+            if posted_rua and hasattr(cliente_perfil, "rua"):
+                cliente_perfil.rua = posted_rua
+                campos_atualizados.append("rua")
+
+            if posted_numero and hasattr(cliente_perfil, "numero"):
+                cliente_perfil.numero = posted_numero
+                campos_atualizados.append("numero")
+
+            if posted_complemento and hasattr(cliente_perfil, "complemento"):
+                cliente_perfil.complemento = posted_complemento
+                campos_atualizados.append("complemento")
+
+            if posted_bairro and hasattr(cliente_perfil, "bairro"):
+                cliente_perfil.bairro = posted_bairro
+                campos_atualizados.append("bairro")
+
+            if posted_cidade and hasattr(cliente_perfil, "cidade"):
+                cliente_perfil.cidade = posted_cidade
+                campos_atualizados.append("cidade")
+
+            if posted_estado and hasattr(cliente_perfil, "estado"):
+                cliente_perfil.estado = posted_estado
+                campos_atualizados.append("estado")
+
+            # Se existir 'endereco' agregado no Perfil, mantém coerência textual.
+            if hasattr(cliente_perfil, "endereco"):
+                partes_logradouro = []
+                if posted_rua: partes_logradouro.append(posted_rua)
+                if posted_numero: partes_logradouro.append(posted_numero)
+                logradouro = ", ".join(partes_logradouro) if partes_logradouro else ""
+
+                partes_localidade = []
+                if posted_bairro: partes_localidade.append(posted_bairro)
+                if posted_cidade: partes_localidade.append(posted_cidade)
+                if posted_estado: partes_localidade.append(posted_estado)
+                localidade = ", ".join(partes_localidade) if partes_localidade else ""
+
+                cep_str = posted_cep if posted_cep else ""
+                comp_str = posted_complemento if posted_complemento else ""
+
+                endereco_parts = [p for p in [logradouro, localidade, cep_str] if p]
+                endereco_str = " - ".join(endereco_parts)
+                if comp_str:
+                    endereco_str = f"{endereco_str} (Comp.: {comp_str})" if endereco_str else comp_str
+
+                if endereco_str:
+                    cliente_perfil.endereco = endereco_str
+                    campos_atualizados.append("endereco")
+
+            if campos_atualizados:
+                # remove duplicidades e salva apenas campos realmente alterados
+                cliente_perfil.save(update_fields=list(set(campos_atualizados)))
+        # ============================================================
+
         pedido_principal = Pedido.objects.create(
             cliente=cliente_perfil,
             valor_produtos=total_pedido,
@@ -241,178 +259,3 @@ def finalizar_pedido(request):
                 "total_carrinho": total_pedido,
             },
         )
-
-
-@require_POST
-def api_aplicar_cupom(request):
-    """
-    Endpoint da API para aplicar um cupom de desconto via AJAX.
-    """
-    try:
-        data = json.loads(request.body)
-        codigo = data.get("codigo", "").strip()
-
-        carrinho_session = request.session.get("carrinho", {})
-        if not carrinho_session:
-            return JsonResponse(
-                {"success": False, "mensagem": "Seu carrinho está vazio."}, status=400
-            )
-
-        produto_ids = [int(pid) for pid in carrinho_session.keys()]
-        produtos_map = {
-            str(p.id): p for p in Produto.objects.filter(id__in=produto_ids)
-        }
-        total_carrinho = sum(
-            produtos_map[pid].preco * item_data["quantidade"]
-            for pid, item_data in carrinho_session.items()
-            if pid in produtos_map
-        )
-        total_carrinho = Decimal(total_carrinho)
-
-        cupom = Cupom.objects.get(codigo__iexact=codigo)
-
-        if not cupom.esta_valido:
-            return JsonResponse(
-                {"success": False, "mensagem": "Este cupom não é mais válido."},
-                status=400,
-            )
-
-        valor_desconto = cupom.calcular_desconto(total_carrinho)
-
-        if valor_desconto <= 0:
-            msg = f"O valor mínimo da compra para este cupom é de R$ {cupom.valor_minimo_compra:.2f}."
-            return JsonResponse({"success": False, "mensagem": msg}, status=400)
-
-        total_final = total_carrinho - valor_desconto
-        request.session["cupom_id"] = cupom.id
-
-        return JsonResponse(
-            {
-                "success": True,
-                "mensagem": f"Cupom '{cupom.codigo}' aplicado!",
-                "cupom": {
-                    "codigo": cupom.codigo,
-                    "desconto": str(cupom),  # Usa o __str__ do modelo
-                },
-                "valores": {
-                    "valor_desconto_str": f"− R$ {valor_desconto:.2f}".replace(
-                        ".", ","
-                    ),
-                    "total_final_str": f"R$ {total_final:.2f}".replace(".", ","),
-                },
-            }
-        )
-
-    except Cupom.DoesNotExist:
-        request.session.pop("cupom_id", None)
-        return JsonResponse(
-            {"success": False, "mensagem": "Cupom inválido."}, status=404
-        )
-    except Exception:
-        return JsonResponse(
-            {"success": False, "mensagem": "Ocorreu um erro inesperado."}, status=500
-        )
-
-
-def aplicar_cupom(request):
-    """
-    Aplica cupom com recarregamento da página (fallback).
-    """
-    if request.method == "POST":
-        codigo = request.POST.get("codigo", "").strip()
-        try:
-            cupom = Cupom.objects.get(codigo__iexact=codigo)
-            if cupom.esta_valido:
-                request.session["cupom_id"] = cupom.id
-                messages.success(
-                    request, f"Cupom '{cupom.codigo}' aplicado com sucesso!"
-                )
-            else:
-                messages.error(request, "Cupom inválido ou expirado.")
-        except Cupom.DoesNotExist:
-            request.session.pop("cupom_id", None)
-            messages.error(request, "Cupom inválido ou expirado.")
-    return redirect("core:checkout_page")
-
-
-@login_required(login_url="/login/")
-def meus_pedidos(request):
-    perfil_usuario = request.user.perfil
-
-    ultimos_pedidos = Pedido.objects.none()
-    pedidos_qs = Pedido.objects.none()
-
-    if perfil_usuario.tipo in [Perfil.TipoUsuario.CLIENTE, 'ONG']:
-        pedidos_qs = (
-            Pedido.objects.filter(cliente=perfil_usuario)
-            .prefetch_related(
-                Prefetch(
-                    "sub_pedidos",
-                    queryset=PedidoVendedor.objects.select_related("vendedor"),
-                ),
-                Prefetch(
-                    "sub_pedidos__itens",
-                    queryset=ItemPedido.objects.select_related("produto"),
-                ),
-            )
-            .order_by("-data_criacao")
-        )
-        ultimos_pedidos = pedidos_qs[:5]
-
-    elif perfil_usuario.tipo == Perfil.TipoUsuario.VENDEDOR:
-            pedidos_qs = (
-                PedidoVendedor.objects
-                .filter(vendedor=perfil_usuario)
-                .select_related('pedido_principal', 'vendedor')
-                .prefetch_related('itens__produto')
-                .order_by('-pedido_principal__data_criacao')
-            )
-    ultimos_pedidos = pedidos_qs[:5]
-
-    paginator = Paginator(pedidos_qs, 10)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
-
-    context = {
-        "page_obj": page_obj,
-        "ultimos_pedidos": ultimos_pedidos,
-        "tipo_usuario": perfil_usuario.tipo,
-    }
-    return render(request, "core/meus_pedidos.html", context)
-
-
-
-
-@login_required
-def painel_pedidos_vendedor(request):
-    vendedor = request.user.perfil
-
-    if vendedor.tipo != Perfil.TipoUsuario.VENDEDOR:
-        return redirect('core:perfil')
-
-    hoje = timezone.now().date()
-
-    pedidos_hoje = (
-        PedidoVendedor.objects
-        .filter(
-            vendedor=vendedor,
-            pedido_principal__data_criacao__date=hoje
-        )
-        .select_related('pedido_principal', 'vendedor')
-        .prefetch_related('itens__produto', 'itens__pacote_surpresa')
-    )
-
-    pedidos_anteriores = (
-        PedidoVendedor.objects
-        .filter(vendedor=vendedor)
-        .exclude(pedido_principal__data_criacao__date=hoje)
-        .select_related('pedido_principal', 'vendedor')
-        .prefetch_related('itens__produto', 'itens__pacote_surpresa')
-    )
-
-    context = {
-        'pedidos_hoje': pedidos_hoje,
-        'pedidos_anteriores': pedidos_anteriores,
-    }
-
-    return render(request, 'core/painel_pedidos_vendedor.html', context)
