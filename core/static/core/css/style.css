@@ -166,3 +166,27 @@
         font-size: 18px;
     }
 }
+.btn_ver_detalhes {
+    text-align: center;
+    display: inline-block;
+    padding: 10px 22px;
+    background: linear-gradient(135deg, #2ea80f, #1f6f07);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.btn_ver_detalhes:hover {
+    background: linear-gradient(135deg, #35c012, #248b08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+}
+
+.btn_ver_detalhes:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
