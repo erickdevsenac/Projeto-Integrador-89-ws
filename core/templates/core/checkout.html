@@ -3,6 +3,7 @@
 
 {% block head %}
 <title>Finalizar Compra - Aproveite+</title>
+<link rel="stylesheet" href="{% static 'core/css/style_checkout.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -11,12 +12,14 @@
     <h2 class="fw-bold mb-5 text-dark">Finalizar Compra</h2>
 
     <div class="row g-5">
+      {# RESUMO CARRINHO #}
       <div class="col-md-5 col-lg-4 order-md-last">
         <div class="card card-resumo p-3">
           <h4 class="d-flex justify-content-between align-items-center mb-4 px-2">
             <span class="text-secondary">Seu Carrinho</span>
-            <span class="badge rounded-pill" style="color: #ffff; background-color: #288a0a;">{{ carrinho|length }}</span>
+            <span class="badge rounded-pill badge-carrinho">{{ carrinho|length }}</span>
           </h4>
+
           <ul class="list-group list-group-flush mb-3">
             {% for item in carrinho %}
             <li class="list-group-item d-flex justify-content-between lh-sm">
@@ -37,92 +40,91 @@
               <span class="text-success">− R$ {{ valor_desconto|floatformat:2 }}</span>
             </li>
             {% endif %}
+
             <li class="list-group-item d-flex justify-content-between pt-3">
-              <span class="fs-5 fw-bold" style="color: #288a0a;">Total</span>
-              <strong class="fs-5 " style="color: #288a0a;">R$ {{ total_final|default:total_carrinho|floatformat:2 }}</strong>
+              <span class="fs-5 fw-bold total-label">Total</span>
+              <strong class="fs-5 total-valor">
+                R$ {{ total_final|default:total_carrinho|floatformat:2 }}
+              </strong>
             </li>
           </ul>
 
           <form method="post" action="{% url 'core:aplicar_cupom' %}" class="p-2">
             {% csrf_token %}
-            <h6 class="text" style="color: #288a0a;">Aplicar cupom:</h6>
+            <h6 class="text cupom-label">Aplicar cupom:</h6>
             <div class="input-group">
               <input type="text" name="codigo" class="form-control form-control-sm" placeholder="Ex: 2025-aproveite">
               <button class="btn btn-dark" type="submit">Aplicar</button>
             </div>
           </form>
-          
         </div>
       </div>
 
+      {# CHECKOUT #}
       <div class="col-md-7 col-lg-8">
-        <div class="card p-4 shadow-sm border-0" style="border-radius: 12px;">
-          <h4 class="mb-4 border-bottom pb-2">Informações de Entrega</h4>
-          <form method="post" action="{% url 'core:checkout' %}" novalidate>
+        <div class="card p-4 shadow-sm border-0 card-checkout">
+          <form method="post" action="{% url 'core:finalizar_pedido' %}" novalidate>
             {% csrf_token %}
 
-            <div class="form-check mb-4">
-              <input class="form-check-input" type="checkbox" id="usarEnderecoCadastro" checked>
-              <label class="form-check-label fw-semibold" for="usarEnderecoCadastro">
-                Usar endereço do meu cadastro
-              </label>
+            {# ERROS GLOBAIS #}
+            {% if form.non_field_errors %}
+              <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <h4 class="mb-3 border-bottom pb-2">Endereço de Entrega</h4>
+
+            {# RESUMO DO PERFIL #}
+            <div id="checkout-address-summary" class="checkout-address-summary">
+              <div class="address-text">
+                <p class="mb-1 fw-semibold">
+                  {{ usuario }}
+                </p>
+                <p class="mb-1 text-muted">
+                  {{ usuario.endereco_completo|default:usuario.endereco|default:"Endereço não informado" }}
+                </p>
+                {% if usuario.telefone %}
+                <p class="mb-0 text-muted">
+                  Tel: {{ usuario.telefone }}
+                </p>
+                {% endif %}
+              </div>
+
+              <button
+                type="button"
+                class="btn btn-outline-success btn-sm ms-lg-3 mt-3 mt-lg-0"
+                id="btn-toggle-endereco"
+                data-mode="resumo"
+              >
+                Editar endereço
+              </button>
             </div>
 
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label class="form-label fw-semibold">Nome completo</label>
-                <input type="text" class="form-control" name="nome" value="{{ usuario.nome }}" required>
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label fw-semibold">Telefone</label>
-                <input type="tel" class="form-control" name="telefone" value="{{ usuario.telefone }}" placeholder="(99) 99999-9999" required>
-              </div>
-
-              <div class="col-md-4">
-                <label class="form-label fw-semibold">CEP</label>
-                <input type="text" class="form-control" name="cep" value="{{ usuario.cep }}" placeholder="00000-000" required>
-              </div>
-
-              <div class="col-md-8">
-                <label class="form-label fw-semibold">Rua</label>
-                <input type="text" class="form-control" name="rua" value="{{ usuario.rua }}" required>
-              </div>
-
-              <div class="col-md-4">
-                <label class="form-label fw-semibold">Número</label>
-                <input type="text" class="form-control" name="numero" value="{{ usuario.numero }}" required>
-              </div>
-
-              <div class="col-md-8">
-                <label class="form-label fw-semibold">Complemento</label>
-                <input type="text" class="form-control" name="complemento" value="{{ usuario.complemento }}">
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label fw-semibold">Bairro</label>
-                <input type="text" class="form-control" name="bairro" value="{{ usuario.bairro }}" required>
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label fw-semibold">Cidade</label>
-                <input type="text" class="form-control" name="cidade" value="{{ usuario.cidade }}" required>
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label fw-semibold">Estado</label>
-                <select class="form-select" name="estado" required>
-                  <option value="">Selecione...</option>
-                  <option {% if usuario.estado == "MS" %}selected{% endif %}>MS</option>
-                  <option {% if usuario.estado == "SP" %}selected{% endif %}>SP</option>
-                  <option {% if usuario.estado == "RJ" %}selected{% endif %}>RJ</option>
-                </select>
+            {# CAMPO EDITÁVEL #}
+            <div id="checkout-address-fields" class="mt-3 d-none">
+              <div class="mb-3">
+                <label class="form-label fw-semibold" for="{{ form.endereco_entrega.id_for_label }}">
+                  Endereço de entrega
+                </label>
+                {{ form.endereco_entrega }}
+                {% if form.endereco_entrega.errors %}
+                  <div class="invalid-feedback d-block">
+                    {{ form.endereco_entrega.errors|striptags }}
+                  </div>
+                {% endif %}
+                <small class="text-muted">
+                  Endereço completo (rua, número, bairro, cidade, estado, CEP).
+                </small>
               </div>
             </div>
 
             <h4 class="mb-4 mt-5 border-bottom pb-2">Pagamento</h4>
             <div class="payment-options">
               {{ form.forma_pagamento }}
+              {% if form.forma_pagamento.errors %}
+                <div class="invalid-feedback d-block mt-2">
+                  {{ form.forma_pagamento.errors|striptags }}
+                </div>
+              {% endif %}
             </div>
 
             <hr class="my-5">
@@ -134,7 +136,9 @@
                 </p>
               </div>
               <div class="col-lg-4">
-                <button type="submit" class="btn btn-checkout w-100 btn-lg" style="background-color: #288a0a; color: #ffffff;">Finalizar Pedido</button>
+                <button type="submit" class="btn btn-checkout w-100 btn-lg">
+                  Finalizar Pedido
+                </button>
               </div>
             </div>
           </form>
@@ -149,4 +153,27 @@
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const btn = document.getElementById('btn-toggle-endereco');
+    const fields = document.getElementById('checkout-address-fields');
+
+    if (!btn || !fields) return;
+
+    btn.addEventListener('click', function () {
+      const isEditing = !fields.classList.contains('d-none');
+
+      if (isEditing) {
+        fields.classList.add('d-none');
+        btn.textContent = 'Editar endereço';
+        btn.dataset.mode = 'resumo';
+      } else {
+        fields.classList.remove('d-none');
+        btn.textContent = 'Usar endereço do cadastro';
+        btn.dataset.mode = 'edicao';
+      }
+    });
+  });
+</script>
 {% endblock content %}

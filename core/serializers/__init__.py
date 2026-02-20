@@ -1,4 +1,4 @@
-from .avaliacao_serialiazer import *
+from .avaliacao_serializer import *
 from .categoria_serializer import *
 from .cupom_serializer import *
 from .dicas_sustentaveis_serializer import *

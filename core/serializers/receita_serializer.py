@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from core.models import EtapaPreparo, Ingrediente, Receita
-from core.serializers.avaliacao_serialiazer import AvaliacaoSerializer
+from core.serializers.avaliacao_serializer import AvaliacaoSerializer
 
 from .usuario_serializer import UserSerializer
 

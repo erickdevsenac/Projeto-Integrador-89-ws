@@ -33,21 +33,18 @@ urlpatterns = [
     path("nova_avaliacao/", nova_avaliacao, name="nova_avaliacao"),
     path("configuracoes/", auth.configuracoes, name="configuracoes"),
     path("logout/", auth.logout_view, name="logout"),
-    
     path("login/", auth.login_view, name="login"),
     path("cadastro/", auth.cadastro, name="cadastro"),
     path("cadastro/completar/", auth.completar_cadastro, name="completar_cadastro"),
     path("ativar-conta/<uidb64>/<token>/", auth.ativar_conta, name="ativar_conta"),
-
     # Recuperação de senha
     path("alterar-senha/", auth.alterarsenha, name="alterar_senha"),
     path("recuperar-senha/", auth.recuperarsenha, name="recuperar-senha"),
     path(
-        "redefinir-senha/<uidb64>/<token>/", 
-        auth.redefinir_senha_confirmar, 
-        name="password_reset_confirm" # Nome padrão do Django
+        "redefinir-senha/<uidb64>/<token>/",
+        auth.redefinir_senha_confirmar,
+        name="password_reset_confirm",  # Nome padrão do Django
     ),
-   
     # ==============================================================================
     # ROTAS DE PRODUTOS E MARKETPLACE
     # ==============================================================================
@@ -63,13 +60,27 @@ urlpatterns = [
     path("produto/cadastrar/", marketplace.cadastrar_produto, name="cadastrar_produto"),
     path("pacote/", public.pacote_detalhe, name="pacote_detalhe"),
     path("pacote/<int:pacote_id>/", public.pacote_detalhe, name="pacote_detalhe"),
-    path('editar_produto/<int:produto_id>/', marketplace.editar_produto, name='editar_produto'),
-    path('excluir_produto/<int:produto_id>/', marketplace.excluir_produto, name='excluir_produto'),
-    path('editar_produto', marketplace.editar_produto, name='editar_produto'),
-    path("pacote/editar/<int:pacote_id>/", marketplace.editar_pacote, name="editar_pacote"),
-    path("pacote/excluir/<int:pacote_id>/", marketplace.excluir_pacote, name="excluir_pacote"),
-    
-
+    path(
+        "editar_produto/<int:produto_id>/",
+        marketplace.editar_produto,
+        name="editar_produto",
+    ),
+    path(
+        "excluir_produto/<int:produto_id>/",
+        marketplace.excluir_produto,
+        name="excluir_produto",
+    ),
+    path("editar_produto", marketplace.editar_produto, name="editar_produto"),
+    path(
+        "pacote/editar/<int:pacote_id>/",
+        marketplace.editar_pacote,
+        name="editar_pacote",
+    ),
+    path(
+        "pacote/excluir/<int:pacote_id>/",
+        marketplace.excluir_pacote,
+        name="excluir_pacote",
+    ),
     # ==============================================================================
     # ROTAS DO CARRINHO E CHECKOUT
     # ==============================================================================
@@ -94,33 +105,32 @@ urlpatterns = [
         carrinho.adicionar_pacote_carrinho,
         name="adicionar_pacote_carrinho",
     ),
- 
     # Checkout
     path("checkout/", checkout.checkout_page, name="checkout_page"),
-    path("finalizar-pedido/", checkout.finalizar_pedido, name="checkout"),
+    path("finalizar-pedido/", checkout.finalizar_pedido, name="finalizar_pedido"),
     path("aplicar-cupom/", checkout.aplicar_cupom, name="aplicar_cupom"),
- 
     # ==============================================================================
     # ROTAS DE PEDIDOS
     # ==============================================================================
     path("meus-pedidos/", checkout.meus_pedidos, name="meus_pedidos"),
-    path('vendedor/pedidos/',checkout.painel_pedidos_vendedor,name='painel_pedidos_vendedor'),
-    
+    path(
+        "vendedor/pedidos/",
+        checkout.painel_pedidos_vendedor,
+        name="painel_pedidos_vendedor",
+    ),
     # ==============================================================================
     # ROTAS DE CUPONS E PROMOÇÕES
     # ==============================================================================
     path("cupom/criar/", admin.criar_cupom, name="criar_cupom"),
- 
     # ==============================================================================
     # ROTAS DE RECEITAS E CONTEÚDO
     # ==============================================================================
     path("receitas/", conteudo.receitas, name="receitas"),
     path("receita/<int:receita_id>/", conteudo.receita_detalhe, name="receita_detalhe"),
     path("receita/criar/", conteudo.cria_receita, name="criar_receita"),
-   
     # Conteúdo educativo
     path("dicas/", conteudo.dicas, name="dicas"),
-    path('dicas-detalhes/<int:id>/', conteudo.detalhes_dica, name='dicas_detalhes'),
+    path("dicas-detalhes/<int:id>/", conteudo.detalhes_dica, name="dicas_detalhes"),
     path("videos/", public.videos, name="videos"),
     # ==============================================================================
     # ROTAS DE ONGs E DOAÇÕES
@@ -131,9 +141,6 @@ urlpatterns = [
     # ROTAS ADMINISTRATIVAS E RELATÓRIOS
     # ==============================================================================
     path("timedev/", public.devs, name="timedev"),
-    
-    
-
 ]
 
 # Adiciona rotas de debug apenas se DEBUG=True

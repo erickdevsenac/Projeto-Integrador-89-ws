@@ -1,0 +1,13 @@
+Olá, {{ usuario.first_name|default:usuario.username }}!
+
+Você solicitou a redefinição de senha no {{ site_name }}.
+
+Clique no link abaixo para criar uma nova senha:
+{{ link_de_reset }}
+
+Este link expira em 24 horas.
+
+Se você não solicitou esta alteração, ignore este e-mail.
+
+---
+Equipe {{ site_name }}

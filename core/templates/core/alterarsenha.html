@@ -1,26 +1,268 @@
 {% extends 'global/base.html' %}
 {% load static %}
+
+{% block head %}
+  <title>Alterar Senha - Aproveite+</title>
+  <link rel="stylesheet" href="{% static 'core/css/style_alterar.css' %}">
+{% endblock %}
+
 {% block alterarsenha %}
-  {% block head %}
-    <title>Aproveite Mais</title>
-    <link rel="stylesheet" href="{% static 'core/css/style_alterar.css' %}">
-  {% endblock %}
+<div class="container-alterar-senha">
   <div class="caixinha">
-    <form class="form-senha" action="/alterar-senha" method="POST">
-      <h2><strong>Alterar Senha </strong></h2>
-
-      <label for="senha-atual">Senha Atual</label>
-      <input type="password" id="senha-atual" name="senha_atual" placeholder="Digite sua Senha" required />
-
-      <label for="nova-senha">Nova Senha</label>
-      <input type="password" id="nova-senha" name="nova_senha"  placeholder="Nova Senha" required />
-
-      <label for="confirmar-senha">Confirmar Nova Senha</label>
-      <input type="password" id="confirmar-senha" name="confirmar_senha" placeholder="Confirme Nova Senha" required />
-
-      <button type="submit">Alterar Senha</button>
+    <form class="form-senha" method="POST">
+      {% csrf_token %}
+      
+      <h2><strong>Alterar Senha</strong></h2>
+      
+      {# Renderizar mensagens APENAS desta página #}
+      {% if messages %}
+        <div class="mensagens">
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      
+      <p class="instrucoes">
+        Digite sua senha atual e escolha uma nova senha.
+      </p>
+      
+      {# Senha Atual #}
+      <div class="form-group">
+        <label for="{{ form.old_password.id_for_label }}">Senha Atual:</label>
+        {{ form.old_password }}
+        {% if form.old_password.errors %}
+          <div class="erro">
+            {% for error in form.old_password.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      
+      {# Nova Senha #}
+      <div class="form-group">
+        <label for="{{ form.new_password1.id_for_label }}">Nova Senha:</label>
+        {{ form.new_password1 }}
+        {% if form.new_password1.errors %}
+          <div class="erro">
+            {% for error in form.new_password1.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      
+      {# Help text ABAIXO do campo #}
+      <div class="help-text-container">
+        <small class="help-text">
+          • Mínimo 8 caracteres<br>
+          • Não pode ser apenas numérica<br>
+          • Não pode ser muito comum
+        </small>
+      </div>
+      
+      {# Confirmar Nova Senha #}
+      <div class="form-group">
+        <label for="{{ form.new_password2.id_for_label }}">Confirmar Nova Senha:</label>
+        {{ form.new_password2 }}
+        {% if form.new_password2.errors %}
+          <div class="erro">
+            {% for error in form.new_password2.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      
+      {# Erros gerais do formulário #}
+      {% if form.non_field_errors %}
+        <div class="erro">
+          {% for error in form.non_field_errors %}
+            {{ error }}
+          {% endfor %}
+        </div>
+      {% endif %}
+      
+      <button type="submit" class="btn-alterar">Alterar Senha</button>
+      
+      <div class="footer-links">
+        <a href="{% url 'core:perfil' %}">← Voltar ao Perfil</a>
+      </div>
     </form>
-
   </div>
+</div>
 
+<style>
+  .container-alterar-senha {
+    min-height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .caixinha {
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 40px 30px;
+  }
+  
+  .form-senha {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .form-senha h2 {
+    text-align: center;
+    color: #333;
+    margin: 0 0 10px 0;
+  }
+  
+  .instrucoes {
+    color: #666;
+    font-size: 0.9rem;
+    text-align: center;
+    margin: 0 0 10px 0;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .form-group label {
+    font-weight: 600;
+    color: #333;
+    font-size: 0.95rem;
+  }
+  
+  /* Estilizar inputs gerados pelo Django */
+  .form-group input[type="password"],
+  #id_old_password,
+  #id_new_password1,
+  #id_new_password2 {
+    width: 100% !important;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    font-family: inherit;
+  }
+  
+  .form-group input[type="password"]:focus,
+  #id_old_password:focus,
+  #id_new_password1:focus,
+  #id_new_password2:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+  }
+  
+  /* Container separado para help text */
+  .help-text-container {
+    margin: -10px 0 0 0;
+  }
+  
+  .help-text {
+    display: block;
+    font-size: 0.8rem;
+    color: #666;
+    line-height: 1.6;
+    padding: 8px 12px;
+    background-color: #f9f9f9;
+    border-left: 3px solid #4CAF50;
+    border-radius: 4px;
+  }
+  
+  .erro {
+    color: #d32f2f;
+    font-size: 0.875rem;
+    background-color: #ffebee;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border-left: 3px solid #d32f2f;
+  }
+  
+  .mensagens {
+    margin-bottom: 0;
+  }
+  
+  .alert {
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    border-left: 4px solid;
+    animation: slideIn 0.3s ease-in;
+  }
+  
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border-left-color: #28a745;
+  }
+  
+  .alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-left-color: #dc3545;
+  }
+  
+  .alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border-left-color: #ffc107;
+  }
+  
+  .btn-alterar {
+    width: 100%;
+    padding: 14px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-alterar:hover {
+    background-color: #45a049;
+  }
+  
+  .footer-links {
+    text-align: center;
+    margin-top: 5px;
+  }
+  
+  .footer-links a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  
+  .footer-links a:hover {
+    text-decoration: underline;
+  }
+</style>
 {% endblock %}

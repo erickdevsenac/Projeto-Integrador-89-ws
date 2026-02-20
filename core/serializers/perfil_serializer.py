@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from ..models import Perfil
-from .avaliacao_serialiazer import AvaliacaoSerializer
+from .avaliacao_serializer import AvaliacaoSerializer
 from .usuario_serializer import UserSerializer
 
 

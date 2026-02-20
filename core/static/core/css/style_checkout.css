@@ -1,9 +1,11 @@
+/* style_checkout.css - Completo e polido */
 .checkout-container {
   background-color: #f8f9fa;
   padding-top: 3rem;
   padding-bottom: 5rem;
 }
 
+/* Card resumo carrinho */
 .card-resumo {
   border: none;
   border-radius: 12px;
@@ -12,15 +14,84 @@
   top: 20px;
 }
 
-.list-group-item {
+.card-resumo .list-group-item {
   border-left: none;
   border-right: none;
   padding: 1.25rem 1rem;
 }
 
+.badge-carrinho {
+  color: #fff;
+  background-color: #288a0a;
+}
+
+/* Total */
+.total-label, .total-valor {
+  color: #288a0a;
+}
+
+/* Cupom */
+.cupom-label {
+  color: #288a0a;
+}
+
+/* Card principal do checkout */
+.card-checkout {
+  border-radius: 12px;
+}
+
+/* Resumo de endereço */
+.checkout-address-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.checkout-address-summary:hover {
+  border-color: #d1e7dd;
+  box-shadow: 0 4px 12px rgba(40, 138, 10, 0.1);
+}
+
+.checkout-address-summary .address-text p {
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+@media (min-width: 992px) {
+  .checkout-address-summary {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+/* Campo editável de endereço */
+#checkout-address-fields .form-control {
+  border-radius: 12px !important;
+  border: 2px solid #dee2e6;
+  padding: 1rem 1.25rem;
+  font-size: 1rem;
+  min-height: 80px;  /* Altura confortável para textarea */
+  resize: vertical;   /* Só redimensiona verticalmente */
+}
+
+#checkout-address-fields .form-control:focus {
+  border-color: #288a0a;
+  box-shadow: 0 0 0 0.2rem rgba(40, 138, 10, 0.25);
+  height: 120px;  /* Cresce um pouco no foco */
+}
+
+/* Pagamento */
 .payment-options ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .payment-options li {
@@ -30,34 +101,111 @@
 .payment-options label {
   display: flex;
   align-items: center;
-  padding: 15px;
+  padding: 1rem 1.25rem;
   border: 2px solid #e9ecef;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
   width: 100%;
+  background-color: #fff;
+  font-weight: 500;
 }
 
 .payment-options input[type="radio"] {
-  margin-right: 15px;
+  margin-right: 1rem;
   transform: scale(1.2);
 }
 
 .payment-options input[type="radio"]:checked + label,
 .payment-options label:hover {
-  border-color: #0d6efd;
-  background-color: #f0f7ff;
-  color: #0d6efd;
+  border-color: #288a0a;
+  background-color: #f1faf0;
+  box-shadow: 0 4px 12px rgba(40, 138, 10, 0.1);
 }
 
+/* Labels */
 .form-label {
   font-weight: 600;
   color: #343a40;
+  margin-bottom: 0.5rem;
 }
 
-.form-control,
-.form-select {
-  padding: 12px;
-  border-radius: 8px;
-  border: 8px 
+/* Botões */
+.btn-checkout {
+  background: linear-gradient(135deg, #288a0a 0%, #216f08 100%);
+  color: #ffffff !important;
+  border: none;
+  border-radius: 50px;  /* Pill shape arredondado */
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 12px rgba(40, 138, 10, 0.3);
+  transition: all 0.3s ease;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-checkout:hover {
+  background: linear-gradient(135deg, #216f08 0%, #1a5a06 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(40, 138, 10, 0.4);
+  color: #ffffff !important;
+}
+
+.btn-checkout:active {
+  transform: translateY(0);
+}
+
+.btn-checkout:focus-visible {
+  outline: 3px solid #216f08;
+  outline-offset: 2px;
+}
+
+/* Botão editar endereço */
+#btn-toggle-endereco {
+  border-radius: 50px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  border-color: #288a0a !important;
+  color: #288a0a !important;
+  min-height: 44px;
+}
+
+#btn-toggle-endereco:hover {
+  background-color: #f1faf0;
+  border-color: #216f08 !important;
+  color: #216f08 !important;
+}
+
+/* Form geral */
+.form-control, .form-select {
+  border-radius: 12px;
+  border: 2px solid #dee2e6;
+  padding: 0.875rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #288a0a;
+  box-shadow: 0 0 0 0.2rem rgba(40, 138, 10, 0.25);
+}
+
+/* Invalid feedback */
+.invalid-feedback {
+  display: block !important;
+  font-size: 0.875rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .checkout-address-summary {
+    text-align: left !important;
+  }
+  
+  .btn-checkout {
+    padding: 1rem !important;
+    font-size: 1rem;
+  }
 }
