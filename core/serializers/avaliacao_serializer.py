@@ -19,7 +19,7 @@ class AvaliacaoSerializer(serializers.ModelSerializer):
             "texto",
             "data_criacao",
             "content_type",
-            "object_id",  # Adicione os campos aqui
+            "object_id",
         )
         extra_kwargs = {
             "content_type": {"write_only": True},
