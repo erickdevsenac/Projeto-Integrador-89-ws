@@ -1,0 +1,105 @@
+{% extends 'global/base.html' %}
+{% load static %}
+
+{% block head %}
+  <title>Redefinir Senha - Aproveite Mais</title>
+  <link rel="stylesheet" href="{% static 'core/css/style_recuperarsenha.css' %}">
+{% endblock %}
+
+{% block recuperarsenha %}
+<div class="caixinha">
+  {% if validlink %}
+    <form class="form-senha" method="POST">
+      {% csrf_token %}
+      
+      <h2><strong>Definir Nova Senha</strong></h2>
+      
+      {% if messages %}
+        <div class="mensagens">
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      
+      <p class="instrucoes">
+        Digite sua nova senha. Ela deve ter no mínimo 8 caracteres.
+      </p>
+      
+      <div class="form-group">
+        <label for="{{ form.new_password1.id_for_label }}">Nova Senha:</label>
+        {{ form.new_password1 }}
+        {% if form.new_password1.errors %}
+          <div class="erro">{{ form.new_password1.errors }}</div>
+        {% endif %}
+      </div>
+      
+      <div class="form-group">
+        <label for="{{ form.new_password2.id_for_label }}">Confirmar Senha:</label>
+        {{ form.new_password2 }}
+        {% if form.new_password2.errors %}
+          <div class="erro">{{ form.new_password2.errors }}</div>
+        {% endif %}
+      </div>
+      
+      <button type="submit" class="btn-primary">Redefinir Senha</button>
+    </form>
+  {% else %}
+    <div class="erro-link">
+      <h2>❌ Link Inválido</h2>
+      <p>Este link de recuperação de senha é inválido ou já expirou.</p>
+      <p>Links de recuperação têm validade de 24 horas.</p>
+      <a href="{% url 'core:recuperar-senha' %}" class="btn-secondary">
+        Solicitar Novo Link
+      </a>
+    </div>
+  {% endif %}
+</div>
+
+<style>
+  .form-senha input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .instrucoes {
+    color: #666;
+    margin-bottom: 20px;
+  }
+  
+  .erro {
+    color: #d32f2f;
+    font-size: 0.875rem;
+    margin-top: 4px;
+  }
+  
+  .erro-link {
+    text-align: center;
+    padding: 40px 20px;
+  }
+  
+  .erro-link h2 {
+    color: #d32f2f;
+    margin-bottom: 20px;
+  }
+  
+  .btn-secondary {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #2196F3;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #1976D2;
+  }
+</style>
+{% endblock %}
