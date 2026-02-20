@@ -68,7 +68,7 @@
               <p class="card-text">{{ pacote.descricao|truncatechars:100 }}</p>
               <p class="card-text"><strong>Tipo de Conteúdo:</strong> {{ pacote.tipo_conteudo }}</p>
               <p class="card-text"><strong>Preço:</strong> R$ {{ pacote.preco|floatformat:2 }}</p>
-              <a href="{% url 'core:pacote_detalhe' pacote.id %}" class="btn btn-primary">Ver Detalhes</a>
+              <a href="{% url 'core:pacote_detalhe' pacote.id %}" class="btn_ver_detalhes">Ver Detalhes</a>
 
             </div>
           </div>
