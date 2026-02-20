@@ -17,9 +17,15 @@ env = environ.Env(
     USE_S3=(bool, False),
     USE_PRODUCTION_DB=(bool, False),
     USE_CELERY=(bool, False),
+    SECURE_SSL_REDIRECT=(bool, False),
+    SESSION_COOKIE_SECURE=(bool, False),
+    CSRF_COOKIE_SECURE=(bool, False),
+    SECURE_HSTS_SECONDS=(int, 0),
+    SECURE_HSTS_INCLUDE_SUBDOMAINS=(bool, False),
+    SECURE_HSTS_PRELOAD=(bool, False),
 )
-environ.Env.read_env(str(BASE_DIR / ".env"))
 
+environ.Env.read_env(str(BASE_DIR / ".env"))
 
 # ==============================================================================
 # SEGURANÇA
@@ -27,30 +33,35 @@ environ.Env.read_env(str(BASE_DIR / ".env"))
 
 SECRET_KEY = env("SECRET_KEY")
 DEBUG = env.bool("DEBUG", default=False)
+
 ALLOWED_HOSTS = env.list(
-    "ALLOWED_HOSTS", 
-    default=["localhost", "127.0.0.1", "10.0.2.2"]
+    "ALLOWED_HOSTS", default=["localhost", "127.0.0.1", "127.0.0.2"]
 )
 
 CSRF_TRUSTED_ORIGINS = env.list(
-    "CSRF_TRUSTED_ORIGINS", 
-    default=["http://192.168.22.10:8000", "https://aproveitemais.shop"]
+    "CSRF_TRUSTED_ORIGINS", default=["https://aproveitemais.shop"]
 )
 
+# HTTPS / Cookies
+
 SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=False)
+SESSION_COOKIE_SECURE = env.bool("SESSION_COOKIE_SECURE", default=False)
+CSRF_COOKIE_SECURE = env.bool("CSRF_COOKIE_SECURE", default=False)
 
-if not DEBUG and SECURE_SSL_REDIRECT:
-    SECURE_BROWSER_XSS_FILTER = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=False)
-    SESSION_COOKIE_SECURE = True  #TROCAR QUANDO FOR HTTPS
-    CSRF_COOKIE_SECURE = True #TROCAR QUANDO FOR HTTPS
-    X_FRAME_OPTIONS = "DENY"
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# HSTS
+SECURE_HSTS_SECONDS = env.int("SECURE_HSTS_SECONDS", default=0)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool(
+    "SECURE_HSTS_INCLUDE_SUBDOMAINS", default=False
+)
+SECURE_HSTS_PRELOAD = env.bool("SECURE_HSTS_PRELOAD", default=False)
 
+# Headers adicionais
+SECURE_BROWSER_XSS_FILTER = not DEBUG
+SECURE_CONTENT_TYPE_NOSNIFF = not DEBUG
+X_FRAME_OPTIONS = "DENY"
+
+# Nginx Proxy Header
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # ==============================================================================
 # APLICAÇÕES
@@ -83,10 +94,8 @@ if DEBUG:
 LOCAL_APPS = ["core"]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
-CYPRESS_BASE_URL= 'http://localhost:9000'
-CYPRESS_FIXTURE_PATH="projeto/cypress/tests/cypress_fixtures"
-
-
+CYPRESS_BASE_URL = "http://localhost:9000"
+CYPRESS_FIXTURE_PATH = "projeto/cypress/tests/cypress_fixtures"
 
 # ==============================================================================
 # MIDDLEWARE
@@ -108,12 +117,12 @@ MIDDLEWARE = [
 if DEBUG:
     MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
 
-
 # ==============================================================================
 # URLS E TEMPLATES
 # ==============================================================================
 
 ROOT_URLCONF = "projeto.urls"
+WSGI_APPLICATION = "projeto.wsgi.application"
 
 TEMPLATES = [
     {
@@ -134,9 +143,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "projeto.wsgi.application"
-
-
 # ==============================================================================
 # BANCO DE DADOS
 # ==============================================================================
@@ -149,24 +155,17 @@ DATABASES = {
     }
 }
 
-# Banco de PRODUÇÃO (quando USE_PRODUCTION_DB=True)
-# Preencha DB_ENGINE, DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT no .env
 if env.bool("USE_PRODUCTION_DB", default=False):
     DATABASES = {
         "default": {
-            "ENGINE": env("DB_ENGINE", default="django.db.backends.postgresql"),
+            "ENGINE": env("DB_ENGINE"),
             "NAME": env("DB_NAME"),
             "USER": env("DB_USER"),
             "PASSWORD": env("DB_PASSWORD"),
-            "HOST": env("DB_HOST", default="localhost"),
-            "PORT": env("DB_PORT", default="5432"),
+            "HOST": env("DB_HOST", default="127.0.0.1"),
+            "PORT": env("DB_PORT", default="3306"),
         }
     }
-
-# Observação: se preferir usar um DATABASE_URL (ex: serviços Heroku/Render),
-# você pode alterar para usar env.db() do django-environ:
-# DATABASES = {'default': env.db()}  # e setar DATABASE_URL no .env
-
 
 # ==============================================================================
 # CACHE
@@ -184,6 +183,7 @@ if env.bool("USE_CACHE", default=True):
     }
     SESSION_ENGINE = "django.contrib.sessions.backends.cache"
     SESSION_CACHE_ALIAS = "default"
+
 else:
     CACHES = {
         "default": {
@@ -197,17 +197,15 @@ CACHE_MIDDLEWARE_SECONDS = 600
 CACHE_MIDDLEWARE_KEY_PREFIX = "aproveite"
 
 # ==============================================================================
-# ARQUIVOS ESTÁTICOS E MÍDIA
+# STATIC & MEDIA
 # ==============================================================================
 
-# Defaults locais
 STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_ROOT = BASE_DIR / "media"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
 # S3: ativar setando USE_S3=True e preenchendo as variáveis abaixo
 if env.bool("USE_S3", default=False):
     AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
@@ -232,11 +230,15 @@ if env.bool("USE_S3", default=False):
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
     MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
 
-
 # ==============================================================================
 # EMAIL
 # ==============================================================================
 
+EMAIL_BACKEND = (
+    "django.core.mail.backends.console.EmailBackend"
+    if DEBUG
+    else "django.core.mail.backends.smtp.EmailBackend"
+)
 EMAIL_BACKEND = env(
     "EMAIL_BACKEND",
     default=(
@@ -254,6 +256,7 @@ if not DEBUG:
     EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
     DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="noreply@aproveitemais.com")
 
+PASSWORD_RESET_TIMEOUT = 86400
 
 # ==============================================================================
 # REST FRAMEWORK
@@ -286,38 +289,16 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    "ROTATE_REFRESH_TOKENS": False,
-    "BLACKLIST_AFTER_ROTATION": True,
-    "UPDATE_LAST_LOGIN": False,
     "ALGORITHM": "HS256",
     "SIGNING_KEY": SECRET_KEY,
-    "VERIFYING_KEY": None,
-    "AUDIENCE": None,
-    "ISSUER": None,
     "AUTH_HEADER_TYPES": ("Bearer",),
-    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
-    "USER_ID_FIELD": "id",
-    "USER_ID_CLAIM": "user_id",
-    "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
-    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
-    "TOKEN_TYPE_CLAIM": "token_type",
-    "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
-    "JTI_CLAIM": "jti",
-    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
-    "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
 }
 
-if DEBUG:
-    REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"].append(
-        "rest_framework.renderers.BrowsableAPIRenderer"
-    )
+# ==============================================================================
+# CONFIGURAÇÕES GERAIS
+# ==============================================================================
 
-if DEBUG:
-    REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"].append(
-        "rest_framework.renderers.BrowsableAPIRenderer"
-    )
-
-
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # ==============================================================================
 # CORS
 # ==============================================================================
