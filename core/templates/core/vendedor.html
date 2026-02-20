@@ -67,11 +67,13 @@
         <ul class="lista-produtos">
             {% for pacote in pacotes %}
             <li class="produto-item" id="produto-{{ pacote.id }}">
+                <a href="{% url 'core:pacote_detalhe' pacote.id %}">
                 {% if pacote.imagem %}
                         <img src="{{ pacote.imagem.url }}" alt="{{ pacote.nome }}" class="produto-imagem" />
                     {% else %}
                         <img src="{% static 'assets/img/placeholder_produto.png' %}" alt="{{ pacote.nome }}" class="produto-imagem" />
                     {% endif %}
+                </a>
                 <div class="produto-info">
                     <h3>{{ pacote.nome }}</h3>
                     <p>{{ pacote.descricao|truncatewords:20|safe }}</p>
@@ -95,10 +97,12 @@
     </section>
 
     <section class="gerenciamento-loja">
+        {% if request.user.perfil == vendedor %}
         <h2>Gerenciamento</h2>
-        <a href="{% url 'core:cadastrar_produto' %}" class="btn btn-primary">Adicionar Produto</a>
-        <a href="{% url 'core:criar_cupom' %}" class="btn btn-primary">Adicionar Cupom</a>
-        <a href="{% url 'core:pacote_detalhe' %}" class="btn btn-primary">Adicionar Pacote Surpresa</a>
+            <a href="{% url 'core:cadastrar_produto' %}" class="btn btn-primary">Adicionar Produto</a>
+            <a href="{% url 'core:criar_cupom' %}" class="btn btn-primary">Adicionar Cupom</a>
+            <a href="{% url 'core:pacote_detalhe' %}" class="btn btn-primary">Adicionar Pacote Surpresa</a>
+        {% endif %}
     </section>
 </div>
 {% endblock content %}

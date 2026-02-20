@@ -53,7 +53,7 @@
             <p class="lead">{{ produto.descricao|safe }}</p>
 
             <div class="my-4">
-                <p><strong>Vendido por:</strong> <a href="#">{{ produto.vendedor.nome_negocio|default:produto.vendedor.usuario.username }}</a></p>
+                <p><strong>Vendido por:</strong> <a href="{% url 'core:vendedor_perfil' produto.vendedor.usuario.id %}">{{ produto.vendedor.nome_negocio|default:produto.vendedor.usuario.username }}</a></p>
                 {% if produto.categoria %}
                     <p><strong>Categoria:</strong> <span class="badge bg-secondary">{{ produto.categoria.nome }}</span></p>
                 {% endif %}
@@ -132,7 +132,7 @@
                 <div class="col">
                     <div class="card h-100 shadow-sm card-relacionado">
                         <a href="{% url 'core:produto_detalhe' relacionado.id %}">
-                            {% if produto.imagem_principal %}
+                            {% if relacionado.imagem_principal %}
                             <img src="{{ relacionado.imagem_principal.url }}" class="card-img-top" alt="{{ relacionado.nome }}">
                             {% else %}
                             <img src="{% static 'assets/img/placeholder_produto.png' %}" class="card-img-top" alt="{{ relacionado.nome }}">
