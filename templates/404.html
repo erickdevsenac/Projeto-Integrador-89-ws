@@ -1,25 +1,117 @@
 {% extends "global/base.html" %}
 {% load static %}
-{% block content %}
+
 {% block head %}
 <style>
     .container_404 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+        padding: 60px 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+    }
 
-.logo_404 {
-    width: 400px;
-}
+    .content_404 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 60px;
+        max-width: 1200px;
+        width: 100%;
+    }
+
+    .text_404 {
+        max-width: 600px;
+    }
+
+    .text_404 h1 {
+        font-size: 72px;
+        margin-bottom: 15px;
+    }
+
+    .text_404 p {
+        font-size: 22px;
+        margin-bottom: 15px;
+        opacity: 0.9;
+    }
+
+    .support-box {
+        margin-top: 15px;
+        font-size: 18px;
+    }
+
+    .support-box a {
+        color: #00c853;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .support-box a:hover {
+        text-decoration: underline;
+    }
+
+    .btn-home {
+        display: inline-block;
+        margin-top: 25px;
+        padding: 12px 30px;
+        background-color: #00c853;
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .btn-home:hover {
+        background-color: #009624;
+    }
+
+    .logo_404 {
+        width: 350px;
+        max-width: 100%;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-12px); }
+        100% { transform: translateY(0px); }
+    }
+
+    /* Responsivo */
+    @media (max-width: 900px) {
+        .content_404 {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
 </style>
 {% endblock head %}
+
+{% block content %}
 <div class="container_404">
-<h1>Ops, Pelo visto você explorou algo inexploravel</h1>
-<img
- class="logo_404"
-        src="{% static 'assets/img/logo.png' %}"
-        alt="Logo Aproveite +"
-      /> 
+    <div class="content_404">
+
+        <div class="text_404">
+            <h1>404</h1>
+
+            <p>Ops... Parece que você explorou algo inexplorável 🌿</p>
+            <p>A página que você está tentando acessar não existe ou foi removida.</p>
+
+            <div class="support-box">
+                Se você acredita que isso é um erro do sistema,
+                <a href="{% url 'core:contato' %}">fale conosco</a>.
+            </div>
+
+            <a href="/" class="btn-home">Voltar para a página inicial</a>
+        </div>
+
+        <div>
+            <img class="logo_404"
+                 src="{% static 'assets/img/guardiaoverde.png' %}"
+                 alt="Guardião Verde">
+        </div>
+
+    </div>
 </div>
 {% endblock content %}
