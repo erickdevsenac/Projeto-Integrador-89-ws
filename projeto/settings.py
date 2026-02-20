@@ -234,11 +234,6 @@ if env.bool("USE_S3", default=False):
 # EMAIL
 # ==============================================================================
 
-EMAIL_BACKEND = (
-    "django.core.mail.backends.console.EmailBackend"
-    if DEBUG
-    else "django.core.mail.backends.smtp.EmailBackend"
-)
 EMAIL_BACKEND = env(
     "EMAIL_BACKEND",
     default=(
@@ -294,11 +289,7 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
-# ==============================================================================
-# CONFIGURAÇÕES GERAIS
-# ==============================================================================
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # ==============================================================================
 # CORS
 # ==============================================================================
