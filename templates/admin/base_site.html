@@ -1,0 +1,69 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'admin/custom.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block branding %}
+<div class="custom-header">
+
+    <div class="logo-area">
+        <h1 class="logo-title">
+            <a href="{% url 'admin:index' %}">APROVEITE +</a>
+        </h1>
+        <span class="admin-subtitle">Sistema Administrativo</span>
+    </div>
+
+    <div class="admin-actions">
+
+        <div class="user-info">
+            <div class="user-avatar">
+                {{ user.username|first|upper }}
+            </div>
+            <div class="user-text">
+                <span class="user-name">
+                    {{ user.first_name|default:user.username }}
+                </span>
+                <span class="user-role">Administrador</span>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <a class="admin-btn secondary" href="{% url 'core:produtos' %}">
+            Produtos
+        </a>
+
+        <a class="admin-btn secondary" href="{% url 'core:meus_pedidos' %}">
+            Pedidos
+        </a>
+
+        <a class="admin-btn" href="/">
+            Ver Site
+        </a>
+
+
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="admin-wrapper">
+    {{ block.super }}
+</div>
+{% endblock %}
+
+{% block footer %}
+<div id="custom-footer">
+    <div class="footer-container">
+        <div class="footer-left">
+            © {{ now|date:"Y" }} APROVEITE +
+        </div>
+        <div class="footer-right">
+            Desenvolvido com 💚 por <strong>Alunos Senac</strong>
+        </div>
+    </div>
+</div>
+{% endblock %}

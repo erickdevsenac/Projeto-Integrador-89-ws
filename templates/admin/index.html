@@ -1,0 +1,130 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static log %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-container">
+
+    <!-- TÍTULO -->
+    <div class="dashboard-header">
+        <h1>Bem-vindo ao Painel Administrativo</h1>
+        <p>Gerencie sua plataforma de sustentabilidade e economia colaborativa</p>
+    </div>
+
+    <!-- CARDS DE MÉTRICAS -->
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <h3>Total em Vendas</h3>
+            <p class="stat-number">R$ {{ total_vendas|default:"0" }}</p>
+            <span class="stat-info positive">▲ 12% este mês</span>
+        </div>
+
+        <div class="stat-card">
+            <h3>Pedidos Pendentes</h3>
+            <p class="stat-number">{{ pedidos_pendentes|default:"0" }}</p>
+            <a href="#" class="stat-link">Ver todos</a>
+        </div>
+
+        <div class="stat-card">
+            <h3>Produtos Baixo Estoque</h3>
+            <p class="stat-number">{{ produtos_baixo_estoque|default:"0" }}</p>
+            <a href="#" class="stat-link">Gerenciar</a>
+        </div>
+
+        <div class="stat-card">
+            <h3>Novos Usuários (30d)</h3>
+            <p class="stat-number">{{ novos_usuarios|default:"0" }}</p>
+            <span class="stat-info positive">▲ 8% crescimento</span>
+        </div>
+
+    </div>
+
+    <!-- AÇÕES RÁPIDAS -->
+    <div class="quick-actions">
+        <h2>Ações Rápidas</h2>
+
+        <div class="actions-grid" >
+            <a href="#"style="color:white" class="action-btn">Adicionar Produto</a>
+            <a href="#" class="action-btn">Ver Pedidos</a>
+            <a href="#" class="action-btn">Criar Cupom</a>
+            <a href="#" class="action-btn">Nova Receita</a>
+            <a href="#" class="action-btn">Publicar Dica</a>
+            <a href="#" class="action-btn">Mensagens</a>
+        </div>
+    </div>
+
+    <!-- MÓDULOS DO DJANGO -->
+    <div class="modules-section">
+        <h2>Módulos do Sistema</h2>
+
+        {% if app_list %}
+            {% for app in app_list %}
+                <div class="module-card">
+                    <h3>{{ app.name }}</h3>
+
+                    <ul>
+                        {% for model in app.models %}
+                            <li>
+                                {% if model.admin_url %}
+                                    <a href="{{ model.admin_url }}">{{ model.name }}</a>
+                                {% else %}
+                                    {{ model.name }}
+                                {% endif %}
+
+                                {% if model.add_url %}
+                                    <a href="{{ model.add_url }}" class="add-link">Adicionar</a>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>{% trans "You don't have permission to view or edit anything." %}</p>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block sidebar %}
+<div class="dashboard-sidebar">
+
+    <div class="sidebar-card">
+        <h3>Atividades Recentes</h3>
+
+        {% get_admin_log 10 as admin_log for_user user %}
+
+        {% if not admin_log %}
+            <p>Nenhuma ação recente.</p>
+        {% else %}
+            <ul class="activity-list">
+                {% for entry in admin_log %}
+                    <li>
+                        <span class="time">{{ entry.action_time|timesince }} atrás</span>
+                        <strong>{{ entry.object_repr }}</strong>
+                        <small>{{ entry.get_change_message }}</small>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <div class="sidebar-card">
+        <h3>Ajuda & Suporte</h3>
+        <ul class="help-links">
+            <li><a href="#">Documentação</a></li>
+            <li><a href="#">Tutoriais</a></li>
+            <li><a href="#">Suporte</a></li>
+        </ul>
+    </div>
+
+</div>
+{% endblock %}
