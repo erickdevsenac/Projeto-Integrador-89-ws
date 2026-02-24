@@ -2,48 +2,62 @@
 {% load static %}
 
 {% block extrastyle %}
-<link rel="stylesheet" href="{% static 'admin/custom.css' %}">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'admin/custom.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 {% endblock %}
 
 {% block branding %}
 <div class="custom-header">
 
     <div class="logo-area">
-        <h1 class="logo-title">
-            <a href="{% url 'admin:index' %}">APROVEITE +</a>
-        </h1>
-        <span class="admin-subtitle">Sistema Administrativo</span>
+        <a href="{% url 'admin:index' %}" class="logo-link">
+            <img
+                src="{% static 'assets/img/logo.png' %}"
+                alt="Aproveite +"
+                class="logo-img"
+            >
+            <div class="logo-text">
+                <span class="logo-title">APROVEITE +</span>
+                <span class="admin-subtitle">Sistema Administrativo</span>
+            </div>
+        </a>
     </div>
 
     <div class="admin-actions">
 
-        <div class="user-info">
-            <div class="user-avatar">
-                {{ user.username|first|upper }}
-            </div>
-            <div class="user-text">
-                <span class="user-name">
-                    {{ user.first_name|default:user.username }}
-                </span>
-                <span class="user-role">Administrador</span>
-            </div>
-        </div>
+        <nav class="header-nav">
+            <a class="admin-btn secondary" href="{% url 'core:produtos' %}">
+                🛒 Produtos
+            </a>
+            <a class="admin-btn secondary" href="{% url 'core:meus_pedidos' %}">
+                📦 Pedidos
+            </a>
+            <a class="admin-btn" href="/" target="_blank" rel="noopener">
+                🌐 Ver Site
+            </a>
+        </nav>
 
         <div class="divider"></div>
 
-        <a class="admin-btn secondary" href="{% url 'core:produtos' %}">
-            Produtos
-        </a>
-
-        <a class="admin-btn secondary" href="{% url 'core:meus_pedidos' %}">
-            Pedidos
-        </a>
-
-        <a class="admin-btn" href="/">
-            Ver Site
-        </a>
-
+        <!-- PERFIL DO USUÁRIO -->
+        <div class="user-profile-container">
+            <div class="user-avatar">
+                {{ user.username|first|upper }}
+            </div>
+            <div class="user-details">
+                <span class="user-name">
+                    {{ user.get_full_name|default:user.username }}
+                </span>
+                <span class="user-role">
+                    {% if user.is_superuser %}Super Admin{% else %}Staff{% endif %}
+                </span>
+            </div>
+            <div class="divider"></div>
+            <a class="admin-btn danger-btn" href="{% url 'admin:logout' %}">
+                Sair
+            </a>
+        </div>
 
     </div>
 </div>
@@ -59,7 +73,12 @@
 <div id="custom-footer">
     <div class="footer-container">
         <div class="footer-left">
-            © {{ now|date:"Y" }} APROVEITE +
+            <img
+                src="{% static 'assets/img/logo.png' %}"
+                alt="Aproveite +"
+                class="footer-logo"
+            >
+            <span>© {% now "Y" %} APROVEITE +</span>
         </div>
         <div class="footer-right">
             Desenvolvido com 💚 por <strong>Alunos Senac</strong>
