@@ -1,0 +1,17 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+  <div class="module">
+    <h1>{{ title }}</h1>
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      <div class="submit-row">
+        <input type="submit" class="default" value="{% trans 'Salvar' %}">
+      </div>
+    </form>
+  </div>
+{% endblock %}
