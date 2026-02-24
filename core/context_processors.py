@@ -1,4 +1,5 @@
 from core.models import CategoriaProduto
+from django.conf import settings
 
 def global_settings(request):
     """
@@ -8,6 +9,14 @@ def global_settings(request):
         "project_name": "Projeto Integrador 89",
         "version": "1.0.0",
         "author": "Equipe SENAC"
+    }
+
+def jivo_context(request):
+    """
+    Adiciona a URL do widget de suporte JivoSite no contexto de todos os templates.
+    """
+    return {
+        "JIVO_SUPPORT": settings.JIVO_SUPPORT
     }
 
 def carrinho_context(request):

@@ -11,6 +11,8 @@ from django.contrib.messages import constants as messages
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+
 env = environ.Env(
     DEBUG=(bool, False),
     USE_CACHE=(bool, True),
@@ -26,6 +28,7 @@ env = environ.Env(
 )
 
 environ.Env.read_env(str(BASE_DIR / ".env"))
+JIVO_SUPPORT = os.environ.get("JIVO_SUPPORT")
 
 # ==============================================================================
 # SEGURANÇA
@@ -138,6 +141,7 @@ TEMPLATES = [
                 "django.template.context_processors.media",
                 "core.context_processors.carrinho_context",
                 "core.context_processors.categorias_context",
+                "core.context_processors.jivo_context",
             ],
         },
     },
