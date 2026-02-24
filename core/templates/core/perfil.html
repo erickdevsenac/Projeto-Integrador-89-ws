@@ -11,7 +11,6 @@
     <div class="row">
 
         <div class="col-lg-4">
-
             <div class="card mb-4">
                 <div class="card-body text-center">
                     {% if perfil and perfil.foto_perfil %}
@@ -60,16 +59,12 @@
                     </ul>
                 </div>
             </div>
-
         </div>
 
         <div class="col-lg-8">
-
             <div id="view-mode">
-
                 {% if perfil %}
                     {% if perfil.tipo == 'VENDEDOR' %}
-
                         <div class="card mb-4 shadow-sm">
                             <div class="card-header bg-light text-dark">Produtos com Baixo Estoque</div>
                             <div class="card-body">
@@ -138,7 +133,6 @@
                         </div>
 
                     {% elif perfil.tipo == 'CLIENTE' or perfil.tipo == 'ONG' %}
-
                         <div class="card mb-4 shadow-sm">
                             <div class="card-header bg-light text-dark">Últimos Pedidos</div>
                             <div class="card-body">
@@ -161,24 +155,51 @@
                                 {% endif %}
                             </div>
                         </div>
-
                     {% endif %}
                 {% endif %}
-
             </div>
 
             <div id="edit-mode" style="display: none;">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h4 class="mb-4">Editar Informações do Perfil</h4>
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4">
+                        <h4 class="card-title mb-4">Editar Informações do Perfil</h4>
                         <form method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             <input type="hidden" name="editar_perfil" value="1">
-                            {{ form.as_p }}
-                            <hr>
+                            
+                            <div class="row g-3">
+                                {% for field in form %}
+                                    <div class="{% if field.name == 'estado' or field.name == 'cep' %}col-md-6{% else %}col-12{% endif %}">
+                                        <label for="{{ field.id_for_label }}" class="form-label fw-bold small text-muted text-uppercase">
+                                            {{ field.label }}
+                                        </label>
+                                        
+                                        {% if field.name == 'foto_perfil' %}
+                                            <input type="file" name="{{ field.name }}" id="{{ field.id_for_label }}" class="form-control">
+                                        {% else %}
+                                            <input type="{{ field.field.widget.input_type|default:'text' }}" 
+                                                   name="{{ field.name }}" 
+                                                   id="{{ field.id_for_label }}" 
+                                                   value="{{ field.value|default:'' }}" 
+                                                   class="form-control" 
+                                                   placeholder="{{ field.help_text|striptags }}">
+                                        {% endif %}
+
+                                        {% if field.help_text %}
+                                            <div class="form-text small">{{ field.help_text|safe }}</div>
+                                        {% endif %}
+                                        
+                                        {% if field.errors %}
+                                            <div class="text-danger small mt-1">{{ field.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            <hr class="my-4">
                             <div class="d-flex gap-2">
-                                <button type="submit" class="btn btn-success">Salvar Alterações</button>
-                                <button type="button" class="btn btn-secondary" id="cancel-edit-btn">Cancelar</button>
+                                <button type="submit" class="btn btn-success px-4">Salvar Alterações</button>
+                                <button type="button" class="btn btn-light px-4" id="cancel-edit-btn">Cancelar</button>
                             </div>
                         </form>
                     </div>
@@ -186,7 +207,6 @@
             </div>
 
         </div>
-
     </div>
 </div>
 
