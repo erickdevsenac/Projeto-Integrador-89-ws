@@ -13,7 +13,7 @@ class PerfilManager(models.Manager):
     def vendedores_ativos(self):
         """Retorna apenas perfis de Vendedores ativos"""
         return self.filter(
-            tipo=self.model.TipoUsuario.VENDEDOR, ativo=True, usuario__is_active=False
+            tipo=self.model.TipoUsuario.VENDEDOR, ativo=True, usuario__is_active=True
         )
 
     def ongs_ativas(self):
@@ -77,7 +77,7 @@ class Perfil(TimeStampedModel):
     )
     cnpj = models.CharField(
         "CNPJ",
-        max_length=14,
+        max_length=18,
         unique= True,
         help_text="Obrigatório para Vendedores e ONGs.",
         blank=True, 
