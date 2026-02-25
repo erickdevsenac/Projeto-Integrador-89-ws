@@ -1,157 +1,147 @@
-/* RESET */
+/* ================= RESET ================= */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
- 
-/* BASE */
+
+/* ================= BASE ================= */
 body {
   font-family: "Noto Sans", sans-serif;
-  background-color: #f3faf6;
+  background-color: #eef5f1;
   color: #2e2e2e;
 }
- 
-/* TÍTULOS */
-.doacao h1 {
-  font-size: 2.4rem;
+
+/* ================= TÍTULO PRINCIPAL ================= */
+h1.doacao {
+  font-size: 2.6rem;
   font-weight: 800;
   text-align: center;
-  color: #1f7a4d;
-  margin: 40px 0 20px 0;
+  color: #145c3a;
+  margin: 50px 0 30px 0;
 }
- 
-.doacao h2 {
-  font-size: 2rem;
-  font-weight: 800;
-  text-align: center;
-  color: #ffffff;
-  margin-bottom: 30px;
-}
- 
-/* CONTAINER PRINCIPAL */
+
+/* ================= CONTAINER PRINCIPAL ================= */
 .container-doacao {
   max-width: 1300px;
-  margin: 0 auto 60px auto;
-  padding: 30px;
-  border-radius: 30px;
-  background: linear-gradient(135deg, #6bdba7, #0c0013);
-  box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+  margin: 0 auto 80px auto;
+  padding: 50px 40px;
+  border-radius: 35px;
+  background: linear-gradient(135deg, #6bdba7, #1f7a4d);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.25);
 }
- 
-/* TEXTO EXPLICATIVO */
+
+/* ================= CAIXA ================= */
+.caixa.doacao {
+  background: transparent;
+}
+
+/* ================= SUBTÍTULO ================= */
+h2.doacao {
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 40px;
+}
+
+/* ================= TEXTO EXPLICATIVO ================= */
 .inf_ongs {
   background-color: #ffffff;
-  max-width: 900px;
-  margin: 0 auto 40px auto;
-  padding: 30px;
-  border-radius: 22px;
-  box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+  max-width: 950px;
+  margin: 0 auto 50px auto;
+  padding: 35px;
+  border-radius: 25px;
+  box-shadow: 0 18px 35px rgba(0,0,0,0.2);
 }
- 
+
 .inf_ongs h3 {
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   font-weight: 800;
-  color: #1f7a4d;
-  margin-bottom: 10px;
+  color: #145c3a;
+  margin-bottom: 15px;
 }
- 
+
 .inf_ongs p {
-  font-size: 1rem;
-  line-height: 1.7;
-  color: #555;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #444;
   text-align: justify;
 }
- 
-/* LISTA DE ONGS */
+
+/* ================= LISTA DE ONGS ================= */
 .ongs {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 30px;
   max-width: 1000px;
   margin: 0 auto;
 }
- 
-/* CARD ONG */
-.texto {
-  display: flex;
-  gap: 25px;
-  background-color: #ffffff;
-  padding: 25px;
-  border-radius: 22px;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-  transition: all 0.3s ease;
-}
- 
-.texto:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 22px 40px rgba(0,0,0,0.25);
-}
- 
 
-
-/* IMAGEM ONG */
-.texto img {
-  width: 150px;
-  height: 150px;
+/* ================= CARD (FUNCIONA SEM DIV EXTRA) ================= */
+.ongs img {
+  width: 95px !important;
+  height: 95px !important;
   object-fit: cover;
   border-radius: 50%;
-  border: 5px solid #e8f8ef;
-  flex-shrink: 0;
+  display: block;
+  margin-bottom: 15px;
+  border: 4px solid #e0f2e8;
 }
- 
-/* INFO ONG */
-.texto h3 {
+
+/* cada ONG separada */
+.ongs h3 {
   font-size: 1.4rem;
   font-weight: 800;
-  color: #1f7a4d;
+  color: #ffffff;
   margin-bottom: 8px;
 }
- 
-.texto p {
+
+.ongs p {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: #555;
+  color: #e8f5ee;
+  margin-bottom: 15px;
   text-align: justify;
 }
- 
-/* BOTÃO */
-.col-auto {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 15px;
+
+/* separação visual entre ONGs */
+.ongs > img {
+  margin-top: 40px;
 }
- 
+
+/* ================= BOTÃO ================= */
+.col-auto {
+  margin-bottom: 30px;
+}
+
 .col-auto button {
   padding: 12px 32px;
   border-radius: 30px;
   border: none;
-  background: linear-gradient(135deg, #1f7a4d, #2fa66a);
-  color: #ffffff;
+  background: #ffffff;
+  color: #145c3a;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 10px 20px rgba(47,166,106,0.4);
 }
- 
+
 .col-auto button:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 18px 35px rgba(47,166,106,0.55);
+  background: #dff3e8;
+  transform: translateY(-3px);
 }
- 
-/* RESPONSIVO */
+
+/* ================= RESPONSIVO ================= */
 @media (max-width: 768px) {
-  .texto {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+
+  .container-doacao {
+    padding: 35px 20px;
   }
- 
-  .texto p {
-    text-align: center;
+
+  .ongs img {
+    width: 80px !important;
+    height: 80px !important;
   }
- 
-  .col-auto {
-    justify-content: center;
+
+  h1.doacao {
+    font-size: 2rem;
   }
+
 }
