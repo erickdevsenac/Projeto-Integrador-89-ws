@@ -3,8 +3,6 @@
 {% load humanize %}
 {% load pagination_tags %}
 
-
-
 {% block content %}
 
 {% block head %}
@@ -14,54 +12,42 @@
 
 <div class="produtos-page">
     <div class="container">
-        <!-- Cabeçalho da Página -->
-        <div class="page-header">
+        <div class="page-header mb-4">
             <div class="row align-items-center">
-                <div class="col-md-6">
-                    <h1 class="page-title">
-                        <i class="fas fa-shopping-bag me-2"></i>
-                        Produtos Disponíveis
-                    </h1>
-                    <p class="page-subtitle">Encontre produtos sustentáveis com preços especiais</p>
-                </div>
-
-                <div class="col-md-6 text-md-end">
-                    <div class="page-actions">
-                        <button class="btn btn-outline-secondary d-lg-none" id="toggle-filters">
-                            <i class="fas fa-filter me-2"></i>Filtros
-                        </button>
-                        </div>
-                    </div>
+                <div class="col-12">
+                    <h1 class="page-title mb-1">
+                        <i class="fas fa-shopping-bag text-success"></i>Produtos Disponíveis</h1>
+                    <p class="page-subtitle text-muted mb-0">Encontre produtos sustentáveis com preços especiais</p>
                 </div>
             </div>
         </div>
 
-        <!-- Conteúdo da Página -->
         <div class="row">
-            <!-- Sidebar de Filtros -->
-            <div class="col-lg-3">
+            <div class="col-lg-3 mb-4">
                 <form id="filters-form" method="GET" action="{% url 'core:produtos' %}">
-                    <div class="filters-sidebar" id="filters-sidebar">
-                        <div class="filters-header">
-                            <h5>Filtros</h5>
-                            <a href="{% url 'core:produtos' %}" class="btn btn-sm btn-link d-none d-lg-inline">Limpar</a>
+                    <div class="filters-sidebar p-3 border rounded bg-white shadow-sm" id="filters-sidebar">
+                        <div class="filters-header d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                            <h5 class="mb-0">Filtros</h5>
+                            <a href="{% url 'core:produtos' %}" class="btn btn-sm btn-link text-decoration-none d-none d-lg-inline p-0">Limpar</a>
                             <button type="button" class="btn-close d-lg-none" id="close-filters-btn" aria-label="Fechar"></button>
                         </div>
 
-                        <!-- Campo de busca -->
-                        <div class="filter-group mb-3">
-                            <label for="search-input" class="filter-label">Buscar produtos</label>
-                            <div class="input-group">
-                                <input type="text" name="termo" id="search-input" class="form-control"
-                                       placeholder="Digite o nome..." value="{{ termo_busca }}">
-                            </div>
+                        <div class="d-lg-none mb-3">
+                             <button type="button" class="btn btn-outline-secondary w-100" id="toggle-filters">
+                                <i class="fas fa-filter me-2"></i>Filtros
+                            </button>
                         </div>
 
-                        <!-- Filtro de Categoria -->
+                        <div class="filter-group mb-3">
+                            <label for="search-input" class="form-label small fw-bold text-uppercase text-muted">Buscar produtos</label>
+                            <input type="text" name="termo" id="search-input" class="form-control form-control-sm"
+                                   placeholder="Digite o nome..." value="{{ termo_busca }}">
+                        </div>
+
                         {% if categorias %}
                         <div class="filter-group mb-3">
-                            <label for="categoria" class="filter-label">Categoria</label>
-                            <select name="categoria" id="categoria" class="form-select">
+                            <label for="categoria" class="form-label small fw-bold text-uppercase text-muted">Categoria</label>
+                            <select name="categoria" id="categoria" class="form-select form-select-sm">
                                 <option value="">Todas</option>
                                 {% for cat in categorias %}
                                 <option value="{{ cat.slug }}" {% if cat.slug == categoria_atual %}selected{% endif %}>
@@ -72,25 +58,23 @@
                         </div>
                         {% endif %}
 
-                        <!-- Filtro de Preço -->
                         <div class="filter-group mb-3">
-                            <label class="filter-label">Faixa de preço</label>
-                            <div class="input-group mb-2">
-                                <span class="input-group-text">R$</span>
+                            <label class="form-label small fw-bold text-uppercase text-muted">Faixa de preço</label>
+                            <div class="input-group input-group-sm mb-2">
+                                <span class="input-group-text bg-light">R$</span>
                                 <input type="number" step="0.01" name="preco_min" class="form-control"
                                        placeholder="Mín" value="{{ filtros.preco_min }}">
                             </div>
-                            <div class="input-group">
-                                <span class="input-group-text">R$</span>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-light">R$</span>
                                 <input type="number" step="0.01" name="preco_max" class="form-control"
                                        placeholder="Máx" value="{{ filtros.preco_max }}">
                             </div>
                         </div>
 
-                        <!-- Ordenação -->
-                        <div class="filter-group mb-3">
-                            <label for="ordenacao" class="filter-label">Ordenar por</label>
-                            <select name="ordenacao" id="ordenacao" class="form-select">
+                        <div class="filter-group mb-4">
+                            <label for="ordenacao" class="form-label small fw-bold text-uppercase text-muted">Ordenar por</label>
+                            <select name="ordenacao" id="ordenacao" class="form-select form-select-sm">
                                 <option value="-data_criacao" {% if filtros.ordenacao == "-data_criacao" %}selected{% endif %}>Mais recentes</option>
                                 <option value="preco" {% if filtros.ordenacao == "preco" %}selected{% endif %}>Menor preço</option>
                                 <option value="-preco" {% if filtros.ordenacao == "-preco" %}selected{% endif %}>Maior preço</option>
@@ -99,13 +83,12 @@
                         </div>
 
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-success w-100">Aplicar filtros</button>
+                            <button type="submit" class="btn btn-success btn-sm py-2">Aplicar filtros</button>
                         </div>
                     </div>
                 </form>
             </div>
 
-            <!-- Listagem de Produtos -->
             <div class="col-lg-9">
                 <div id="product-list-container">
                     {% include 'core/_lista_produtos.html' %}
@@ -115,10 +98,8 @@
     </div>
 </div>
 
-<!-- Overlay para o mobile -->
 <div id="sidebar-overlay" class="sidebar-overlay"></div>
 
-<!-- Scripts -->
 <script src="{% static 'core/js/produtos.js' %}"></script>
 <script src="{% static 'core/js/produtos_ajax.js' %}"></script>
 
