@@ -52,7 +52,7 @@ class Receita(models.Model):
         help_text="Imagem de apresentação do prato",
     )
 
-    data_criacao = models.DateTimeField(default=timezone.now)
+    data_criacao = models.DateTimeField(auto_now_add=True)
     disponivel = models.BooleanField(default=True)
 
     class Meta:

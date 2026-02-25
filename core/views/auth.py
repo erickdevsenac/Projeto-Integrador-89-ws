@@ -334,7 +334,7 @@ def alterarsenha(request):
             messages.success(
                 request, "✅ Sua senha foi alterada com sucesso! Você continua logado."
             )
-            return redirect("core:alterarsenha")  # Redireciona para a mesma página
+            return redirect("core:alterar_senha")  # Redireciona para a mesma página
         else:
             # Exibir erros do formulário
             for field, errors in form.errors.items():
