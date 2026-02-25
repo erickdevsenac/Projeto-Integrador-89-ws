@@ -136,6 +136,16 @@ class Produto(TimeStampedModel):
 
     objects = ProdutoManager()
 
+    @property
+    def estoque_baixo(self):
+        return (
+            self.quantidade_estoque > 0
+            and self.quantidade_estoque <= self.estoque_minimo
+        )
+
+    @property
+    def valor_negativo(self):
+        return self.preco <= 0
     class Meta:
         verbose_name = "Produto"
         verbose_name_plural = "Produtos"
@@ -206,7 +216,7 @@ class PacoteSurpresa(TimeStampedModel):
         related_name="pacotes",
         limit_choices_to={"tipo": "VENDEDOR"},
     )
-    
+
 
     nome = models.CharField(max_length=100, default="Pacote Surpresa do Dia")
     descricao = models.TextField()
