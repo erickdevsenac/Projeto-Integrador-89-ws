@@ -206,6 +206,7 @@ class PacoteSurpresa(TimeStampedModel):
         related_name="pacotes",
         limit_choices_to={"tipo": "VENDEDOR"},
     )
+    
 
     nome = models.CharField(max_length=100, default="Pacote Surpresa do Dia")
     descricao = models.TextField()
