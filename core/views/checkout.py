@@ -120,13 +120,20 @@ def checkout_page(request):
 
     cupom, valor_desconto, total_final = _recuperar_cupom(request, total_carrinho)
 
-    # Aqui você pode usar apenas endereco completo, ou juntar rua/número/bairro
+    # <<< ADIÇÃO: pré-preenche também os campos "novos" do form >>>
     form = CheckoutForm(
         initial={
-            "endereco_entrega": perfil.endereco,  # campo do seu modelo Perfil
+            "endereco_entrega": perfil.endereco,   # linha do endereço no Perfil
             "forma_pagamento": None,
+            "cep": perfil.cep or "",
+            "rua": perfil.endereco or "",          # Perfil tem uma única linha "endereco"
+            "numero": "",                          # se quiser, deixe em branco para o usuário ajustar
+            "bairro": "",                          # idem
+            "cidade": perfil.cidade or "",
+            "estado": (perfil.estado or "").upper(),
         }
     )
+    # <<< FIM ADIÇÃO >>>
 
     context = {
         "form": form,
@@ -221,22 +228,38 @@ def finalizar_pedido(request):
 
     form = CheckoutForm(request.POST)
     if form.is_valid():
-        endereco_entrega = form.cleaned_data["endereco_entrega"]
+        # 1. Campos dos inputs novos
+        rua = form.cleaned_data.get("rua", "").strip()
+        num = form.cleaned_data.get("numero", "").strip()
+        bai = form.cleaned_data.get("bairro", "").strip()
+        cid = form.cleaned_data.get("cidade", "").strip()
+        est = (form.cleaned_data.get("estado", "") or "").strip().upper()[:2]  # <<< ADIÇÃO: normaliza UF
+        cep = form.cleaned_data.get("cep", "").strip()
+
+        # 2. Strings de endereço
+        endereco_linha = f"{rua}, {num} - {bai}"  # <<< ADIÇÃO: para salvar no Perfil
+        endereco_completo = f"{rua}, {num} - {bai}, {cid}/{est} - CEP: {cep}"
+
         forma_pagamento = form.cleaned_data["forma_pagamento"]
 
-        # Se quiser, atualize o endereço padrão do perfil com o usado no pedido:
-        # cliente_perfil.endereco = endereco_entrega
-        # cliente_perfil.save(update_fields=["endereco"])
-
+        # 3. Cria o pedido com o endereço formatado
         pedido_principal = Pedido.objects.create(
             cliente=cliente_perfil,
             valor_produtos=total_pedido,
-            endereco_entrega=endereco_entrega,
+            endereco_entrega=endereco_completo,
             forma_pagamento=forma_pagamento,
             cupom_aplicado=cupom,
             valor_desconto=valor_desconto,
-            # valor_total calculado no save() do modelo
         )
+
+        # <<< ADIÇÃO: Atualiza o Perfil com os dados recém-digitados >>>
+        # Perfil possui: endereco (linha única), cep, cidade, estado
+        cliente_perfil.endereco = endereco_linha
+        cliente_perfil.cep = cep
+        cliente_perfil.cidade = cid
+        cliente_perfil.estado = est
+        cliente_perfil.save(update_fields=["endereco", "cep", "cidade", "estado"])
+        # <<< FIM ADIÇÃO >>>
 
         if cupom:
             cupom.usar_cupom()

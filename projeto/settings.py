@@ -28,7 +28,7 @@ env = environ.Env(
 )
 
 environ.Env.read_env(str(BASE_DIR / ".env"))
-JIVO_SUPPORT = os.environ.get("JIVO_SUPPORT")
+JIVO_SUPPORT = "https://code.jivosite.com/widget/SEU_CODIGO"
 
 # ==============================================================================
 # SEGURANÇA
