@@ -99,22 +99,41 @@
               </button>
             </div>
 
-            {# CAMPO EDITÁVEL #}
             <div id="checkout-address-fields" class="mt-3 d-none">
-              <div class="mb-3">
-                <label class="form-label fw-semibold" for="{{ form.endereco_entrega.id_for_label }}">
-                  Endereço de entrega
-                </label>
-                {{ form.endereco_entrega }}
-                {% if form.endereco_entrega.errors %}
-                  <div class="invalid-feedback d-block">
-                    {{ form.endereco_entrega.errors|striptags }}
-                  </div>
+                <h5 class="fw-semibold mb-3">Endereço de entrega</h5>
+                
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">CEP</label>
+                        {{ form.cep }}
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label fw-semibold">Rua</label>
+                        {{ form.rua }}
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Número</label>
+                        {{ form.numero }}
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label fw-semibold">Bairro</label>
+                        {{ form.bairro }}
+                    </div>
+
+                    <div class="col-md-8">
+                        <label class="form-label fw-semibold">Cidade</label>
+                        {{ form.cidade }}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Estado</label>
+                        {{ form.estado }}
+                    </div>
+                </div>
+                
+                {% if form.cep.errors or form.rua.errors %}
+                    <div class="alert alert-danger mt-2">Por favor, preencha todos os campos do endereço.</div>
                 {% endif %}
-                <small class="text-muted">
-                  Endereço completo (rua, número, bairro, cidade, estado, CEP).
-                </small>
-              </div>
             </div>
 
             <h4 class="mb-4 mt-5 border-bottom pb-2">Pagamento</h4>
@@ -136,7 +155,7 @@
                 </p>
               </div>
               <div class="col-lg-4">
-                <button type="submit" class="btn btn-checkout w-100 btn-lg">
+                <button href="{% url 'core:meus_pedidos' %}"type="submit" class="btn btn-checkout w-100 btn-lg">
                   Finalizar Pedido
                 </button>
               </div>

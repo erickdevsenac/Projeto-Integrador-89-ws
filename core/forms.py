@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+import re
 from django.forms import inlineformset_factory
 
 from .models import (
@@ -217,19 +218,55 @@ class CupomForm(forms.ModelForm):
         codigo = self.cleaned_data.get("codigo")
         return codigo.upper() if codigo else codigo
 
+
 class CheckoutForm(forms.ModelForm):
     class Meta:
         model = Pedido
         fields = ['endereco_entrega', 'forma_pagamento']
-
         widgets = {
-            'endereco_entrega': forms.Textarea(attrs={'rows': 3}),
+            'endereco_entrega': forms.HiddenInput(),   # vamos preencher na view
             'forma_pagamento': forms.RadioSelect(),
         }
         labels = {
             'endereco_entrega': "Confirme ou altere o Endereço de Entrega",
             'forma_pagamento': "Escolha a Forma de Pagamento",
         }
+
+    cep = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '00000-000'})
+    )
+    rua = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    numero = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    bairro = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    cidade = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    estado = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+    # --- Normalizações ---
+    def clean_estado(self):
+        uf = (self.cleaned_data['estado'] or '').strip().upper()
+        return uf[:2]  # garante 2 caracteres
+
+    def clean_cep(self):
+        cep = (self.cleaned_data['cep'] or '').strip()
+        somente_digitos = re.sub(r'\D', '', cep)
+        if len(somente_digitos) == 8:
+            return f"{somente_digitos[:5]}-{somente_digitos[5:]}"
+        # Se já vier com hífen correto, deixa
+        return cep
+
+    # --- Helpers opcionais ---
+    def endereco_linha_para_perfil(self):
+        cd = self.cleaned_data
+        # Perfil.endereco => apenas a “linha” (rua, número, bairro)
+        return f"{cd['rua'].strip()}, {cd['numero'].strip()} - {cd['bairro'].strip()}"
+
+    def endereco_completo_para_pedido(self):
+        cd = self.cleaned_data
+        uf = cd['estado'].strip().upper()[:2]
+        return f"{cd['rua'].strip()}, {cd['numero'].strip()} - {cd['bairro'].strip()}, {cd['cidade'].strip()}/{uf} - CEP: {cd['cep']}"
+
+
 class PacoteSurpresaForm(forms.ModelForm):
     class Meta:
         model = PacoteSurpresa

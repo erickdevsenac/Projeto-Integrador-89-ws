@@ -71,20 +71,10 @@
   }
 }
 
-/* Campo editável de endereço */
-#checkout-address-fields .form-control {
-  border-radius: 12px !important;
-  border: 2px solid #dee2e6;
-  padding: 1rem 1.25rem;
-  font-size: 1rem;
-  min-height: 80px;  /* Altura confortável para textarea */
-  resize: vertical;   /* Só redimensiona verticalmente */
-}
 
 #checkout-address-fields .form-control:focus {
   border-color: #288a0a;
   box-shadow: 0 0 0 0.2rem rgba(40, 138, 10, 0.25);
-  height: 120px;  /* Cresce um pouco no foco */
 }
 
 /* Pagamento */
